@@ -10,7 +10,14 @@ namespace game.gameplay_core.interactive_objects
 		[SerializeField]
 		private bool _isClosedByDefault = true;
 		[SerializeField]
+		private bool _canNotOpenFromFrontSide = false;
+		[SerializeField]
 		private Animator _animator;
+
+		[SerializeField]
+		private InteractionZone _interactionFront;
+		[SerializeField]
+		private InteractionZone _interactionBack;
 
 		[SerializeField]
 		private bool _openWithKey;
@@ -20,6 +27,33 @@ namespace game.gameplay_core.interactive_objects
 
 		private static readonly int IsOpen = Animator.StringToHash("IsOpen");
 		private static readonly int Immediate = Animator.StringToHash("Immediate");
+
+		private void Awake()
+		{
+			_interactionFront?.SetData(true, "Open Door", TryOpenFromFrontSide);
+			_interactionBack?.SetData(true, "Open Door", TryOpen);
+		}
+
+		private void TryOpenFromFrontSide()
+		{
+			if(_canNotOpenFromFrontSide)
+			{
+				//TODO message can not be open from this side
+				return;
+			}
+			TryOpen();
+		}
+
+		private void TryOpen()
+		{
+			if(_openWithKey)
+			{
+				//TODO key logic
+			}
+
+			Data.IsOpened = true;
+			UpdateAnimatorState();
+		}
 
 		public override void InitializeFirstTime()
 		{
