@@ -20,6 +20,7 @@ namespace game.gameplay_core
 		public override void Deserialize(string data)
 		{
 			Data = JsonUtility.FromJson<T>(data);
+			OnDeserialize();
 		}
 
 		[Button]

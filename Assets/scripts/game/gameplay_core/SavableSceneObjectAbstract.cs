@@ -11,6 +11,7 @@ namespace game.gameplay_core
 		public abstract string Serialize();
 
 		public abstract void Deserialize(string data);
+		public abstract void OnDeserialize();
 
 		public abstract void GenerateUniqueId();
 	}

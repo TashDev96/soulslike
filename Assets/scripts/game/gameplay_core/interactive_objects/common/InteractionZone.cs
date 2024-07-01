@@ -5,14 +5,25 @@ namespace game.gameplay_core.interactive_objects
 {
 	public class InteractionZone : MonoBehaviour
 	{
-		private string _hudText;
-		private Action _onInteractionTriggered;
+		public string InteractionTextHint;
+		public event Action OnInteractionTriggered;
 
-		public void SetData(bool active, string hudText = null, Action onInteractionTriggered = null)
+		public bool IsActive
 		{
-			gameObject.SetActive(active);
-			_hudText = hudText;
-			_onInteractionTriggered = onInteractionTriggered;
+			set => gameObject.SetActive(value);
+			get => gameObject.activeSelf;
+		}
+
+		private void OnCollisionEnter(Collision other)
+		{
+			OnInteractionTriggered?.Invoke();
+		}
+
+		public void SetData(bool isActive, string interactionHint, Action callback)
+		{
+			InteractionTextHint = interactionHint;
+			OnInteractionTriggered += callback;
+			IsActive = isActive;
 		}
 	}
 }

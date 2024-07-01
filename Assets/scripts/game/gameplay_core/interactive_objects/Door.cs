@@ -62,10 +62,9 @@ namespace game.gameplay_core.interactive_objects
 			UpdateAnimatorState(true);
 		}
 
-		public override void Deserialize(string data)
+		public override void OnDeserialize()
 		{
-			base.Deserialize(data);
-			UpdateAnimatorState(true);
+			UpdateAnimatorState(true);	
 		}
 
 		private void UpdateAnimatorState(bool immediate = false)
