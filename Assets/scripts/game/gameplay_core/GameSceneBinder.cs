@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Sirenix.OdinInspector;
 using src.editor;
 using UnityEditor;
@@ -10,16 +8,16 @@ namespace game.gameplay_core
 	[ExecuteInEditMode]
 	public class GameSceneBinder : MonoBehaviour
 	{
-		public List<SavableSceneObjectAbstract> _savableObjects;
+		[SerializeField]
+		private SceneSavableObjectBase[] _allSavableObjects;
+
+#if UNITY_EDITOR
 
 		[Button]
 		private void FindObjectsOnScene()
 		{
-			_savableObjects = FindObjectsByType<SavableSceneObjectAbstract>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
-
+			_allSavableObjects = FindObjectsByType<SceneSavableObjectBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 		}
-
-#if UNITY_EDITOR
 
 		private void OnEnable()
 		{
@@ -34,21 +32,24 @@ namespace game.gameplay_core
 			SceneChangesInEditorTracker.OnAnyComponentCreateOrDelete -= HandleComponentCreateOrDelete;
 		}
 
-		private void HandleComponentCreateOrDelete(GameObject obj)
+		private void HandleComponentCreateOrDelete(GameObject _)
 		{
 			FindObjectsOnScene();
 		}
 #endif
 
-		//enemies
+		public void BindObjects(LocationContext locationContext)
+		{
+			var saveData = locationContext.LocationSaveData;
 
-		//interactive objects
-		//spawn points
-		//loot
-		//doors
-		//elevators
-		//ladders
-
-		//destructible objects
+			foreach(var sceneSavableObject in _allSavableObjects)
+			{
+				if(!saveData.SavableObjects.ContainsKey(sceneSavableObject.UniqueId))
+				{
+					sceneSavableObject.InitializeFirstTime();
+					saveData.SavableObjects.Add(sceneSavableObject.UniqueId, sceneSavableObject.GetSave());
+				}
+			}
+		}
 	}
 }

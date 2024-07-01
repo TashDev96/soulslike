@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace game.gameplay_core.interactive_objects
 {
-	public class Door : SavableSceneObject<DoorSaveData>
+	public class Door : SavableSceneObjectGeneric<DoorSaveData>
 	{
 		[SerializeField]
 		private bool _isClosedByDefault = true;
 		[SerializeField]
-		private bool _canNotOpenFromFrontSide = false;
+		private bool _canNotOpenFromFrontSide;
 		[SerializeField]
 		private Animator _animator;
 
@@ -27,6 +27,18 @@ namespace game.gameplay_core.interactive_objects
 
 		private static readonly int IsOpen = Animator.StringToHash("IsOpen");
 		private static readonly int Immediate = Animator.StringToHash("Immediate");
+
+		public override void InitializeFirstTime()
+		{
+			SaveData.IsOpened = !_isClosedByDefault;
+
+			InitializeAfterSaveLoaded();
+		}
+
+		protected override void InitializeAfterSaveLoaded()
+		{
+			UpdateAnimatorState(true);
+		}
 
 		private void Awake()
 		{
@@ -51,26 +63,14 @@ namespace game.gameplay_core.interactive_objects
 				//TODO key logic
 			}
 
-			Data.IsOpened = true;
+			SaveData.IsOpened = true;
 			UpdateAnimatorState();
-		}
-
-		public override void InitializeFirstTime()
-		{
-			Data.IsOpened = !_isClosedByDefault;
-
-			UpdateAnimatorState(true);
-		}
-
-		public override void OnDeserialize()
-		{
-			UpdateAnimatorState(true);	
 		}
 
 		private void UpdateAnimatorState(bool immediate = false)
 		{
-			Data.IsOpened = !Data.IsOpened;
-			_animator.SetBool(IsOpen, Data.IsOpened);
+			SaveData.IsOpened = !SaveData.IsOpened;
+			_animator.SetBool(IsOpen, SaveData.IsOpened);
 			if(immediate)
 			{
 				_animator.SetTrigger(Immediate);
@@ -79,7 +79,7 @@ namespace game.gameplay_core.interactive_objects
 	}
 
 	[Serializable]
-	public class DoorSaveData
+	public class DoorSaveData : BaseSaveData
 	{
 		[field: SerializeField]
 		public bool IsOpened { get; set; }

@@ -15,23 +15,24 @@ namespace game.gameplay_core.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			Data.IsUnlocked = _unlockedByDefault;
-			Data.UpgradeLevel = _defaultLevel;
+			SaveData.IsUnlocked = _unlockedByDefault;
+			SaveData.UpgradeLevel = _defaultLevel;
+			InitializeAfterSaveLoaded();
 		}
 
-		public override void OnDeserialize()
+		protected override void InitializeAfterSaveLoaded()
 		{
-			//set animation
 		}
 
 		protected override void HandleInteractionTriggered()
 		{
-			//reset level
+			//TODO reset level
+			//TODO heal player
 		}
 
 		protected override string GetInteractionTextHint()
 		{
-			if(Data.IsUnlocked)
+			if(SaveData.IsUnlocked)
 			{
 				return "Rest At  Bonfire";
 			}
@@ -40,7 +41,7 @@ namespace game.gameplay_core.interactive_objects
 	}
 
 	[Serializable]
-	public class BonfireSaveData
+	public class BonfireSaveData : BaseSaveData
 	{
 		[field: SerializeField]
 		public bool IsUnlocked { get; set; }

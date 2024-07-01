@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.interactive_objects
 {
-	public abstract class InteractiveObjectBase<T> : SavableSceneObject<T>
+	public abstract class InteractiveObjectBase<T> : SavableSceneObjectGeneric<T> where T : BaseSaveData
 	{
 		[SerializeField]
 		protected InteractionZone InteractionZone;

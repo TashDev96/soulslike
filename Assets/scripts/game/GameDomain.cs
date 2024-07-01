@@ -18,8 +18,9 @@ namespace gameplay_meta
 		{
 			if(_sceneDebugMode)
 			{
-				//fake initialize everything
 				
+				//fake initialize everything
+
 				//start core gameplay
 			}
 			else
