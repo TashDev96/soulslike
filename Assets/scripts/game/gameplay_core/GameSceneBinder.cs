@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using src.editor;
 using UnityEditor;
@@ -10,6 +12,7 @@ namespace game.gameplay_core
 	{
 		[SerializeField]
 		private SceneSavableObjectBase[] _allSavableObjects;
+		private LocationContext _locationContext;
 
 #if UNITY_EDITOR
 
@@ -40,14 +43,62 @@ namespace game.gameplay_core
 
 		public void BindObjects(LocationContext locationContext)
 		{
-			var saveData = locationContext.LocationSaveData;
+			_locationContext = locationContext;
+
+			LoadLocationObjects();
+			LoadSpawnedObjects();
+		}
+
+		private void LoadSpawnedObjects()
+		{
+			var locationSave = _locationContext.LocationSaveData;
+
+			foreach(var spawnedObjectSave in locationSave.SpawnedObjects)
+			{
+				var prefab = Resources.Load<GameObject>(spawnedObjectSave.PrefabName);
+				var instance = Instantiate(prefab);
+
+				var spawnedObjectController = new SpawnedObjectController()
+				{
+					SceneInstance = instance.GetComponent<SceneSavableObjectBase>(),
+				};
+
+				spawnedObjectController.LoadSave(spawnedObjectSave);
+				_locationContext.SpawnedObjects.Add(spawnedObjectController);
+			}
+		}
+
+		private void LoadLocationObjects()
+		{
+			var locationSave = _locationContext.LocationSaveData;
+
+			var usedIds = new HashSet<string>();
 
 			foreach(var sceneSavableObject in _allSavableObjects)
 			{
-				if(!saveData.SavableObjects.ContainsKey(sceneSavableObject.UniqueId))
+				var objectId = sceneSavableObject.UniqueId;
+
+				if(locationSave.SceneObjects.TryGetValue(objectId, out var objectSave))
+				{
+					sceneSavableObject.LoadSave(objectSave);
+				}
+				else
 				{
 					sceneSavableObject.InitializeFirstTime();
-					saveData.SavableObjects.Add(sceneSavableObject.UniqueId, sceneSavableObject.GetSave());
+					locationSave.SceneObjects.Add(objectId, sceneSavableObject.GetSave());
+				}
+
+				usedIds.Add(objectId);
+			}
+
+			var keysInSave = locationSave.SceneObjects.Keys.ToArray();
+
+			foreach(var keyInSave in keysInSave)
+			{
+				if(usedIds.Contains(keyInSave))
+				{
+					Debug.LogWarning($"remove from save unused object id {keyInSave}");
+					locationSave.SceneObjects.Remove(keyInSave);
 				}
 			}
 		}
