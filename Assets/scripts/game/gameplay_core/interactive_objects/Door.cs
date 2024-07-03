@@ -1,5 +1,7 @@
 using System;
 using game.enums;
+using game.gameplay_core.interactive_objects.common;
+using game.gameplay_core.location_save_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

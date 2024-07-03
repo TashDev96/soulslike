@@ -4,14 +4,14 @@ namespace game.gameplay_core
 	{
 		private LocationDomain _locationDomain;
 
-		public void LoadLocation()
-		{
-		}
-
 		public void InitializeDebugLocation()
 		{
 			_locationDomain = new LocationDomain();
 			_locationDomain.Initialize();
+		}
+
+		public void LoadLocation()
+		{
 		}
 	}
 }

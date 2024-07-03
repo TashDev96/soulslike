@@ -1,4 +1,6 @@
 using System;
+using game.gameplay_core.interactive_objects.common;
+using game.gameplay_core.location_save_system;
 using UnityEngine;
 
 namespace game.gameplay_core.interactive_objects

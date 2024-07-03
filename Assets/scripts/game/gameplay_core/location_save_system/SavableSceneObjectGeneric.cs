@@ -1,4 +1,4 @@
-namespace game.gameplay_core
+namespace game.gameplay_core.location_save_system
 {
 	public abstract class SavableSceneObjectGeneric<T> : SceneSavableObjectBase where T : BaseSaveData
 	{

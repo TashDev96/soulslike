@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using game.gameplay_core.location_save_system;
 using UnityEngine;
 
 namespace game.gameplay_core
@@ -67,9 +68,9 @@ namespace game.gameplay_core
 				var prefab = Resources.Load<GameObject>(spawnedObjectSave.PrefabName);
 				var instance = Object.Instantiate(prefab);
 
-				var spawnedObjectController = new SpawnedObjectController()
+				var spawnedObjectController = new SpawnedObjectController
 				{
-					SceneInstance = instance.GetComponent<SceneSavableObjectBase>(),
+					SceneInstance = instance.GetComponent<SceneSavableObjectBase>()
 				};
 
 				spawnedObjectController.LoadSave(spawnedObjectSave);

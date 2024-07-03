@@ -2,7 +2,7 @@ using application;
 using dream_lib.src.utils.components;
 using game.gameplay_core;
 
-namespace gameplay_meta
+namespace game
 {
 	public class GameDomain : IGameDomain
 	{
@@ -18,18 +18,14 @@ namespace gameplay_meta
 
 		public void Initialize()
 		{
-			
-			
 			if(_sceneDebugMode)
 			{
 				//TODO fake initialize meta game
 				_coreGameDomain = new CoreGameDomain();
 				_coreGameDomain.InitializeDebugLocation();
 			}
-			else
-			{
-				//open main menu
-			}
+
+			//open main menu
 		}
 	}
 }

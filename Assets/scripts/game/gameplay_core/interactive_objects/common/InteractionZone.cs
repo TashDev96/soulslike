@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
 
-namespace game.gameplay_core.interactive_objects
+namespace game.gameplay_core.interactive_objects.common
 {
 	public class InteractionZone : MonoBehaviour
 	{
 		public string InteractionTextHint;
-		public event Action OnInteractionTriggered;
 
 		public bool IsActive
 		{
@@ -14,16 +13,18 @@ namespace game.gameplay_core.interactive_objects
 			get => gameObject.activeSelf;
 		}
 
-		private void OnCollisionEnter(Collision other)
-		{
-			OnInteractionTriggered?.Invoke();
-		}
+		public event Action OnInteractionTriggered;
 
 		public void SetData(bool isActive, string interactionHint, Action callback)
 		{
 			InteractionTextHint = interactionHint;
 			OnInteractionTriggered += callback;
 			IsActive = isActive;
+		}
+
+		private void OnCollisionEnter(Collision other)
+		{
+			OnInteractionTriggered?.Invoke();
 		}
 	}
 }

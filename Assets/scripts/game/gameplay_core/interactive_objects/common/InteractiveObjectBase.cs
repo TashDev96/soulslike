@@ -1,6 +1,7 @@
+using game.gameplay_core.location_save_system;
 using UnityEngine;
 
-namespace game.gameplay_core.interactive_objects
+namespace game.gameplay_core.interactive_objects.common
 {
 	public abstract class InteractiveObjectBase<T> : SavableSceneObjectGeneric<T> where T : BaseSaveData
 	{

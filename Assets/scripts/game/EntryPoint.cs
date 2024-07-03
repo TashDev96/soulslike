@@ -1,7 +1,7 @@
-using gameplay_meta;
+using application;
 using UnityEngine;
 
-namespace application
+namespace game
 {
 	public class EntryPoint : MonoBehaviour
 	{

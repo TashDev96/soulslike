@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using game.gameplay_core.location_save_system;
 using Sirenix.OdinInspector;
 using src.editor;
 using UnityEditor;
@@ -12,6 +11,11 @@ namespace game.gameplay_core
 	{
 		[SerializeField]
 		private SceneSavableObjectBase[] _allSavableObjects;
+
+		public void BindObjects(LocationContext locationContext)
+		{
+			locationContext.SceneSavableObjects = _allSavableObjects;
+		}
 
 #if UNITY_EDITOR
 
@@ -39,10 +43,5 @@ namespace game.gameplay_core
 			FindObjectsOnScene();
 		}
 #endif
-
-		public void BindObjects(LocationContext locationContext)
-		{
-			locationContext.SceneSavableObjects = _allSavableObjects;
-		}
 	}
 }
