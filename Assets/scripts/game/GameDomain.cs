@@ -1,5 +1,6 @@
 using application;
 using dream_lib.src.utils.components;
+using game.gameplay_core;
 
 namespace gameplay_meta
 {
@@ -8,6 +9,7 @@ namespace gameplay_meta
 		private UnityEventsListener _unityEventsListener = UnityEventsListener.Create("__gameDomainEventsListener");
 
 		private readonly bool _sceneDebugMode;
+		private CoreGameDomain _coreGameDomain;
 
 		public GameDomain(bool sceneDebugMode)
 		{
@@ -16,12 +18,13 @@ namespace gameplay_meta
 
 		public void Initialize()
 		{
+			
+			
 			if(_sceneDebugMode)
 			{
-				
-				//fake initialize everything
-
-				//start core gameplay
+				//TODO fake initialize meta game
+				_coreGameDomain = new CoreGameDomain();
+				_coreGameDomain.InitializeDebugLocation();
 			}
 			else
 			{
