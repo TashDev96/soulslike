@@ -816,7 +816,10 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_EDITOR_ONLY;ODIN_VALIDATOR
+    Android: CF_FORCE_MOBILE_MODE
+    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_EDITOR_ONLY;ODIN_VALIDATOR;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3
+    Windows Store Apps: CF_FORCE_MOBILE_MODE
+    iPhone: CF_FORCE_MOBILE_MODE
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
