@@ -1,11 +1,10 @@
-namespace game.gameplay_core.character.state_machine
+namespace game.gameplay_core.characters.state_machine
 {
 	public class CharacterStateMachine
 	{
-		public BaseCharacterState CurrentState { get; private set; }
-
 		private CharacterCommand _nextCommand;
 		private readonly CharacterContext _context;
+		public BaseCharacterState CurrentState { get; }
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{

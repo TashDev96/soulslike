@@ -1,4 +1,4 @@
-namespace game.gameplay_core.character.state_machine
+namespace game.gameplay_core.characters.state_machine
 {
 	public class WalkState : BaseCharacterState
 	{

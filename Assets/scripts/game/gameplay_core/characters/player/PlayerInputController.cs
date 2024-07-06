@@ -1,8 +1,7 @@
-using game.gameplay_core.character;
 using game.input;
 using UnityEngine;
 
-namespace game.gameplay_core.player
+namespace game.gameplay_core.characters.player
 {
 	public class PlayerInputController : ICharacterBrain
 	{

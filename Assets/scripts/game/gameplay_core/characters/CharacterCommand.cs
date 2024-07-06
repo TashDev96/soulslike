@@ -1,4 +1,4 @@
-namespace game.gameplay_core.character
+namespace game.gameplay_core.characters
 {
 	public enum CharacterCommand
 	{
@@ -10,6 +10,6 @@ namespace game.gameplay_core.character
 		StrongAttack,
 		Block,
 		UseItem,
-		Interact,
+		Interact
 	}
 }

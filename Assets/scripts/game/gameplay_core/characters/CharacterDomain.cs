@@ -1,9 +1,9 @@
 using dream_lib.src.utils.serialization;
-using game.gameplay_core.character.state_machine;
-using game.gameplay_core.player;
+using game.gameplay_core.characters.player;
+using game.gameplay_core.characters.state_machine;
 using UnityEngine;
 
-namespace game.gameplay_core.character
+namespace game.gameplay_core.characters
 {
 	public class CharacterDomain : MonoBehaviour, IOnSceneUniqueIdOwner
 	{
