@@ -1,3 +1,6 @@
+using dream_lib.src.camera;
+using dream_lib.src.extensions;
+using dream_lib.src.reactive;
 using game.input;
 using UnityEngine;
 
@@ -7,28 +10,30 @@ namespace game.gameplay_core.characters.player
 	{
 		private readonly CharacterInputData _inputData;
 		private readonly Transform _characterTransform;
+		private readonly ReactiveProperty<Camera> _mainCamera;
 
-		public PlayerInputController(CharacterInputData inputData, Transform characterTransform)
+		public PlayerInputController(CharacterInputData inputData, Transform characterTransform, ReactiveProperty<Camera> locationContextMainCamera)
 		{
 			_inputData = inputData;
 			_characterTransform = characterTransform;
+			_mainCamera = locationContextMainCamera;
 		}
 
 		public void Update(float deltaTime)
 		{
-			var directionInputLocalSpace = Vector3.zero;
+			var directionInputScreenSpace = Vector2.zero;
 
-			directionInputLocalSpace.x += InputAdapter.GetAxis(InputAxesNames.Horizontal);
-			directionInputLocalSpace.z += InputAdapter.GetAxis(InputAxesNames.Vertical);
-			directionInputLocalSpace = directionInputLocalSpace.normalized;
+			directionInputScreenSpace.x += InputAdapter.GetAxis(InputAxesNames.Horizontal);
+			directionInputScreenSpace.y += InputAdapter.GetAxis(InputAxesNames.Vertical);
+			directionInputScreenSpace = directionInputScreenSpace.normalized;
 
-			if(directionInputLocalSpace.sqrMagnitude > 0)
+			if(directionInputScreenSpace.sqrMagnitude > 0)
 			{
-				_inputData.DirectionLocal = directionInputLocalSpace;
-				_inputData.DirectionWorld = _characterTransform.TransformDirection(_inputData.DirectionLocal);
+				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlane(directionInputScreenSpace);
+				_inputData.DirectionLocal = _characterTransform.InverseTransformDirection(_inputData.DirectionWorld);
 			}
 
-			_inputData.Command = CalculateCommand(directionInputLocalSpace);
+			_inputData.Command = CalculateCommand(directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
 		}
 

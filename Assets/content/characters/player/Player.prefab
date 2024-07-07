@@ -132,6 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugDrawer:
+    DrawStateMachineInfo: 1
   <UniqueId>k__BackingField: Player
 --- !u!1 &2291678830616944205
 GameObject:

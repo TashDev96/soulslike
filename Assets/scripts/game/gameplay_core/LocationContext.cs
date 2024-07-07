@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using game.gameplay_core.location_save_system;
+using UnityEngine;
 
 namespace game.gameplay_core
 {
@@ -13,5 +15,7 @@ namespace game.gameplay_core
 		public SceneSavableObjectBase[] SceneSavableObjects;
 		public CharacterDomain[] Characters { get; set; }
 		public List<SpawnedObjectController> SpawnedObjects { get; set; }
+		public ReactiveCommand<float> LocationUpdate { get; set; }
+		public ReactiveProperty<Camera> MainCamera { get; set; } = new();
 	}
 }

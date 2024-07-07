@@ -14,11 +14,14 @@ namespace game.gameplay_core
 		private SceneSavableObjectBase[] _allSavableObjects;
 		[SerializeField]
 		private CharacterDomain[] _allCharacters;
+		[SerializeField]
+		private Camera _mainCamera;
 
 		public void BindObjects(LocationContext locationContext)
 		{
 			locationContext.SceneSavableObjects = _allSavableObjects;
 			locationContext.Characters = _allCharacters;
+			locationContext.MainCamera.Value = _mainCamera;
 		}
 
 #if UNITY_EDITOR

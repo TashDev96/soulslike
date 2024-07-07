@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using dream_lib.src.reactive;
+using dream_lib.src.utils.components;
 using game.gameplay_core.characters;
 using game.gameplay_core.location_save_system;
 using UnityEngine;
@@ -10,6 +12,7 @@ namespace game.gameplay_core
 	public class LocationDomain
 	{
 		private LocationContext _locationContext = new();
+		private UnityEventsListener _unityEventsListener;
 
 		public void Initialize()
 		{
@@ -23,12 +26,21 @@ namespace game.gameplay_core
 
 			//TODO Load Saved Data
 			_locationContext.LocationSaveData = new LocationSaveData();
+			_locationContext.LocationUpdate = new ReactiveCommand<float>();
 
 			sceneBinder.BindObjects(_locationContext);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();
 			LoadCharacters();
+
+			_unityEventsListener = UnityEventsListener.Create("__locationDomainUnityEvents");
+			_unityEventsListener.OnUpdate += HandleUpdate;
+		}
+
+		private void HandleUpdate()
+		{
+			_locationContext.LocationUpdate.Execute(Time.deltaTime);
 		}
 
 		private void LoadCharacters()
@@ -37,7 +49,7 @@ namespace game.gameplay_core
 
 			var player = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 
-			player.Initialize();
+			player.Initialize(_locationContext);
 		}
 
 		private void LoadSceneObjects()
