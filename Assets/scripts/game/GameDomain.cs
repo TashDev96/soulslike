@@ -22,7 +22,7 @@ namespace game
 			{
 				//TODO fake initialize meta game
 				_coreGameDomain = new CoreGameDomain();
-				_coreGameDomain.InitializeDebugLocation();
+				_coreGameDomain.PlayOnDebugLocation();
 			}
 
 			//open main menu

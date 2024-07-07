@@ -32,7 +32,10 @@ namespace game.gameplay_core.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData.IsOpened = !_isClosedByDefault;
+			SaveData = new DoorSaveData
+			{
+				IsOpened = !_isClosedByDefault
+			};
 
 			InitializeAfterSaveLoaded();
 		}

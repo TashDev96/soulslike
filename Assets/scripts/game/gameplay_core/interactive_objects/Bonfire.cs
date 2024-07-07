@@ -17,8 +17,11 @@ namespace game.gameplay_core.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData.IsUnlocked = _unlockedByDefault;
-			SaveData.UpgradeLevel = _defaultLevel;
+			SaveData = new BonfireSaveData
+			{
+				IsUnlocked = _unlockedByDefault,
+				UpgradeLevel = _defaultLevel
+			};
 			InitializeAfterSaveLoaded();
 		}
 

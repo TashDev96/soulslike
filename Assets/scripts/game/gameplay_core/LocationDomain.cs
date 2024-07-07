@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using game.gameplay_core.characters;
 using game.gameplay_core.location_save_system;
 using UnityEngine;
 
@@ -11,17 +13,31 @@ namespace game.gameplay_core
 
 		public void Initialize()
 		{
+			InitializeAsync().Forget();
+		}
+
+		private async UniTask InitializeAsync()
+		{
 			var sceneBinder = Object.FindAnyObjectByType<GameSceneBinder>();
 			_locationContext = new LocationContext();
 
-			_locationContext.LocationSaveData = new LocationSaveData();
-
 			//TODO Load Saved Data
+			_locationContext.LocationSaveData = new LocationSaveData();
 
 			sceneBinder.BindObjects(_locationContext);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();
+			LoadCharacters();
+		}
+
+		private void LoadCharacters()
+		{
+			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
+
+			var player = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
+
+			player.Initialize();
 		}
 
 		private void LoadSceneObjects()

@@ -1,6 +1,7 @@
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.state_machine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.characters
@@ -15,9 +16,11 @@ namespace game.gameplay_core.characters
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
-		public void Initialize(bool isPlayer)
+		public void Initialize()
 		{
 			_context.InputData = new CharacterInputData();
+
+			_stateMachine = new CharacterStateMachine(_context);
 
 			if(UniqueId == "Player")
 			{
@@ -34,9 +37,10 @@ namespace game.gameplay_core.characters
 			_brain.Update(deltaTime);
 		}
 
+		[Button]
 		public void GenerateUniqueId()
 		{
-			UniqueId = "Character" + Random.value;
+			UniqueId = name + Random.value;
 		}
 	}
 }

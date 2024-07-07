@@ -1,4 +1,5 @@
 using dream_lib.src.utils.serialization;
+using game.gameplay_core.characters;
 using game.gameplay_core.location_save_system;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -11,10 +12,13 @@ namespace game.gameplay_core
 	{
 		[SerializeField]
 		private SceneSavableObjectBase[] _allSavableObjects;
+		[SerializeField]
+		private CharacterDomain[] _allCharacters;
 
 		public void BindObjects(LocationContext locationContext)
 		{
 			locationContext.SceneSavableObjects = _allSavableObjects;
+			locationContext.Characters = _allCharacters;
 		}
 
 #if UNITY_EDITOR
@@ -23,6 +27,7 @@ namespace game.gameplay_core
 		private void FindObjectsOnScene()
 		{
 			_allSavableObjects = FindObjectsByType<SceneSavableObjectBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			_allCharacters = FindObjectsByType<CharacterDomain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 		}
 
 		private void OnEnable()

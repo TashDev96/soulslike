@@ -12,6 +12,10 @@ namespace game.gameplay_core.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
+			SaveData = new PickupItemSaveData
+			{
+				PickedUp = false
+			};
 		}
 
 		protected override void InitializeAfterSaveLoaded()
