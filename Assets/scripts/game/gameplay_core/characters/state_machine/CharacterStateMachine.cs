@@ -17,11 +17,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
-
-			CurrentState = new IdleState(_context)
-			{
-				Context = _context
-			};
+			SetState(_idleState);
 		}
 
 		public void Update(float deltaTime)

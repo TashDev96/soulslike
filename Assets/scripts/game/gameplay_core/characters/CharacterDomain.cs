@@ -1,4 +1,5 @@
 using System;
+using dream_lib.src.reactive;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.state_machine;
@@ -17,13 +18,21 @@ namespace game.gameplay_core.characters
 
 		[SerializeField]
 		private CharacterDebugDrawer _debugDrawer;
+		[SerializeField]
+		private ReactiveProperty<float> _walkSpeed = new ReactiveProperty<float>(5f);
+		[SerializeField]
+		private ReactiveProperty<float> _rotationSpeed = new ReactiveProperty<float>(360f);
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
-			_context = new CharacterContext(transform);
+			_context = new CharacterContext(transform)
+			{
+				WalkSpeed = _walkSpeed,
+				RotationSpeed = _rotationSpeed,
+			};
 			_stateMachine = new CharacterStateMachine(_context);
 
 			if(UniqueId == "Player")
@@ -51,10 +60,11 @@ namespace game.gameplay_core.characters
 		{
 			UniqueId = name + Random.value;
 		}
-
+#if UNITY_EDITOR
 		private void OnDrawGizmos()
 		{
-			_debugDrawer.OnDrawGizmos();	
+			_debugDrawer.OnDrawGizmos();
 		}
+#endif
 	}
 }

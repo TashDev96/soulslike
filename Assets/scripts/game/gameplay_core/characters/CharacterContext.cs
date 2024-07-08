@@ -1,3 +1,4 @@
+using dream_lib.src.reactive;
 using UnityEngine;
 
 namespace game.gameplay_core.characters
@@ -20,5 +21,7 @@ namespace game.gameplay_core.characters
 		//hp
 		//stamina
 		//
+		public ReactiveProperty<float> WalkSpeed { get; set; }
+		public ReactiveProperty<float> RotationSpeed { get; set; }
 	}
 }

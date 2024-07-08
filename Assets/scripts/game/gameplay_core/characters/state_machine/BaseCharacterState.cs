@@ -2,16 +2,16 @@ namespace game.gameplay_core.characters.state_machine
 {
 	public abstract class BaseCharacterState
 	{
-		public CharacterContext Context { get; set; }
+		protected CharacterContext _context;
 		public bool IsComplete { get; protected set; }
 		public bool IsReadyToRememberNextCommand { get; set; }
 
-		public abstract void Update(float deltaTime);
-
 		protected BaseCharacterState(CharacterContext context)
 		{
-			Context = context;
+			_context = context;
 		}
+
+		public abstract void Update(float deltaTime);
 
 		public virtual bool TryChangeStateByCustomLogic(out BaseCharacterState newState)
 		{

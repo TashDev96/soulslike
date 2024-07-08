@@ -64,3 +64,4 @@ Assets/Samples/
 Assets/third_party/Samples/
 Assets/z_experiments_gitignore/
 Assets/z_experiments_gitignore.meta
+build/

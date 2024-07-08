@@ -9,6 +9,11 @@ namespace game.input
 			return CF2Input.GetAxis(axis.ToString());
 		}
 
+		public static float GetAxisRaw(InputAxesNames axis)
+		{
+			return CF2Input.GetAxisRaw(axis.ToString());
+		}
+
 		public static bool GetButtonDown(InputAxesNames axis)
 		{
 			return CF2Input.GetButtonDown(axis.ToString());

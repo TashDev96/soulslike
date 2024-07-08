@@ -1,3 +1,5 @@
+using UnityEngine.Device;
+
 namespace application
 {
 	public static class ApplicationDomain
@@ -13,6 +15,8 @@ namespace application
 			}
 
 			Initialized = true;
+
+			Application.targetFrameRate = 60;
 
 			_gameDomain = gameDomain;
 			_gameDomain.Initialize();

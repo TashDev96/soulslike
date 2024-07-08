@@ -23,13 +23,13 @@ namespace game.gameplay_core.characters.player
 		{
 			var directionInputScreenSpace = Vector2.zero;
 
-			directionInputScreenSpace.x += InputAdapter.GetAxis(InputAxesNames.Horizontal);
-			directionInputScreenSpace.y += InputAdapter.GetAxis(InputAxesNames.Vertical);
+			directionInputScreenSpace.x += InputAdapter.GetAxisRaw(InputAxesNames.Horizontal);
+			directionInputScreenSpace.y += InputAdapter.GetAxisRaw(InputAxesNames.Vertical);
 			directionInputScreenSpace = directionInputScreenSpace.normalized;
 
 			if(directionInputScreenSpace.sqrMagnitude > 0)
 			{
-				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlane(directionInputScreenSpace);
+				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlaneWithSkew(directionInputScreenSpace);
 				_inputData.DirectionLocal = _characterTransform.InverseTransformDirection(_inputData.DirectionWorld);
 			}
 

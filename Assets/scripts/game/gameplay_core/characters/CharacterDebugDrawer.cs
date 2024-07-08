@@ -14,7 +14,8 @@ namespace game.gameplay_core.characters
 		private Transform _transform;
 		private CharacterStateMachine _stateMachine;
 		private GUIStyle _textStyle;
-
+		
+		#if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
 			if(!_initialized)
@@ -32,6 +33,8 @@ namespace game.gameplay_core.characters
 
 			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);
 		}
+		
+		#endif
 
 		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
 		{
