@@ -27,8 +27,7 @@ namespace game.gameplay_core.characters
 
 			if(DrawStateMachineInfo)
 			{
-				str += $"state:   {_stateMachine.CurrentState.GetType().Name}\n";
-				str += $"command: {_context.InputData.Command}\n";
+				str += _stateMachine.GetDebugString();
 			}
 
 			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);

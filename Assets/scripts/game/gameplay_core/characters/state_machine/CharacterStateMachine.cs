@@ -93,5 +93,13 @@ namespace game.gameplay_core.characters.state_machine
 			CurrentState = newState;
 			_nextCommand = CharacterCommand.None;
 		}
+
+		public string GetDebugString()
+		{
+			var str = "";
+			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
+			str += $"command: {_context.InputData.Command}\n";
+			return str;
+		}
 	}
 }

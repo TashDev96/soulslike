@@ -136,6 +136,8 @@ MonoBehaviour:
     DrawStateMachineInfo: 1
   _walkSpeed:
     _value: 3
+  _rotationSpeed:
+    _value: 540
   <UniqueId>k__BackingField: Player
 --- !u!1 &2291678830616944205
 GameObject:
