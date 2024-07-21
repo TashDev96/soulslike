@@ -1,4 +1,4 @@
-using System;
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.player;
@@ -32,16 +32,27 @@ namespace game.gameplay_core.characters
 			{
 				WalkSpeed = _walkSpeed,
 				RotationSpeed = _rotationSpeed,
+				MovementController = GetComponent<CharacterController>(),
 			};
 			_stateMachine = new CharacterStateMachine(_context);
 
 			if(UniqueId == "Player")
 			{
-				_brain = new PlayerInputController(_context.InputData, transform, locationContext.MainCamera);
+				_brain = new PlayerInputController(locationContext.MainCamera);
+				_brain.Initialize(_context);
 			}
 			else
 			{
 				_brain = GetComponent<ICharacterBrain>();
+				if(_brain != null)
+				{
+					_brain.Initialize(_context);
+				}
+				else
+				{
+					Debug.LogError($"Brain not found for character {transform.GetFullPathInScene()}");
+					return;
+				}
 			}
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
@@ -49,9 +60,9 @@ namespace game.gameplay_core.characters
 			_debugDrawer.Initialize(transform, _context, _stateMachine);
 		}
 
-		public void CustomUpdate(float deltaTime)
+		private void CustomUpdate(float deltaTime)
 		{
-			_brain.Update(deltaTime);
+			_brain.Think(deltaTime);
 			_stateMachine.Update(deltaTime);
 		}
 

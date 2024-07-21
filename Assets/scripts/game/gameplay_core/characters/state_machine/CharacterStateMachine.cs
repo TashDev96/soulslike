@@ -84,6 +84,7 @@ namespace game.gameplay_core.characters.state_machine
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
+				_nextCommand = CharacterCommand.None;
 			}
 			return;
 		}

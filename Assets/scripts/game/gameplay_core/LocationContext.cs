@@ -13,7 +13,8 @@ namespace game.gameplay_core
 		public CharacterDomain Player;
 
 		public SceneSavableObjectBase[] SceneSavableObjects;
-		public CharacterDomain[] Characters { get; set; }
+		
+		public List<CharacterDomain> Characters { get; set; }
 		public List<SpawnedObjectController> SpawnedObjects { get; set; }
 		public ReactiveCommand<float> LocationUpdate { get; set; }
 		public ReactiveProperty<Camera> MainCamera { get; set; } = new();

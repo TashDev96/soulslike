@@ -13,6 +13,7 @@ namespace game.gameplay_core
 	{
 		private LocationContext _locationContext = new();
 		private UnityEventsListener _unityEventsListener;
+		private GameSceneInstaller _sceneInstaller;
 
 		public void Initialize()
 		{
@@ -21,14 +22,14 @@ namespace game.gameplay_core
 
 		private async UniTask InitializeAsync()
 		{
-			var sceneBinder = Object.FindAnyObjectByType<GameSceneBinder>();
-			_locationContext = new LocationContext();
+			_sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>();
 
-			//TODO Load Saved Data
-			_locationContext.LocationSaveData = new LocationSaveData();
-			_locationContext.LocationUpdate = new ReactiveCommand<float>();
-
-			sceneBinder.BindObjects(_locationContext);
+			_locationContext = new LocationContext
+			{
+				LocationSaveData = new LocationSaveData(),
+				LocationUpdate = new ReactiveCommand<float>(),
+				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera)
+			};
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();
@@ -45,15 +46,24 @@ namespace game.gameplay_core
 
 		private void LoadCharacters()
 		{
+			_locationContext.Characters = new List<CharacterDomain>();
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
-
 			var player = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
-
 			player.Initialize(_locationContext);
+
+			foreach(var character in _sceneInstaller.Characters)
+			{
+				character.Initialize(_locationContext);
+				_locationContext.Characters.Add(character);
+			}
+
+			_locationContext.Characters.Add(player);
 		}
 
 		private void LoadSceneObjects()
 		{
+			_locationContext.SceneSavableObjects = _sceneInstaller.SavableObjects.ToArray();
+
 			var locationSave = _locationContext.LocationSaveData;
 
 			var usedIds = new HashSet<string>();

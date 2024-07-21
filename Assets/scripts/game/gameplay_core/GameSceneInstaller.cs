@@ -8,29 +8,22 @@ using UnityEngine;
 namespace game.gameplay_core
 {
 	[ExecuteInEditMode]
-	public class GameSceneBinder : MonoBehaviour
+	public class GameSceneInstaller : MonoBehaviour
 	{
-		[SerializeField]
-		private SceneSavableObjectBase[] _allSavableObjects;
-		[SerializeField]
-		private CharacterDomain[] _allCharacters;
-		[SerializeField]
-		private Camera _mainCamera;
-
-		public void BindObjects(LocationContext locationContext)
-		{
-			locationContext.SceneSavableObjects = _allSavableObjects;
-			locationContext.Characters = _allCharacters;
-			locationContext.MainCamera.Value = _mainCamera;
-		}
+		[field: SerializeField]
+		public SceneSavableObjectBase[] SavableObjects { get; private set; }
+		[field: SerializeField]
+		public CharacterDomain[] Characters { get; private set; }
+		[field: SerializeField]
+		public Camera MainCamera { get; private set; }
 
 #if UNITY_EDITOR
 
 		[Button]
 		private void FindObjectsOnScene()
 		{
-			_allSavableObjects = FindObjectsByType<SceneSavableObjectBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-			_allCharacters = FindObjectsByType<CharacterDomain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			SavableObjects = FindObjectsByType<SceneSavableObjectBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			Characters = FindObjectsByType<CharacterDomain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 		}
 
 		private void OnEnable()

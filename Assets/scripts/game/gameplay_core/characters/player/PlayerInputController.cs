@@ -1,5 +1,4 @@
 using dream_lib.src.camera;
-using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.input;
 using UnityEngine;
@@ -8,18 +7,24 @@ namespace game.gameplay_core.characters.player
 {
 	public class PlayerInputController : ICharacterBrain
 	{
-		private readonly CharacterInputData _inputData;
-		private readonly Transform _characterTransform;
+		private CharacterInputData _inputData;
+		private Transform _characterTransform;
 		private readonly ReactiveProperty<Camera> _mainCamera;
+		private CharacterContext _characterContext;
 
-		public PlayerInputController(CharacterInputData inputData, Transform characterTransform, ReactiveProperty<Camera> locationContextMainCamera)
+		public PlayerInputController(ReactiveProperty<Camera> locationContextMainCamera)
 		{
-			_inputData = inputData;
-			_characterTransform = characterTransform;
 			_mainCamera = locationContextMainCamera;
 		}
 
-		public void Update(float deltaTime)
+		public void Initialize(CharacterContext context)
+		{
+			_characterContext = context;
+			_inputData = context.InputData;
+			_characterTransform = context.Transform;
+		}
+
+		public void Think(float deltaTime)
 		{
 			var directionInputScreenSpace = Vector2.zero;
 

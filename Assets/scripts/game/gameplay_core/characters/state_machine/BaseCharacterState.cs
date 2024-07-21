@@ -19,6 +19,11 @@ namespace game.gameplay_core.characters.state_machine
 			return false;
 		}
 
+		public virtual void HandleNextInput(CharacterCommand input, out bool readyToRemember)
+		{
+			readyToRemember = false;
+		}
+
 		public virtual bool IsContinuousForCommand(CharacterCommand command)
 		{
 			return false;

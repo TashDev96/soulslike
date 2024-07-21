@@ -1,4 +1,5 @@
 using dream_lib.src.reactive;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters
@@ -7,6 +8,7 @@ namespace game.gameplay_core.characters
 	{
 		public CharacterInputData InputData;
 		public Transform Transform;
+		public CharacterController MovementController;
 
 		public CharacterContext(Transform transform)
 		{
@@ -23,5 +25,6 @@ namespace game.gameplay_core.characters
 		//
 		public ReactiveProperty<float> WalkSpeed { get; set; }
 		public ReactiveProperty<float> RotationSpeed { get; set; }
+		public ReactiveProperty<WeaponDomain> CurrentWeapon { get; set; }
 	}
 }
