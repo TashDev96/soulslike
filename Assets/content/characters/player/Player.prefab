@@ -1,5 +1,76 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &458727774296053383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190690924677334171}
+  - component: {fileID: 4536650897598067234}
+  m_Layer: 0
+  m_Name: DebugWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &190690924677334171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458727774296053383}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.6373975, z: -0, w: -0.7705352}
+  m_LocalPosition: {x: -1.3436472, y: 1.6389145, z: 0.13391286}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919925399006202490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4536650897598067234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458727774296053383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd42311a287401f9789b38b1784e43d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Config:
+    <RegularAttacks>k__BackingField:
+    - <BaseDamage>k__BackingField: 10
+      <Duration>k__BackingField: 2
+      <HitTimings>k__BackingField:
+      - {x: 0.35833332, y: 0.575}
+      <HitDamageMultipliers>k__BackingField:
+      - 1
+    - <BaseDamage>k__BackingField: 10
+      <Duration>k__BackingField: 3
+      <HitTimings>k__BackingField:
+      - {x: 0.2888889, y: 0.42777777}
+      - {x: 0.47222224, y: 0.5222222}
+      <HitDamageMultipliers>k__BackingField:
+      - 1
+      - 2
+    <StrongAttacks>k__BackingField: []
+    <SpecialAttacks>k__BackingField: []
+    <RegularToRegularCustomOrder>k__BackingField:
+      _list: []
+      _keyCollision: 0
+    <RegularToStrongCustomOrder>k__BackingField:
+      _list: []
+      _keyCollision: 0
+    <StrongToRegularCustomOrder>k__BackingField:
+      _list: []
+      _keyCollision: 0
 --- !u!1 &1115408808283148802
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +190,7 @@ Transform:
   m_Children:
   - {fileID: 2339832027269603005}
   - {fileID: 6747424450283158477}
+  - {fileID: 190690924677334171}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -1159.196, z: 0}
 --- !u!114 &618884517016294189
@@ -140,6 +212,7 @@ MonoBehaviour:
   _rotationSpeed:
     _value: 540
   <UniqueId>k__BackingField: Player
+  <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
 --- !u!143 &313819625180903426
 CharacterController:
   m_ObjectHideFlags: 0

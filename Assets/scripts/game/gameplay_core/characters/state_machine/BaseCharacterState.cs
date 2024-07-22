@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace game.gameplay_core.characters.state_machine
 {
 	public abstract class BaseCharacterState
@@ -9,6 +11,12 @@ namespace game.gameplay_core.characters.state_machine
 		protected BaseCharacterState(CharacterContext context)
 		{
 			_context = context;
+		}
+
+		protected void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
+		{
+			var targetRotation = Quaternion.LookRotation(toDirection);
+			_context.Transform.rotation = Quaternion.RotateTowards(_context.Transform.rotation, targetRotation, speed * deltaTime);
 		}
 
 		public abstract void Update(float deltaTime);
@@ -27,6 +35,11 @@ namespace game.gameplay_core.characters.state_machine
 		public virtual bool IsContinuousForCommand(CharacterCommand command)
 		{
 			return false;
+		}
+
+		public virtual void OnEnter()
+		{
+			
 		}
 	}
 }

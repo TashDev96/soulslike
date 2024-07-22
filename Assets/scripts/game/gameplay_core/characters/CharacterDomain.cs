@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.state_machine;
+using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -26,6 +27,9 @@ namespace game.gameplay_core.characters
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
+		[field: SerializeField]
+		public WeaponDomain DebugWeapon { get; private set; }
+
 		public void Initialize(LocationContext locationContext)
 		{
 			_context = new CharacterContext(transform)
@@ -33,6 +37,7 @@ namespace game.gameplay_core.characters
 				WalkSpeed = _walkSpeed,
 				RotationSpeed = _rotationSpeed,
 				MovementController = GetComponent<CharacterController>(),
+				CurrentWeapon = new ReactiveProperty<WeaponDomain>(DebugWeapon),
 			};
 			_stateMachine = new CharacterStateMachine(_context);
 

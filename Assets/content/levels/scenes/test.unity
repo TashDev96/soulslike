@@ -5113,6 +5113,14 @@ PrefabInstance:
       propertyPath: leftStickConfig.analogDeadZone
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: mouseConfig.horzDeltaBinding.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[3].analogToDigitalThresh
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5865372750619838363, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: m_Name
       value: ControlFreakSetup

@@ -10,6 +10,7 @@ namespace game.gameplay_core.characters.state_machine
 
 		private IdleState _idleState;
 		private WalkState _walkState;
+		private AttackState _attackState;
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -17,6 +18,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
+			_attackState = new AttackState(_context);
 			SetState(_idleState);
 		}
 
@@ -72,8 +74,16 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.Roll:
 						break;
 					case CharacterCommand.Attack:
-						break;
 					case CharacterCommand.StrongAttack:
+
+						_attackState.SetType(_nextCommand);
+						
+						if(CurrentState is AttackState)
+						{
+							_attackState.TryContinueCombo();
+						}
+						SetState(_attackState);
+
 						break;
 					case CharacterCommand.Block:
 						break;
@@ -92,6 +102,7 @@ namespace game.gameplay_core.characters.state_machine
 		private void SetState(BaseCharacterState newState)
 		{
 			CurrentState = newState;
+			CurrentState.OnEnter();
 			_nextCommand = CharacterCommand.None;
 		}
 
@@ -100,6 +111,7 @@ namespace game.gameplay_core.characters.state_machine
 			var str = "";
 			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
 			str += $"command: {_context.InputData.Command}\n";
+			str += $"next command: {_nextCommand}\n";
 			return str;
 		}
 	}
