@@ -53,7 +53,7 @@ namespace game.gameplay_core.characters.state_machine
 				_hitsData.Add(new HitData());
 			}
 
-			Debug.Log($"attack {_currentAttackIndex} {_type}");
+			Debug.Log($"attack {_currentAttackIndex} {_currentAttackIndex % (attacksList.Length - 1)} {_type}");
 			IsComplete = false;
 			_time = 0;
 		}

@@ -33,17 +33,33 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void TryRememberNextCommand()
 		{
+			var inputCommand = _context.InputData.Command;
+
 			if(_nextCommand == CharacterCommand.None)
 			{
-				if(CurrentState.IsContinuousForCommand(_context.InputData.Command))
+				if(CheckIsContinuousCommand(inputCommand))
 				{
 					return;
 				}
 
 				if(CurrentState.IsReadyToRememberNextCommand)
 				{
-					_nextCommand = _context.InputData.Command;
+					_nextCommand = inputCommand;
 				}
+			}
+		}
+
+		private bool CheckIsContinuousCommand(CharacterCommand command)
+		{
+			switch(command)
+			{
+				case CharacterCommand.None:
+				case CharacterCommand.Walk:
+				case CharacterCommand.Run:
+				case CharacterCommand.Block:
+					return true;
+				default:
+					return false;
 			}
 		}
 
@@ -77,7 +93,7 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.StrongAttack:
 
 						_attackState.SetType(_nextCommand);
-						
+
 						if(CurrentState is AttackState)
 						{
 							_attackState.TryContinueCombo();
