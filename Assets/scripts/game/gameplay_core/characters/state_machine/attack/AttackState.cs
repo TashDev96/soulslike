@@ -48,9 +48,12 @@ namespace game.gameplay_core.characters.state_machine
 			_currentAttackConfig = attacksList[_currentAttackIndex % (attacksList.Length - 1)];
 
 			_hitsData.Clear();
-			for(var i = 0; i < _currentAttackConfig.HitTimings.Count; i++)
+			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
 			{
-				_hitsData.Add(new HitData());
+				_hitsData.Add(new HitData()
+				{
+					Config = _currentAttackConfig.HitConfigs[i], 
+				});
 			}
 
 			Debug.Log($"attack {_currentAttackIndex} {_currentAttackIndex % (attacksList.Length - 1)} {_type}");
@@ -67,22 +70,22 @@ namespace game.gameplay_core.characters.state_machine
 				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value, deltaTime);
 			}
 
-			for(var i = 0; i < _hitsData.Count; i++)
+			foreach (var hitData in _hitsData)
 			{
-				var startEndTime = _currentAttackConfig.HitTimings[i];
+				var startEndTime = hitData.Config.Timing;
 
-				if(!_hitsData[i].IsStarted && NormalizedTime >= startEndTime.x)
+				if(!hitData.IsStarted && NormalizedTime >= startEndTime.x)
 				{
-					_hitsData[i].IsStarted = true;
+					hitData.IsStarted = true;
 				}
 
-				if(_hitsData[i].IsActive)
+				if(hitData.IsActive)
 				{
 					//overlap capsule
 
 					if(NormalizedTime >= startEndTime.y)
 					{
-						_hitsData[i].IsEnded = true;
+						hitData.IsEnded = true;
 					}
 				}
 			}
@@ -113,6 +116,8 @@ namespace game.gameplay_core.characters.state_machine
 			public bool IsStarted;
 			public bool IsEnded;
 			public bool IsActive => IsStarted && !IsEnded;
+			public HitConfig Config;
+
 			public HashSet<string> TargetedCharacters = new();
 		}
 	}

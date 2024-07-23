@@ -13,49 +13,51 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float BaseDamage { get; private set; }
 
-		[field: SerializeField]
+		[field: SerializeField] 
 		public float Duration { get; private set; }
 
-		[field: SerializeField]
-		[field: HideInInspector]
-		public List<Vector2> HitTimings { get; private set; } = new();
 
 		[field: SerializeField]
 		[field: HideInInspector]
-		public List<float> HitDamageMultipliers { get; private set; } = new();
+		public List<HitConfig> HitConfigs { get; private set; }
+
 
 #if UNITY_EDITOR
 		[OnInspectorGUI]
-		private void What()
+		private void DrawCustomHitsInspector()
 		{
 			GUILayout.Space(20);
 			GUILayout.Label($"Hit Configs:");
 			GUILayout.Space(10);
 
-			for(int i = 0; i < HitTimings.Count; i++)
+			for (int i = 0; i < HitConfigs.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
 				GUILayout.Label($"Hit {i}");
-				if(GUILayout.Button("-", GUILayout.Width(30)))
+				if (GUILayout.Button("-", GUILayout.Width(30)))
 				{
-					HitTimings.RemoveAt(i);
-					HitDamageMultipliers.RemoveAt(i);
+					HitConfigs.RemoveAt(i);
 					return;
 				}
+
 				GUILayout.EndHorizontal();
 
 				const int fps = 60;
-				var denormalizedTiming = HitTimings[i] * Duration * fps;
-				denormalizedTiming = SirenixEditorFields.MinMaxSlider($"Timing:", denormalizedTiming, new Vector2(0, Duration*fps));
-				HitTimings[i] = denormalizedTiming.Round(1) / Duration/fps;
-				HitDamageMultipliers[i] = SirenixEditorFields.FloatField($"Damage Multiplier:", HitDamageMultipliers[i]);
+				var denormalizedTiming = HitConfigs[i].Timing * Duration * fps;
+				denormalizedTiming = SirenixEditorFields.MinMaxSlider($"Timing:", denormalizedTiming, new Vector2(0, Duration * fps));
+				HitConfigs[i].Timing = denormalizedTiming.Round(1) / Duration / fps;
+				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField($"Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				GUILayout.Space(10);
 			}
 
-			if(GUILayout.Button("Add"))
+			if (GUILayout.Button("Add"))
 			{
-				HitTimings.Add(new Vector2(0.5f, 0.6f));
-				HitDamageMultipliers.Add(1f);
+				HitConfigs.Add(new()
+				{
+					Timing = new Vector2(0.5f, 0.6f),
+					DamageMultiplier = 1,
+				});
+				 
 			}
 		}
 #endif
