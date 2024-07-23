@@ -71,9 +71,15 @@ namespace game.gameplay_core.characters.state_machine
 				return;
 			}
 
+			var commandToCalculate = _nextCommand;
+			if (_nextCommand == CharacterCommand.None)
+			{
+				commandToCalculate = _context.InputData.Command;
+			}
+
 			if(CurrentState.IsComplete)
 			{
-				switch(_nextCommand)
+				switch(commandToCalculate)
 				{
 					case CharacterCommand.None:
 						if(CurrentState.IsContinuousForCommand(_context.InputData.Command))
