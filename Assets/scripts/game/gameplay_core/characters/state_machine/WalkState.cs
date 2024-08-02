@@ -14,7 +14,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			var inputWorld = _context.InputData.DirectionWorld;
 
-			RotateCharacter(inputWorld, _context.RotationSpeed.Value, deltaTime);
+			RotateCharacter(inputWorld, _context.RotationSpeed.DegreesPerSecond, deltaTime);
 			
 			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.forward, inputWorld));
 			var velocity = inputWorld * directionMultiplier * _context.WalkSpeed.Value;

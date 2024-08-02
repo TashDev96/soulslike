@@ -52,7 +52,7 @@ namespace game.gameplay_core.characters.state_machine
 			{
 				_hitsData.Add(new HitData()
 				{
-					Config = _currentAttackConfig.HitConfigs[i], 
+					Config = _currentAttackConfig.HitConfigs[i],
 				});
 			}
 
@@ -67,10 +67,10 @@ namespace game.gameplay_core.characters.state_machine
 
 			if(!_hitsData.Any(d => d.IsStarted))
 			{
-				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value, deltaTime);
+				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.DegreesPerSecond, deltaTime);
 			}
 
-			foreach (var hitData in _hitsData)
+			foreach(var hitData in _hitsData)
 			{
 				var startEndTime = hitData.Config.Timing;
 

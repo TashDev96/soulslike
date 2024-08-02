@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: _rotationSpeed._halfTurnDurationSeconds
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_Name
       value: Enemy_Small Variant

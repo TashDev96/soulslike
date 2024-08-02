@@ -22,7 +22,7 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		private ReactiveProperty<float> _walkSpeed = new ReactiveProperty<float>(5f);
 		[SerializeField]
-		private ReactiveProperty<float> _rotationSpeed = new ReactiveProperty<float>(360f);
+		private RotationSpeedData _rotationSpeed;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }

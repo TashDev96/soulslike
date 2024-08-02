@@ -27,6 +27,7 @@ namespace game.gameplay_core.characters.state_machine
 			TryRememberNextCommand();
 
 			CurrentState.Update(deltaTime);
+				//
 
 			TryChangeState();
 		}

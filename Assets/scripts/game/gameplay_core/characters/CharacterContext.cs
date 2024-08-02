@@ -24,7 +24,7 @@ namespace game.gameplay_core.characters
 		//stamina
 		//
 		public ReactiveProperty<float> WalkSpeed { get; set; }
-		public ReactiveProperty<float> RotationSpeed { get; set; }
+		public RotationSpeedData RotationSpeed { get; set; }
 		public ReactiveProperty<WeaponDomain> CurrentWeapon { get; set; }
 	}
 }
