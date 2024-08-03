@@ -1,3 +1,4 @@
+using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.serialization;
@@ -19,13 +20,12 @@ namespace game.gameplay_core.characters
 
 		[SerializeField]
 		private CharacterDebugDrawer _debugDrawer;
-		[SerializeField]
-		private ReactiveProperty<float> _walkSpeed = new ReactiveProperty<float>(5f);
-		[SerializeField]
-		private RotationSpeedData _rotationSpeed;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
+
+		[SerializeField]
+		private CharacterConfig _config;
 
 		[field: SerializeField]
 		public WeaponDomain DebugWeapon { get; private set; }
@@ -34,10 +34,12 @@ namespace game.gameplay_core.characters
 		{
 			_context = new CharacterContext(transform)
 			{
-				WalkSpeed = _walkSpeed,
-				RotationSpeed = _rotationSpeed,
+				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
+				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
+				Config = _config,
 				MovementController = GetComponent<CharacterController>(),
 				CurrentWeapon = new ReactiveProperty<WeaponDomain>(DebugWeapon),
+				Animator = GetComponent<AnimancerComponent>()
 			};
 			_stateMachine = new CharacterStateMachine(_context);
 

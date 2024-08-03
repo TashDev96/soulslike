@@ -4,7 +4,7 @@ using UnityEngine;
 namespace game.gameplay_core.characters
 {
 	[Serializable]
-	public class RotationSpeedData
+	public struct RotationSpeedData
 	{
 		[SerializeField]
 		private float _halfTurnDurationSeconds;

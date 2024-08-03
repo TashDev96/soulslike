@@ -10,11 +10,17 @@ namespace game.gameplay_core.characters.state_machine
 			IsComplete = true;
 		}
 
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			_context.Animator.Play(_context.Config.IdleAnimation);
+		}
+
 		public override void Update(float deltaTime)
 		{
 			var inputWorld = _context.InputData.DirectionWorld;
 
-			RotateCharacter(inputWorld, _context.RotationSpeed.DegreesPerSecond, deltaTime);
+			RotateCharacter(inputWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			
 			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.forward, inputWorld));
 			var velocity = inputWorld * directionMultiplier * _context.WalkSpeed.Value;

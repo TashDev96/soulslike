@@ -1,3 +1,4 @@
+using Animancer;
 using dream_lib.src.reactive;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -24,7 +25,9 @@ namespace game.gameplay_core.characters
 		//stamina
 		//
 		public ReactiveProperty<float> WalkSpeed { get; set; }
-		public RotationSpeedData RotationSpeed { get; set; }
+		public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
 		public ReactiveProperty<WeaponDomain> CurrentWeapon { get; set; }
+		public CharacterConfig Config { get; set; }
+		public AnimancerComponent Animator { get; set; }
 	}
 }

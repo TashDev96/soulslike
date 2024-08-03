@@ -55,6 +55,8 @@ namespace game.gameplay_core.characters.state_machine
 					Config = _currentAttackConfig.HitConfigs[i],
 				});
 			}
+			
+			_context.Animator.Play(_currentAttackConfig.Animation);
 
 			Debug.Log($"attack {_currentAttackIndex} {_currentAttackIndex % (attacksList.Length - 1)} {_type}");
 			IsComplete = false;
@@ -67,7 +69,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			if(!_hitsData.Any(d => d.IsStarted))
 			{
-				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.DegreesPerSecond, deltaTime);
+				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			}
 
 			foreach(var hitData in _hitsData)
