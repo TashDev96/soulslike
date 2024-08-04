@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd42311a287401f9789b38b1784e43d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitColliders:
+  - {fileID: 4725038385825252919}
   Config:
     <RegularAttacks>k__BackingField:
     - <Animation>k__BackingField:
@@ -60,7 +62,9 @@ MonoBehaviour:
       <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
       <HitConfigs>k__BackingField:
-      - <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
+      - <InvolvedColliders>k__BackingField: 010000
+        <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
+        <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
     - <Animation>k__BackingField:
         _FadeDuration: 0.25
@@ -409,6 +413,7 @@ Transform:
   m_Children:
   - {fileID: 3039175197032892056}
   - {fileID: 5703626353122994650}
+  - {fileID: 7436892871259565529}
   m_Father: {fileID: 3919925399006202490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4965938122599690265
@@ -454,8 +459,8 @@ GameObject:
   - component: {fileID: 5167767869099505736}
   - component: {fileID: 703023570509958965}
   - component: {fileID: 1728854168996855099}
-  - component: {fileID: 8639689047192796679}
-  m_Layer: 0
+  - component: {fileID: 4725038385825252919}
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,8 +535,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8639689047192796679
-BoxCollider:
+--- !u!136 &4725038385825252919
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -545,12 +550,83 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  serializedVersion: 2
+  m_Radius: 1.07
+  m_Height: 1.0000002
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0.00000023841858}
+--- !u!1 &7145545717421006737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7436892871259565529}
+  - component: {fileID: 5913837822015771739}
+  - component: {fileID: 1877066224745364191}
+  m_Layer: 7
+  m_Name: DamageRecieverBody
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7436892871259565529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145545717421006737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.019, y: 1.075, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2339832027269603005}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &5913837822015771739
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145545717421006737}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1877066224745364191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145545717421006737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a572fa7f21e44a058f79af87663d2d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damageMultiplier: 1
 --- !u!1001 &4073073474766327944
 PrefabInstance:
   m_ObjectHideFlags: 0

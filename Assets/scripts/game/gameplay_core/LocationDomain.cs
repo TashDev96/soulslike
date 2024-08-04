@@ -53,6 +53,10 @@ namespace game.gameplay_core
 
 			foreach(var character in _sceneInstaller.Characters)
 			{
+				if(!character.gameObject.activeSelf)
+				{
+					continue;
+				}
 				character.Initialize(_locationContext);
 				_locationContext.Characters.Add(character);
 			}

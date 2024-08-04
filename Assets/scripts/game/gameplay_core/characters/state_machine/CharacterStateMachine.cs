@@ -4,13 +4,26 @@ namespace game.gameplay_core.characters.state_machine
 {
 	public class CharacterStateMachine
 	{
-		private CharacterCommand _nextCommand;
+		private CharacterCommand NextCommand
+		{
+			get => _nextCommand;
+			set
+			{
+				if(value != _nextCommand)
+				{
+					// Debug.Log($"{Time.frameCount}set command {value}");
+				}
+				_nextCommand = value;
+			}
+		}
+
 		private readonly CharacterContext _context;
 		public BaseCharacterState CurrentState { get; private set; }
 
 		private IdleState _idleState;
 		private WalkState _walkState;
 		private AttackState _attackState;
+		private CharacterCommand _nextCommand;
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -22,21 +35,26 @@ namespace game.gameplay_core.characters.state_machine
 			SetState(_idleState);
 		}
 
-		public void Update(float deltaTime)
+		public void Update(float deltaTime, bool calculateInputLogic)
 		{
-			TryRememberNextCommand();
+			if(calculateInputLogic)
+			{
+				TryRememberNextCommand();
+			}
 
 			CurrentState.Update(deltaTime);
-				//
 
-			TryChangeState();
+			if(calculateInputLogic)
+			{
+				TryChangeState();
+			}
 		}
 
 		private void TryRememberNextCommand()
 		{
 			var inputCommand = _context.InputData.Command;
 
-			if(_nextCommand == CharacterCommand.None)
+			if(NextCommand == CharacterCommand.None)
 			{
 				if(CheckIsContinuousCommand(inputCommand))
 				{
@@ -45,7 +63,7 @@ namespace game.gameplay_core.characters.state_machine
 
 				if(CurrentState.IsReadyToRememberNextCommand)
 				{
-					_nextCommand = inputCommand;
+					NextCommand = inputCommand;
 				}
 			}
 		}
@@ -66,8 +84,8 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void TryChangeState()
 		{
-			var commandToCalculate = _nextCommand;
-			if (_nextCommand == CharacterCommand.None)
+			var commandToCalculate = NextCommand;
+			if(NextCommand == CharacterCommand.None)
 			{
 				commandToCalculate = _context.InputData.Command;
 			}
@@ -93,7 +111,7 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.Attack:
 					case CharacterCommand.StrongAttack:
 
-						_attackState.SetType(_nextCommand);
+						_attackState.SetType(NextCommand);
 
 						if(CurrentState is AttackState)
 						{
@@ -111,16 +129,15 @@ namespace game.gameplay_core.characters.state_machine
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-				_nextCommand = CharacterCommand.None;
+				NextCommand = CharacterCommand.None;
 			}
-			return;
 		}
 
 		private void SetState(BaseCharacterState newState)
 		{
 			CurrentState = newState;
 			CurrentState.OnEnter();
-			_nextCommand = CharacterCommand.None;
+			NextCommand = CharacterCommand.None;
 		}
 
 		public string GetDebugString()
@@ -128,7 +145,7 @@ namespace game.gameplay_core.characters.state_machine
 			var str = "";
 			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
 			str += $"command: {_context.InputData.Command}\n";
-			str += $"next command: {_nextCommand}\n";
+			str += $"next command: {NextCommand}\n";
 			return str;
 		}
 	}

@@ -29,25 +29,46 @@ namespace game.gameplay_core.characters
 		private CharacterConfig _config;
 
 		[field: SerializeField]
-		public WeaponDomain DebugWeapon { get; private set; }
+		public WeaponView DebugWeapon { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
-			_context = new CharacterContext(transform)
+			var isPlayer = UniqueId == "Player";
+
+			_context = new CharacterContext
 			{
 				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
 				Config = _config,
 				MovementController = GetComponent<CharacterController>(),
-				CurrentWeapon = new ReactiveProperty<WeaponDomain>(DebugWeapon),
+				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				Animator = GetComponent<AnimancerComponent>(),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
+				CharacterId = new ReactiveProperty<string>(UniqueId),
+				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.Enemy),
+				IsPlayer = new ReactiveProperty<bool>(isPlayer),
+				Transform = transform,
+				InputData = new CharacterInputData(),
+				ApplyDamage = new ReactiveCommand<DamageInfo>(),
 			};
 
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
+			_context.CurrentWeapon.Value.Initialize(_context);
+
+			_context.ApplyDamage.OnExecute += ApplyDamage;
+			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
+			foreach(var damageReceiver in damageReceivers)
+			{
+				damageReceiver.Initialize(new DamageReceiver.DamageReceiverContext()
+				{
+					Team = _context.Team,
+					CharacterId = _context.CharacterId,
+					ApplyDamage = _context.ApplyDamage,
+				});
+			}
 
 			if(UniqueId == "Player")
 			{
@@ -73,18 +94,26 @@ namespace game.gameplay_core.characters
 			_debugDrawer.Initialize(transform, _context, _stateMachine);
 		}
 
+		private void ApplyDamage(DamageInfo damageInfo)
+		{
+			Debug.Log(damageInfo.DamageAmount);
+		}
+
 		private void CustomUpdate(float deltaTime)
 		{
 			var deltaTimeLeft = deltaTime * _context.DeltaTimeMultiplier.Value;
-			Debug.Log($"{(1f/deltaTime):0.##}");
-
+			
+			_brain.Think(deltaTimeLeft);
+			var calculateInputLogic = true;
+			
 			while(deltaTimeLeft > 0f)
 			{
 				var deltaTimeStep = Mathf.Min(deltaTimeLeft, _context.MaxDeltaTime.Value);
 				deltaTimeLeft -= deltaTimeStep;
-				_brain.Think(deltaTimeStep);
-				_stateMachine.Update(deltaTimeStep);
+				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
+				_context.CurrentWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
+				calculateInputLogic = false;
 			}
 		}
 

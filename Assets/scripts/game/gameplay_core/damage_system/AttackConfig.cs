@@ -36,7 +36,6 @@ namespace game.gameplay_core.damage_system
 
 #if UNITY_EDITOR
 
-
 		private PreviewAnimationDrawer _animationPreview;
 
 		[OnInspectorGUI]
@@ -46,9 +45,9 @@ namespace game.gameplay_core.damage_system
 			{
 				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, Animation.Clip);
 			}
-			
+
 			EditorGUI.BeginChangeCheck();
-			
+
 			_animationPreview.ClearTimeChanges();
 			RotationDisabledTime = DrawTimingSlider("Rotation Disabled Time:", RotationDisabledTime);
 			LockedStateTime = DrawTimingSlider("Locked State Time:", LockedStateTime);
@@ -61,14 +60,15 @@ namespace game.gameplay_core.damage_system
 			{
 				GUILayout.BeginHorizontal();
 				GUILayout.Label($"Hit {i}");
-				if(GUILayout.Button("-", GUILayout.Width(30)))
+				if(GUILayout.Button("Remove", GUILayout.Width(30)))
 				{
 					HitConfigs.RemoveAt(i);
 					EditorUtility.SetDirty(Selection.activeObject);
 					return;
 				}
-
 				GUILayout.EndHorizontal();
+
+				DrawSelectColliders(HitConfigs[i]);
 
 				HitConfigs[i].Timing = DrawTimingSlider("Timing:", HitConfigs[i].Timing);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField($"Damage Multiplier:", HitConfigs[i].DamageMultiplier);
@@ -88,17 +88,28 @@ namespace game.gameplay_core.damage_system
 			_animationPreview.Draw();
 
 			GUILayout.Space(40);
-			
+
 			if(EditorGUI.EndChangeCheck())
 			{
 				EditorUtility.SetDirty(Selection.activeObject);
 			}
 		}
 
+		private void DrawSelectColliders(HitConfig hitConfig)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Colliders involved: ");
+			for(var i = 0; i < 3; i++)
+			{
+				hitConfig.InvolvedColliders[i] = GUILayout.Toggle(hitConfig.InvolvedColliders[i], $"{i}");
+			}
+			GUILayout.EndHorizontal();
+		}
+
 		private Vector2 DrawTimingSlider(string label, Vector2 value)
 		{
 			var fps = Animation.Clip ? Animation.Clip.frameRate : 60f;
-			
+
 			GUILayout.Label(label);
 			_animationPreview.RegisterTimeBefore(value.x);
 			_animationPreview.RegisterTimeBefore(value.y);

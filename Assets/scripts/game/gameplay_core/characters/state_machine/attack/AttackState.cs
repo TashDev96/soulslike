@@ -70,7 +70,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			_time += deltaTime;
 
-			if(!_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
+			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
 				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			}
@@ -88,6 +88,8 @@ namespace game.gameplay_core.characters.state_machine
 
 				if(hitData.IsActive)
 				{
+					_context.CurrentWeapon.Value.CastAttack(_currentAttackConfig, hitData);
+
 					if(NormalizedTime >= hitTiming.y)
 					{
 						hitData.IsEnded = true;
@@ -98,7 +100,6 @@ namespace game.gameplay_core.characters.state_machine
 			}
 
 			_context.MaxDeltaTime.Value = hasActiveHit ? CharacterConstants.MaxDeltaTimeAttacking : CharacterConstants.MaxDeltaTimeNormal;
-			_context.CurrentWeapon.Value.DrawDebugCast(hasActiveHit);
 
 			if(_time >= _currentAttackConfig.Duration)
 			{
@@ -134,16 +135,6 @@ namespace game.gameplay_core.characters.state_machine
 		public void SetType(CharacterCommand nextCommand)
 		{
 			_type = nextCommand;
-		}
-
-		private class HitData
-		{
-			public bool IsStarted;
-			public bool IsEnded;
-			public HitConfig Config;
-
-			public HashSet<string> TargetedCharacters = new();
-			public bool IsActive => IsStarted && !IsEnded;
 		}
 	}
 }

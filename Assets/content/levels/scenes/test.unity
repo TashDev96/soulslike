@@ -1445,10 +1445,9 @@ MonoBehaviour:
   - {fileID: 875381543}
   - {fileID: 636421841}
   <Characters>k__BackingField:
+  - {fileID: 5039234435017277223}
   - {fileID: 1717593984}
   - {fileID: 4377911618002708333}
-  - {fileID: 2008532831}
-  - {fileID: 5039234435017277223}
   <MainCamera>k__BackingField: {fileID: 330585545}
 --- !u!4 &466086402
 Transform:
@@ -4169,6 +4168,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Small (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
       value: Enemy_Small (1)0.1280272
@@ -4972,17 +4975,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
---- !u!114 &2008532831 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-  m_PrefabInstance: {fileID: 2008532830}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2114369412
 GameObject:
   m_ObjectHideFlags: 0
@@ -5222,6 +5214,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Big
       objectReference: {fileID: 0}
+    - target: {fileID: 5892839429199645874, guid: 52825454100dbe0448e865223bea6297, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8612867717841487573, guid: 52825454100dbe0448e865223bea6297, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.6266551
@@ -5395,6 +5391,10 @@ PrefabInstance:
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_Name
       value: Enemy_Small
+      objectReference: {fileID: 0}
+    - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
