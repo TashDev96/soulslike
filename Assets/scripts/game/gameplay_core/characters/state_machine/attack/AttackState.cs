@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using dream_lib.src.extensions;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -9,13 +7,16 @@ namespace game.gameplay_core.characters.state_machine
 {
 	public class AttackState : BaseCharacterState
 	{
-		private int _currentAttackIndex = 0;
+		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
 		private bool _comboTriggered;
 		private float _time;
 		private CharacterCommand _type;
 		private AttackConfig _currentAttackConfig;
-		private List<HitData> _hitsData = new();
+		private readonly List<HitData> _hitsData = new();
+
+		private float NormalizedTime => _time / _currentAttackConfig.Duration;
+		private float TimeLeft => _currentAttackConfig.Duration - _time;
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -52,9 +53,9 @@ namespace game.gameplay_core.characters.state_machine
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
 			{
-				_hitsData.Add(new HitData()
+				_hitsData.Add(new HitData
 				{
-					Config = _currentAttackConfig.HitConfigs[i],
+					Config = _currentAttackConfig.HitConfigs[i]
 				});
 			}
 
@@ -74,25 +75,30 @@ namespace game.gameplay_core.characters.state_machine
 				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			}
 
+			var hasActiveHit = false;
+
 			foreach(var hitData in _hitsData)
 			{
-				var startEndTime = hitData.Config.Timing;
+				var hitTiming = hitData.Config.Timing;
 
-				if(!hitData.IsStarted && NormalizedTime >= startEndTime.x)
+				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
 				{
 					hitData.IsStarted = true;
 				}
 
 				if(hitData.IsActive)
 				{
-					//overlap capsule
-
-					if(NormalizedTime >= startEndTime.y)
+					if(NormalizedTime >= hitTiming.y)
 					{
 						hitData.IsEnded = true;
 					}
 				}
+
+				hasActiveHit |= hitData.IsActive;
 			}
+
+			_context.MaxDeltaTime.Value = hasActiveHit ? CharacterConstants.MaxDeltaTimeAttacking : CharacterConstants.MaxDeltaTimeNormal;
+			_context.CurrentWeapon.Value.DrawDebugCast(hasActiveHit);
 
 			if(_time >= _currentAttackConfig.Duration)
 			{
@@ -101,9 +107,6 @@ namespace game.gameplay_core.characters.state_machine
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 		}
-
-		private float NormalizedTime => _time / _currentAttackConfig.Duration;
-		private float TimeLeft => _currentAttackConfig.Duration - _time;
 
 		public void TryContinueCombo()
 		{
@@ -137,10 +140,10 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			public bool IsStarted;
 			public bool IsEnded;
-			public bool IsActive => IsStarted && !IsEnded;
 			public HitConfig Config;
 
 			public HashSet<string> TargetedCharacters = new();
+			public bool IsActive => IsStarted && !IsEnded;
 		}
 	}
 }

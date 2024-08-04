@@ -60,7 +60,7 @@ MonoBehaviour:
       <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
       <HitConfigs>k__BackingField:
-      - <Timing>k__BackingField: {x: 0.3035714, y: 0.3214286}
+      - <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
         <DamageMultiplier>k__BackingField: 1
     - <Animation>k__BackingField:
         _FadeDuration: 0.25
@@ -435,14 +435,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4965938122599690265}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.65545124, w: 0.75523746}
-  m_LocalPosition: {x: 0.854, y: 1.259, z: -0}
+  m_LocalRotation: {x: -0.6927532, y: -0.2691688, z: -0.120435506, w: 0.6581311}
+  m_LocalPosition: {x: 0.67000186, y: 1.11, z: 1.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 190690924677334171}
   m_Father: {fileID: 3919925399006202490}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -81.908}
+  m_LocalEulerAnglesHint: {x: -77.602, y: -119.19185, z: 87.016}
 --- !u!1 &5430971074112620380
 GameObject:
   m_ObjectHideFlags: 0

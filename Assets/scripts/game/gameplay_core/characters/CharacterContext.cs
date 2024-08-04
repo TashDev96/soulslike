@@ -29,5 +29,7 @@ namespace game.gameplay_core.characters
 		public ReactiveProperty<WeaponDomain> CurrentWeapon { get; set; }
 		public CharacterConfig Config { get; set; }
 		public AnimancerComponent Animator { get; set; }
+		public ReactiveProperty<float> DeltaTimeMultiplier { get; set; }
+		public ReactiveProperty<float> MaxDeltaTime { get; set; }
 	}
 }

@@ -7,6 +7,7 @@ using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Playables;
 using Random = UnityEngine.Random;
 
 namespace game.gameplay_core.characters
@@ -39,9 +40,14 @@ namespace game.gameplay_core.characters
 				Config = _config,
 				MovementController = GetComponent<CharacterController>(),
 				CurrentWeapon = new ReactiveProperty<WeaponDomain>(DebugWeapon),
-				Animator = GetComponent<AnimancerComponent>()
+				Animator = GetComponent<AnimancerComponent>(),
+				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
+				MaxDeltaTime = new ReactiveProperty<float>(1),
 			};
+
 			_stateMachine = new CharacterStateMachine(_context);
+			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
+			_context.Animator.Animator.enabled = true;
 
 			if(UniqueId == "Player")
 			{
@@ -69,8 +75,17 @@ namespace game.gameplay_core.characters
 
 		private void CustomUpdate(float deltaTime)
 		{
-			_brain.Think(deltaTime);
-			_stateMachine.Update(deltaTime);
+			var deltaTimeLeft = deltaTime * _context.DeltaTimeMultiplier.Value;
+			Debug.Log($"{(1f/deltaTime):0.##}");
+
+			while(deltaTimeLeft > 0f)
+			{
+				var deltaTimeStep = Mathf.Min(deltaTimeLeft, _context.MaxDeltaTime.Value);
+				deltaTimeLeft -= deltaTimeStep;
+				_brain.Think(deltaTimeStep);
+				_stateMachine.Update(deltaTimeStep);
+				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
+			}
 		}
 
 		[Button]
