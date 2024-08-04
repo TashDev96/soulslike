@@ -26,7 +26,7 @@ namespace game.gameplay_core.damage_system
 		}
 
 		[field: SerializeField]
-		public AnimationCurve CharacterRotationSpeed { get; private set; }
+		public Vector2 RotationDisabledTime { get; private set; }
 
 		[field: SerializeField]
 		[field: HideInInspector]
@@ -34,7 +34,6 @@ namespace game.gameplay_core.damage_system
 
 #if UNITY_EDITOR
 
-		const int FPS = 60;
 
 		private PreviewAnimationDrawer _animationPreview;
 
@@ -49,6 +48,7 @@ namespace game.gameplay_core.damage_system
 			EditorGUI.BeginChangeCheck();
 			
 			_animationPreview.ClearTimeChanges();
+			RotationDisabledTime = DrawTimingSlider("Rotation Disabled Time:", RotationDisabledTime);
 
 			GUILayout.Space(20);
 			GUILayout.Label($"Hit Configs:");
@@ -72,7 +72,7 @@ namespace game.gameplay_core.damage_system
 				GUILayout.Space(10);
 			}
 
-			if(GUILayout.Button("Add"))
+			if(GUILayout.Button("Add Hit"))
 			{
 				HitConfigs.Add(new()
 				{
@@ -84,6 +84,8 @@ namespace game.gameplay_core.damage_system
 			_animationPreview.CalculateTimeFromChanges();
 			_animationPreview.Draw();
 
+			GUILayout.Space(40);
+			
 			if(EditorGUI.EndChangeCheck())
 			{
 				EditorUtility.SetDirty(Selection.activeObject);
@@ -92,12 +94,14 @@ namespace game.gameplay_core.damage_system
 
 		private Vector2 DrawTimingSlider(string label, Vector2 value)
 		{
+			var fps = Animation.Clip ? Animation.Clip.frameRate : 60f;
+			
 			GUILayout.Label(label);
 			_animationPreview.RegisterTimeBefore(value.x);
 			_animationPreview.RegisterTimeBefore(value.y);
-			var denormalizedTiming = value * Duration * FPS;
-			var framedTiming = SirenixEditorFields.MinMaxSlider(denormalizedTiming, new Vector2(0, Duration * FPS), false);
-			var result = framedTiming.Round(1) / Duration / FPS;
+			var denormalizedTiming = value * Duration * fps;
+			var framedTiming = SirenixEditorFields.MinMaxSlider(denormalizedTiming, new Vector2(0, Duration * fps), false);
+			var result = framedTiming.Round(1) / Duration / fps;
 			_animationPreview.RegisterTimeAfter(result.x);
 			_animationPreview.RegisterTimeAfter(result.y);
 			return result;

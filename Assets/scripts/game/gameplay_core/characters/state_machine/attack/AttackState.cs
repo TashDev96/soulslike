@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using dream_lib.src.extensions;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
@@ -67,7 +68,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			_time += deltaTime;
 
-			if(!_hitsData.Any(d => d.IsStarted))
+			if(!_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
 				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			}
