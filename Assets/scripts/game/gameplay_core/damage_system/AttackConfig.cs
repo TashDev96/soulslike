@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
+using dream_lib.src.utils.editor;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
+using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -24,13 +26,30 @@ namespace game.gameplay_core.damage_system
 		}
 
 		[field: SerializeField]
+		public AnimationCurve CharacterRotationSpeed { get; private set; }
+
+		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
 
 #if UNITY_EDITOR
+
+		const int FPS = 60;
+
+		private PreviewAnimationDrawer _animationPreview;
+
 		[OnInspectorGUI]
 		private void DrawCustomHitsInspector()
 		{
+			if(_animationPreview == null)
+			{
+				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, Animation.Clip);
+			}
+			
+			EditorGUI.BeginChangeCheck();
+			
+			_animationPreview.ClearTimeChanges();
+
 			GUILayout.Space(20);
 			GUILayout.Label($"Hit Configs:");
 			GUILayout.Space(10);
@@ -42,15 +61,13 @@ namespace game.gameplay_core.damage_system
 				if(GUILayout.Button("-", GUILayout.Width(30)))
 				{
 					HitConfigs.RemoveAt(i);
+					EditorUtility.SetDirty(Selection.activeObject);
 					return;
 				}
 
 				GUILayout.EndHorizontal();
 
-				const int fps = 60;
-				var denormalizedTiming = HitConfigs[i].Timing * Duration * fps;
-				denormalizedTiming = SirenixEditorFields.MinMaxSlider(denormalizedTiming, new Vector2(0, Duration * fps), false);
-				HitConfigs[i].Timing = denormalizedTiming.Round(1) / Duration / fps;
+				HitConfigs[i].Timing = DrawTimingSlider("Timing:", HitConfigs[i].Timing);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField($"Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				GUILayout.Space(10);
 			}
@@ -63,6 +80,27 @@ namespace game.gameplay_core.damage_system
 					DamageMultiplier = 1,
 				});
 			}
+
+			_animationPreview.CalculateTimeFromChanges();
+			_animationPreview.Draw();
+
+			if(EditorGUI.EndChangeCheck())
+			{
+				EditorUtility.SetDirty(Selection.activeObject);
+			}
+		}
+
+		private Vector2 DrawTimingSlider(string label, Vector2 value)
+		{
+			GUILayout.Label(label);
+			_animationPreview.RegisterTimeBefore(value.x);
+			_animationPreview.RegisterTimeBefore(value.y);
+			var denormalizedTiming = value * Duration * FPS;
+			var framedTiming = SirenixEditorFields.MinMaxSlider(denormalizedTiming, new Vector2(0, Duration * FPS), false);
+			var result = framedTiming.Round(1) / Duration / FPS;
+			_animationPreview.RegisterTimeAfter(result.x);
+			_animationPreview.RegisterTimeAfter(result.y);
+			return result;
 		}
 #endif
 	}
