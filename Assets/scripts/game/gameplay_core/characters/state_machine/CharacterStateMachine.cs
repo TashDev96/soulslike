@@ -66,19 +66,13 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void TryChangeState()
 		{
-			if(CurrentState.TryChangeStateByCustomLogic(out var newState))
-			{
-				SetState(newState);
-				return;
-			}
-
 			var commandToCalculate = _nextCommand;
 			if (_nextCommand == CharacterCommand.None)
 			{
 				commandToCalculate = _context.InputData.Command;
 			}
 
-			if(CurrentState.IsComplete)
+			if(CurrentState.CanExecuteNextCommand(commandToCalculate))
 			{
 				switch(commandToCalculate)
 				{

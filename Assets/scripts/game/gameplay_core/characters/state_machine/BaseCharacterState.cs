@@ -21,12 +21,6 @@ namespace game.gameplay_core.characters.state_machine
 
 		public abstract void Update(float deltaTime);
 
-		public virtual bool TryChangeStateByCustomLogic(out BaseCharacterState newState)
-		{
-			newState = null;
-			return false;
-		}
-
 		public virtual void HandleNextInput(CharacterCommand input, out bool readyToRemember)
 		{
 			readyToRemember = false;
@@ -40,6 +34,11 @@ namespace game.gameplay_core.characters.state_machine
 		public virtual void OnEnter()
 		{
 			
+		}
+
+		public virtual bool CanExecuteNextCommand(CharacterCommand command)
+		{
+			return IsComplete;
 		}
 	}
 }

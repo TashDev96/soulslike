@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using dream_lib.src.extensions;
@@ -56,7 +57,7 @@ namespace game.gameplay_core.characters.state_machine
 					Config = _currentAttackConfig.HitConfigs[i],
 				});
 			}
-			
+
 			_context.Animator.Play(_currentAttackConfig.Animation);
 
 			Debug.Log($"attack {_currentAttackIndex} {_currentAttackIndex % (attacksList.Length - 1)} {_type}");
@@ -107,6 +108,24 @@ namespace game.gameplay_core.characters.state_machine
 		public void TryContinueCombo()
 		{
 			_comboTriggered = true;
+		}
+
+		public override bool CanExecuteNextCommand(CharacterCommand command)
+		{
+			switch(command)
+			{
+				case CharacterCommand.Walk:
+				case CharacterCommand.Run:
+				case CharacterCommand.Roll:
+				case CharacterCommand.UseItem:
+				case CharacterCommand.Interact:
+					return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
+				case CharacterCommand.Attack:
+				case CharacterCommand.StrongAttack:
+				case CharacterCommand.Block:
+					return IsComplete;
+			}
+			return IsComplete;
 		}
 
 		public void SetType(CharacterCommand nextCommand)

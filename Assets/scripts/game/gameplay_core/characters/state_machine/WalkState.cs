@@ -13,7 +13,7 @@ namespace game.gameplay_core.characters.state_machine
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			_context.Animator.Play(_context.Config.IdleAnimation);
+			_context.Animator.Play(_context.Config.IdleAnimation, 0.3f);
 		}
 
 		public override void Update(float deltaTime)

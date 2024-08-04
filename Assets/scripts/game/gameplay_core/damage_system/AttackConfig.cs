@@ -27,6 +27,8 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public Vector2 RotationDisabledTime { get; private set; }
+		[field: SerializeField]
+		public Vector2 LockedStateTime { get; private set; } = new Vector2(0, 1f);
 
 		[field: SerializeField]
 		[field: HideInInspector]
@@ -49,6 +51,7 @@ namespace game.gameplay_core.damage_system
 			
 			_animationPreview.ClearTimeChanges();
 			RotationDisabledTime = DrawTimingSlider("Rotation Disabled Time:", RotationDisabledTime);
+			LockedStateTime = DrawTimingSlider("Locked State Time:", LockedStateTime);
 
 			GUILayout.Space(20);
 			GUILayout.Label($"Hit Configs:");
