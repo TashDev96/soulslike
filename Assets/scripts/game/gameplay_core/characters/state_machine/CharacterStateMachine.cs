@@ -32,11 +32,24 @@ namespace game.gameplay_core.characters.state_machine
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
 			_attackState = new AttackState(_context);
+
+			_context.IsDead.OnChanged += HandleIsDeadChanged;
+			
 			SetState(_idleState);
+		}
+
+		private void HandleIsDeadChanged(bool isDead)
+		{
+			if(isDead)
+			{
+				SetState(new DeadState(_context));
+			}
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)
 		{
+			calculateInputLogic &= !_context.IsDead.Value;
+
 			if(calculateInputLogic)
 			{
 				TryRememberNextCommand();
@@ -135,6 +148,7 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void SetState(BaseCharacterState newState)
 		{
+			CurrentState?.OnExit();
 			CurrentState = newState;
 			CurrentState.OnEnter();
 			NextCommand = CharacterCommand.None;

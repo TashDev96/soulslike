@@ -36,6 +36,11 @@ namespace game.gameplay_core.characters.state_machine
 			
 		}
 
+		public virtual void OnExit()
+		{
+			
+		}
+
 		public virtual bool CanExecuteNextCommand(CharacterCommand command)
 		{
 			return IsComplete;

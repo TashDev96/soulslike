@@ -4170,7 +4170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
@@ -5216,7 +5216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5892839429199645874, guid: 52825454100dbe0448e865223bea6297, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8612867717841487573, guid: 52825454100dbe0448e865223bea6297, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5394,7 +5394,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField

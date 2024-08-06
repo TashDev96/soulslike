@@ -2,6 +2,8 @@ using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.serialization;
+using game.gameplay_core.characters.bindings;
+using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.damage_system;
@@ -28,19 +30,26 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		private CharacterConfig _config;
 
+		[SerializeField]
+		private GameObject _deadStateRoot;
+
 		[field: SerializeField]
 		public WeaponView DebugWeapon { get; private set; }
+
+		private CharacterHealthLogic _healthLogic;
+		private CharacterMovementLogic _movementLogic;
 
 		public void Initialize(LocationContext locationContext)
 		{
 			var isPlayer = UniqueId == "Player";
+
+			_movementLogic = new CharacterMovementLogic();
 
 			_context = new CharacterContext
 			{
 				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
 				Config = _config,
-				MovementController = GetComponent<CharacterController>(),
 				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				Animator = GetComponent<AnimancerComponent>(),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
@@ -51,14 +60,24 @@ namespace game.gameplay_core.characters
 				Transform = transform,
 				InputData = new CharacterInputData(),
 				ApplyDamage = new ReactiveCommand<DamageInfo>(),
+				CharacterStats = _config.DefaultStats,
+				IsDead = new IsDead(),
+				DeadStateRoot = _deadStateRoot,
+				MovementLogic = _movementLogic,
 			};
+
+			_movementLogic.SetContext(new CharacterMovementLogic.Context()
+			{
+				CharacterTransform = transform,
+				UnityCharacterController = GetComponent<CharacterController>(),
+				IsDead = _context.IsDead,
+			});
 
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
 			_context.CurrentWeapon.Value.Initialize(_context);
 
-			_context.ApplyDamage.OnExecute += ApplyDamage;
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
 			foreach(var damageReceiver in damageReceivers)
 			{
@@ -69,6 +88,13 @@ namespace game.gameplay_core.characters
 					ApplyDamage = _context.ApplyDamage,
 				});
 			}
+
+			_healthLogic = new CharacterHealthLogic(new CharacterHealthLogic.Context()
+			{
+				ApplyDamage = _context.ApplyDamage,
+				IsDead = _context.IsDead,
+				CharacterStats = _context.CharacterStats,
+			});
 
 			if(UniqueId == "Player")
 			{
@@ -102,16 +128,17 @@ namespace game.gameplay_core.characters
 		private void CustomUpdate(float deltaTime)
 		{
 			var deltaTimeLeft = deltaTime * _context.DeltaTimeMultiplier.Value;
-			
+
 			_brain.Think(deltaTimeLeft);
 			var calculateInputLogic = true;
-			
+
 			while(deltaTimeLeft > 0f)
 			{
 				var deltaTimeStep = Mathf.Min(deltaTimeLeft, _context.MaxDeltaTime.Value);
 				deltaTimeLeft -= deltaTimeStep;
 				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_context.CurrentWeapon.Value?.CustomUpdate(deltaTimeStep);
+				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				calculateInputLogic = false;
 			}

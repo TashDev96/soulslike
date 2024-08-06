@@ -234,6 +234,15 @@ MonoBehaviour:
     <WalkSpeed>k__BackingField: 5
     <RotationSpeed>k__BackingField:
       _halfTurnDurationSeconds: 0.22
+    <DefaultStats>k__BackingField:
+      Hp:
+        _value: 10
+      MaxHp:
+        _value: 10
+      Stamina:
+        _value: 20
+      MaxStamina:
+        _value: 20
   <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
 --- !u!143 &313819625180903426
 CharacterController:
@@ -414,6 +423,7 @@ Transform:
   - {fileID: 3039175197032892056}
   - {fileID: 5703626353122994650}
   - {fileID: 7436892871259565529}
+  - {fileID: 3556327465321771145}
   m_Father: {fileID: 3919925399006202490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4965938122599690265
@@ -558,6 +568,61 @@ CapsuleCollider:
   m_Height: 1.0000002
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0.00000023841858}
+--- !u!1 &6899306725788326224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3556327465321771145}
+  - component: {fileID: 444830256696912245}
+  m_Layer: 0
+  m_Name: DeadStateRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3556327465321771145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899306725788326224}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.914, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2339832027269603005}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &444830256696912245
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899306725788326224}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Height: 2.16
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7145545717421006737
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using dream_lib.src.extensions;
 using game.gameplay_core.characters.state_machine;
 using UnityEditor;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace game.gameplay_core.characters
 			}
 
 			var str = "";
+
+			str += $"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.MaxHp.Value.CeilFormat()}\n";
 
 			if(DrawStateMachineInfo)
 			{
