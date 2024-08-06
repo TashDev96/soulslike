@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: b011c7077da0981468e9c8e98d8d4472
   m_currentHash:
     serializedVersion: 2
-    Hash: 2c450a8436ad4aeb4184e35bad36fcbd
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
@@ -70,15 +70,15 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 3d64521f9cc22e844afcb6c5cdcc1f65
-        m_Value: <undefined>
+        m_Value: content/addressable_assets_data
       - m_Id: 604978e451e60be4eb2a9eadd182477e
-        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+        m_Value: content/addressable_assets_data
       - m_Id: ce2619c138dce794f84f2fdb699f8e46
-        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+        m_Value: content/addressable_assets_data
       - m_Id: eb44f4317049438499aedf298d534d83
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f7210a68e3076dc4abc9ad6a04cad708
-        m_Value: 'ServerData/[BuildTarget]'
+        m_Value: content/addressable_assets_data
     m_ProfileEntryNames:
     - m_Id: 3d64521f9cc22e844afcb6c5cdcc1f65
       m_Name: Remote.LoadPath

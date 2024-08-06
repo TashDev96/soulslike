@@ -1,6 +1,8 @@
 using application;
+using Cysharp.Threading.Tasks;
 using dream_lib.src.utils.components;
 using game.gameplay_core;
+using game.ui;
 
 namespace game
 {
@@ -10,6 +12,7 @@ namespace game
 
 		private readonly bool _sceneDebugMode;
 		private CoreGameDomain _coreGameDomain;
+		private UiDomain _uiDomain;
 
 		public GameDomain(bool sceneDebugMode)
 		{
@@ -18,6 +21,14 @@ namespace game
 
 		public void Initialize()
 		{
+			InitializeAsync().Forget();
+		}
+
+		private async UniTask InitializeAsync()
+		{
+			_uiDomain = new UiDomain();
+			await _uiDomain.Initialize();
+
 			if(_sceneDebugMode)
 			{
 				//TODO fake initialize meta game
