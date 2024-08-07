@@ -66,3 +66,4 @@ Assets/z_experiments_gitignore/
 Assets/z_experiments_gitignore.meta
 build/
 CF2-Data/Settings/CF2.config
+all_tests_passed

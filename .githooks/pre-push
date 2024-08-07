@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Define the path to the flag file
+FLAG_FILE="EcoMinerUnity/all_tests_passed"
+
+# Check if the flag file exists
+if [ ! -f "$FLAG_FILE" ]; then
+    echo "Error: Flag file '$FLAG_FILE' does not exist. Please run editor tests before pushing. Push aborted."
+    exit 1
+fi
+
+# Remove the flag file
+rm "$FLAG_FILE"
+
+# Proceed with the push
+exit 0
