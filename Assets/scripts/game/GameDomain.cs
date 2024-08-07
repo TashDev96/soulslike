@@ -1,8 +1,10 @@
 using application;
 using Cysharp.Threading.Tasks;
+using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using game.gameplay_core;
 using game.ui;
+using UnityEngine;
 
 namespace game
 {
@@ -26,6 +28,12 @@ namespace game
 
 		private async UniTask InitializeAsync()
 		{
+			GameStaticContext.Instance = new GameStaticContext
+			{
+				WorldToScreenUiParent = new ReactiveProperty<RectTransform>(),
+				MainCamera = new ReactiveProperty<Camera>()
+			};
+
 			_uiDomain = new UiDomain();
 			await _uiDomain.Initialize();
 
@@ -33,7 +41,7 @@ namespace game
 			{
 				//TODO fake initialize meta game
 				_coreGameDomain = new CoreGameDomain();
-				_coreGameDomain.PlayOnDebugLocation();
+				await _coreGameDomain.PlayOnDebugLocation();
 			}
 
 			//open main menu

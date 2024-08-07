@@ -1442,12 +1442,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 636421841}
   - {fileID: 875381543}
+  - {fileID: 636421841}
   <Characters>k__BackingField:
-  - {fileID: 5039234435017277223}
-  - {fileID: 4377911618002708333}
   - {fileID: 1717593984}
+  - {fileID: 4377911618002708333}
+  - {fileID: 5039234435017277223}
   <MainCamera>k__BackingField: {fileID: 330585545}
 --- !u!4 &466086402
 Transform:

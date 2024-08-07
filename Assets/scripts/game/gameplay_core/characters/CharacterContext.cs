@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters
 {
-	public class CharacterContext
+	public struct CharacterContext
 	{
-		public CharacterInputData InputData = new();
+		public CharacterInputData InputData;
 		public Transform Transform;
 
 		public ReactiveProperty<float> WalkSpeed { get; set; }

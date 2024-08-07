@@ -9,7 +9,7 @@ namespace game.gameplay_core
 
 		private bool _initialized = false;
 
-		public async UniTask Initialize()
+		private async UniTask Initialize()
 		{
 			await PreloadCoreGameAssets();
 
@@ -17,12 +17,12 @@ namespace game.gameplay_core
 			_locationDomain.Initialize();
 		}
 
-		public void PlayOnDebugLocation()
+		public async UniTask PlayOnDebugLocation()
 		{
-			Initialize().Forget();
+			await Initialize();
 		}
 
-		public void PlayOnLocation()
+		public async UniTask PlayOnLocation()
 		{
 			//load scene
 		}
@@ -30,6 +30,7 @@ namespace game.gameplay_core
 		private async UniTask PreloadCoreGameAssets()
 		{
 			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.Player, AssetOwner.Game);
+			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.CharacterUi, AssetOwner.Game);
 		}
 	}
 }

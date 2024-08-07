@@ -212,6 +212,7 @@ Transform:
   - {fileID: 2339832027269603005}
   - {fileID: 6747424450283158477}
   - {fileID: 8792662738043832350}
+  - {fileID: 5318633997349167403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -1159.196, z: 0}
 --- !u!114 &618884517016294189
@@ -236,13 +237,15 @@ MonoBehaviour:
       _halfTurnDurationSeconds: 0.22
     <DefaultStats>k__BackingField:
       Hp:
-        _value: 10
+        _value: 100
       MaxHp:
-        _value: 10
+        _value: 100
       Stamina:
         _value: 20
       MaxStamina:
         _value: 20
+  _deadStateRoot: {fileID: 6899306725788326224}
+  _uiPivot: {fileID: 5318633997349167403}
   <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
 --- !u!143 &313819625180903426
 CharacterController:
@@ -692,6 +695,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageMultiplier: 1
+--- !u!1 &7304026251954394066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5318633997349167403}
+  m_Layer: 0
+  m_Name: UiPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5318633997349167403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7304026251954394066}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.215, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919925399006202490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4073073474766327944
 PrefabInstance:
   m_ObjectHideFlags: 0

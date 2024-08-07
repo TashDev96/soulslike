@@ -6,17 +6,17 @@ using UnityEngine;
 
 namespace game.gameplay_core
 {
-	public class LocationContext
+	public struct LocationContext
 	{
 		public LocationSaveData LocationSaveData;
 
 		public CharacterDomain Player;
 
 		public SceneSavableObjectBase[] SceneSavableObjects;
-		
+
 		public List<CharacterDomain> Characters { get; set; }
 		public List<SpawnedObjectController> SpawnedObjects { get; set; }
 		public ReactiveCommand<float> LocationUpdate { get; set; }
-		public ReactiveProperty<Camera> MainCamera { get; set; } = new();
+		public ReactiveProperty<Camera> MainCamera { get; set; }
 	}
 }

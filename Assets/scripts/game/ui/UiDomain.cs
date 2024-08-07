@@ -13,6 +13,8 @@ namespace game.ui
 
 			_mainCanvasInstaller = Object.Instantiate(mainCanvasPrefab).GetComponent<MainCanvasInstaller>();
 			Object.DontDestroyOnLoad(_mainCanvasInstaller.gameObject);
+
+			GameStaticContext.Instance.WorldToScreenUiParent.Value = _mainCanvasInstaller.WorldToScreenRoot;
 		}
 	}
 }

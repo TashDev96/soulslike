@@ -11,7 +11,7 @@ namespace game.gameplay_core
 {
 	public class LocationDomain
 	{
-		private LocationContext _locationContext = new();
+		private LocationContext _locationContext;
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
 
@@ -30,6 +30,8 @@ namespace game.gameplay_core
 				LocationUpdate = new ReactiveCommand<float>(),
 				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera)
 			};
+
+			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();

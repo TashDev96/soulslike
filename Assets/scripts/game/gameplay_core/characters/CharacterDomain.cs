@@ -6,6 +6,7 @@ using game.gameplay_core.characters.bindings;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.state_machine;
+using game.gameplay_core.characters.ui;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,16 +17,8 @@ namespace game.gameplay_core.characters
 {
 	public class CharacterDomain : MonoBehaviour, IOnSceneUniqueIdOwner
 	{
-		private CharacterStateMachine _stateMachine;
-		private CharacterContext _context;
-
-		private ICharacterBrain _brain;
-
 		[SerializeField]
 		private CharacterDebugDrawer _debugDrawer;
-
-		[field: SerializeField]
-		public string UniqueId { get; private set; }
 
 		[SerializeField]
 		private CharacterConfig _config;
@@ -33,11 +26,22 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		private GameObject _deadStateRoot;
 
-		[field: SerializeField]
-		public WeaponView DebugWeapon { get; private set; }
+		[SerializeField]
+		private Transform _uiPivot;
+		private CharacterStateMachine _stateMachine;
+		private CharacterContext _context;
+
+		private ICharacterBrain _brain;
 
 		private CharacterHealthLogic _healthLogic;
 		private CharacterMovementLogic _movementLogic;
+		private CharacterWorldSpaceUi _worldSpaceUi;
+
+		[field: SerializeField]
+		public string UniqueId { get; private set; }
+
+		[field: SerializeField]
+		public WeaponView DebugWeapon { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -63,14 +67,14 @@ namespace game.gameplay_core.characters
 				CharacterStats = _config.DefaultStats,
 				IsDead = new IsDead(),
 				DeadStateRoot = _deadStateRoot,
-				MovementLogic = _movementLogic,
+				MovementLogic = _movementLogic
 			};
 
-			_movementLogic.SetContext(new CharacterMovementLogic.Context()
+			_movementLogic.SetContext(new CharacterMovementLogic.Context
 			{
 				CharacterTransform = transform,
 				UnityCharacterController = GetComponent<CharacterController>(),
-				IsDead = _context.IsDead,
+				IsDead = _context.IsDead
 			});
 
 			_stateMachine = new CharacterStateMachine(_context);
@@ -81,22 +85,22 @@ namespace game.gameplay_core.characters
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
 			foreach(var damageReceiver in damageReceivers)
 			{
-				damageReceiver.Initialize(new DamageReceiver.DamageReceiverContext()
+				damageReceiver.Initialize(new DamageReceiver.DamageReceiverContext
 				{
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
-					ApplyDamage = _context.ApplyDamage,
+					ApplyDamage = _context.ApplyDamage
 				});
 			}
 
-			_healthLogic = new CharacterHealthLogic(new CharacterHealthLogic.Context()
+			_healthLogic = new CharacterHealthLogic(new CharacterHealthLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				IsDead = _context.IsDead,
-				CharacterStats = _context.CharacterStats,
+				CharacterStats = _context.CharacterStats
 			});
 
-			if(UniqueId == "Player")
+			if(isPlayer)
 			{
 				_brain = new PlayerInputController(locationContext.MainCamera);
 				_brain.Initialize(_context);
@@ -113,6 +117,8 @@ namespace game.gameplay_core.characters
 					Debug.LogError($"Brain not found for character {transform.GetFullPathInScene()}");
 					return;
 				}
+
+				CreateCharacterUi();
 			}
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
@@ -120,34 +126,42 @@ namespace game.gameplay_core.characters
 			_debugDrawer.Initialize(transform, _context, _stateMachine);
 		}
 
-		private void ApplyDamage(DamageInfo damageInfo)
+		[Button]
+		public void GenerateUniqueId()
 		{
-			Debug.Log(damageInfo.DamageAmount);
+			UniqueId = name + Random.value;
+		}
+
+		private void CreateCharacterUi()
+		{
+			var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterUi);
+			_worldSpaceUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
+			_worldSpaceUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
+			{
+				CharacterStats = _context.CharacterStats,
+				UiPivotWorld = _uiPivot
+			});
 		}
 
 		private void CustomUpdate(float deltaTime)
 		{
-			var deltaTimeLeft = deltaTime * _context.DeltaTimeMultiplier.Value;
+			var personalDeltaTime = deltaTime * _context.DeltaTimeMultiplier.Value;
 
-			_brain.Think(deltaTimeLeft);
+			_brain.Think(personalDeltaTime);
 			var calculateInputLogic = true;
 
-			while(deltaTimeLeft > 0f)
+			while(personalDeltaTime > 0f)
 			{
-				var deltaTimeStep = Mathf.Min(deltaTimeLeft, _context.MaxDeltaTime.Value);
-				deltaTimeLeft -= deltaTimeStep;
+				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
+				personalDeltaTime -= deltaTimeStep;
 				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_context.CurrentWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				calculateInputLogic = false;
 			}
-		}
 
-		[Button]
-		public void GenerateUniqueId()
-		{
-			UniqueId = name + Random.value;
+			_worldSpaceUi?.CustomUpdate(deltaTime);
 		}
 #if UNITY_EDITOR
 		private void OnDrawGizmos()
