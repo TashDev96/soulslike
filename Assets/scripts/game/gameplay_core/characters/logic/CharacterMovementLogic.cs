@@ -1,4 +1,4 @@
-using game.gameplay_core.characters.bindings;
+using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic

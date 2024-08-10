@@ -1,7 +1,7 @@
 using System;
-using game.gameplay_core.characters.stats;
+using game.gameplay_core.characters.runtime_data.bindings.stats;
 
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.runtime_data
 {
 	[Serializable]
 	public class CharacterStats

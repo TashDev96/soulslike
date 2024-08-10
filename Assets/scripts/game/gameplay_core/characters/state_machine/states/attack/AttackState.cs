@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using dream_lib.src.extensions;
+using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine
+namespace game.gameplay_core.characters.state_machine.states.attack
 {
 	public class AttackState : BaseCharacterState
 	{

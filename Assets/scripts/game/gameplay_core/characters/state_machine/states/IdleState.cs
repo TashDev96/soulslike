@@ -1,6 +1,6 @@
-using UnityEngine;
+using game.gameplay_core.characters.commands;
 
-namespace game.gameplay_core.characters.state_machine
+namespace game.gameplay_core.characters.state_machine.states
 {
 	public class IdleState : BaseCharacterState
 	{

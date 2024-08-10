@@ -1,6 +1,7 @@
+using game.gameplay_core.characters.commands;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine
+namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class BaseCharacterState
 	{

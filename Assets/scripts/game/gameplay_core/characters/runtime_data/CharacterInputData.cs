@@ -1,7 +1,8 @@
 using System;
+using game.gameplay_core.characters.commands;
 using UnityEngine;
 
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.runtime_data
 {
 	[Serializable]
 	public class CharacterInputData

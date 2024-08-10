@@ -4,7 +4,7 @@ using game.gameplay_core.characters.state_machine;
 using UnityEditor;
 using UnityEngine;
 
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.view
 {
 	[Serializable]
 	public struct CharacterDebugDrawer

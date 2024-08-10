@@ -1,4 +1,4 @@
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.ai
 {
 	public interface ICharacterBrain
 	{

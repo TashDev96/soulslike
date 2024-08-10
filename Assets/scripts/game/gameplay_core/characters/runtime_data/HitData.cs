@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine
+namespace game.gameplay_core.characters.runtime_data
 {
 	public class HitData
 	{

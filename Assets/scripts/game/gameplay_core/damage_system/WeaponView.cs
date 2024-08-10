@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
+using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.state_machine;
 using UnityEngine;
 

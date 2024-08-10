@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine
+namespace game.gameplay_core.characters.state_machine.states
 {
 	public class DeadState : BaseCharacterState
 	{

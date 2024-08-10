@@ -1,8 +1,9 @@
 using dream_lib.src.extensions;
 using dream_lib.src.ui;
+using game.gameplay_core.characters.runtime_data;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ui
+namespace game.gameplay_core.characters.view.ui
 {
 	public class CharacterWorldSpaceUi : MonoBehaviour
 	{

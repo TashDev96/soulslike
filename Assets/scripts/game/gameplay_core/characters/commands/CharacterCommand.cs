@@ -1,4 +1,4 @@
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.commands
 {
 	public enum CharacterCommand
 	{

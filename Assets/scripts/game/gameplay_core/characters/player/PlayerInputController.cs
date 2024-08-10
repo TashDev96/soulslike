@@ -1,5 +1,8 @@
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
+using game.gameplay_core.characters.ai;
+using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.runtime_data;
 using game.input;
 using UnityEngine;
 
