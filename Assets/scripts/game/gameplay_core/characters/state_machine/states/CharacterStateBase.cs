@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public abstract class BaseCharacterState
+	public abstract class CharacterStateBase
 	{
 		protected CharacterContext _context;
 		public bool IsComplete { get; protected set; }
 		public bool IsReadyToRememberNextCommand { get; set; }
+		public virtual bool CanInterruptByStagger => true;
 
-		protected BaseCharacterState(CharacterContext context)
+		protected CharacterStateBase(CharacterContext context)
 		{
 			_context = context;
 		}
@@ -31,6 +32,10 @@ namespace game.gameplay_core.characters.state_machine.states
 		}
 
 		public virtual void OnExit()
+		{
+		}
+
+		public virtual void OnInterrupt()
 		{
 		}
 

@@ -31,14 +31,15 @@ namespace game.gameplay_core.characters
 
 		[SerializeField]
 		private Transform _uiPivot;
+		private CharacterWorldSpaceUi _worldSpaceUi;
+
 		private CharacterStateMachine _stateMachine;
+		private ICharacterBrain _brain;
 		private CharacterContext _context;
 
-		private ICharacterBrain _brain;
-
-		private CharacterHealthLogic _healthLogic;
-		private CharacterMovementLogic _movementLogic;
-		private CharacterWorldSpaceUi _worldSpaceUi;
+		private HealthLogic _healthLogic;
+		private MovementLogic _movementLogic;
+		private StaggerLogic _staggerLogic;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -50,7 +51,7 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
-			_movementLogic = new CharacterMovementLogic();
+			_movementLogic = new MovementLogic();
 
 			_context = new CharacterContext
 			{
@@ -70,10 +71,11 @@ namespace game.gameplay_core.characters
 				CharacterStats = _config.DefaultStats,
 				IsDead = new IsDead(),
 				DeadStateRoot = _deadStateRoot,
-				MovementLogic = _movementLogic
+				MovementLogic = _movementLogic,
+				TriggerStagger = new ReactiveCommand(),
 			};
 
-			_movementLogic.SetContext(new CharacterMovementLogic.Context
+			_movementLogic.SetContext(new MovementLogic.Context
 			{
 				CharacterTransform = transform,
 				UnityCharacterController = GetComponent<CharacterController>(),
@@ -83,6 +85,7 @@ namespace game.gameplay_core.characters
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
+			_context.Animator.Animator.runtimeAnimatorController = null;
 			_context.CurrentWeapon.Value.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
@@ -96,11 +99,18 @@ namespace game.gameplay_core.characters
 				});
 			}
 
-			_healthLogic = new CharacterHealthLogic(new CharacterHealthLogic.Context
+			_healthLogic = new HealthLogic(new HealthLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				IsDead = _context.IsDead,
 				CharacterStats = _context.CharacterStats
+			});
+
+			_staggerLogic = new StaggerLogic(new StaggerLogic.Context
+			{
+				ApplyDamage = _context.ApplyDamage,
+				Stats = _context.CharacterStats,
+				TriggerStagger = _context.TriggerStagger
 			});
 
 			if(isPlayer)

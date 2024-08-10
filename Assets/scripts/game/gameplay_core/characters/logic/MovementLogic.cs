@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
-	public class CharacterMovementLogic
+	public class MovementLogic
 	{
 		public struct Context
 		{

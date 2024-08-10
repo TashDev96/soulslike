@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class DeadState : BaseCharacterState
+	public class DeadState : CharacterStateBase
 	{
 		public DeadState(CharacterContext context) : base(context)
 		{

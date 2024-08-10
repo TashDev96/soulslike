@@ -69,6 +69,7 @@ namespace game.gameplay_core.damage_system
 
 				HitConfigs[i].Timing = DrawTimingSlider("Timing:", HitConfigs[i].Timing);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
+				HitConfigs[i].PoiseDamage = SirenixEditorFields.FloatField("Poise Damage:", HitConfigs[i].PoiseDamage);
 				GUILayout.Space(10);
 			}
 

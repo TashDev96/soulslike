@@ -66,6 +66,7 @@ MonoBehaviour:
         <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
     - <Animation>k__BackingField:
         _FadeDuration: 0.25
         _Events:
@@ -229,23 +230,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugDrawer:
     DrawStateMachineInfo: 1
-  <UniqueId>k__BackingField: Player
   _config:
     <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
+    <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <WalkSpeed>k__BackingField: 5
     <RotationSpeed>k__BackingField:
       _halfTurnDurationSeconds: 0.22
     <DefaultStats>k__BackingField:
       Hp:
         _value: 100
-      MaxHp:
+      HpMax:
         _value: 100
       Stamina:
-        _value: 20
-      MaxStamina:
-        _value: 20
+        _value: 30
+      StaminaMax:
+        _value: 30
+      Poise:
+        _value: 3
+      PoiseMax:
+        _value: 3
+      PoiseRestoreTime:
+        _value: 5
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
+  <UniqueId>k__BackingField: Player
   <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
 --- !u!143 &313819625180903426
 CharacterController:
@@ -296,7 +304,7 @@ Animator:
   m_GameObject: {fileID: 1163829566012686365}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2e2b3f13d4fb00f42b954f5841416f4c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

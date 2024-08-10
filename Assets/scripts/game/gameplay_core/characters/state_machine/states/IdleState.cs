@@ -2,7 +2,7 @@ using game.gameplay_core.characters.commands;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class IdleState : BaseCharacterState
+	public class IdleState : CharacterStateBase
 	{
 		public IdleState(CharacterContext context) : base(context)
 		{

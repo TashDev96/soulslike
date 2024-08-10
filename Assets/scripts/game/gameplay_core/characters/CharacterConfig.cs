@@ -1,5 +1,6 @@
 using System;
 using game.gameplay_core.characters.runtime_data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.characters
@@ -9,6 +10,8 @@ namespace game.gameplay_core.characters
 	{
 		[field: SerializeField]
 		public AnimationClip IdleAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip StaggerAnimation { get; private set; }
 
 		[field: SerializeField]
 		public float WalkSpeed { get; private set; } = 5f;
@@ -17,5 +20,6 @@ namespace game.gameplay_core.characters
 
 		[field: SerializeField]
 		public CharacterStats DefaultStats { get; private set; }
+
 	}
 }

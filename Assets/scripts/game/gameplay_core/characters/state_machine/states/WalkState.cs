@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class WalkState : BaseCharacterState
+	public class WalkState : CharacterStateBase
 	{
 		public WalkState(CharacterContext context) : base(context)
 		{

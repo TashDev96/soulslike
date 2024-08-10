@@ -12,6 +12,7 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly IdleState _idleState;
 		private readonly WalkState _walkState;
 		private readonly AttackState _attackState;
+		private readonly StaggerState _staggerState;
 		private CharacterCommand _nextCommand;
 
 		private CharacterCommand NextCommand
@@ -27,7 +28,7 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		public BaseCharacterState CurrentState { get; private set; }
+		public CharacterStateBase CurrentState { get; private set; }
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -36,8 +37,10 @@ namespace game.gameplay_core.characters.state_machine
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
 			_attackState = new AttackState(_context);
+			_staggerState = new StaggerState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
+			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
 
 			SetState(_idleState);
 		}
@@ -66,6 +69,15 @@ namespace game.gameplay_core.characters.state_machine
 			str += $"command: {_context.InputData.Command}\n";
 			str += $"next command: {NextCommand}\n";
 			return str;
+		}
+
+		private void HandleTriggerStagger()
+		{
+			if(CurrentState.CanInterruptByStagger && !_context.IsDead.Value)
+			{
+				CurrentState.OnInterrupt();
+				SetState(_staggerState);
+			}
 		}
 
 		private void HandleIsDeadChanged(bool isDead)
@@ -159,7 +171,7 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		private void SetState(BaseCharacterState newState)
+		private void SetState(CharacterStateBase newState)
 		{
 			CurrentState?.OnExit();
 			CurrentState = newState;

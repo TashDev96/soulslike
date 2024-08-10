@@ -26,7 +26,7 @@ namespace game.gameplay_core.characters.view.ui
 			_healthBar.SetContext(new UiBar.Context
 			{
 				Current = context.CharacterStats.Hp,
-				Max = context.CharacterStats.MaxHp
+				Max = context.CharacterStats.HpMax
 			});
 		}
 

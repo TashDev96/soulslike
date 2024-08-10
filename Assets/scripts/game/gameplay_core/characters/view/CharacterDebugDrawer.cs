@@ -41,7 +41,7 @@ namespace game.gameplay_core.characters.view
 
 			var str = "";
 
-			str += $"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.MaxHp.Value.CeilFormat()}\n";
+			str += $"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.HpMax.Value.CeilFormat()}\n";
 
 			if(DrawStateMachineInfo)
 			{

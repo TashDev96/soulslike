@@ -5,7 +5,7 @@ using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.logic
 {
-	public class CharacterHealthLogic
+	public class HealthLogic
 	{
 		public struct Context
 		{
@@ -16,7 +16,7 @@ namespace game.gameplay_core.characters.logic
 
 		private readonly Context _context;
 
-		public CharacterHealthLogic(Context context)
+		public HealthLogic(Context context)
 		{
 			_context = context;
 			_context.ApplyDamage.OnExecute += ApplyDamage;

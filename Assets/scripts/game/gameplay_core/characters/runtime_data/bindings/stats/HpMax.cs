@@ -4,7 +4,7 @@ using dream_lib.src.reactive;
 namespace game.gameplay_core.characters.runtime_data.bindings.stats
 {
 	[Serializable]
-	public class MaxHp : ReactiveProperty<float>
+	public class HpMax : ReactiveProperty<float>
 	{
 	}
 }

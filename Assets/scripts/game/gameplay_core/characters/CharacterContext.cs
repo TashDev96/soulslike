@@ -26,7 +26,8 @@ namespace game.gameplay_core.characters
 		public ReactiveCommand<DamageInfo> ApplyDamage { get; set; }
 		public CharacterStats CharacterStats { get; set; }
 		public IsDead IsDead { get; set; }
-		public CharacterMovementLogic MovementLogic { get; set; }
+		public MovementLogic MovementLogic { get; set; }
 		public GameObject DeadStateRoot { get; set; }
+		public ReactiveCommand TriggerStagger { get; set; }
 	}
 }

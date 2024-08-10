@@ -86,6 +86,7 @@ namespace game.gameplay_core.damage_system
 								damageReceiver.ApplyDamage(new DamageInfo
 								{
 									DamageAmount = attackConfig.BaseDamage * hitData.Config.DamageMultiplier,
+									PoiseDamageAmount = hitData.Config.PoiseDamage,
 									WorldPos = Vector3.Lerp((point0 + point1) / 2f, _results[j].transform.position, 0.3f),
 									DoneByPlayer = _context.IsPlayer.Value
 								});

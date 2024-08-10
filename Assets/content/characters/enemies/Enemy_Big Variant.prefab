@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: _rotationSpeed._halfTurnDurationSeconds
       value: 2.2
       objectReference: {fileID: 0}
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: _config.<DefaultStats>k__BackingField.Poise._value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: _config.<DefaultStats>k__BackingField.PoiseMax._value
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_Name
       value: Enemy_Big Variant

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
-	public class AttackState : BaseCharacterState
+	public class AttackState : CharacterStateBase
 	{
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
