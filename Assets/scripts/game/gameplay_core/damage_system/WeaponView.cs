@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.characters.state_machine;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -46,7 +45,7 @@ namespace game.gameplay_core.damage_system
 
 					var angleDiff = Quaternion.Angle(prevRotation, currentRotation);
 					var posDiff = (currentPosition - prevPosition).magnitude;
-					
+
 					var stepsCount = Mathf.CeilToInt(Mathf.Max(angleDiff / maxAngleStep, posDiff / maxPosStep));
 					for(var step = 0; step < stepsCount; step++)
 					{
@@ -88,7 +87,7 @@ namespace game.gameplay_core.damage_system
 								{
 									DamageAmount = attackConfig.BaseDamage * hitData.Config.DamageMultiplier,
 									WorldPos = Vector3.Lerp((point0 + point1) / 2f, _results[j].transform.position, 0.3f),
-									DoneByPlayer = _context.IsPlayer.Value,
+									DoneByPlayer = _context.IsPlayer.Value
 								});
 							}
 						}

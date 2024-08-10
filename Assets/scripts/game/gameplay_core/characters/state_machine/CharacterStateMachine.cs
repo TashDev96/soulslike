@@ -7,6 +7,13 @@ namespace game.gameplay_core.characters.state_machine
 {
 	public class CharacterStateMachine
 	{
+		private readonly CharacterContext _context;
+
+		private readonly IdleState _idleState;
+		private readonly WalkState _walkState;
+		private readonly AttackState _attackState;
+		private CharacterCommand _nextCommand;
+
 		private CharacterCommand NextCommand
 		{
 			get => _nextCommand;
@@ -20,13 +27,7 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		private readonly CharacterContext _context;
 		public BaseCharacterState CurrentState { get; private set; }
-
-		private IdleState _idleState;
-		private WalkState _walkState;
-		private AttackState _attackState;
-		private CharacterCommand _nextCommand;
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -37,16 +38,8 @@ namespace game.gameplay_core.characters.state_machine
 			_attackState = new AttackState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
-			
-			SetState(_idleState);
-		}
 
-		private void HandleIsDeadChanged(bool isDead)
-		{
-			if(isDead)
-			{
-				SetState(new DeadState(_context));
-			}
+			SetState(_idleState);
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)
@@ -63,6 +56,23 @@ namespace game.gameplay_core.characters.state_machine
 			if(calculateInputLogic)
 			{
 				TryChangeState();
+			}
+		}
+
+		public string GetDebugString()
+		{
+			var str = "";
+			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
+			str += $"command: {_context.InputData.Command}\n";
+			str += $"next command: {NextCommand}\n";
+			return str;
+		}
+
+		private void HandleIsDeadChanged(bool isDead)
+		{
+			if(isDead)
+			{
+				SetState(new DeadState(_context));
 			}
 		}
 
@@ -155,15 +165,6 @@ namespace game.gameplay_core.characters.state_machine
 			CurrentState = newState;
 			CurrentState.OnEnter();
 			NextCommand = CharacterCommand.None;
-		}
-
-		public string GetDebugString()
-		{
-			var str = "";
-			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
-			str += $"command: {_context.InputData.Command}\n";
-			str += $"next command: {NextCommand}\n";
-			return str;
 		}
 	}
 }

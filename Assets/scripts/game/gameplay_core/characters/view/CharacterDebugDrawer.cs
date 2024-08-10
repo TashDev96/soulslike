@@ -15,8 +15,23 @@ namespace game.gameplay_core.characters.view
 		private Transform _transform;
 		private CharacterStateMachine _stateMachine;
 		private GUIStyle _textStyle;
-		
-		#if UNITY_EDITOR
+
+		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
+		{
+			_transform = transform;
+			_context = context;
+			_stateMachine = stateMachine;
+			_initialized = true;
+
+			_textStyle = new GUIStyle
+			{
+				normal = new GUIStyleState { textColor = Color.white },
+				fontStyle = FontStyle.Bold,
+				alignment = TextAnchor.LowerLeft
+			};
+		}
+
+#if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
 			if(!_initialized)
@@ -35,22 +50,7 @@ namespace game.gameplay_core.characters.view
 
 			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);
 		}
-		
-		#endif
 
-		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
-		{
-			_transform = transform;
-			_context = context;
-			_stateMachine = stateMachine;
-			_initialized = true;
-			
-			_textStyle = new GUIStyle
-			{
-				normal = new GUIStyleState { textColor = Color.white },
-				fontStyle = FontStyle.Bold,
-				alignment = TextAnchor.LowerLeft
-			};
-		}
+#endif
 	}
 }

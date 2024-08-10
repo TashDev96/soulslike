@@ -12,7 +12,7 @@ namespace game.gameplay_core.characters.view.ui
 			public CharacterStats CharacterStats { get; set; }
 			public Transform UiPivotWorld { get; set; }
 		}
-		
+
 		[SerializeField]
 		private UiBar _healthBar;
 		private CharacterWorldSpaceUiContext _context;
@@ -23,7 +23,7 @@ namespace game.gameplay_core.characters.view.ui
 			_context = context;
 			_transform = transform;
 			transform.parent = GameStaticContext.Instance.WorldToScreenUiParent.Value;
-			_healthBar.SetContext(new UiBar.Context()
+			_healthBar.SetContext(new UiBar.Context
 			{
 				Current = context.CharacterStats.Hp,
 				Max = context.CharacterStats.MaxHp

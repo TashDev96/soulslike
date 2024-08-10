@@ -21,11 +21,6 @@ namespace game.gameplay_core.characters.logic
 			_context.IsDead.OnChanged += HandleDeath;
 		}
 
-		private void HandleDeath(bool isDead)
-		{
-			_context.UnityCharacterController.enabled = !isDead;
-		}
-
 		public void Update(float deltaTime)
 		{
 			if(_context.IsDead.Value)
@@ -47,6 +42,11 @@ namespace game.gameplay_core.characters.logic
 		public void Move(Vector3 vector)
 		{
 			_context.UnityCharacterController.Move(vector);
+		}
+
+		private void HandleDeath(bool isDead)
+		{
+			_context.UnityCharacterController.enabled = !isDead;
 		}
 	}
 }

@@ -20,15 +20,12 @@ namespace game.gameplay_core.damage_system
 		public float BaseDamage { get; private set; }
 
 		[ShowInInspector]
-		public float Duration
-		{
-			get => Animation.Clip ? Animation.Clip.length : 0.1f;
-		}
+		public float Duration => Animation.Clip ? Animation.Clip.length : 0.1f;
 
 		[field: SerializeField]
 		public Vector2 RotationDisabledTime { get; private set; }
 		[field: SerializeField]
-		public Vector2 LockedStateTime { get; private set; } = new Vector2(0, 1f);
+		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
 
 		[field: SerializeField]
 		[field: HideInInspector]
@@ -53,10 +50,10 @@ namespace game.gameplay_core.damage_system
 			LockedStateTime = DrawTimingSlider("Locked State Time:", LockedStateTime);
 
 			GUILayout.Space(20);
-			GUILayout.Label($"Hit Configs:");
+			GUILayout.Label("Hit Configs:");
 			GUILayout.Space(10);
 
-			for(int i = 0; i < HitConfigs.Count; i++)
+			for(var i = 0; i < HitConfigs.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
 				GUILayout.Label($"Hit {i}");
@@ -71,16 +68,16 @@ namespace game.gameplay_core.damage_system
 				DrawSelectColliders(HitConfigs[i]);
 
 				HitConfigs[i].Timing = DrawTimingSlider("Timing:", HitConfigs[i].Timing);
-				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField($"Damage Multiplier:", HitConfigs[i].DamageMultiplier);
+				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				GUILayout.Space(10);
 			}
 
 			if(GUILayout.Button("Add Hit"))
 			{
-				HitConfigs.Add(new()
+				HitConfigs.Add(new HitConfig
 				{
 					Timing = new Vector2(0.5f, 0.6f),
-					DamageMultiplier = 1,
+					DamageMultiplier = 1
 				});
 			}
 
