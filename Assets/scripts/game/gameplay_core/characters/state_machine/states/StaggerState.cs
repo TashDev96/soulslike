@@ -1,3 +1,5 @@
+using Animancer;
+
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public class StaggerState : CharacterStateBase
@@ -12,8 +14,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 			IsComplete = false;
-			_timeLeft = 2f;
-			_context.Animator.Play(_context.Config.StaggerAnimation, 0.1f);
+			_timeLeft = _context.Config.StaggerAnimation.length;
+			_context.Animator.Play(_context.Config.StaggerAnimation, 0.1f, FadeMode.FromStart);
 		}
 
 		public override void Update(float deltaTime)

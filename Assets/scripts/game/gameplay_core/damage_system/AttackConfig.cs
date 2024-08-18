@@ -26,6 +26,8 @@ namespace game.gameplay_core.damage_system
 		public Vector2 RotationDisabledTime { get; private set; }
 		[field: SerializeField]
 		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
+		[field: SerializeField]
+		public Vector2 EnterComboTime { get; private set; } = new(0, 1f);
 
 		[field: SerializeField]
 		[field: HideInInspector]
@@ -48,6 +50,7 @@ namespace game.gameplay_core.damage_system
 			_animationPreview.ClearTimeChanges();
 			RotationDisabledTime = DrawTimingSlider("Rotation Disabled Time:", RotationDisabledTime);
 			LockedStateTime = DrawTimingSlider("Locked State Time:", LockedStateTime);
+			EnterComboTime = DrawTimingSlider("Enter Combo Time:", EnterComboTime);
 
 			GUILayout.Space(20);
 			GUILayout.Label("Hit Configs:");

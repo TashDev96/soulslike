@@ -47,18 +47,14 @@ namespace game.gameplay_core.characters.state_machine
 
 		public void Update(float deltaTime, bool calculateInputLogic)
 		{
+			CurrentState.Update(deltaTime);
+
 			calculateInputLogic &= !_context.IsDead.Value;
 
 			if(calculateInputLogic)
 			{
 				TryRememberNextCommand();
-			}
-
-			CurrentState.Update(deltaTime);
-
-			if(calculateInputLogic)
-			{
-				TryChangeState();
+				TryExecuteNextCommand();
 			}
 		}
 
@@ -94,15 +90,51 @@ namespace game.gameplay_core.characters.state_machine
 
 			if(NextCommand == CharacterCommand.None)
 			{
-				if(CheckIsContinuousCommand(inputCommand))
-				{
-					return;
-				}
-
 				if(CurrentState.IsReadyToRememberNextCommand)
 				{
 					NextCommand = inputCommand;
 				}
+			}
+		}
+
+		private void TryExecuteNextCommand()
+		{
+			if(CurrentState.TryContinueWithCommand(NextCommand))
+			{
+				NextCommand = CharacterCommand.None;
+				return;
+			}
+
+			if(CurrentState.CheckIsReadyToChangeState())
+			{
+				switch(NextCommand)
+				{
+					case CharacterCommand.None:
+						SetState(_idleState);
+						break;
+					case CharacterCommand.Walk:
+						SetState(_walkState);
+						break;
+					case CharacterCommand.Run:
+						break;
+					case CharacterCommand.Roll:
+						break;
+					case CharacterCommand.Attack:
+					case CharacterCommand.StrongAttack:
+
+						SetState(_attackState);
+
+						break;
+					case CharacterCommand.Block:
+						break;
+					case CharacterCommand.UseItem:
+						break;
+					case CharacterCommand.Interact:
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				NextCommand = CharacterCommand.None;
 			}
 		}
 
@@ -117,57 +149,6 @@ namespace game.gameplay_core.characters.state_machine
 					return true;
 				default:
 					return false;
-			}
-		}
-
-		private void TryChangeState()
-		{
-			var commandToCalculate = NextCommand;
-			if(NextCommand == CharacterCommand.None)
-			{
-				commandToCalculate = _context.InputData.Command;
-			}
-
-			if(CurrentState.CanExecuteNextCommand(commandToCalculate))
-			{
-				switch(commandToCalculate)
-				{
-					case CharacterCommand.None:
-						if(CurrentState.IsContinuousForCommand(_context.InputData.Command))
-						{
-							return;
-						}
-						SetState(_idleState);
-						break;
-					case CharacterCommand.Walk:
-						SetState(_walkState);
-						break;
-					case CharacterCommand.Run:
-						break;
-					case CharacterCommand.Roll:
-						break;
-					case CharacterCommand.Attack:
-					case CharacterCommand.StrongAttack:
-
-						_attackState.SetType(NextCommand);
-
-						if(CurrentState is AttackState)
-						{
-							_attackState.TryContinueCombo();
-						}
-						SetState(_attackState);
-
-						break;
-					case CharacterCommand.Block:
-						break;
-					case CharacterCommand.UseItem:
-						break;
-					case CharacterCommand.Interact:
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-				NextCommand = CharacterCommand.None;
 			}
 		}
 

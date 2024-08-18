@@ -22,11 +22,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			readyToRemember = false;
 		}
 
-		public virtual bool IsContinuousForCommand(CharacterCommand command)
-		{
-			return false;
-		}
-
 		public virtual void OnEnter()
 		{
 		}
@@ -39,7 +34,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 		}
 
-		public virtual bool CanExecuteNextCommand(CharacterCommand command)
+		public virtual bool CheckIsReadyToChangeState()
 		{
 			return IsComplete;
 		}
@@ -48,6 +43,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			var targetRotation = Quaternion.LookRotation(toDirection);
 			_context.Transform.rotation = Quaternion.RotateTowards(_context.Transform.rotation, targetRotation, speed * deltaTime);
+		}
+
+		public virtual bool TryContinueWithCommand(CharacterCommand nextCommand)
+		{
+			return false;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Animancer;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
@@ -11,11 +12,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 	{
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
-		private bool _comboTriggered;
 		private float _time;
-		private CharacterCommand _type;
+		private AttackType _attackType;
 		private AttackConfig _currentAttackConfig;
 		private readonly List<HitData> _hitsData = new();
+		private int _comboCounter;
 
 		private float NormalizedTime => _time / _currentAttackConfig.Duration;
 		private float TimeLeft => _currentAttackConfig.Duration - _time;
@@ -26,31 +27,25 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override void OnEnter()
 		{
-			if(_comboTriggered)
+			_comboCounter = 0;
+			LaunchAttack();
+		}
+
+		private void LaunchAttack()
+		{
+			var weaponConfig = _context.CurrentWeapon.Value.Config;
+			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
+
+			if(_comboCounter > 0)
 			{
-				_currentAttackIndex++;
-				_comboTriggered = false;
+				_currentAttackIndex = _comboCounter % (attacksList.Length);
 			}
 			else
 			{
 				_currentAttackIndex = 0;
 			}
 
-			var weaponConfig = _context.CurrentWeapon.Value.Config;
-
-			AttackConfig[] attacksList = null;
-
-			switch(_type)
-			{
-				case CharacterCommand.Attack:
-					attacksList = weaponConfig.RegularAttacks;
-					break;
-				case CharacterCommand.StrongAttack:
-					attacksList = weaponConfig.StrongAttacks;
-					break;
-			}
-
-			_currentAttackConfig = attacksList[_currentAttackIndex % (attacksList.Length - 1)];
+			_currentAttackConfig = attacksList[_currentAttackIndex];
 
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
@@ -61,9 +56,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			_context.Animator.Play(_currentAttackConfig.Animation);
+			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation,0.1f, FadeMode.FromStart);
+			//newAnimation.Time = 0.1f //TODO: skip time for smooth transition
 
-			Debug.Log($"attack {_currentAttackIndex} {_currentAttackIndex % (attacksList.Length - 1)} {_type}");
+			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
 			_time = 0;
 		}
@@ -111,32 +107,25 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 		}
 
-		public void TryContinueCombo()
+		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
-			_comboTriggered = true;
-		}
-
-		public override bool CanExecuteNextCommand(CharacterCommand command)
-		{
-			switch(command)
+			if(nextCommand is not CharacterCommand.Attack and not CharacterCommand.StrongAttack)
 			{
-				case CharacterCommand.Walk:
-				case CharacterCommand.Run:
-				case CharacterCommand.Roll:
-				case CharacterCommand.UseItem:
-				case CharacterCommand.Interact:
-					return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
-				case CharacterCommand.Attack:
-				case CharacterCommand.StrongAttack:
-				case CharacterCommand.Block:
-					return IsComplete;
+				return false;
 			}
-			return IsComplete;
+			
+			if( _currentAttackConfig.EnterComboTime.Contains(NormalizedTime))
+			{
+				_comboCounter++;
+				LaunchAttack();
+				return true;
+			}
+			return false;
 		}
 
-		public void SetType(CharacterCommand nextCommand)
+		public override bool CheckIsReadyToChangeState()
 		{
-			_type = nextCommand;
+			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 	}
 }

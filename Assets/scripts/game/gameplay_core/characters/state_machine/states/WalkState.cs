@@ -1,3 +1,4 @@
+using System;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 
@@ -8,13 +9,26 @@ namespace game.gameplay_core.characters.state_machine.states
 		public WalkState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
-			IsComplete = true;
 		}
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			IsComplete = false;
 			_context.Animator.Play(_context.Config.IdleAnimation, 0.3f);
+		}
+
+		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
+		{
+			switch(nextCommand)
+			{
+				case CharacterCommand.Walk:
+				case CharacterCommand.Run:
+					IsComplete = false;
+					return true;
+				default:
+					return false;
+			}
 		}
 
 		public override void Update(float deltaTime)
@@ -27,11 +41,8 @@ namespace game.gameplay_core.characters.state_machine.states
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value);
 
 			_context.MovementLogic.Move(velocity * deltaTime);
-		}
 
-		public override bool IsContinuousForCommand(CharacterCommand command)
-		{
-			return command == CharacterCommand.Walk;
+			IsComplete = true;
 		}
 	}
 }
