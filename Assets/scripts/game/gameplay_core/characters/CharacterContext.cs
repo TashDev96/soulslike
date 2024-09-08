@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
@@ -29,5 +30,6 @@ namespace game.gameplay_core.characters
 		public MovementLogic MovementLogic { get; set; }
 		public GameObject DeadStateRoot { get; set; }
 		public ReactiveCommand TriggerStagger { get; set; }
+		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer { get; set; }
 	}
 }

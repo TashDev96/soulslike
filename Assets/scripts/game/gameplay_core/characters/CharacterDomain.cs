@@ -73,6 +73,7 @@ namespace game.gameplay_core.characters
 				DeadStateRoot = _deadStateRoot,
 				MovementLogic = _movementLogic,
 				TriggerStagger = new ReactiveCommand(),
+				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
 			};
 
 			_movementLogic.SetContext(new MovementLogic.Context
@@ -135,8 +136,8 @@ namespace game.gameplay_core.characters
 			}
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
-
 			_debugDrawer.Initialize(transform, _context, _stateMachine);
+			_context.DebugDrawer.Value = _debugDrawer;
 		}
 
 		[Button]

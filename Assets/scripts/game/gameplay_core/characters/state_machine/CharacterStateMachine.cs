@@ -2,6 +2,7 @@ using System;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -88,7 +89,9 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			var inputCommand = _context.InputData.Command;
 
-			if(NextCommand == CharacterCommand.None)
+			var overrideMovement = NextCommand == CharacterCommand.Walk && inputCommand is not (CharacterCommand.Walk or CharacterCommand.None);
+
+			if(NextCommand == CharacterCommand.None || overrideMovement)
 			{
 				if(CurrentState.IsReadyToRememberNextCommand)
 				{
@@ -102,15 +105,19 @@ namespace game.gameplay_core.characters.state_machine
 			if(CurrentState.TryContinueWithCommand(NextCommand))
 			{
 				NextCommand = CharacterCommand.None;
+				_context.InputData.Command = CharacterCommand.None;
 				return;
 			}
 
-			if(CurrentState.CheckIsReadyToChangeState())
+			if(CurrentState.CheckIsReadyToChangeState(NextCommand))
 			{
 				switch(NextCommand)
 				{
 					case CharacterCommand.None:
-						SetState(_idleState);
+						if(CurrentState.IsComplete)
+						{
+							SetState(_idleState);
+						}
 						break;
 					case CharacterCommand.Walk:
 						SetState(_walkState);
@@ -138,19 +145,7 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		private bool CheckIsContinuousCommand(CharacterCommand command)
-		{
-			switch(command)
-			{
-				case CharacterCommand.None:
-				case CharacterCommand.Walk:
-				case CharacterCommand.Run:
-				case CharacterCommand.Block:
-					return true;
-				default:
-					return false;
-			}
-		}
+		 
 
 		private void SetState(CharacterStateBase newState)
 		{

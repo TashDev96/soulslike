@@ -1,5 +1,3 @@
-using game.gameplay_core.characters.commands;
-
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public class IdleState : CharacterStateBase
@@ -13,9 +11,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			_context.Animator.Play(_context.Config.IdleAnimation);
+			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
 		}
-		
+
 		public override void Update(float deltaTime)
 		{
 		}

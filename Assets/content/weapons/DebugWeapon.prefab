@@ -171,7 +171,8 @@ MonoBehaviour:
       <BaseDamage>k__BackingField: 10
       <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
-      <EnterComboTime>k__BackingField: {x: 0.46428573, y: 0.6428572}
+      <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
+      <EnterComboTime>k__BackingField: 0.2857143
       <HitConfigs>k__BackingField:
       - <InvolvedColliders>k__BackingField: 010000
         <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
@@ -190,7 +191,8 @@ MonoBehaviour:
       <BaseDamage>k__BackingField: 10
       <RotationDisabledTime>k__BackingField: {x: 0.1851852, y: 1}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.8333333}
-      <EnterComboTime>k__BackingField: {x: 0.537037, y: 0.70370376}
+      <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
+      <EnterComboTime>k__BackingField: 0
       <HitConfigs>k__BackingField:
       - <InvolvedColliders>k__BackingField: 010000
         <Timing>k__BackingField: {x: 0.25925928, y: 0.2962963}

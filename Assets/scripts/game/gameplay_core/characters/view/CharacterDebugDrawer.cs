@@ -1,13 +1,17 @@
 using System;
 using dream_lib.src.extensions;
+using dream_lib.src.utils.editor;
+using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine;
+using game.gameplay_core.characters.state_machine.states.attack;
+using game.gameplay_core.damage_system;
 using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view
 {
 	[Serializable]
-	public struct CharacterDebugDrawer
+	public class CharacterDebugDrawer
 	{
 		public bool DrawStateMachineInfo;
 		private bool _initialized;
@@ -15,6 +19,8 @@ namespace game.gameplay_core.characters.view
 		private Transform _transform;
 		private CharacterStateMachine _stateMachine;
 		private GUIStyle _textStyle;
+
+		private GizmoGraphDrawer _graphDrawer;
 
 		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
 		{
@@ -29,6 +35,8 @@ namespace game.gameplay_core.characters.view
 				fontStyle = FontStyle.Bold,
 				alignment = TextAnchor.LowerLeft
 			};
+
+			_graphDrawer = new GizmoGraphDrawer();
 		}
 
 #if UNITY_EDITOR
@@ -49,8 +57,57 @@ namespace game.gameplay_core.characters.view
 			}
 
 			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);
+
+			_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
+
+			if(_stateMachine.CurrentState is AttackState attackState)
+			{
+				if(_context.InputData.Command == CharacterCommand.Attack)
+				{
+					_graphDrawer.FreePoints.Add(new GraphPoint(attackState.Time, AttackGraphY)
+					{
+						Color = Color.blue,
+						Size = 0.03f
+					});
+				}
+			}
 		}
 
 #endif
+		private int _attackIndex;
+		private bool _comboTriggered;
+
+		public void AddAttackGraph(AttackConfig currentAttackConfig)
+		{
+			_attackIndex++;
+			_comboTriggered = false;
+			var line = _graphDrawer.AddLine(_attackIndex.ToString());
+			line.AddRange(new[]
+			{
+				new GraphPoint(0, AttackGraphY),
+				new GraphPoint(currentAttackConfig.ExitToComboTime.x*currentAttackConfig.Duration, AttackGraphY)
+				{
+					Color = Color.green
+				},
+				new GraphPoint(currentAttackConfig.ExitToComboTime.y*currentAttackConfig.Duration, AttackGraphY),
+				new GraphPoint(currentAttackConfig.Duration, AttackGraphY),
+				
+			});
+		}
+		
+		private float AttackGraphY => _attackIndex / 10f;
+
+		public void AddAttackComboAttempt(float time)
+		{
+			if(!_comboTriggered)
+			{
+				_comboTriggered = true;
+				_graphDrawer.FreePoints.Add(new GraphPoint(time, AttackGraphY)
+				{
+					Color = Color.red,
+					Size = 0.05f
+				});
+			}
+		}
 	}
 }

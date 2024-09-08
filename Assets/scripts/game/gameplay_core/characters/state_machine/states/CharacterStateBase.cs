@@ -34,7 +34,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 		}
 
-		public virtual bool CheckIsReadyToChangeState()
+		public virtual bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
 			return IsComplete;
 		}

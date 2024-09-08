@@ -12,14 +12,16 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 	{
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
-		private float _time;
+		public float Time { get; private set; }
 		private AttackType _attackType;
 		private AttackConfig _currentAttackConfig;
 		private readonly List<HitData> _hitsData = new();
 		private int _comboCounter;
 
-		private float NormalizedTime => _time / _currentAttackConfig.Duration;
-		private float TimeLeft => _currentAttackConfig.Duration - _time;
+		private float NormalizedTime => Time / _currentAttackConfig.Duration;
+		private float TimeLeft => _currentAttackConfig.Duration - Time;
+
+		private int _framesToUnlockWalk = 0;
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -56,17 +58,22 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation,0.1f, FadeMode.FromStart);
-			//newAnimation.Time = 0.1f //TODO: skip time for smooth transition
+			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			if(_comboCounter > 0)
+			{
+				newAnimation.Time = _currentAttackConfig.EnterComboTime;
+			}
+
+			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
 
 			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
-			_time = 0;
+			Time = 0;
 		}
 
 		public override void Update(float deltaTime)
 		{
-			_time += deltaTime;
+			Time += deltaTime;
 
 			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
@@ -99,9 +106,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			_context.MaxDeltaTime.Value = hasActiveHit ? CharacterConstants.MaxDeltaTimeAttacking : CharacterConstants.MaxDeltaTimeNormal;
 
-			if(_time >= _currentAttackConfig.Duration)
+			if(Time >= _currentAttackConfig.Duration)
 			{
 				IsComplete = true;
+			}
+
+			if(_currentAttackConfig.LockedStateTime.Contains(NormalizedTime))
+			{
+				_framesToUnlockWalk = 5;
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
@@ -113,8 +125,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				return false;
 			}
-			
-			if( _currentAttackConfig.EnterComboTime.Contains(NormalizedTime))
+
+			_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
+
+			if(_currentAttackConfig.ExitToComboTime.Contains(NormalizedTime))
 			{
 				_comboCounter++;
 				LaunchAttack();
@@ -123,8 +137,17 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return false;
 		}
 
-		public override bool CheckIsReadyToChangeState()
+		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
+			if(nextCommand == CharacterCommand.Walk)
+			{
+				if(_framesToUnlockWalk > 0)
+				{
+					_framesToUnlockWalk--;
+					return false;
+				}
+			}
+			
 			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 	}
