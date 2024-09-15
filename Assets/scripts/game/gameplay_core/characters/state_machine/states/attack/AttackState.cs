@@ -84,7 +84,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
-				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
+				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
 			var forwardMovement = _currentAttackConfig.ForwardMovement.Evaluate(Time);

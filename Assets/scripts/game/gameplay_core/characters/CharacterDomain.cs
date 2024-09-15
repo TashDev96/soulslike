@@ -47,19 +47,21 @@ namespace game.gameplay_core.characters
 
 		[field: SerializeField]
 		private WeaponView DebugWeapon { get; set; }
-		
+
 		public CharacterExternalData ExternalData { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
 			var isPlayer = UniqueId == "Player";
 
+
 			_movementLogic = new MovementLogic();
-			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context()
+			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
 				CharacterTransform = transform,
 				AllCharacters = locationContext.Characters,
 				Self = this,
+				MovementLogic = _movementLogic,
 			});
 
 			_context = new CharacterContext
@@ -83,7 +85,8 @@ namespace game.gameplay_core.characters
 				MovementLogic = _movementLogic,
 				TriggerStagger = new ReactiveCommand(),
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
+				LockOnLogic = _lockOnLogic,
+				LockOnTargets = GetComponentsInChildren<LockOnTargetView>()
 			};
 
 			ExternalData = new CharacterExternalData(_context);
@@ -92,7 +95,8 @@ namespace game.gameplay_core.characters
 			{
 				CharacterTransform = transform,
 				UnityCharacterController = GetComponent<CharacterController>(),
-				IsDead = _context.IsDead
+				IsDead = _context.IsDead,
+				RotationSpeed = _context.RotationSpeed,
 			});
 
 			_stateMachine = new CharacterStateMachine(_context);
@@ -184,6 +188,7 @@ namespace game.gameplay_core.characters
 				_context.CurrentWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
+				_lockOnLogic.Update(deltaTimeStep);
 				calculateInputLogic = false;
 			}
 

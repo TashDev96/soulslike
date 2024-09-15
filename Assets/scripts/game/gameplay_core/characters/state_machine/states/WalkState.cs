@@ -1,4 +1,3 @@
-using System;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 
@@ -35,9 +34,16 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			var inputWorld = _context.InputData.DirectionWorld;
 
-			RotateCharacter(inputWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
+			if(!_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
+			}
 
 			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.forward, inputWorld));
+			if(_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				directionMultiplier = 1;
+			}
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value);
 
 			_context.MovementLogic.Move(velocity * deltaTime);

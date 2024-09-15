@@ -1,3 +1,5 @@
+using dream_lib.src.reactive;
+using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace game.gameplay_core.characters.logic
 			public Transform CharacterTransform;
 			public CharacterController UnityCharacterController;
 			public IsDead IsDead { get; set; }
+			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
 		}
 
 		private Context _context;
@@ -47,6 +50,20 @@ namespace game.gameplay_core.characters.logic
 		private void HandleDeath(bool isDead)
 		{
 			_context.UnityCharacterController.enabled = !isDead;
+		}
+
+		public void RotateCharacter(Vector3 toDirection, float deltaTime)
+		{
+			RotateCharacter(toDirection, _context.RotationSpeed.Value.DegreesPerSecond ,deltaTime);
+		}
+
+		public void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
+		{
+			var angleDifference = Vector3.SignedAngle(_context.CharacterTransform.forward, toDirection, Vector3.up);
+			var clampedAngle = Mathf.Clamp(angleDifference, -speed * deltaTime, speed * deltaTime);
+			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
+
+			_context.CharacterTransform.rotation *= rotationStep;
 		}
 	}
 }

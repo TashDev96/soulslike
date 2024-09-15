@@ -8,6 +8,7 @@ namespace game.input
 		Attack,
 		Run,
 		Roll,
+		LockOn,
 		Horizontal,
 		Vertical,
 		MouseScrollWheel,

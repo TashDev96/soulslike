@@ -43,6 +43,11 @@ namespace game.gameplay_core.characters.player
 
 			_inputData.Command = CalculateCommand(directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.LockOn))
+			{
+				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
+			}
 		}
 
 		private CharacterCommand CalculateCommand(Vector3 directionInputLocalSpace)
