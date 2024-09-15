@@ -3,6 +3,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
+using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location_save_system;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace game.gameplay_core
 		private LocationContext _locationContext;
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
+		private IsometricCameraController _cameraController;
+		private ReactiveProperty<CharacterDomain> _player = new();
 
 		public void Initialize()
 		{
@@ -33,6 +36,12 @@ namespace game.gameplay_core
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 
+			_cameraController = new IsometricCameraController(new IsometricCameraController.Context()
+			{
+				Camera = _locationContext.MainCamera,
+				Player = _player,
+			});
+
 			LoadSceneObjects();
 			LoadSpawnedObjects();
 			LoadCharacters();
@@ -44,14 +53,15 @@ namespace game.gameplay_core
 		private void HandleUpdate()
 		{
 			_locationContext.LocationUpdate.Execute(Time.deltaTime);
+			_cameraController.Update(Time.deltaTime);
 		}
 
 		private void LoadCharacters()
 		{
 			_locationContext.Characters = new List<CharacterDomain>();
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
-			var player = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
-			player.Initialize(_locationContext);
+			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
+			_player.Value.Initialize(_locationContext);
 
 			foreach(var character in _sceneInstaller.Characters)
 			{
@@ -63,7 +73,7 @@ namespace game.gameplay_core
 				_locationContext.Characters.Add(character);
 			}
 
-			_locationContext.Characters.Add(player);
+			_locationContext.Characters.Add(_player.Value);
 		}
 
 		private void LoadSceneObjects()
