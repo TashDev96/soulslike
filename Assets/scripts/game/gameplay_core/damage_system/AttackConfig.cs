@@ -32,6 +32,8 @@ namespace game.gameplay_core.damage_system
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
+		[field:SerializeField]
+		public AnimationCurve ForwardMovement { get; private set; }
 
 		[field: SerializeField]
 		[field: HideInInspector]

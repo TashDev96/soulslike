@@ -22,6 +22,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private float TimeLeft => _currentAttackConfig.Duration - Time;
 
 		private int _framesToUnlockWalk = 0;
+		private float _forwardMovementDone;
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -62,13 +63,19 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			if(_comboCounter > 0)
 			{
 				newAnimation.Time = _currentAttackConfig.EnterComboTime;
+				Time = _currentAttackConfig.EnterComboTime;
+				_forwardMovementDone = _currentAttackConfig.ForwardMovement.Evaluate(Time);
+			}
+			else
+			{
+				Time = 0f;
+				_forwardMovementDone = 0f;
 			}
 
 			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
 
 			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
-			Time = 0;
 		}
 
 		public override void Update(float deltaTime)
@@ -79,6 +86,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				RotateCharacter(_context.InputData.DirectionWorld, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 			}
+
+			var forwardMovement = _currentAttackConfig.ForwardMovement.Evaluate(Time);
+			_context.MovementLogic.Move(_context.Transform.forward * (forwardMovement - _forwardMovementDone));
+			_forwardMovementDone = forwardMovement;
 
 			var hasActiveHit = false;
 
@@ -147,7 +158,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return false;
 				}
 			}
-			
+
 			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 	}
