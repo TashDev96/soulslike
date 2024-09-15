@@ -39,7 +39,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			return IsComplete;
 		}
 
-		protected void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
+		protected void RotateCharacter(Vector3 toDirection, float speed, float deltaTime, bool ignoreLockOn = false)
 		{
 			var targetRotation = Quaternion.LookRotation(toDirection);
 			_context.Transform.rotation = Quaternion.RotateTowards(_context.Transform.rotation, targetRotation, speed * deltaTime);

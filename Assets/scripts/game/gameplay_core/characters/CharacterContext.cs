@@ -31,5 +31,6 @@ namespace game.gameplay_core.characters
 		public GameObject DeadStateRoot { get; set; }
 		public ReactiveCommand TriggerStagger { get; set; }
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer { get; set; }
+		public LockOnTargetView[] LockOnTargets { get; set; }
 	}
 }

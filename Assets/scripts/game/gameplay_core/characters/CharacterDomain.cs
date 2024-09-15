@@ -40,18 +40,27 @@ namespace game.gameplay_core.characters
 		private HealthLogic _healthLogic;
 		private MovementLogic _movementLogic;
 		private StaggerLogic _staggerLogic;
+		private LockOnLogic _lockOnLogic;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
 		[field: SerializeField]
-		public WeaponView DebugWeapon { get; private set; }
+		private WeaponView DebugWeapon { get; set; }
+		
+		public CharacterExternalData ExternalData { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
 			var isPlayer = UniqueId == "Player";
 
 			_movementLogic = new MovementLogic();
+			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context()
+			{
+				CharacterTransform = transform,
+				AllCharacters = locationContext.Characters,
+				Self = this,
+			});
 
 			_context = new CharacterContext
 			{
@@ -73,8 +82,11 @@ namespace game.gameplay_core.characters
 				DeadStateRoot = _deadStateRoot,
 				MovementLogic = _movementLogic,
 				TriggerStagger = new ReactiveCommand(),
-				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
+				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
+				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 			};
+
+			ExternalData = new CharacterExternalData(_context);
 
 			_movementLogic.SetContext(new MovementLogic.Context
 			{
