@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
+#if UNITY_EDITOR
 using dream_lib.src.utils.editor;
-using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
+#endif
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -28,7 +30,7 @@ namespace game.gameplay_core.damage_system
 		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
 		[field: SerializeField]
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
-		[field:SerializeField]
+		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
 
 		[field: SerializeField]

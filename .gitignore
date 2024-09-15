@@ -67,3 +67,7 @@ Assets/z_experiments_gitignore.meta
 build/
 CF2-Data/Settings/CF2.config
 all_tests_passed
+Assets/AddressableAssetsData/Windows/addressables_content_state.bin
+Assets/AddressableAssetsData/Windows/addressables_content_state.bin.meta
+Assets/content/addressable_assets_data/link.xml
+Assets/content/addressable_assets_data/link.xml.meta

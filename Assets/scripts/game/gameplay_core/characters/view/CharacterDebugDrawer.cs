@@ -1,6 +1,7 @@
 using System;
+using System.Diagnostics;
 using dream_lib.src.extensions;
-using dream_lib.src.utils.editor;
+using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states.attack;
@@ -22,6 +23,7 @@ namespace game.gameplay_core.characters.view
 
 		private GizmoGraphDrawer _graphDrawer;
 
+		[Conditional("UNITY_EDITOR")]
 		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
 		{
 			_transform = transform;
@@ -35,7 +37,6 @@ namespace game.gameplay_core.characters.view
 				fontStyle = FontStyle.Bold,
 				alignment = TextAnchor.LowerLeft
 			};
-
 			_graphDrawer = new GizmoGraphDrawer();
 		}
 
@@ -77,6 +78,7 @@ namespace game.gameplay_core.characters.view
 		private int _attackIndex;
 		private bool _comboTriggered;
 
+		[Conditional("UNITY_EDITOR")]
 		public void AddAttackGraph(AttackConfig currentAttackConfig)
 		{
 			_attackIndex++;
@@ -85,18 +87,18 @@ namespace game.gameplay_core.characters.view
 			line.AddRange(new[]
 			{
 				new GraphPoint(0, AttackGraphY),
-				new GraphPoint(currentAttackConfig.ExitToComboTime.x*currentAttackConfig.Duration, AttackGraphY)
+				new GraphPoint(currentAttackConfig.ExitToComboTime.x * currentAttackConfig.Duration, AttackGraphY)
 				{
 					Color = Color.green
 				},
-				new GraphPoint(currentAttackConfig.ExitToComboTime.y*currentAttackConfig.Duration, AttackGraphY),
+				new GraphPoint(currentAttackConfig.ExitToComboTime.y * currentAttackConfig.Duration, AttackGraphY),
 				new GraphPoint(currentAttackConfig.Duration, AttackGraphY),
-				
 			});
 		}
-		
+
 		private float AttackGraphY => _attackIndex / 10f;
 
+		[Conditional("UNITY_EDITOR")]
 		public void AddAttackComboAttempt(float time)
 		{
 			if(!_comboTriggered)
