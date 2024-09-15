@@ -10,6 +10,7 @@ namespace game.gameplay_core.characters.ai
 
 		private float _timer;
 		private Vector3 _startPos;
+		private CharacterCommand _selectedCommand;
 
 		public void Initialize()
 		{
@@ -29,21 +30,23 @@ namespace game.gameplay_core.characters.ai
 				switch(Random.value)
 				{
 					case < 0.2f:
-						_characterContext.InputData.Command = CharacterCommand.Walk;
+						_selectedCommand = CharacterCommand.Walk;
 						_characterContext.InputData.DirectionWorld = new Vector3().AddRandom(-1, 1).SetY(0).normalized;
 						_timer = Random.Range(1, 5f);
 						break;
 					case < 0.5f:
-						_characterContext.InputData.Command = CharacterCommand.Walk;
+						_selectedCommand = CharacterCommand.Walk;
 						_characterContext.InputData.DirectionWorld = (_startPos - _characterContext.Transform.position).normalized;
 						_timer = Random.Range(1, 5f);
 						break;
 					default:
-						_characterContext.InputData.Command = CharacterCommand.None;
+						_selectedCommand = CharacterCommand.None;
 						_timer = Random.Range(1, 2f);
 						break;
 				}
 			}
+
+			_characterContext.InputData.Command = _selectedCommand;
 		}
 	}
 }
