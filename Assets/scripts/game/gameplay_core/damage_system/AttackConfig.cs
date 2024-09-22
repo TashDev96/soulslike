@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
+using game.editor;
 #if UNITY_EDITOR
 using dream_lib.src.utils.editor;
 using Sirenix.Utilities.Editor;
@@ -32,7 +33,7 @@ namespace game.gameplay_core.damage_system
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
-		[field:SerializeField]
+		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
 
 		[field: SerializeField]
@@ -54,10 +55,10 @@ namespace game.gameplay_core.damage_system
 			EditorGUI.BeginChangeCheck();
 
 			_animationPreview.ClearTimeChanges();
-			RotationDisabledTime = DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime);
-			LockedStateTime = DrawTimingSliderMinMax("Locked State Time:", LockedStateTime);
-			ExitToComboTime = DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime);
-			EnterComboTime = DrawTimingSlider("Enter Combo Time:", EnterComboTime);
+			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation, _animationPreview);
+			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation, _animationPreview);
+			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation, _animationPreview);
+			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation, _animationPreview);
 
 			GUILayout.Space(20);
 			GUILayout.Label("Hit Configs:");
@@ -77,7 +78,7 @@ namespace game.gameplay_core.damage_system
 
 				DrawSelectColliders(HitConfigs[i]);
 
-				HitConfigs[i].Timing = DrawTimingSliderMinMax("Timing:", HitConfigs[i].Timing);
+				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing:", HitConfigs[i].Timing, Animation, _animationPreview);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				HitConfigs[i].PoiseDamage = SirenixEditorFields.FloatField("Poise Damage:", HitConfigs[i].PoiseDamage);
 				GUILayout.Space(10);
@@ -114,33 +115,6 @@ namespace game.gameplay_core.damage_system
 			GUILayout.EndHorizontal();
 		}
 
-		private Vector2 DrawTimingSliderMinMax(string label, Vector2 value)
-		{
-			var fps = Animation.Clip ? Animation.Clip.frameRate : 60f;
-
-			GUILayout.Label(label);
-			_animationPreview.RegisterTimeBefore(value.x);
-			_animationPreview.RegisterTimeBefore(value.y);
-			var denormalizedTiming = value * Duration * fps;
-			var framedTiming = SirenixEditorFields.MinMaxSlider(denormalizedTiming, new Vector2(0, Duration * fps), false);
-			var result = framedTiming.Round(1) / Duration / fps;
-			_animationPreview.RegisterTimeAfter(result.x);
-			_animationPreview.RegisterTimeAfter(result.y);
-			return result;
-		}
-
-		private float DrawTimingSlider(string label, float value)
-		{
-			var fps = Animation.Clip ? Animation.Clip.frameRate : 60f;
-
-			GUILayout.Label(label);
-			_animationPreview.RegisterTimeBefore(value);
-			var denormalizedTiming = value * Duration * fps;
-			var framedTiming = EditorGUILayout.Slider(denormalizedTiming, 0, Duration * fps);
-			var result = framedTiming.Round(1) / Duration / fps;
-			_animationPreview.RegisterTimeAfter(result);
-			return result;
-		}
 #endif
 	}
 }

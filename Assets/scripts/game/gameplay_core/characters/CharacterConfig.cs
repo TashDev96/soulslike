@@ -12,6 +12,8 @@ namespace game.gameplay_core.characters
 		public AnimationClip IdleAnimation { get; private set; }
 		[field: SerializeField]
 		public AnimationClip StaggerAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip RollAnimation { get; private set; }
 
 		[field: SerializeField]
 		public float WalkSpeed { get; private set; } = 5f;
