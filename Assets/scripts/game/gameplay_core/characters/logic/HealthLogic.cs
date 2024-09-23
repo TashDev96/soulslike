@@ -1,4 +1,3 @@
-using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
@@ -9,9 +8,10 @@ namespace game.gameplay_core.characters.logic
 	{
 		public struct Context
 		{
-			public ReactiveCommand<DamageInfo> ApplyDamage { get; set; }
+			public ApplyDamageCommand ApplyDamage { get; set; }
 			public CharacterStats CharacterStats { get; set; }
 			public IsDead IsDead { get; set; }
+			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
 		}
 
 		private readonly Context _context;

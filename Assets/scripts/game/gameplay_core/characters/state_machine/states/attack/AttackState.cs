@@ -12,17 +12,17 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 	{
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
-		public float Time { get; private set; }
 		private AttackType _attackType;
 		private AttackConfig _currentAttackConfig;
 		private readonly List<HitData> _hitsData = new();
 		private int _comboCounter;
 
+		private int _framesToUnlockWalk;
+		private float _forwardMovementDone;
+		public float Time { get; private set; }
+
 		private float NormalizedTime => Time / _currentAttackConfig.Duration;
 		private float TimeLeft => _currentAttackConfig.Duration - Time;
-
-		private int _framesToUnlockWalk = 0;
-		private float _forwardMovementDone;
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -32,50 +32,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			_comboCounter = 0;
 			LaunchAttack();
-		}
-
-		private void LaunchAttack()
-		{
-			var weaponConfig = _context.CurrentWeapon.Value.Config;
-			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
-
-			if(_comboCounter > 0)
-			{
-				_currentAttackIndex = _comboCounter % (attacksList.Length);
-			}
-			else
-			{
-				_currentAttackIndex = 0;
-			}
-
-			_currentAttackConfig = attacksList[_currentAttackIndex];
-
-			_hitsData.Clear();
-			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
-			{
-				_hitsData.Add(new HitData
-				{
-					Config = _currentAttackConfig.HitConfigs[i]
-				});
-			}
-
-			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
-			if(_comboCounter > 0)
-			{
-				newAnimation.Time = _currentAttackConfig.EnterComboTime;
-				Time = _currentAttackConfig.EnterComboTime;
-				_forwardMovementDone = _currentAttackConfig.ForwardMovement.Evaluate(Time);
-			}
-			else
-			{
-				Time = 0f;
-				_forwardMovementDone = 0f;
-			}
-
-			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
-
-			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
-			IsComplete = false;
 		}
 
 		public override void Update(float deltaTime)
@@ -160,6 +116,50 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
+		}
+
+		private void LaunchAttack()
+		{
+			var weaponConfig = _context.CurrentWeapon.Value.Config;
+			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
+
+			if(_comboCounter > 0)
+			{
+				_currentAttackIndex = _comboCounter % attacksList.Length;
+			}
+			else
+			{
+				_currentAttackIndex = 0;
+			}
+
+			_currentAttackConfig = attacksList[_currentAttackIndex];
+
+			_hitsData.Clear();
+			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
+			{
+				_hitsData.Add(new HitData
+				{
+					Config = _currentAttackConfig.HitConfigs[i]
+				});
+			}
+
+			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			if(_comboCounter > 0)
+			{
+				newAnimation.Time = _currentAttackConfig.EnterComboTime;
+				Time = _currentAttackConfig.EnterComboTime;
+				_forwardMovementDone = _currentAttackConfig.ForwardMovement.Evaluate(Time);
+			}
+			else
+			{
+				Time = 0f;
+				_forwardMovementDone = 0f;
+			}
+
+			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
+
+			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
+			IsComplete = false;
 		}
 	}
 }

@@ -2,7 +2,6 @@ using System;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -12,6 +11,7 @@ namespace game.gameplay_core.characters.state_machine
 
 		private readonly IdleState _idleState;
 		private readonly WalkState _walkState;
+		private readonly RollState _rollState;
 		private readonly AttackState _attackState;
 		private readonly StaggerState _staggerState;
 		private CharacterCommand _nextCommand;
@@ -39,6 +39,7 @@ namespace game.gameplay_core.characters.state_machine
 			_walkState = new WalkState(_context);
 			_attackState = new AttackState(_context);
 			_staggerState = new StaggerState(_context);
+			_rollState = new RollState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
@@ -125,6 +126,7 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.Run:
 						break;
 					case CharacterCommand.Roll:
+						SetState(_rollState);
 						break;
 					case CharacterCommand.Attack:
 					case CharacterCommand.StrongAttack:
@@ -144,8 +146,6 @@ namespace game.gameplay_core.characters.state_machine
 				NextCommand = CharacterCommand.None;
 			}
 		}
-
-		 
 
 		private void SetState(CharacterStateBase newState)
 		{

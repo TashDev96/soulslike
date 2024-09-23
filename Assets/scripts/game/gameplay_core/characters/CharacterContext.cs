@@ -11,27 +11,30 @@ namespace game.gameplay_core.characters
 {
 	public struct CharacterContext
 	{
-		public CharacterInputData InputData;
-		public Transform Transform;
+		public LockOnLogic LockOnLogic;
+		public MovementLogic MovementLogic;
+		public InvulnerabilityLogic InvulnerabilityLogic;
 
-		public ReactiveProperty<float> WalkSpeed { get; set; }
-		public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
-		public ReactiveProperty<WeaponView> CurrentWeapon { get; set; }
-		public CharacterConfig Config { get; set; }
-		public AnimancerComponent Animator { get; set; }
-		public ReactiveProperty<float> DeltaTimeMultiplier { get; set; }
-		public ReactiveProperty<float> MaxDeltaTime { get; set; }
-		public ReactiveProperty<Team> Team { get; set; }
-		public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-		public IReadOnlyReactiveProperty<bool> IsPlayer { get; set; }
-		public ReactiveCommand<DamageInfo> ApplyDamage { get; set; }
-		public CharacterStats CharacterStats { get; set; }
-		public IsDead IsDead { get; set; }
-		public MovementLogic MovementLogic { get; set; }
-		public GameObject DeadStateRoot { get; set; }
-		public ReactiveCommand TriggerStagger { get; set; }
-		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer { get; set; }
-		public LockOnTargetView[] LockOnTargets { get; set; }
-		public LockOnLogic LockOnLogic { get; set; }
+		public CharacterConfig Config;
+		public Transform Transform;
+		public AnimancerComponent Animator;
+		public GameObject DeadStateRoot;
+		public LockOnTargetView[] LockOnTargets;
+		public CharacterStats CharacterStats;
+		public CharacterInputData InputData;
+
+		public ReactiveProperty<float> WalkSpeed;
+		public ReactiveProperty<RotationSpeedData> RotationSpeed;
+		public ReactiveProperty<WeaponView> CurrentWeapon;
+		public ReactiveProperty<float> DeltaTimeMultiplier;
+		public ReactiveProperty<float> MaxDeltaTime;
+		public ReactiveProperty<Team> Team;
+		public IReadOnlyReactiveProperty<string> CharacterId;
+		public IReadOnlyReactiveProperty<bool> IsPlayer;
+		public ApplyDamageCommand ApplyDamage;
+		public IsDead IsDead;
+		public ReactiveCommand TriggerStagger;
+
+		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 	}
 }

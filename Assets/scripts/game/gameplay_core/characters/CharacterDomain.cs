@@ -41,6 +41,7 @@ namespace game.gameplay_core.characters
 		private MovementLogic _movementLogic;
 		private StaggerLogic _staggerLogic;
 		private LockOnLogic _lockOnLogic;
+		private InvulnerabilityLogic _invulnerabilityLogic;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -54,39 +55,43 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
-
 			_movementLogic = new MovementLogic();
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
 				CharacterTransform = transform,
 				AllCharacters = locationContext.Characters,
 				Self = this,
-				MovementLogic = _movementLogic,
+				MovementLogic = _movementLogic
 			});
 
+			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_context = new CharacterContext
 			{
+				MovementLogic = _movementLogic,
+				LockOnLogic = _lockOnLogic,
+				InvulnerabilityLogic = _invulnerabilityLogic,
+
+				Config = _config,
+				Transform = transform,
+				Animator = GetComponent<AnimancerComponent>(),
+				DeadStateRoot = _deadStateRoot,
+				CharacterStats = _config.DefaultStats,
+				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
+				InputData = new CharacterInputData(),
+
 				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
-				Config = _config,
 				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
-				Animator = GetComponent<AnimancerComponent>(),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
 				CharacterId = new ReactiveProperty<string>(UniqueId),
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.Enemy),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
-				Transform = transform,
-				InputData = new CharacterInputData(),
-				ApplyDamage = new ReactiveCommand<DamageInfo>(),
-				CharacterStats = _config.DefaultStats,
+				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = new IsDead(),
-				DeadStateRoot = _deadStateRoot,
-				MovementLogic = _movementLogic,
 				TriggerStagger = new ReactiveCommand(),
-				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-				LockOnLogic = _lockOnLogic,
-				LockOnTargets = GetComponentsInChildren<LockOnTargetView>()
+
+				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
 			};
 
 			ExternalData = new CharacterExternalData(_context);
@@ -96,7 +101,7 @@ namespace game.gameplay_core.characters
 				CharacterTransform = transform,
 				UnityCharacterController = GetComponent<CharacterController>(),
 				IsDead = _context.IsDead,
-				RotationSpeed = _context.RotationSpeed,
+				RotationSpeed = _context.RotationSpeed
 			});
 
 			_stateMachine = new CharacterStateMachine(_context);
@@ -112,7 +117,8 @@ namespace game.gameplay_core.characters
 				{
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
-					ApplyDamage = _context.ApplyDamage
+					ApplyDamage = _context.ApplyDamage,
+					InvulnerabilityLogic = _context.InvulnerabilityLogic
 				});
 			}
 
@@ -120,7 +126,8 @@ namespace game.gameplay_core.characters
 			{
 				ApplyDamage = _context.ApplyDamage,
 				IsDead = _context.IsDead,
-				CharacterStats = _context.CharacterStats
+				CharacterStats = _context.CharacterStats,
+				InvulnerabilityLogic = _context.InvulnerabilityLogic
 			});
 
 			_staggerLogic = new StaggerLogic(new StaggerLogic.Context

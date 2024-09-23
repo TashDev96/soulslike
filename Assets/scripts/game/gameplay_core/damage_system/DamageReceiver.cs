@@ -1,4 +1,6 @@
 using dream_lib.src.reactive;
+using game.gameplay_core.characters.logic;
+using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -9,7 +11,8 @@ namespace game.gameplay_core.damage_system
 		{
 			public IReadOnlyReactiveProperty<Team> Team { get; set; }
 			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public ReactiveCommand<DamageInfo> ApplyDamage { get; set; }
+			public ApplyDamageCommand ApplyDamage { get; set; }
+			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
 		}
 
 		[SerializeField]
@@ -27,6 +30,11 @@ namespace game.gameplay_core.damage_system
 
 		public void ApplyDamage(DamageInfo damageInfo)
 		{
+			if(_context.InvulnerabilityLogic.IsInvulnerable)
+			{
+				return;
+			}
+
 			damageInfo.DamageAmount *= _damageMultiplier;
 			_context.ApplyDamage.Execute(damageInfo);
 		}

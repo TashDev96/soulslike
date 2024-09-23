@@ -1,4 +1,3 @@
-using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.editor;
 using Sirenix.Utilities.Editor;
@@ -9,7 +8,7 @@ namespace game.editor
 {
 	public static class CharacterInspectorUtils
 	{
-		public static Vector2 DrawTimingSliderMinMax(string label, Vector2 value, ClipTransition animation, PreviewAnimationDrawer animationPreview = null)
+		public static Vector2 DrawTimingSliderMinMax(string label, Vector2 value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null)
 		{
 			GetAnimationParams(animation, out var fps, out var duration);
 
@@ -24,7 +23,7 @@ namespace game.editor
 			return result;
 		}
 
-		public static float DrawTimingSlider(string label, float value, ClipTransition animation, PreviewAnimationDrawer animationPreview = null)
+		public static float DrawTimingSlider(string label, float value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null)
 		{
 			GetAnimationParams(animation, out var fps, out var duration);
 
@@ -37,10 +36,10 @@ namespace game.editor
 			return result;
 		}
 
-		private static void GetAnimationParams(ClipTransition animation, out float fps, out float duration)
+		private static void GetAnimationParams(AnimationClip animation, out float fps, out float duration)
 		{
-			fps = animation.Clip ? animation.Clip.frameRate : 60f;
-			duration = animation.Clip ? animation.Clip.length : 0.1f;
+			fps = animation ? animation.frameRate : 60f;
+			duration = animation ? animation.length : 0.1f;
 		}
 	}
 }

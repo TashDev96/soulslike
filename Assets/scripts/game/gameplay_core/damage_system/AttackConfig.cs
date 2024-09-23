@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Animancer;
-using dream_lib.src.extensions;
 using game.editor;
+using Sirenix.OdinInspector;
+using UnityEngine;
 #if UNITY_EDITOR
 using dream_lib.src.utils.editor;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
 #endif
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace game.gameplay_core.damage_system
 {
@@ -55,10 +54,10 @@ namespace game.gameplay_core.damage_system
 			EditorGUI.BeginChangeCheck();
 
 			_animationPreview.ClearTimeChanges();
-			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation, _animationPreview);
-			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation, _animationPreview);
-			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation, _animationPreview);
-			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation, _animationPreview);
+			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation.Clip, _animationPreview);
+			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
+			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);
+			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation.Clip, _animationPreview);
 
 			GUILayout.Space(20);
 			GUILayout.Label("Hit Configs:");
@@ -78,7 +77,7 @@ namespace game.gameplay_core.damage_system
 
 				DrawSelectColliders(HitConfigs[i]);
 
-				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing:", HitConfigs[i].Timing, Animation, _animationPreview);
+				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing:", HitConfigs[i].Timing, Animation.Clip, _animationPreview);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				HitConfigs[i].PoiseDamage = SirenixEditorFields.FloatField("Poise Damage:", HitConfigs[i].PoiseDamage);
 				GUILayout.Space(10);
