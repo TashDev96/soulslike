@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
-	public class AttackState : CharacterStateBase
+	public class AttackState : CharacterAnimationStateBase
 	{
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
@@ -19,10 +19,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private int _framesToUnlockWalk;
 		private float _forwardMovementDone;
-		public float Time { get; private set; }
 
-		private float NormalizedTime => Time / _currentAttackConfig.Duration;
-		private float TimeLeft => _currentAttackConfig.Duration - Time;
+		public override float Time { get; protected set; }
+		protected override float Duration { get; set; }
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -133,6 +132,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			_currentAttackConfig = attacksList[_currentAttackIndex];
+			Duration = _currentAttackConfig.Duration;
 
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)

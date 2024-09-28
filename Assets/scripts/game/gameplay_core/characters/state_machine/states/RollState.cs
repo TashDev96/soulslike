@@ -4,13 +4,10 @@ using game.gameplay_core.characters.logic;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class RollState : CharacterStateBase
+	public class RollState : CharacterAnimationStateBase
 	{
-		private float _duration;
-		public float Time { get; private set; }
-
-		private float NormalizedTime => Time / _duration;
-		private float TimeLeft => _duration - Time;
+		public override float Time { get; protected set; }
+		protected override float Duration { get; set; }
 
 		public RollState(CharacterContext context) : base(context)
 		{
@@ -23,7 +20,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var animation = _context.Config.Roll.RollAnimation;
 
 			Time = 0;
-			_duration = animation.length;
+			Duration = animation.length;
 
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
