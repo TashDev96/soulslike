@@ -54,11 +54,45 @@ MonoBehaviour:
   _debugDrawer:
     DrawStateMachineInfo: 1
   _config:
-    <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
-    <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     Roll:
       <RollAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
-      <RollInvulnerabilityTiming>k__BackingField: {x: 0, y: 0}
+      <RollInvulnerabilityTiming>k__BackingField: {x: 0.3, y: 0.8}
+      <RotationDisabledTime>k__BackingField: {x: 0.36666667, y: 0.98333335}
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0.44705465
+          outSlope: 0.44705465
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.34348086
+        - serializedVersion: 3
+          time: 0.28373286
+          value: 1.3406862
+          inSlope: 8.193136
+          outSlope: 8.193136
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.07879137
+        - serializedVersion: 3
+          time: 1
+          value: 6
+          inSlope: 0.24006338
+          outSlope: 0.24006338
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.12862317
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
+    <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <WalkSpeed>k__BackingField: 5
     <RotationSpeed>k__BackingField:
       _halfTurnDurationSeconds: 0.22

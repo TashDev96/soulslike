@@ -18,7 +18,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private int _comboCounter;
 
 		private int _framesToUnlockWalk;
-		private float _forwardMovementDone;
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
@@ -42,9 +41,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
-			var forwardMovement = _currentAttackConfig.ForwardMovement.Evaluate(Time);
-			_context.MovementLogic.Move(_context.Transform.forward * (forwardMovement - _forwardMovementDone));
-			_forwardMovementDone = forwardMovement;
+			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 
 			var hasActiveHit = false;
 
@@ -84,6 +81,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 		}
+
+
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
@@ -148,12 +147,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				newAnimation.Time = _currentAttackConfig.EnterComboTime;
 				Time = _currentAttackConfig.EnterComboTime;
-				_forwardMovementDone = _currentAttackConfig.ForwardMovement.Evaluate(Time);
+				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 			}
 			else
 			{
 				Time = 0f;
-				_forwardMovementDone = 0f;
+				ResetForwardMovement();
 			}
 
 			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
