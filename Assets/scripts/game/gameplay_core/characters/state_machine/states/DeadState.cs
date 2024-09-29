@@ -1,4 +1,4 @@
-using UnityEngine;
+using Animancer;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -14,13 +14,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void OnEnter()
 		{
-			_context.Transform.Rotate(_context.Transform.right, 90f, Space.World);
+			_context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
 			_context.DeadStateRoot.SetActive(true);
 		}
 
 		public override void OnExit()
 		{
-			_context.Transform.rotation = Quaternion.identity;
+			_context.Animator.Play(_context.Config.IdleAnimation, 0.1f, FadeMode.FromStart);
 			_context.DeadStateRoot.SetActive(false);
 		}
 	}

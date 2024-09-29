@@ -1,5 +1,5 @@
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.view;
-using UnityEngine;
 
 namespace game.gameplay_core.characters
 {
@@ -8,7 +8,7 @@ namespace game.gameplay_core.characters
 		private readonly CharacterContext _context;
 
 		public string Id => _context.CharacterId.Value;
-		public Transform Transform => _context.Transform;
+		public ReadOnlyTransform Transform => _context.Transform;
 		public LockOnTargetView[] LockOnTargets => _context.LockOnTargets;
 		public bool IsDead => _context.IsDead.Value;
 

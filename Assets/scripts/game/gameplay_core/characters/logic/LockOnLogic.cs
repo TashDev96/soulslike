@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.runtime_data;
-using UnityEngine;
+using dream_lib.src.utils.data_types;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -10,7 +9,7 @@ namespace game.gameplay_core.characters.logic
 	{
 		public struct Context
 		{
-			public Transform CharacterTransform;
+			public ReadOnlyTransform CharacterTransform;
 			public CharacterDomain Self;
 			public List<CharacterDomain> AllCharacters { get; set; }
 			public MovementLogic MovementLogic { get; set; }
@@ -19,6 +18,7 @@ namespace game.gameplay_core.characters.logic
 		private readonly Context _context;
 
 		public ReactiveProperty<CharacterDomain> LockOnTarget { get; } = new();
+		public bool IsLockedOn => LockOnTarget.HasValue;
 
 		public LockOnLogic(Context context)
 		{
@@ -50,7 +50,7 @@ namespace game.gameplay_core.characters.logic
 				return;
 			}
 
-			var lookVector = (LockOnTarget.Value.ExternalData.Transform.position - _context.CharacterTransform.position).SetY(0);
+			var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.CharacterTransform.Position).SetY(0);
 			_context.MovementLogic.RotateCharacter(lookVector, deltaTime);
 		}
 
@@ -66,7 +66,7 @@ namespace game.gameplay_core.characters.logic
 					continue;
 				}
 
-				var distance = (_context.CharacterTransform.position - character.ExternalData.Transform.position).sqrMagnitude;
+				var distance = (_context.CharacterTransform.Position - character.ExternalData.Transform.Position).sqrMagnitude;
 				if(distance < minDistance)
 				{
 					minDistance = distance;

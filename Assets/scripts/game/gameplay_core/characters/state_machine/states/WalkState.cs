@@ -39,7 +39,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
 			}
 
-			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.forward, inputWorld));
+			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.Forward, inputWorld));
 			if(_context.LockOnLogic.LockOnTarget.HasValue)
 			{
 				directionMultiplier = 1;

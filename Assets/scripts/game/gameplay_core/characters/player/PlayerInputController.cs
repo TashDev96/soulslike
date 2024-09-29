@@ -1,5 +1,6 @@
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
@@ -11,7 +12,7 @@ namespace game.gameplay_core.characters.player
 	public class PlayerInputController : ICharacterBrain
 	{
 		private CharacterInputData _inputData;
-		private Transform _characterTransform;
+		private ReadOnlyTransform _characterTransform;
 		private readonly ReactiveProperty<Camera> _mainCamera;
 		private CharacterContext _characterContext;
 

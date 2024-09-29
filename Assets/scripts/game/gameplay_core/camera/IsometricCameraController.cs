@@ -25,7 +25,7 @@ namespace game.gameplay_core.camera
 		public void Update(float deltaTime)
 		{
 			var cameraTransform = _context.Camera.Value.transform;
-			var vectorToTarget = _context.Player.Value.ExternalData.Transform.position - cameraTransform.position;
+			var vectorToTarget = _context.Player.Value.ExternalData.Transform.Position - cameraTransform.position;
 
 			var cameraRight = cameraTransform.right;
 			var cameraUp = cameraTransform.up;

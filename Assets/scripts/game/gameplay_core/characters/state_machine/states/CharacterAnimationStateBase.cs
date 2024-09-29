@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class CharacterAnimationStateBase : CharacterStateBase
@@ -20,7 +22,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected void UpdateForwardMovement(float currentForwardDistance)
 		{
-			_context.MovementLogic.Move(_context.Transform.forward * (currentForwardDistance - _forwardMovementDone));
+			_context.MovementLogic.Move(_context.Transform.Forward * (currentForwardDistance - _forwardMovementDone));
+			_forwardMovementDone = currentForwardDistance;
+		}
+		
+		protected void UpdateForwardMovement(float currentForwardDistance, Vector3 overrideDirection)
+		{
+			_context.MovementLogic.Move(overrideDirection * (currentForwardDistance - _forwardMovementDone));
 			_forwardMovementDone = currentForwardDistance;
 		}
 	}

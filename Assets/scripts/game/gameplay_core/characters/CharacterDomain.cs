@@ -1,6 +1,7 @@
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.logic;
@@ -36,6 +37,7 @@ namespace game.gameplay_core.characters
 		private CharacterStateMachine _stateMachine;
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
+		private ReadOnlyTransform _transform;
 
 		private HealthLogic _healthLogic;
 		private MovementLogic _movementLogic;
@@ -55,10 +57,12 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
+			_transform = new ReadOnlyTransform(transform);
+			
 			_movementLogic = new MovementLogic();
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
-				CharacterTransform = transform,
+				CharacterTransform = _transform,
 				AllCharacters = locationContext.Characters,
 				Self = this,
 				MovementLogic = _movementLogic
@@ -72,7 +76,7 @@ namespace game.gameplay_core.characters
 				InvulnerabilityLogic = _invulnerabilityLogic,
 
 				Config = _config,
-				Transform = transform,
+				Transform = _transform,
 				Animator = GetComponent<AnimancerComponent>(),
 				DeadStateRoot = _deadStateRoot,
 				CharacterStats = _config.DefaultStats,

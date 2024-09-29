@@ -36,7 +36,7 @@ namespace game.gameplay_core.characters.ai
 						break;
 					case < 0.5f:
 						_selectedCommand = CharacterCommand.Walk;
-						_characterContext.InputData.DirectionWorld = (_startPos - _characterContext.Transform.position).normalized;
+						_characterContext.InputData.DirectionWorld = (_startPos - _characterContext.Transform.Position).normalized;
 						_timer = Random.Range(1, 5f);
 						break;
 					default:

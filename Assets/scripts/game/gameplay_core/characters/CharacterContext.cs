@@ -1,5 +1,6 @@
 using Animancer;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
@@ -16,7 +17,7 @@ namespace game.gameplay_core.characters
 		public InvulnerabilityLogic InvulnerabilityLogic;
 
 		public CharacterConfig Config;
-		public Transform Transform;
+		public ReadOnlyTransform Transform;
 		public AnimancerComponent Animator;
 		public GameObject DeadStateRoot;
 		public LockOnTargetView[] LockOnTargets;
