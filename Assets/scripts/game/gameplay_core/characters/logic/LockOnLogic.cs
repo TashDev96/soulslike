@@ -19,6 +19,7 @@ namespace game.gameplay_core.characters.logic
 
 		public ReactiveProperty<CharacterDomain> LockOnTarget { get; } = new();
 		public bool IsLockedOn => LockOnTarget.HasValue;
+		public bool DisableRotationForThisFrame { get; set; }
 
 		public LockOnLogic(Context context)
 		{
@@ -50,8 +51,13 @@ namespace game.gameplay_core.characters.logic
 				return;
 			}
 
-			var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.CharacterTransform.Position).SetY(0);
-			_context.MovementLogic.RotateCharacter(lookVector, deltaTime);
+			if(!DisableRotationForThisFrame)
+			{
+				var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.CharacterTransform.Position).SetY(0);
+				_context.MovementLogic.RotateCharacter(lookVector, deltaTime);
+			}
+
+			DisableRotationForThisFrame = false;
 		}
 
 		private void FindLockOnTarget()

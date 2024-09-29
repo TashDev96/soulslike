@@ -11,12 +11,18 @@ namespace game.gameplay_core.characters
 	public class RollConfig
 	{
 		[field: SerializeField]
-		public AnimationClip RollAnimation { get; private set; }
+		public AnimationClip ForwardAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip BackwardAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip RightAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip LeftAnimation { get; private set; }
 
 		[field: SerializeField]
 		[field: ReadOnly]
 		public Vector2 RollInvulnerabilityTiming { get; private set; }
-		
+
 		[field: SerializeField]
 		[field: ReadOnly]
 		public Vector2 RotationDisabledTime { get; private set; }
@@ -32,23 +38,22 @@ namespace game.gameplay_core.characters
 		{
 			if(_animationPreview == null)
 			{
-				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, RollAnimation);
+				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, ForwardAnimation);
 			}
 
 			EditorGUI.BeginChangeCheck();
 
 			_animationPreview.ClearTimeChanges();
 			var oldValue = RollInvulnerabilityTiming;
-			RollInvulnerabilityTiming = CharacterInspectorUtils.DrawTimingSliderMinMax("Roll Invulnerability Timing:", RollInvulnerabilityTiming, RollAnimation, _animationPreview);
-			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, RollAnimation, _animationPreview);
+			RollInvulnerabilityTiming = CharacterInspectorUtils.DrawTimingSliderMinMax("Roll Invulnerability Timing:", RollInvulnerabilityTiming, ForwardAnimation, _animationPreview);
+			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, ForwardAnimation, _animationPreview);
 			if(oldValue != RollInvulnerabilityTiming)
 			{
-				_animationPreview.Clip = RollAnimation;
+				_animationPreview.Clip = ForwardAnimation;
 			}
 			_animationPreview.CalculateTimeFromChanges();
 			_animationPreview.Draw();
-			
-			
+
 			if(EditorGUI.EndChangeCheck())
 			{
 				EditorUtility.SetDirty(Selection.activeObject);
