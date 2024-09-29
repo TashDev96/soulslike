@@ -10,12 +10,13 @@ namespace game.gameplay_core.characters.state_machine.states
 	{
 		private RollConfig _config;
 		private Vector3 _rollDirectionWorld;
-		private Vector3 _rollDirectionLocal;
+		private Vector3 _characterDirectionTarget;
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
 		public RollState(CharacterContext context) : base(context)
 		{
+			IsReadyToRememberNextCommand = true;
 		}
 
 		public override void OnEnter()
@@ -27,37 +28,32 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			var animation = _config.ForwardAnimation;
 
+			_rollDirectionWorld = _context.InputData.HasDirectionInput ? _context.InputData.DirectionWorld : -_context.Transform.Forward;
+			_characterDirectionTarget = _rollDirectionWorld;
+
 			if(_context.LockOnLogic.IsLockedOn && _context.InputData.HasDirectionInput)
 			{
 				var directionType = _context.InputData.DirectionLocal.GetDirectionHor();
 
-				_rollDirectionLocal = directionType.ToVector();
-
 				switch(directionType)
 				{
 					case Direction.Forward:
-						_rollDirectionWorld = _context.Transform.Forward;
 						animation = _config.ForwardAnimation;
+						_characterDirectionTarget = _rollDirectionWorld;
 						break;
 					case Direction.Right:
-						_rollDirectionWorld = _context.Transform.Right;
 						animation = _config.RightAnimation;
+						_characterDirectionTarget = Quaternion.AngleAxis(90, Vector3.up) * -_rollDirectionWorld;
 						break;
 					case Direction.Back:
-						_rollDirectionWorld = -_context.Transform.Forward;
 						animation = _config.BackwardAnimation;
+						_characterDirectionTarget = _rollDirectionWorld;
 						break;
 					case Direction.Left:
-						_rollDirectionWorld = -_context.Transform.Right;
 						animation = _config.LeftAnimation;
-
+						_characterDirectionTarget = Quaternion.AngleAxis(90, Vector3.up) * _rollDirectionWorld;
 						break;
 				}
-			}
-			else
-			{
-				_rollDirectionWorld = _context.InputData.HasDirectionInput ? _context.InputData.DirectionWorld : -_context.Transform.Forward;
-				_rollDirectionLocal = _context.InputData.DirectionLocal;
 			}
 
 			Time = 0;
@@ -68,11 +64,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 
-		public override void OnExit()
-		{
-			base.OnExit();
-		}
-
 		public override void Update(float deltaTime)
 		{
 			Time += deltaTime;
@@ -81,19 +72,15 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_context.LockOnLogic.DisableRotationForThisFrame = true;
 			}
-			else
-			{
-				_context.MovementLogic.RotateCharacter(_rollDirectionWorld, deltaTime);
-			}
 
-			IsReadyToRememberNextCommand = NormalizedTime > 0.3f;
+			_context.MovementLogic.RotateCharacter(_characterDirectionTarget, deltaTime);
+			UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld);
 
 			if(TimeLeft <= 0f)
 			{
 				IsComplete = true;
 			}
 
-			UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld);
 
 			if(_context.Config.Roll.RollInvulnerabilityTiming.Contains(NormalizedTime))
 			{
