@@ -47,7 +47,7 @@ namespace game.gameplay_core.characters.state_machine.states
 						break;
 					case Direction.Back:
 						animation = _config.BackwardAnimation;
-						_characterDirectionTarget = _rollDirectionWorld;
+						_characterDirectionTarget = -_rollDirectionWorld;
 						break;
 					case Direction.Left:
 						animation = _config.LeftAnimation;
