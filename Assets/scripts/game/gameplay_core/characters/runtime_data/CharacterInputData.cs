@@ -12,7 +12,6 @@ namespace game.gameplay_core.characters.runtime_data
 		public bool HoldBlock;
 		public bool HoldRun;
 
-		public Vector3 DirectionLocal;
 		public Vector3 DirectionWorld;
 		public bool HasDirectionInput => DirectionWorld.sqrMagnitude > 0;
 	}

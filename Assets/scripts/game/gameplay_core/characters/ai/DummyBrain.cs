@@ -48,5 +48,10 @@ namespace game.gameplay_core.characters.ai
 
 			_characterContext.InputData.Command = _selectedCommand;
 		}
+
+		public string GetDebugSting()
+		{
+			return "Dummy Brain";
+		}
 	}
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 313819625180903426}
   - component: {fileID: 1937557130125307911}
   - component: {fileID: 9014584770393281075}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,6 +96,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
     <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
+    <DeathAnimation>k__BackingField: {fileID: 0}
     <WalkSpeed>k__BackingField: 5
     <RotationSpeed>k__BackingField:
       _halfTurnDurationSeconds: 0.22
@@ -341,7 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3556327465321771145}
   - component: {fileID: 444830256696912245}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DeadStateRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

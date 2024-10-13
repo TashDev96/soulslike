@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
+using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states.attack;
@@ -15,20 +16,28 @@ namespace game.gameplay_core.characters.view
 	public class CharacterDebugDrawer
 	{
 		public bool DrawStateMachineInfo;
+		public bool DrawBrainInfo;
+
 		private bool _initialized;
 		private CharacterContext _context;
+		private ICharacterBrain _brain;
 		private Transform _transform;
 		private CharacterStateMachine _stateMachine;
 		private GUIStyle _textStyle;
 
 		private GizmoGraphDrawer _graphDrawer;
+		private int _attackIndex;
+		private bool _comboTriggered;
+
+		private float AttackGraphY => _attackIndex / 10f;
 
 		[Conditional("UNITY_EDITOR")]
-		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine)
+		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine, ICharacterBrain brain)
 		{
 			_transform = transform;
 			_context = context;
 			_stateMachine = stateMachine;
+			_brain = brain;
 			_initialized = true;
 
 			_textStyle = new GUIStyle
@@ -41,6 +50,7 @@ namespace game.gameplay_core.characters.view
 		}
 
 #if UNITY_EDITOR
+
 		public void OnDrawGizmos()
 		{
 			if(!_initialized)
@@ -55,6 +65,10 @@ namespace game.gameplay_core.characters.view
 			if(DrawStateMachineInfo)
 			{
 				str += _stateMachine.GetDebugString();
+			}
+			if(DrawBrainInfo)
+			{
+				str += _brain.GetDebugSting();
 			}
 
 			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);
@@ -75,8 +89,6 @@ namespace game.gameplay_core.characters.view
 		}
 
 #endif
-		private int _attackIndex;
-		private bool _comboTriggered;
 
 		[Conditional("UNITY_EDITOR")]
 		public void AddAttackGraph(AttackConfig currentAttackConfig)
@@ -92,11 +104,9 @@ namespace game.gameplay_core.characters.view
 					Color = Color.green
 				},
 				new GraphPoint(currentAttackConfig.ExitToComboTime.y * currentAttackConfig.Duration, AttackGraphY),
-				new GraphPoint(currentAttackConfig.Duration, AttackGraphY),
+				new GraphPoint(currentAttackConfig.Duration, AttackGraphY)
 			});
 		}
-
-		private float AttackGraphY => _attackIndex / 10f;
 
 		[Conditional("UNITY_EDITOR")]
 		public void AddAttackComboAttempt(float time)

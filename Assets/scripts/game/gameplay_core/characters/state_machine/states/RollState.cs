@@ -33,7 +33,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			if(_context.LockOnLogic.IsLockedOn && _context.InputData.HasDirectionInput)
 			{
-				var directionType = _context.InputData.DirectionLocal.GetDirectionHor();
+				var localDir = _context.Transform.InverseTransformDirection(_context.InputData.DirectionWorld); //maybe should save this at OnEnter
+				var directionType = localDir.GetDirectionHor();
 
 				switch(directionType)
 				{
@@ -80,7 +81,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				IsComplete = true;
 			}
-
 
 			if(_context.Config.Roll.RollInvulnerabilityTiming.Contains(NormalizedTime))
 			{

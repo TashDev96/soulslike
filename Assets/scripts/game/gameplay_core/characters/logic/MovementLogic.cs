@@ -17,6 +17,7 @@ namespace game.gameplay_core.characters.logic
 
 		private Context _context;
 		private Vector3 _fallVelocity;
+		public float LastSpeed { get; private set; }
 
 		public void SetContext(Context context)
 		{
@@ -45,6 +46,7 @@ namespace game.gameplay_core.characters.logic
 		public void Move(Vector3 vector)
 		{
 			_context.UnityCharacterController.Move(vector);
+			LastSpeed = vector.magnitude;
 		}
 
 		private void HandleDeath(bool isDead)

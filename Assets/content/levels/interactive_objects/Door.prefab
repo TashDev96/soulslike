@@ -67,7 +67,7 @@ GameObject:
   - component: {fileID: 3269465076722921974}
   - component: {fileID: 7729525258019656164}
   - component: {fileID: 2372112993021699864}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DoorMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c43a5a21846e4d299079f5d1af7ea9da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InteractionTextHint: 
 --- !u!1 &7177525310011649158
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +278,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -295,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c43a5a21846e4d299079f5d1af7ea9da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InteractionTextHint: 
 --- !u!1 &8400818467221582702
 GameObject:
   m_ObjectHideFlags: 0

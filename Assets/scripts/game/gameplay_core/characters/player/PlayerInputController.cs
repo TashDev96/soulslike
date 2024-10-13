@@ -1,6 +1,5 @@
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
-using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
@@ -12,9 +11,9 @@ namespace game.gameplay_core.characters.player
 	public class PlayerInputController : ICharacterBrain
 	{
 		private CharacterInputData _inputData;
-		private ReadOnlyTransform _characterTransform;
 		private readonly ReactiveProperty<Camera> _mainCamera;
 		private CharacterContext _characterContext;
+		private Vector2 _directionInputScreenSpace;
 
 		public PlayerInputController(ReactiveProperty<Camera> locationContextMainCamera)
 		{
@@ -25,30 +24,33 @@ namespace game.gameplay_core.characters.player
 		{
 			_characterContext = context;
 			_inputData = context.InputData;
-			_characterTransform = context.Transform;
 		}
 
 		public void Think(float deltaTime)
 		{
-			var directionInputScreenSpace = Vector2.zero;
+			_directionInputScreenSpace = Vector2.zero;
 
-			directionInputScreenSpace.x += InputAdapter.GetAxisRaw(InputAxesNames.Horizontal);
-			directionInputScreenSpace.y += InputAdapter.GetAxisRaw(InputAxesNames.Vertical);
-			directionInputScreenSpace = directionInputScreenSpace.normalized;
+			_directionInputScreenSpace.x += InputAdapter.GetAxisRaw(InputAxesNames.Horizontal);
+			_directionInputScreenSpace.y += InputAdapter.GetAxisRaw(InputAxesNames.Vertical);
+			_directionInputScreenSpace = _directionInputScreenSpace.normalized;
 
-			if(directionInputScreenSpace.sqrMagnitude > 0)
+			if(_directionInputScreenSpace.sqrMagnitude > 0)
 			{
-				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlaneWithSkew(directionInputScreenSpace);
-				_inputData.DirectionLocal = _characterTransform.InverseTransformDirection(_inputData.DirectionWorld);
+				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlaneWithSkew(_directionInputScreenSpace);
 			}
 
-			_inputData.Command = CalculateCommand(directionInputScreenSpace);
+			_inputData.Command = CalculateCommand(_directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
 
 			if(InputAdapter.GetButtonDown(InputAxesNames.LockOn))
 			{
 				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
 			}
+		}
+
+		public string GetDebugSting()
+		{
+			return $"Player Input {_directionInputScreenSpace}";
 		}
 
 		private CharacterCommand CalculateCommand(Vector3 directionInputLocalSpace)

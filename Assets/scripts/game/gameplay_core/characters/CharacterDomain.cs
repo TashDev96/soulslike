@@ -89,7 +89,7 @@ namespace game.gameplay_core.characters
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
 				CharacterId = new ReactiveProperty<string>(UniqueId),
-				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.Enemy),
+				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = new IsDead(),
@@ -163,7 +163,7 @@ namespace game.gameplay_core.characters
 			}
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
-			_debugDrawer.Initialize(transform, _context, _stateMachine);
+			_debugDrawer.Initialize(transform, _context, _stateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
 		}
 
