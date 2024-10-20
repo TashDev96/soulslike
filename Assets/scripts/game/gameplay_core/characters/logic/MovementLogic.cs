@@ -49,14 +49,9 @@ namespace game.gameplay_core.characters.logic
 			LastSpeed = vector.magnitude;
 		}
 
-		private void HandleDeath(bool isDead)
-		{
-			_context.UnityCharacterController.enabled = !isDead;
-		}
-
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			RotateCharacter(toDirection, _context.RotationSpeed.Value.DegreesPerSecond ,deltaTime);
+			RotateCharacter(toDirection, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
@@ -66,6 +61,11 @@ namespace game.gameplay_core.characters.logic
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
 			_context.CharacterTransform.rotation *= rotationStep;
+		}
+
+		private void HandleDeath(bool isDead)
+		{
+			_context.UnityCharacterController.enabled = !isDead;
 		}
 	}
 }

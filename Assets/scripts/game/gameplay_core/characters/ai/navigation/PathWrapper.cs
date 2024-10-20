@@ -6,13 +6,12 @@ namespace game.gameplay_core.characters.ai
 {
 	public class PathWrapper
 	{
+		private readonly List<Vector3> _positions = new();
+		private readonly List<Vector3> _directions = new();
+		private readonly List<float> _distances = new();
 		public bool IsEmpty => _positions.Count == 0;
-		
-		public float Length { get; private set; }
 
-		private List<Vector3> _positions = new();
-		private List<Vector3> _directions = new();
-		private List<float> _distances = new();
+		public float Length { get; private set; }
 
 		public IReadOnlyList<Vector3> Positions => _positions;
 		public IReadOnlyList<Vector3> Directions => _directions;

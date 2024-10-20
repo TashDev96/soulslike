@@ -88,7 +88,8 @@ namespace game.gameplay_core.damage_system
 									DamageAmount = attackConfig.BaseDamage * hitData.Config.DamageMultiplier,
 									PoiseDamageAmount = hitData.Config.PoiseDamage,
 									WorldPos = Vector3.Lerp((point0 + point1) / 2f, _results[j].transform.position, 0.3f),
-									DoneByPlayer = _context.IsPlayer.Value
+									DoneByPlayer = _context.IsPlayer.Value,
+									DamageDealer = _context.SelfLink,
 								});
 							}
 						}

@@ -12,6 +12,7 @@ namespace game.gameplay_core.characters
 {
 	public struct CharacterContext
 	{
+		public CharacterDomain SelfLink;
 		public LockOnLogic LockOnLogic;
 		public MovementLogic MovementLogic;
 		public InvulnerabilityLogic InvulnerabilityLogic;

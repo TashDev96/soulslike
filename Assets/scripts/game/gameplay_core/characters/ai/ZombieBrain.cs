@@ -1,6 +1,8 @@
 using System;
 using dream_lib.src.utils.components;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai
@@ -14,6 +16,27 @@ namespace game.gameplay_core.characters.ai
 		private float _attackDistance = 2f;
 		[SerializeField]
 		private float _fightModeDistance = 4f;
+
+		[Header("Stupidity")]
+		[SerializeField]
+		private RangeFloat _freezeInterval;
+		[SerializeField]
+		private RangeFloat _freezeDuration;
+		
+		[SerializeField]
+		private RangeFloat _noAttackInterval;
+		[SerializeField]
+		private RangeFloat _noAttackDuration;
+		[SerializeField, Range(0,1)]
+		private float _pauseBetweenAttacksChance;
+		[SerializeField]
+		private RangeFloat _pauseBetweenAttacksDuration;
+
+		[SerializeField, Range(0,1)]
+		private float _mistakeAttackChance;
+		[SerializeField, Range(0,1)]
+		private float _dodgeTriggerChance;
+		
 		[Header("Debug")]
 		[SerializeField]
 		private Color _navigationDebugColor = Color.green;
@@ -32,6 +55,7 @@ namespace game.gameplay_core.characters.ai
 		public void Initialize(CharacterContext context)
 		{
 			_context = context;
+			_context.ApplyDamage.OnExecute += HandleDamage;
 
 			foreach(var triggerListener in _aggroZones)
 			{
@@ -39,6 +63,14 @@ namespace game.gameplay_core.characters.ai
 			}
 
 			_navigationModule = new AiNavigationModule(_context.Transform);
+		}
+
+		private void HandleDamage(DamageInfo info)
+		{
+			if(!HasTarget)
+			{
+				_target = info.DamageDealer;
+			}
 		}
 
 		public void Think(float deltaTime)
@@ -113,44 +145,49 @@ namespace game.gameplay_core.characters.ai
 					break;
 				case State.Fight:
 
-					if(!HasTarget)
-					{
-						_state = State.Idle;
-						break;
-					}
-
-					if(isReadyToMakeDecision && distanceToTarget > _fightModeDistance)
-					{
-						BuildPathToTarget();
-						_state = State.Navigate;
-						break;
-					}
-
-					if(distanceToTarget < _attackDistance)
-					{
-						_context.InputData.Command = CharacterCommand.Attack;
-						_context.InputData.DirectionWorld = directionToTarget;
-					}
-					else
-					{
-						_context.InputData.DirectionWorld = directionToTarget;
-					}
+					UpdateFightState(isReadyToMakeDecision, distanceToTarget, directionToTarget);
 
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
-		
-		
-		private void BuildPathToTarget()
+
+		private void UpdateFightState(bool isReadyToMakeDecision, float distanceToTarget, Vector3 directionToTarget)
 		{
-			_navigationModule.BuildPath(_target.ExternalData.Transform.Position);
+			if(!HasTarget)
+			{
+				_state = State.Idle;
+				return;
+			}
+
+			if(isReadyToMakeDecision && distanceToTarget > _fightModeDistance)
+			{
+				BuildPathToTarget();
+				_state = State.Navigate;
+				return;
+			}
+
+			if(distanceToTarget < _attackDistance)
+			{
+				_context.InputData.Command = CharacterCommand.Attack;
+				_context.InputData.DirectionWorld = directionToTarget;
+			}
+			else
+			{
+				_context.InputData.Command = CharacterCommand.Walk;
+				_context.InputData.DirectionWorld = directionToTarget;
+			}
 		}
 
 		public string GetDebugSting()
 		{
 			return $"Zombie Brain, state {_state}";
+		}
+
+		private void BuildPathToTarget()
+		{
+			_navigationModule.BuildPath(_target.ExternalData.Transform.Position);
 		}
 
 #if UNITY_EDITOR
@@ -172,7 +209,7 @@ namespace game.gameplay_core.characters.ai
 					}
 
 					var refPos = _navigationModule.ReferencePos;
-					Debug.DrawLine(refPos, refPos+Vector3.up*3f, _navigationDebugColor);
+					Debug.DrawLine(refPos, refPos + Vector3.up * 3f, _navigationDebugColor);
 				}
 			}
 		}
@@ -192,6 +229,17 @@ namespace game.gameplay_core.characters.ai
 					_target = otherCharacter;
 				}
 			}
+		}
+
+		private class FightStateData
+		{
+			public float Duration;
+			public float TotalDurationWithoutTargetLoss;
+			public float NextEvadeChance;
+			
+			
+
+			public float TimeToNextStupidity;
 		}
 
 		private enum State

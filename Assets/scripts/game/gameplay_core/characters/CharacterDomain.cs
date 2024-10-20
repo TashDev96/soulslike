@@ -58,7 +58,7 @@ namespace game.gameplay_core.characters
 			var isPlayer = UniqueId == "Player";
 
 			_transform = new ReadOnlyTransform(transform);
-			
+
 			_movementLogic = new MovementLogic();
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
@@ -71,6 +71,8 @@ namespace game.gameplay_core.characters
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_context = new CharacterContext
 			{
+				SelfLink =  this,
+				
 				MovementLogic = _movementLogic,
 				LockOnLogic = _lockOnLogic,
 				InvulnerabilityLogic = _invulnerabilityLogic,

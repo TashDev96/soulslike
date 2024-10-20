@@ -8,14 +8,13 @@ namespace game.gameplay_core.characters.ai
 	{
 		private readonly ReadOnlyTransform _characterTransform;
 
-		public PathWrapper Path { get; private set; }
-		public Vector3 ReferencePos => _previousWorldTarget;
-
-		private NavMeshPath _navMeshPath;
+		private readonly NavMeshPath _navMeshPath;
 
 		private int _currentIndex;
 		private float _currentDistanceInsideSegment;
-		private Vector3 _previousWorldTarget;
+
+		public PathWrapper Path { get; }
+		public Vector3 ReferencePos { get; private set; }
 
 		public AiNavigationModule(ReadOnlyTransform characterTransform)
 		{
@@ -39,7 +38,7 @@ namespace game.gameplay_core.characters.ai
 		{
 			var speedOffset = speed / 30f;
 
-			if((currentPosition - _previousWorldTarget).sqrMagnitude < 0.2f + speedOffset)
+			if((currentPosition - ReferencePos).sqrMagnitude < 0.2f + speedOffset)
 			{
 				_currentDistanceInsideSegment += 0.5f + speedOffset;
 			}
@@ -53,7 +52,7 @@ namespace game.gameplay_core.characters.ai
 			var nextPoint = Path.Positions[_currentIndex + 1];
 			var normalizedDistance = Mathf.Clamp01(_currentDistanceInsideSegment / Path.Distances[_currentIndex]);
 
-			_previousWorldTarget = Vector3.MoveTowards(point, nextPoint, normalizedDistance);
+			ReferencePos = Vector3.MoveTowards(point, nextPoint, normalizedDistance);
 
 			if(normalizedDistance >= 1)
 			{
@@ -61,7 +60,7 @@ namespace game.gameplay_core.characters.ai
 				_currentDistanceInsideSegment = 0;
 			}
 
-			return (_previousWorldTarget - currentPosition).normalized;
+			return (ReferencePos - currentPosition).normalized;
 		}
 	}
 }
