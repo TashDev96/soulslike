@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using game.gameplay_core.camera;
@@ -62,6 +63,7 @@ namespace game.gameplay_core
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
+			_player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos);
 
 			foreach(var character in _sceneInstaller.Characters)
 			{

@@ -158,8 +158,9 @@ MonoBehaviour:
   _hitColliders:
   - {fileID: 1841813809505577228}
   Config:
-    <RegularAttacks>k__BackingField:
-    - <Animation>k__BackingField:
+    <Attacks>k__BackingField:
+    - <Name>k__BackingField: Regular1
+      <Animation>k__BackingField:
         _FadeDuration: 0.25
         _Events:
           _NormalizedTimes: []
@@ -239,7 +240,154 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
-    - <Animation>k__BackingField:
+    - <Name>k__BackingField: Regular2
+      <Animation>k__BackingField:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: e8f71e52c23a3a94facf4b2923df9262, type: 2}
+        _Speed: 1
+        _NormalizedStartTime: NaN
+      <BaseDamage>k__BackingField: 10
+      <RotationDisabledTime>k__BackingField: {x: 0.1851852, y: 1}
+      <LockedStateTime>k__BackingField: {x: 0, y: 0.8333333}
+      <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
+      <EnterComboTime>k__BackingField: 0
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.49674606
+          value: 0.003112793
+          inSlope: 2.473301
+          outSlope: 2.473301
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.7036793
+          value: 0.514921
+          inSlope: 2.473301
+          outSlope: -0.03966309
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9944585
+          value: 0.5033878
+          inSlope: -0.11899399
+          outSlope: -0.11899399
+          tangentMode: 1
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1.5633532
+          value: 0.49808115
+          inSlope: -0.00932802
+          outSlope: -0.00932802
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      <HitConfigs>k__BackingField:
+      - <InvolvedColliders>k__BackingField: 010000
+        <Timing>k__BackingField: {x: 0.25925928, y: 0.2962963}
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+    RegularAttacksSequence: 0000000001000000
+    <RegularAttacks>k__BackingField:
+    - <Name>k__BackingField: 
+      <Animation>k__BackingField:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
+        _Speed: 1
+        _NormalizedStartTime: NaN
+      <BaseDamage>k__BackingField: 9.84
+      <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
+      <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
+      <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
+      <EnterComboTime>k__BackingField: 0.2857143
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: -0.0007769945
+          value: 0.00039045114
+          inSlope: -0.0018150839
+          outSlope: 0.27156472
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.1989717
+          value: 0.054635152
+          inSlope: 0.27156472
+          outSlope: 0.14877076
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.51367295
+          value: 0.1014535
+          inSlope: 0.14877076
+          outSlope: 2.176072
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.7036793
+          value: 0.514921
+          inSlope: 2.176072
+          outSlope: -0.03966309
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.9944585
+          value: 0.5033878
+          inSlope: -0.11899399
+          outSlope: -0.11899399
+          tangentMode: 1
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1.5633532
+          value: 0.49808115
+          inSlope: -0.00932802
+          outSlope: -0.00932802
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      <HitConfigs>k__BackingField:
+      - <InvolvedColliders>k__BackingField: 010000
+        <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+    - <Name>k__BackingField: 
+      <Animation>k__BackingField:
         _FadeDuration: 0.25
         _Events:
           _NormalizedTimes: []

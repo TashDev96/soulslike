@@ -111,6 +111,7 @@ namespace game.gameplay_core.characters
 			});
 
 			_stateMachine = new CharacterStateMachine(_context);
+			_context.CurrentState = _stateMachine.CurrentState;
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;

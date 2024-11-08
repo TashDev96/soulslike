@@ -4,6 +4,7 @@ using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -38,5 +39,6 @@ namespace game.gameplay_core.characters
 		public ReactiveCommand TriggerStagger;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
+		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
 	}
 }

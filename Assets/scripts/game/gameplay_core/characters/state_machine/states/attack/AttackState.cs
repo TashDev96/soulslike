@@ -82,8 +82,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 		}
 
-
-
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
 			if(nextCommand is not CharacterCommand.Attack and not CharacterCommand.StrongAttack)
@@ -118,19 +116,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void LaunchAttack()
 		{
-			var weaponConfig = _context.CurrentWeapon.Value.Config;
-			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
-
-			if(_comboCounter > 0)
-			{
-				_currentAttackIndex = _comboCounter % attacksList.Length;
-			}
-			else
-			{
-				_currentAttackIndex = 0;
-			}
-
-			_currentAttackConfig = attacksList[_currentAttackIndex];
+			_currentAttackConfig = GetCurrentAttackConfig();
 			Duration = _currentAttackConfig.Duration;
 
 			_hitsData.Clear();
@@ -159,6 +145,28 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
+		}
+
+		private AttackConfig GetCurrentAttackConfig()
+		{
+			var weaponConfig = _context.CurrentWeapon.Value.Config;
+			if(_context.InputData.ForcedAttackConfig != null)
+			{
+				return _context.InputData.ForcedAttackConfig;
+			}
+
+			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
+
+			if(_comboCounter > 0)
+			{
+				_currentAttackIndex = _comboCounter % attacksList.Length;
+			}
+			else
+			{
+				_currentAttackIndex = 0;
+			}
+
+			return attacksList[_currentAttackIndex];
 		}
 	}
 }

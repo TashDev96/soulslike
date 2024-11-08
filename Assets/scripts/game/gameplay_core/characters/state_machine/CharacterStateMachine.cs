@@ -1,4 +1,5 @@
 using System;
+using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
@@ -29,7 +30,10 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		public CharacterStateBase CurrentState { get; private set; }
+		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState => _currentState;
+		private ReactiveProperty<CharacterStateBase> _currentState = new();
+
+		 
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -49,7 +53,7 @@ namespace game.gameplay_core.characters.state_machine
 
 		public void Update(float deltaTime, bool calculateInputLogic)
 		{
-			CurrentState.Update(deltaTime);
+			_currentState.Value.Update(deltaTime);
 
 			calculateInputLogic &= !_context.IsDead.Value;
 
@@ -63,7 +67,7 @@ namespace game.gameplay_core.characters.state_machine
 		public string GetDebugString()
 		{
 			var str = "";
-			str += $"state:   {CurrentState.GetType().Name}  complete: {CurrentState.IsComplete}\n";
+			str += $"state:   {_currentState.Value.GetType().Name}  complete: {_currentState.Value.IsComplete}\n";
 			str += $"command: {_context.InputData.Command}\n";
 			str += $"next command: {NextCommand}\n";
 			return str;
@@ -71,9 +75,9 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void HandleTriggerStagger()
 		{
-			if(CurrentState.CanInterruptByStagger && !_context.IsDead.Value)
+			if(_currentState.Value.CanInterruptByStagger && !_context.IsDead.Value)
 			{
-				CurrentState.OnInterrupt();
+				_currentState.Value.OnInterrupt();
 				SetState(_staggerState);
 			}
 		}
@@ -94,7 +98,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			if(NextCommand == CharacterCommand.None || overrideMovement)
 			{
-				if(CurrentState.IsReadyToRememberNextCommand)
+				if(_currentState.Value.IsReadyToRememberNextCommand)
 				{
 					NextCommand = inputCommand;
 				}
@@ -103,19 +107,19 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void TryExecuteNextCommand()
 		{
-			if(CurrentState.TryContinueWithCommand(NextCommand))
+			if(_currentState.Value.TryContinueWithCommand(NextCommand))
 			{
 				NextCommand = CharacterCommand.None;
 				_context.InputData.Command = CharacterCommand.None;
 				return;
 			}
 
-			if(CurrentState.CheckIsReadyToChangeState(NextCommand))
+			if(_currentState.Value.CheckIsReadyToChangeState(NextCommand))
 			{
 				switch(NextCommand)
 				{
 					case CharacterCommand.None:
-						if(CurrentState.IsComplete)
+						if(_currentState.Value.IsComplete)
 						{
 							SetState(_idleState);
 						}
@@ -149,9 +153,9 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void SetState(CharacterStateBase newState)
 		{
-			CurrentState?.OnExit();
-			CurrentState = newState;
-			CurrentState.OnEnter();
+			_currentState.Value?.OnExit();
+			_currentState.Value = newState;
+			_currentState.Value.OnEnter();
 			NextCommand = CharacterCommand.None;
 		}
 	}

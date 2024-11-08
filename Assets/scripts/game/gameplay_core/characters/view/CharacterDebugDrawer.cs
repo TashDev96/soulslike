@@ -75,7 +75,7 @@ namespace game.gameplay_core.characters.view
 
 			_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
 
-			if(_stateMachine.CurrentState is AttackState attackState)
+			if(_stateMachine.CurrentState.Value is AttackState attackState)
 			{
 				if(_context.InputData.Command == CharacterCommand.Attack)
 				{

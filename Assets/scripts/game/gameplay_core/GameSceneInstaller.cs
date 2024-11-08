@@ -16,6 +16,9 @@ namespace game.gameplay_core
 		public CharacterDomain[] Characters { get; private set; }
 		[field: SerializeField]
 		public Camera MainCamera { get; private set; }
+		[field: SerializeField]
+		public Transform TestPlayerSpawnPos { get; private set; }
+		
 
 #if UNITY_EDITOR
 

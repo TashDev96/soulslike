@@ -2,6 +2,8 @@ using System;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.state_machine.states;
+using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
@@ -22,21 +24,21 @@ namespace game.gameplay_core.characters.ai
 		private RangeFloat _freezeInterval;
 		[SerializeField]
 		private RangeFloat _freezeDuration;
-		
+
 		[SerializeField]
 		private RangeFloat _noAttackInterval;
 		[SerializeField]
 		private RangeFloat _noAttackDuration;
-		[SerializeField, Range(0,1)]
+		[SerializeField] [Range(0, 1)]
 		private float _pauseBetweenAttacksChance;
 		[SerializeField]
 		private RangeFloat _pauseBetweenAttacksDuration;
 
-		[SerializeField, Range(0,1)]
+		[SerializeField] [Range(0, 1)]
 		private float _mistakeAttackChance;
-		[SerializeField, Range(0,1)]
+		[SerializeField] [Range(0, 1)]
 		private float _dodgeTriggerChance;
-		
+
 		[Header("Debug")]
 		[SerializeField]
 		private Color _navigationDebugColor = Color.green;
@@ -50,6 +52,8 @@ namespace game.gameplay_core.characters.ai
 
 		private float _decisionTimer;
 
+		private FightStateData _fightData = new();
+
 		private bool HasTarget => _target != null;
 
 		public void Initialize(CharacterContext context)
@@ -62,15 +66,9 @@ namespace game.gameplay_core.characters.ai
 				triggerListener.OnTriggerEnterEvent += HandleAggroTriggerEnter;
 			}
 
-			_navigationModule = new AiNavigationModule(_context.Transform);
-		}
+			_context.CurrentState.OnChangedFromTo += HandleCharacterStateChange;
 
-		private void HandleDamage(DamageInfo info)
-		{
-			if(!HasTarget)
-			{
-				_target = info.DamageDealer;
-			}
+			_navigationModule = new AiNavigationModule(_context.Transform);
 		}
 
 		public void Think(float deltaTime)
@@ -153,6 +151,19 @@ namespace game.gameplay_core.characters.ai
 			}
 		}
 
+		public string GetDebugSting()
+		{
+			return $"Zombie Brain, state {_state}";
+		}
+
+		private void HandleDamage(DamageInfo info)
+		{
+			if(!HasTarget)
+			{
+				_target = info.DamageDealer;
+			}
+		}
+
 		private void UpdateFightState(bool isReadyToMakeDecision, float distanceToTarget, Vector3 directionToTarget)
 		{
 			if(!HasTarget)
@@ -180,9 +191,12 @@ namespace game.gameplay_core.characters.ai
 			}
 		}
 
-		public string GetDebugSting()
+		private void HandleCharacterStateChange(CharacterStateBase from, CharacterStateBase to)
 		{
-			return $"Zombie Brain, state {_state}";
+			if(from is AttackState && to is not AttackState)
+			{
+				// _context.CurrentWeapon.Value.Config.RegularAttacks
+			}
 		}
 
 		private void BuildPathToTarget()
@@ -236,8 +250,6 @@ namespace game.gameplay_core.characters.ai
 			public float Duration;
 			public float TotalDurationWithoutTargetLoss;
 			public float NextEvadeChance;
-			
-			
 
 			public float TimeToNextStupidity;
 		}
