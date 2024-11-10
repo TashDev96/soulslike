@@ -1,4 +1,5 @@
 using System;
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.runtime_data;
@@ -44,11 +45,16 @@ namespace game.gameplay_core.characters.logic
 
 		private CharacterController UnityCharacterController => _context.UnityCharacterController;
 
+		private Vector3 CurrentPosition => _context.CharacterTransform.position;
+
+		private Vector3 _prevPos;
+
 		public void SetContext(Context context)
 		{
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
 			_groundLayer = LayerMask.GetMask("Default");
+			_prevPos = CurrentPosition;
 		}
 
 		public void Update(float deltaTime)
@@ -68,6 +74,12 @@ namespace game.gameplay_core.characters.logic
 			{
 				UpdateSliding(deltaTime);
 			}
+
+			if(_drawDebug && Time.frameCount % 10 == 0)
+			{
+				DebugDrawUtils.DrawText(_slidingVelocity.magnitude.RoundFormat(), CurrentPosition + Vector3.up, 10f);
+			}
+			_prevPos = CurrentPosition;
 		}
 
 		private void GetGroundNormal()
@@ -150,9 +162,13 @@ namespace game.gameplay_core.characters.logic
 
 			if(UnityCharacterController.isGrounded)
 			{
-				if(_slidingVelocity.sqrMagnitude > 0)
+				if(_hasStableGround)
 				{
-					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime*10f);
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
+				}
+				else
+				{
+					projectedMovement -= Vector3.Project(projectedMovement, _slidingVelocity.normalized);
 				}
 			}
 			UnityCharacterController.Move(projectedMovement);
@@ -192,6 +208,8 @@ namespace game.gameplay_core.characters.logic
 				_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
 				UnityCharacterController.Move(_slidingVelocity * deltaTime);
 			}
+
+			
 		}
 
 		private void HandleDeath(bool isDead)
