@@ -41,7 +41,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
-			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
+			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
 			var hasActiveHit = false;
 

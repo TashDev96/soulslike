@@ -1,10 +1,13 @@
+using System;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
+	[Serializable]
 	public class MovementLogic
 	{
 		public struct Context
@@ -16,13 +19,36 @@ namespace game.gameplay_core.characters.logic
 		}
 
 		private Context _context;
+
+		private bool _prevIsGrounded;
 		private Vector3 _fallVelocity;
-		public float LastSpeed { get; private set; }
+		private Vector3 _slidingVelocity;
+
+		[SerializeField]
+		private float _inAirDamping;
+		[SerializeField]
+		private float _slidingAcceleration;
+		[SerializeField]
+		private float _slidingDamping;
+		[SerializeField]
+		private float _slidingStopDamping;
+
+		[Space]
+		[SerializeField]
+		private bool _drawDebug;
+
+		private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
+		private LayerMask _groundLayer;
+		private Vector3 _groundNormal;
+		private bool _hasStableGround;
+
+		private CharacterController UnityCharacterController => _context.UnityCharacterController;
 
 		public void SetContext(Context context)
 		{
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
+			_groundLayer = LayerMask.GetMask("Default");
 		}
 
 		public void Update(float deltaTime)
@@ -32,21 +58,104 @@ namespace game.gameplay_core.characters.logic
 				return;
 			}
 
-			if(!_context.UnityCharacterController.isGrounded)
+			UpdateFalling(deltaTime);
+
+			_prevIsGrounded = UnityCharacterController.isGrounded; //important to keep it before UpdateSlipping, since isGrounded will change immediately after calling .Move() 
+
+			GetGroundNormal();
+
+			if(UnityCharacterController.isGrounded)
 			{
+				UpdateSliding(deltaTime);
+			}
+		}
+
+		private void GetGroundNormal()
+		{
+			if(!UnityCharacterController.isGrounded)
+			{
+				_groundNormal = Vector3.up;
+			}
+
+			var capsule = UnityCharacterController;
+
+			var origin = _context.CharacterTransform.position + capsule.center;
+			var radius = capsule.radius + UnityCharacterController.skinWidth;
+			var maxDistance = capsule.height / 2 + 0.0001f - radius + UnityCharacterController.skinWidth;
+
+			var count = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, _groundCastResults, maxDistance, _groundLayer);
+
+			if(_drawDebug)
+			{
+				DebugDrawUtils.DrawHandlesSphere(origin, radius, new Color(1, 0, 0, 0.3f));
+				DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * (maxDistance), radius, new Color(0, 1, 0, 0.3f));
+			}
+
+			if(count == 0)
+			{
+				_groundNormal = Vector3.up;
+				return;
+			}
+
+			_hasStableGround = false;
+			var normalsSum = Vector3.zero;
+
+			for(var i = 0; i < count; i++)
+			{
+				var result = _groundCastResults[i];
+				var angle = Vector3.Angle(Vector3.up, result.normal);
+				var isSliding = angle > UnityCharacterController.slopeLimit;
+				if(!isSliding)
+				{
+					_hasStableGround = true;
+					_groundNormal = result.normal;
+				}
+
+				normalsSum += result.normal;
+
+				if(_drawDebug)
+				{
+					Debug.DrawRay(result.point, result.normal * 2, isSliding ? Color.red : Color.green);
+				}
+			}
+
+			if(!_hasStableGround)
+			{
+				_groundNormal = normalsSum / count;
+			}
+		}
+
+		private void UpdateFalling(float deltaTime)
+		{
+			if(!UnityCharacterController.isGrounded)
+			{
+				if(_prevIsGrounded)
+				{
+					_fallVelocity = _slidingVelocity;
+				}
+				_fallVelocity = Vector3.Lerp(_fallVelocity, Vector3.zero, _inAirDamping * deltaTime);
 				_fallVelocity += Physics.gravity * deltaTime;
-				_context.UnityCharacterController.Move(_fallVelocity * deltaTime);
+				UnityCharacterController.Move(_fallVelocity * deltaTime);
 			}
 			else
 			{
+				// _slidingVelocity = _fallVelocity;
 				_fallVelocity = Vector3.zero;
 			}
 		}
 
-		public void Move(Vector3 vector)
+		public void Walk(Vector3 vector, float deltaTime)
 		{
-			_context.UnityCharacterController.Move(vector);
-			LastSpeed = vector.magnitude;
+			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
+
+			if(UnityCharacterController.isGrounded)
+			{
+				if(_slidingVelocity.sqrMagnitude > 0)
+				{
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime*10f);
+				}
+			}
+			UnityCharacterController.Move(projectedMovement);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
@@ -63,9 +172,31 @@ namespace game.gameplay_core.characters.logic
 			_context.CharacterTransform.rotation *= rotationStep;
 		}
 
+		private void UpdateSliding(float deltaTime)
+		{
+			if(_hasStableGround)
+			{
+				_slidingVelocity.y = 0;
+				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
+				_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
+				UnityCharacterController.Move(_slidingVelocity * deltaTime);
+				if(_slidingVelocity.sqrMagnitude < 0.001f)
+				{
+					_slidingVelocity = Vector3.zero;
+				}
+			}
+			else
+			{
+				var slideDirection = Vector3.ProjectOnPlane(Vector3.down, _groundNormal).normalized;
+				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingDamping);
+				_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
+				UnityCharacterController.Move(_slidingVelocity * deltaTime);
+			}
+		}
+
 		private void HandleDeath(bool isDead)
 		{
-			_context.UnityCharacterController.enabled = !isDead;
+			UnityCharacterController.enabled = !isDead;
 		}
 	}
 }

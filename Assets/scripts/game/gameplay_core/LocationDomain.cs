@@ -64,18 +64,20 @@ namespace game.gameplay_core
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
 			_player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos);
-
-			foreach(var character in _sceneInstaller.Characters)
-			{
-				if(!character.gameObject.activeSelf)
-				{
-					continue;
-				}
-				character.Initialize(_locationContext);
-				_locationContext.Characters.Add(character);
-			}
-
 			_locationContext.Characters.Add(_player.Value);
+
+			if(!_sceneInstaller.OnlySpawnPlayer)
+			{
+				foreach(var character in _sceneInstaller.Characters)
+				{
+					if(!character.gameObject.activeSelf)
+					{
+						continue;
+					}
+					character.Initialize(_locationContext);
+					_locationContext.Characters.Add(character);
+				}
+			}
 		}
 
 		private void LoadSceneObjects()

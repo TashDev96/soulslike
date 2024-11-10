@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugDrawer:
     DrawStateMachineInfo: 1
+    DrawBrainInfo: 0
   _config:
     Roll:
       <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
@@ -117,6 +118,11 @@ MonoBehaviour:
         _value: 5
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
+  _movementLogic:
+    _inAirDamping: 0.2
+    _slidingAcceleration: 10
+    _slidingDamping: 0.7
+    _slidingStopDamping: 2
   <UniqueId>k__BackingField: Player
   <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
 --- !u!143 &313819625180903426
@@ -139,8 +145,8 @@ CharacterController:
   serializedVersion: 3
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 35
+  m_StepOffset: 0.4
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}

@@ -46,7 +46,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			}
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value);
 
-			_context.MovementLogic.Move(velocity * deltaTime);
+			_context.MovementLogic.Walk(velocity * deltaTime, deltaTime);
 
 			IsComplete = true;
 		}

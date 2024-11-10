@@ -20,15 +20,15 @@ namespace game.gameplay_core.characters.state_machine.states
 			_forwardMovementDone = initialValue;
 		}
 
-		protected void UpdateForwardMovement(float currentForwardDistance)
+		protected void UpdateForwardMovement(float currentForwardDistance, float deltaTime)
 		{
-			_context.MovementLogic.Move(_context.Transform.Forward * (currentForwardDistance - _forwardMovementDone));
+			_context.MovementLogic.Walk(_context.Transform.Forward * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
 		}
 		
-		protected void UpdateForwardMovement(float currentForwardDistance, Vector3 overrideDirection)
+		protected void UpdateForwardMovement(float currentForwardDistance, Vector3 overrideDirection, float deltaTime)
 		{
-			_context.MovementLogic.Move(overrideDirection * (currentForwardDistance - _forwardMovementDone));
+			_context.MovementLogic.Walk(overrideDirection * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
 		}
 	}

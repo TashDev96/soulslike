@@ -32,6 +32,9 @@ namespace game.gameplay_core.characters
 
 		[SerializeField]
 		private Transform _uiPivot;
+		[SerializeField]
+		private MovementLogic _movementLogic;
+		
 		private CharacterWorldSpaceUi _worldSpaceUi;
 
 		private CharacterStateMachine _stateMachine;
@@ -40,7 +43,6 @@ namespace game.gameplay_core.characters
 		private ReadOnlyTransform _transform;
 
 		private HealthLogic _healthLogic;
-		private MovementLogic _movementLogic;
 		private StaggerLogic _staggerLogic;
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
@@ -59,7 +61,6 @@ namespace game.gameplay_core.characters
 
 			_transform = new ReadOnlyTransform(transform);
 
-			_movementLogic = new MovementLogic();
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
 				CharacterTransform = _transform,
@@ -71,8 +72,8 @@ namespace game.gameplay_core.characters
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_context = new CharacterContext
 			{
-				SelfLink =  this,
-				
+				SelfLink = this,
+
 				MovementLogic = _movementLogic,
 				LockOnLogic = _lockOnLogic,
 				InvulnerabilityLogic = _invulnerabilityLogic,

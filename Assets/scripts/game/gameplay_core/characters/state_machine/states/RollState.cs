@@ -75,7 +75,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			}
 
 			_context.MovementLogic.RotateCharacter(_characterDirectionTarget, deltaTime);
-			UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld);
+			UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld, deltaTime);
 
 			if(TimeLeft <= 0f)
 			{
