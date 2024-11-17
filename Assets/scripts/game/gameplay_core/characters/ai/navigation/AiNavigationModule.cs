@@ -1,9 +1,8 @@
-using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.navigation
 {
 	public class AiNavigationModule
 	{
@@ -43,9 +42,10 @@ namespace game.gameplay_core.characters.ai
 			var nextPoint = Path.Positions[_currentIndex + 1];
 
 			var vectorBetweenPoints = nextPoint - currentPoint;
-			var vectorOfMotion = nextPoint - currentPoint;
+			var vectorOfMotion = currentPosition - currentPoint;
 			
-			
+			Debug.DrawLine(currentPosition, currentPosition+vectorOfMotion, Color.green );
+			Debug.DrawLine(currentPoint, currentPoint+vectorBetweenPoints, Color.red );
 
 			if(Vector3.Project(vectorOfMotion, vectorBetweenPoints).magnitude > vectorBetweenPoints.magnitude)
 			{

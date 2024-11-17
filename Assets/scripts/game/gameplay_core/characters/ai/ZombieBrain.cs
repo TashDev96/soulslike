@@ -1,6 +1,7 @@
 using System;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.ai.navigation;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
@@ -83,14 +84,12 @@ namespace game.gameplay_core.characters.ai
 			}
 
 			var selfPosition = _context.Transform.Position;
-			Vector3 targetPosition = default;
-			Vector3 vectorToTarget = default;
 			Vector3 directionToTarget = default;
 			float distanceToTarget = default;
 			if(HasTarget)
 			{
-				targetPosition = _target.ExternalData.Transform.Position;
-				vectorToTarget = targetPosition - selfPosition;
+				var targetPosition = _target.ExternalData.Transform.Position;
+				var vectorToTarget = targetPosition - selfPosition;
 				directionToTarget = vectorToTarget.normalized;
 				distanceToTarget = vectorToTarget.magnitude;
 			}
@@ -219,7 +218,7 @@ namespace game.gameplay_core.characters.ai
 					{
 						var prevPos = _navigationModule.Path.Positions[i - 1];
 						var pos = _navigationModule.Path.Positions[i];
-						Debug.DrawLine(prevPos, pos, _navigationDebugColor);
+						//Debug.DrawLine(prevPos, pos, _navigationDebugColor);
 					}
 				}
 			}

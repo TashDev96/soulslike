@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.navigation
 {
 	public class PathWrapper
 	{
