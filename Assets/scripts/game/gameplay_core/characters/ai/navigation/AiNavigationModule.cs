@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,10 +12,8 @@ namespace game.gameplay_core.characters.ai
 		private readonly NavMeshPath _navMeshPath;
 
 		private int _currentIndex;
-		private float _currentDistanceInsideSegment;
 
 		public PathWrapper Path { get; }
-		public Vector3 ReferencePos { get; private set; }
 
 		public AiNavigationModule(ReadOnlyTransform characterTransform)
 		{
@@ -30,37 +29,31 @@ namespace game.gameplay_core.characters.ai
 			{
 				Path.SetPath(_navMeshPath);
 			}
-			_currentDistanceInsideSegment = 0.5f;
 			_currentIndex = 0;
 		}
 
-		public Vector3 CalculateMoveDirection(Vector3 currentPosition, float speed)
+		public Vector3 CalculateMoveDirection(Vector3 currentPosition)
 		{
-			var speedOffset = speed / 30f;
-
-			if((currentPosition - ReferencePos).sqrMagnitude < 0.2f + speedOffset)
-			{
-				_currentDistanceInsideSegment += 0.5f + speedOffset;
-			}
-
 			if(_currentIndex >= Path.Positions.Count - 1)
 			{
 				return (Path.Positions[^1] - currentPosition).normalized;
 			}
 
-			var point = Path.Positions[_currentIndex];
+			var currentPoint = Path.Positions[_currentIndex];
 			var nextPoint = Path.Positions[_currentIndex + 1];
-			var normalizedDistance = Mathf.Clamp01(_currentDistanceInsideSegment / Path.Distances[_currentIndex]);
 
-			ReferencePos = Vector3.MoveTowards(point, nextPoint, normalizedDistance);
+			var vectorBetweenPoints = nextPoint - currentPoint;
+			var vectorOfMotion = nextPoint - currentPoint;
+			
+			
 
-			if(normalizedDistance >= 1)
+			if(Vector3.Project(vectorOfMotion, vectorBetweenPoints).magnitude > vectorBetweenPoints.magnitude)
 			{
 				_currentIndex++;
-				_currentDistanceInsideSegment = 0;
+				nextPoint = Path.Positions[Mathf.Min(Path.Positions.Count - 1, _currentIndex + 1)];
 			}
 
-			return (ReferencePos - currentPosition).normalized;
+			return (nextPoint - currentPosition).normalized;
 		}
 	}
 }

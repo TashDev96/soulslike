@@ -66,7 +66,10 @@ namespace game.gameplay_core
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
-			_player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos);
+			if(_sceneInstaller.TestPlayerSpawnPos != null)
+			{
+				_player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos);
+			}
 			_locationContext.Characters.Add(_player.Value);
 
 			if(!_sceneInstaller.OnlySpawnPlayer)

@@ -135,7 +135,7 @@ namespace game.gameplay_core.characters.ai
 						}
 						else
 						{
-							var newDir = _navigationModule.CalculateMoveDirection(selfPosition, _context.WalkSpeed.Value);
+							var newDir = _navigationModule.CalculateMoveDirection(selfPosition);
 							_context.InputData.DirectionWorld = newDir;
 						}
 					}
@@ -221,9 +221,6 @@ namespace game.gameplay_core.characters.ai
 						var pos = _navigationModule.Path.Positions[i];
 						Debug.DrawLine(prevPos, pos, _navigationDebugColor);
 					}
-
-					var refPos = _navigationModule.ReferencePos;
-					Debug.DrawLine(refPos, refPos + Vector3.up * 3f, _navigationDebugColor);
 				}
 			}
 		}
