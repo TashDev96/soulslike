@@ -181,6 +181,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
 		{
+			toDirection.y = 0;
 			var angleDifference = Vector3.SignedAngle(_context.CharacterTransform.forward, toDirection, Vector3.up);
 			var clampedAngle = Mathf.Clamp(angleDifference, -speed * deltaTime, speed * deltaTime);
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);

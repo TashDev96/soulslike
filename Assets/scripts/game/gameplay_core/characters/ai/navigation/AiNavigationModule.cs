@@ -12,14 +12,14 @@ namespace game.gameplay_core.characters.ai.navigation
 
 		private int _currentIndex;
 
-		public PathWrapper Path { get; }
-
 		public AiNavigationModule(ReadOnlyTransform characterTransform)
 		{
 			Path = new PathWrapper();
 			_navMeshPath = new NavMeshPath();
 			_characterTransform = characterTransform;
 		}
+
+		public PathWrapper Path { get; }
 
 		public void BuildPath(Vector3 targetPosition)
 		{
@@ -28,6 +28,7 @@ namespace game.gameplay_core.characters.ai.navigation
 			{
 				Path.SetPath(_navMeshPath);
 			}
+
 			_currentIndex = 0;
 		}
 
@@ -43,15 +44,17 @@ namespace game.gameplay_core.characters.ai.navigation
 
 			var vectorBetweenPoints = nextPoint - currentPoint;
 			var vectorOfMotion = currentPosition - currentPoint;
-			
-			Debug.DrawLine(currentPosition, currentPosition+vectorOfMotion, Color.green );
-			Debug.DrawLine(currentPoint, currentPoint+vectorBetweenPoints, Color.red );
+
 
 			if(Vector3.Project(vectorOfMotion, vectorBetweenPoints).magnitude > vectorBetweenPoints.magnitude)
 			{
 				_currentIndex++;
 				nextPoint = Path.Positions[Mathf.Min(Path.Positions.Count - 1, _currentIndex + 1)];
 			}
+
+			
+			//Debug.DrawLine(currentPosition, currentPosition + (nextPoint - currentPosition).normalized * 2f, Color.green);
+
 
 			return (nextPoint - currentPosition).normalized;
 		}
