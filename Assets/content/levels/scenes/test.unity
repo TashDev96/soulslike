@@ -2396,11 +2396,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 875381543}
   - {fileID: 636421841}
+  - {fileID: 875381543}
   <Characters>k__BackingField:
-  - {fileID: 4377911618002708333}
   - {fileID: 1717593984}
+  - {fileID: 4377911618002708333}
   - {fileID: 5039234435017277223}
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}
@@ -8038,7 +8038,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -16952,6 +16952,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5039234435017277225}
+    - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5039234435017277226}
   m_SourcePrefab: {fileID: 100100000, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
 --- !u!4 &5039234435017277222 stripped
 Transform:
@@ -17010,6 +17013,173 @@ MonoBehaviour:
   _dodgeTriggerChance: 0
   _navigationDebugColor: {r: 0, g: 1, b: 0, a: 1}
   _drawNavigationDebug: 1
+--- !u!114 &5039234435017277226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039234435017277224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dea5e4ca7e4362a46288fe48f47409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoalChains:
+    _list:
+    - Key: BackAndHeal
+      Value:
+        Comment: 
+        Considerations:
+        - rid: 4872847103003983932
+        - rid: 4872847103003983935
+        Goals:
+        - WeightAdd: 30
+          Action: RollBack
+        - WeightAdd: 60
+          Action: UseEstus
+    _keyCollision: 0
+  Actions:
+    _list:
+    - Key: LightAttack
+      Value:
+        Considerations:
+        - rid: 4872847024085270591
+        Action: 0
+        Direction: 0
+    - Key: RollBack
+      Value:
+        Considerations:
+        - rid: 4872847024085270594
+        Action: 3
+        Direction: 2
+    - Key: UseEstus
+      Value:
+        Considerations: []
+        Action: 7
+        Direction: 0
+    _keyCollision: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4872847024085270591
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Comment: less hp = less risk, quicker attacks
+        ValueSource:
+          rid: 4872847024085270593
+        Weight:
+          rid: 4872847024085270592
+    - rid: 4872847024085270592
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 0.5
+        _metWeight: 10
+        _notMetWeight: 0
+    - rid: 4872847024085270593
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Stat: 0
+    - rid: 4872847024085270594
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Comment: less hp - more defencive
+        ValueSource:
+          rid: 4872847024085270596
+        Weight:
+          rid: 4872847024085270597
+    - rid: 4872847024085270596
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Stat: 0
+    - rid: 4872847024085270597
+      type: {class: UtilityWeightCurve, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        Multiplier: 10
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: -0.79009247
+            outSlope: -0.79009247
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 0.20990753
+            inSlope: -0.79009247
+            outSlope: -0.79009247
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 4872847103003983932
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Comment: 
+        ValueSource:
+          rid: 4872847103003983934
+        Weight:
+          rid: 4872847103003983933
+    - rid: 4872847103003983933
+      type: {class: UtilityWeightCurve, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        Multiplier: 10
+        Curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0.00340271
+            value: 0.99057007
+            inSlope: -1.0256468
+            outSlope: -1.0256468
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.9830017
+            value: -0.014152527
+            inSlope: -1.0256468
+            outSlope: -1.0256468
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - rid: 4872847103003983934
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Stat: 0
+    - rid: 4872847103003983935
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Comment: 
+        ValueSource:
+          rid: 4872847103003983936
+        Weight:
+          rid: 4872847103003983937
+    - rid: 4872847103003983936
+      type: {class: TimeSinceActionPerformed, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        ActionId: UseEstus
+    - rid: 4872847103003983937
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 20
+        _metWeight: -100
+        _notMetWeight: 0
 --- !u!1001 &8108957380275419158
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
-		public AttackConfig[] StrongAttacks { get; private set; }
+		public AttackConfig[] StrongAttacks { get; private set; } 
 		[field: SerializeField]
 		public AttackConfig[] SpecialAttacks { get; private set; }
 
