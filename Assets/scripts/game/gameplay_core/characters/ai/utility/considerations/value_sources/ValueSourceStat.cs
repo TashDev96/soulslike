@@ -21,9 +21,9 @@ namespace game.gameplay_core.characters.ai.considerations
 			switch(Stat)
 			{
 				case Stats.HpPercent:
-					return Context.CharacterStats.Hp;
+					return _context.CharacterContext.CharacterStats.Hp;
 				case Stats.Stamina:
-					return Context.CharacterStats.Stamina;
+					return _context.CharacterContext.CharacterStats.Stamina;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

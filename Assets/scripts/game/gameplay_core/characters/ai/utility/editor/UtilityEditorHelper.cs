@@ -6,11 +6,11 @@ namespace game.gameplay_core.characters.ai.editor
 {
 	public class UtilityEditorHelper
 	{
-		public static SerializableDictionary<string, UtilityAction> CurrentContextActions = new ();
+		public static List<UtilityAction> CurrentContextActions = new ();
 
 		public static IList<string> GetActionsDropDown()
 		{
-			return CurrentContextActions.Keys.ToList();
+			return CurrentContextActions.Select(a=>a.Id).ToList();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-using dream_lib.src.utils.data_types;
+using System.Collections.Generic;
+using dream_lib.src.extensions;
 using game.gameplay_core.characters.ai.editor;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
@@ -9,8 +10,10 @@ namespace game.gameplay_core.characters.ai
 	[OdinDontRegister]
 	public class SubUtilityFight : MonoBehaviour, ISerializationCallbackReceiver
 	{
-		public SerializableDictionary<string, GoalsChain> GoalChains;
-		public SerializableDictionary<string, UtilityAction> Actions;
+		[ValidateInput(nameof(ValidateGoals))]
+		public List<GoalsChain> GoalChains;
+		[ValidateInput(nameof(ValidateActions))]
+		public List<UtilityAction> Actions;
 
 		//chain of goals
 		//chain examples:
@@ -42,6 +45,28 @@ namespace game.gameplay_core.characters.ai
 
 		public void OnAfterDeserialize()
 		{
+		}
+
+		private bool ValidateActions(List<UtilityAction> actions, ref string errorMessage)
+		{
+			if(actions.HasDuplicates(a => a.Id, out var duplicateId))
+			{
+				errorMessage = $"duplicate id {duplicateId}";
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool ValidateGoals(List<GoalsChain> goals, ref string errorMessage)
+		{
+			if(goals.HasDuplicates(a => a.Id, out var duplicateId))
+			{
+				errorMessage = $"duplicate id {duplicateId}";
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
