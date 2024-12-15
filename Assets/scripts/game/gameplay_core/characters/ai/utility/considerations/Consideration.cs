@@ -8,15 +8,26 @@ namespace game.gameplay_core.characters.ai.considerations
 	[Serializable]
 	public class Consideration
 	{
+		[HideInInspector]
+		[SerializeField]
+		private bool _commentEnabled;
+		[CustomContextMenu("Toggle Comment", "ToggleComment")]
+		[HorizontalGroup("Comment")]
+		[ShowIf(nameof(_commentEnabled))]
 		public string Comment;
-		
-		[SerializeReference, HideReferenceObjectPicker]
+
+		[CustomContextMenu("Toggle Comment", "ToggleComment")]
+		[LabelText("@ValueSource.GetType().Name")]
+		[SerializeReference]
+		[HideReferenceObjectPicker]
 		[InlineProperty]
 		public ValueSourceBase ValueSource;
-		[SerializeReference, HideReferenceObjectPicker]
+
+		[CustomContextMenu("Toggle Comment", "ToggleComment")]
+		[SerializeReference]
+		[HideReferenceObjectPicker]
 		[InlineProperty]
 		public UtilityWeightBase Weight;
-
 
 		public float Evaluate()
 		{
@@ -24,6 +35,9 @@ namespace game.gameplay_core.characters.ai.considerations
 			return Weight.Evaluate(value);
 		}
 
-		//target
+		private void ToggleComment()
+		{
+			_commentEnabled = !_commentEnabled;
+		}
 	}
 }

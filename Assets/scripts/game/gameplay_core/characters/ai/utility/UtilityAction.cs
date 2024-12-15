@@ -14,9 +14,9 @@ namespace game.gameplay_core.characters.ai
 		public string Id;
 		public ActionType Type;
 		public Direction Direction;
-		
+
 		[SerializeReference, HideReferenceObjectPicker]
-		public Consideration[] Considerations = Array.Empty<Consideration>();
+		public List<Consideration> Considerations = new();
 
 		
 		public enum ActionType
