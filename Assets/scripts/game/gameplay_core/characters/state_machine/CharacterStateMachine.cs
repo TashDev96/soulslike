@@ -128,6 +128,7 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_walkState);
 						break;
 					case CharacterCommand.Run:
+						SetState(_walkState);
 						break;
 					case CharacterCommand.Roll:
 						SetState(_rollState);

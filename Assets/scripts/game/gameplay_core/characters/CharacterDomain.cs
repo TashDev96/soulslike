@@ -87,6 +87,7 @@ namespace game.gameplay_core.characters
 				InputData = new CharacterInputData(),
 
 				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
+				RunSpeed = new ReactiveProperty<float>(_config.RunSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
 				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),

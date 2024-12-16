@@ -18,7 +18,10 @@ namespace game.gameplay_core.characters
 		
 		[field: Space]
 		[field: SerializeField]
-		public float WalkSpeed { get; private set; } = 5f;
+		public float WalkSpeed { get; private set; } = 5f;	
+		[field: Space]
+		[field: SerializeField]
+		public float RunSpeed { get; private set; } = 15f;
 		[field: SerializeField]
 		public RotationSpeedData RotationSpeed { get; private set; }
 

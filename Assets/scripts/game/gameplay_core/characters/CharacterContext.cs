@@ -27,6 +27,7 @@ namespace game.gameplay_core.characters
 		public CharacterInputData InputData;
 
 		public ReactiveProperty<float> WalkSpeed;
+		public ReactiveProperty<float> RunSpeed;
 		public ReactiveProperty<RotationSpeedData> RotationSpeed;
 		public ReactiveProperty<WeaponView> CurrentWeapon;
 		public ReactiveProperty<float> DeltaTimeMultiplier;

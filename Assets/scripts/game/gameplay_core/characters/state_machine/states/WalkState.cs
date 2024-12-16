@@ -44,7 +44,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				directionMultiplier = 1;
 			}
-			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value);
+
+			var speed = _context.InputData.Command == CharacterCommand.Run ? _context.RunSpeed.Value : _context.WalkSpeed.Value;
+			var velocity = inputWorld * (directionMultiplier * speed);
 
 			_context.MovementLogic.Walk(velocity * deltaTime, deltaTime);
 
