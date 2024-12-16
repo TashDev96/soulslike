@@ -3,7 +3,7 @@ using dream_lib.src.utils.serialization;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.location_save_system
+namespace game.gameplay_core.location.location_save_system
 {
 	public abstract class SceneSavableObjectBase : MonoBehaviour, IOnSceneUniqueIdOwner
 	{

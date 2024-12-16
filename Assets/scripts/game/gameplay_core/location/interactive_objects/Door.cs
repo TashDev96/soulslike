@@ -1,11 +1,11 @@
 using System;
 using game.enums;
-using game.gameplay_core.interactive_objects.common;
-using game.gameplay_core.location_save_system;
+using game.gameplay_core.location.interactive_objects.common;
+using game.gameplay_core.location.location_save_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.interactive_objects
+namespace game.gameplay_core.location.interactive_objects
 {
 	public class Door : SavableSceneObjectGeneric<DoorSaveData>
 	{

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 
-namespace game.gameplay_core.location_save_system
+namespace game.gameplay_core.location.location_save_system
 {
 	[Serializable]
 	public class LocationSaveData

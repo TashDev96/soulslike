@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace game.gameplay_core.interactive_objects.common
+namespace game.gameplay_core.location.interactive_objects.common
 {
 	public class InteractionZone : MonoBehaviour
 	{

@@ -1,6 +1,6 @@
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters;
-using game.gameplay_core.location_save_system;
+using game.gameplay_core.location.location_save_system;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;

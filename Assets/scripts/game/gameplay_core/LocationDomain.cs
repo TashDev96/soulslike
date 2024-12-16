@@ -7,7 +7,7 @@ using dream_lib.src.utils.components;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
-using game.gameplay_core.location_save_system;
+using game.gameplay_core.location.location_save_system;
 using UnityEngine;
 
 namespace game.gameplay_core

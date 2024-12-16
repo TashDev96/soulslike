@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
-using game.gameplay_core.location_save_system;
+using game.gameplay_core.location.location_save_system;
 using UnityEngine;
 
 namespace game.gameplay_core
