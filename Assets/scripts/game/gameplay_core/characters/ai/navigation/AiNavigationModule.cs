@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,6 +12,8 @@ namespace game.gameplay_core.characters.ai.navigation
 		private readonly NavMeshPath _navMeshPath;
 
 		private int _currentIndex;
+
+		private float _currentLength;
 
 		public AiNavigationModule(ReadOnlyTransform characterTransform)
 		{
@@ -29,34 +32,42 @@ namespace game.gameplay_core.characters.ai.navigation
 				Path.SetPath(_navMeshPath);
 			}
 
+			_currentLength = 0;
 			_currentIndex = 0;
+		}
+
+		private void SampleByLength(float length, out Vector3 position, out Vector3 direction)
+		{
+			var iLength = 0f;
+			for(int i = 0; i < Path.Positions.Count-1; i++)
+			{
+				var cornerDistance = Path.Distances[i]; 
+				if(iLength+cornerDistance >= length)
+				{
+					position = Vector3.Lerp(Path.Positions[i], Path.Positions[i + 1], (length - iLength) / cornerDistance);
+					direction = Path.Directions[i];
+					return;
+				}
+				
+				iLength += Path.Distances[i];
+			}
+
+			position = Path.Positions[^1];
+			direction = Path.Directions[^1];
 		}
 
 		public Vector3 CalculateMoveDirection(Vector3 currentPosition)
 		{
-			if(_currentIndex >= Path.Positions.Count - 1)
+			SampleByLength(_currentLength, out var targetPos, out _);
+			if((targetPos - currentPosition).sqrMagnitude < 0.1f*0.1f)
 			{
-				return (Path.Positions[^1] - currentPosition).normalized;
+				_currentLength += 0.2f;
+				SampleByLength(_currentLength, out targetPos, out _);
 			}
 
-			var currentPoint = Path.Positions[_currentIndex];
-			var nextPoint = Path.Positions[_currentIndex + 1];
-
-			var vectorBetweenPoints = nextPoint - currentPoint;
-			var vectorOfMotion = currentPosition - currentPoint;
-
-
-			if(Vector3.Project(vectorOfMotion, vectorBetweenPoints).magnitude > vectorBetweenPoints.magnitude)
-			{
-				_currentIndex++;
-				nextPoint = Path.Positions[Mathf.Min(Path.Positions.Count - 1, _currentIndex + 1)];
-			}
-
-			
-			//Debug.DrawLine(currentPosition, currentPosition + (nextPoint - currentPosition).normalized * 2f, Color.green);
-
-
-			return (nextPoint - currentPosition).normalized;
+			return (targetPos - currentPosition).normalized;
 		}
+		
+
 	}
 }

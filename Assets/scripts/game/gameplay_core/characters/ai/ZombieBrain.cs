@@ -218,7 +218,7 @@ namespace game.gameplay_core.characters.ai
 					{
 						var prevPos = _navigationModule.Path.Positions[i - 1];
 						var pos = _navigationModule.Path.Positions[i];
-						//Debug.DrawLine(prevPos, pos, _navigationDebugColor);
+						Debug.DrawLine(prevPos, pos, _navigationDebugColor);
 					}
 				}
 			}
