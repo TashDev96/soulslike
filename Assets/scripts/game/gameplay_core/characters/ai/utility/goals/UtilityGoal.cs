@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using dream_lib.src.utils.data_types;
 using Sirenix.OdinInspector;
 
 namespace game.gameplay_core.characters.ai
@@ -10,14 +9,23 @@ namespace game.gameplay_core.characters.ai
 	public class UtilityGoal
 	{
 		public float WeightAdd;
-		[ValueDropdown("@UtilityEditorHelper.GetActionsDropDown()")]
+		[ValueDropdown("@GetActionsDropDown()")]
 		public string Action;
-		
+
 #if UNITY_EDITOR
-		[NonSerialized]
-		// ReSharper disable once InconsistentNaming
-		public Func<IList<string>> GetActionsList;
+
+		private SubUtilityBase _editorData;
+
+		public void PropagateEditorData(SubUtilityBase data)
+		{
+			_editorData = data;
+		}
+
+		private List<string> GetActionsDropDown()
+		{
+			return _editorData.Actions.Select(a => a.Id).ToList();
+		}
+
 #endif
-		
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using dream_lib.src.reactive;
+using game.gameplay_core.characters.ai.blackbox;
 using game.gameplay_core.characters.ai.considerations.value_sources;
 
 namespace game.gameplay_core.characters.ai.considerations
@@ -10,20 +11,20 @@ namespace game.gameplay_core.characters.ai.considerations
 		public Stats Stat;
 
 		//evaluate stat
-		public override float GetValue()
+		public override float GetValue(UtilityBrainContext context)
 		{
-			var stat = GetStat();
+			var stat = GetStat(context);
 			return stat.Value;
 		}
 
-		private IReadOnlyReactiveProperty<float> GetStat()
+		private IReadOnlyReactiveProperty<float> GetStat(UtilityBrainContext context)
 		{
 			switch(Stat)
 			{
 				case Stats.HpPercent:
-					return _context.CharacterContext.CharacterStats.Hp;
+					return context.CharacterContext.CharacterStats.Hp;
 				case Stats.Stamina:
-					return _context.CharacterContext.CharacterStats.Stamina;
+					return context.CharacterContext.CharacterStats.Stamina;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -33,6 +34,6 @@ namespace game.gameplay_core.characters.ai.considerations
 	public enum Stats
 	{
 		HpPercent,
-		Stamina,
+		Stamina
 	}
 }

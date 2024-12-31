@@ -10,11 +10,10 @@ namespace game.gameplay_core.characters.ai
 	[HideReferenceObjectPicker]
 	public class UtilityWeightCurve : UtilityWeightBase
 	{
-		[HideReferenceObjectPicker]
-		public AnimationCurve Curve = new();
 		[SerializeField]
 		public float Multiplier = 1f;
-
+		[HideReferenceObjectPicker]
+		public AnimationCurve Curve = new();
 
 		protected override float EvaluateInternal(float statValue)
 		{

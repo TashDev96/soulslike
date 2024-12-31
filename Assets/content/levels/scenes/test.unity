@@ -15650,8 +15650,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 875381543}
   - {fileID: 636421841}
+  - {fileID: 875381543}
   <Characters>k__BackingField:
   - {fileID: 5039234435017277223}
   - {fileID: 4377911618002708333}
@@ -38861,6 +38861,142 @@ Transform:
   - {fileID: 119056651}
   m_Father: {fileID: 1950967221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1637548379
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1637548380}
+  - component: {fileID: 1637548381}
+  m_Layer: 8
+  m_Name: UtilityFight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1637548380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637548379}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5039234435017277222}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1637548381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637548379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dea5e4ca7e4362a46288fe48f47409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoalChains:
+  - Id: RollBackAndHeal
+    Goals:
+    - WeightAdd: 30
+      Action: RollBack
+    - WeightAdd: 60
+      Action: Heal
+    Considerations:
+    - rid: 4872847103003983938
+  Actions:
+  - Id: Attack
+    Type: 0
+    Direction: 0
+    Considerations:
+    - rid: 5490946356669055036
+  - Id: Heal
+    Type: 8
+    Direction: 6
+    Considerations: []
+  - Id: RollBack
+    Type: 3
+    Direction: 2
+    Considerations: []
+  - Id: MoveForward
+    Type: 6
+    Direction: 0
+    Considerations:
+    - rid: 4872847103003983942
+  DebugLastAction: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 4872847103003983938
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 4872847103003983939
+        Weight:
+          rid: 4872847103003983940
+    - rid: 4872847103003983939
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Stat: 0
+    - rid: 4872847103003983940
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 0.5
+        _metWeight: 30
+        _notMetWeight: 0
+    - rid: 4872847103003983942
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 4872847103003983946
+        Weight:
+          rid: 4872847103003983944
+    - rid: 4872847103003983944
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 2
+        _value: 1.1
+        _metWeight: 30
+        _notMetWeight: 0
+    - rid: 4872847103003983946
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 1
+    - rid: 5490946356669055036
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 5490946356669055037
+        Weight:
+          rid: 5490946356669055038
+    - rid: 5490946356669055037
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 1
+    - rid: 5490946356669055038
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 1.1
+        _metWeight: 30
+        _notMetWeight: -20
 --- !u!1 &1644955430
 GameObject:
   m_ObjectHideFlags: 0
@@ -56348,11 +56484,11 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2412503847255696516, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5039234435017277226}
+      addedObject: {fileID: 1637548380}
+    m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5039234435017277230}
@@ -56378,88 +56514,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
   m_PrefabInstance: {fileID: 5039234435017277221}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5039234435017277226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5039234435017277224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0dea5e4ca7e4362a46288fe48f47409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GoalChains:
-  - Id: RollBackAndHeal
-    Goals:
-    - WeightAdd: 30
-      Action: RollBack
-    - WeightAdd: 60
-      Action: Heal
-    Considerations:
-    - rid: 4872847103003983938
-  Actions:
-  - Id: Attack
-    Type: 0
-    Direction: 0
-    Considerations: []
-  - Id: Heal
-    Type: 8
-    Direction: 6
-    Considerations: []
-  - Id: RollBack
-    Type: 3
-    Direction: 2
-    Considerations: []
-  - Id: MoveForward
-    Type: 6
-    Direction: 0
-    Considerations:
-    - rid: 4872847103003983942
-  references:
-    version: 2
-    RefIds:
-    - rid: 4872847103003983938
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 4872847103003983939
-        Weight:
-          rid: 4872847103003983940
-    - rid: 4872847103003983939
-      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        Stat: 0
-    - rid: 4872847103003983940
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 1
-        _value: 0.5
-        _metWeight: 30
-        _notMetWeight: 0
-    - rid: 4872847103003983942
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 4872847103003983946
-        Weight:
-          rid: 4872847103003983944
-    - rid: 4872847103003983944
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 2
-        _value: 1.1
-        _metWeight: 30
-        _notMetWeight: 0
-    - rid: 4872847103003983946
-      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _normalizeToAttackRange: 1
 --- !u!114 &5039234435017277230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56469,33 +56523,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5039234435017277224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b36182943044d1d8f3ac78ca336e651, type: 3}
+  m_Script: {fileID: 11500000, guid: c9ebba56e4d34c169ab50225a4ced27e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _subUtilities:
+  - {fileID: 1637548381}
   _aggroZones:
   - {fileID: 529340877}
   _attackDistance: 2
   _fightModeDistance: 4
-  _freezeInterval:
-    Min: 0
-    Max: 0
-  _freezeDuration:
-    Min: 0
-    Max: 0
-  _noAttackInterval:
-    Min: 0
-    Max: 0
-  _noAttackDuration:
-    Min: 0
-    Max: 0
-  _pauseBetweenAttacksChance: 0
-  _pauseBetweenAttacksDuration:
-    Min: 0
-    Max: 0
-  _mistakeAttackChance: 0
-  _dodgeTriggerChance: 0
-  _navigationDebugColor: {r: 0, g: 1, b: 0, a: 1}
-  _drawNavigationDebug: 1
 --- !u!1001 &8108957380275419158
 PrefabInstance:
   m_ObjectHideFlags: 0

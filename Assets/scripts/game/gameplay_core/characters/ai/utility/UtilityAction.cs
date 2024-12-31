@@ -10,15 +10,6 @@ namespace game.gameplay_core.characters.ai
 	[Serializable]
 	public class UtilityAction
 	{
-		
-		public string Id;
-		public ActionType Type;
-		public Direction Direction;
-
-		[SerializeReference, HideReferenceObjectPicker]
-		public List<Consideration> Considerations = new();
-
-		
 		public enum ActionType
 		{
 			LightAttack,
@@ -29,7 +20,14 @@ namespace game.gameplay_core.characters.ai
 			KeepSafeDistance,
 			GetIntoAttackDistance,
 			Strafe,
-			Heal,
+			Heal
 		}
+
+		public string Id;
+		public ActionType Type;
+		public Direction Direction;
+
+		[SerializeReference] [HideReferenceObjectPicker]
+		public List<Consideration> Considerations = new();
 	}
 }

@@ -32,7 +32,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			var inputWorld = _context.InputData.DirectionWorld;
+			var inputWorld = _context.InputData.DirectionWorld.normalized;
 
 			if(!_context.LockOnLogic.LockOnTarget.HasValue)
 			{

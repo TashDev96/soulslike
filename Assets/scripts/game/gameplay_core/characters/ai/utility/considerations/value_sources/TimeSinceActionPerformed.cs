@@ -1,3 +1,4 @@
+using game.gameplay_core.characters.ai.blackbox;
 using game.gameplay_core.characters.ai.considerations.value_sources;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
@@ -16,13 +17,13 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 		public UtilityAction.ActionType ActionType;
 		public bool UseActionType;
 
-		public override float GetValue()
+		public override float GetValue(UtilityBrainContext context)
 		{
 			var lastHistoryId = -1;
 
-			for(var i = _context.PerformedActionsHistory.Count - 1; i >= 0; i--)
+			for(var i = context.PerformedActionsHistory.Count - 1; i >= 0; i--)
 			{
-				var node = _context.PerformedActionsHistory[i];
+				var node = context.PerformedActionsHistory[i];
 				if(UseActionType)
 				{
 					if(node.Action.Type != ActionType)
@@ -41,7 +42,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 
 			if(lastHistoryId >= 0)
 			{
-				return Time.time - _context.PerformedActionsHistory[lastHistoryId].EndTime;
+				return Time.time - context.PerformedActionsHistory[lastHistoryId].EndTime;
 			}
 
 			return float.MaxValue;

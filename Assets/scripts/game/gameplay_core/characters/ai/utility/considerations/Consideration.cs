@@ -1,4 +1,5 @@
 using System;
+using game.gameplay_core.characters.ai.blackbox;
 using game.gameplay_core.characters.ai.considerations.value_sources;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -29,9 +30,9 @@ namespace game.gameplay_core.characters.ai.considerations
 		[InlineProperty]
 		public UtilityWeightBase Weight;
 
-		public float Evaluate()
+		public float Evaluate(UtilityBrainContext context)
 		{
-			var value = ValueSource.GetValue();
+			var value = ValueSource.GetValue(context);
 			return Weight.Evaluate(value);
 		}
 

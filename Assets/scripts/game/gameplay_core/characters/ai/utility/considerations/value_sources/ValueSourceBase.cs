@@ -6,8 +6,6 @@ namespace game.gameplay_core.characters.ai.considerations.value_sources
 	[Serializable]
 	public abstract class ValueSourceBase
 	{
-		protected UtilityBrainContext _context;
-		public abstract float GetValue();
-
+		public abstract float GetValue(UtilityBrainContext context);
 	}
 }
