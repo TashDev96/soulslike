@@ -16,22 +16,31 @@ namespace game.gameplay_core.characters.ai
 		public List<GoalsChain> GoalChains;
 		[ValidateInput(nameof(ValidateActions))]
 		public List<UtilityAction> Actions;
-		
+
+		public string DebugString;
+
 		private UtilityBrainContext _context;
+
+		private CharacterInputData InputData => _context.CharacterContext.InputData;
+		private ReadOnlyTransform _transform;
+
+		private bool _hasMovedByPathThisFrame;
+		private bool _needRecalculatePath;
 
 		public void Initialize(UtilityBrainContext context)
 		{
 			_context = context;
+			_transform = _context.CharacterContext.Transform;
 		}
 
 		public void Think(float deltaTime)
 		{
-
 			var maxWeight = float.MinValue;
 			var selectedAction = Actions[0];
 
+
 			DebugString = "";
-			
+
 			foreach(var utilityAction in Actions)
 			{
 				var weight = 0f;
@@ -49,23 +58,36 @@ namespace game.gameplay_core.characters.ai
 				}
 			}
 
+			
+			
 			PerformAction(selectedAction);
-
 		}
 
-		public string DebugString;
+		public void OnBeforeSerialize()
+		{
+#if UNITY_EDITOR
+			foreach(var goalChain in GoalChains)
+			{
+				goalChain.PropagateEditorData(this);
+			}
+#endif
+		}
 
-		private CharacterInputData InputData => _context.CharacterContext.InputData;
-		private ReadOnlyTransform Transform => _context.CharacterContext.Transform;
-		
+		public void OnAfterDeserialize()
+		{
+		}
+
 		private void PerformAction(UtilityAction action)
 		{
-			var vectorToTarget = Transform.Forward;
+			
+			_hasMovedByPathThisFrame = false;
+			
+			var vectorToTarget = _transform.Forward;
 			if(_context.TargetTransform != null)
 			{
-				vectorToTarget = _context.TargetTransform.Position - Transform.Position;
+				vectorToTarget = _context.TargetTransform.Position - _transform.Position;
 			}
-			
+
 			switch(action.Type)
 			{
 				case UtilityAction.ActionType.LightAttack:
@@ -82,7 +104,7 @@ namespace game.gameplay_core.characters.ai
 					break;
 				case UtilityAction.ActionType.Roll:
 					InputData.Command = CharacterCommand.Roll;
-					InputData.DirectionWorld = Transform.TransformDirection(action.Direction.ToVector());
+					InputData.DirectionWorld = _transform.TransformDirection(action.Direction.ToVector());
 					break;
 				case UtilityAction.ActionType.WalkToTransform:
 					break;
@@ -91,8 +113,8 @@ namespace game.gameplay_core.characters.ai
 					InputData.DirectionWorld = -vectorToTarget;
 					break;
 				case UtilityAction.ActionType.GetIntoAttackDistance:
-					InputData.Command = CharacterCommand.Walk;
-					InputData.DirectionWorld = vectorToTarget;
+					MoveTo(_context.TargetTransform.Position);
+
 					break;
 				case UtilityAction.ActionType.Strafe:
 					break;
@@ -101,25 +123,35 @@ namespace game.gameplay_core.characters.ai
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-		}
 
-		private void PerformRelativeToTargetMovement(Vector3 localVector)
-		{
-			
-		}
-
-		public void OnBeforeSerialize()
-		{
-#if UNITY_EDITOR
-			foreach(var goalChain in GoalChains)
+			if(!_hasMovedByPathThisFrame)
 			{
-				goalChain.PropagateEditorData(this);
+				_needRecalculatePath = true;
 			}
-#endif
 		}
 
-		public void OnAfterDeserialize()
+		private void MoveTo(Vector3 worldPos)
 		{
+			const float navMeshDistance = 2f;
+			var moveVector = worldPos - _transform.Position;
+			InputData.Command = CharacterCommand.Walk;
+			if(moveVector.sqrMagnitude < navMeshDistance * navMeshDistance)
+			{
+				InputData.DirectionWorld = moveVector;
+			}
+			else
+			{
+				_needRecalculatePath |= _context.NavigationModule.CheckTargetPositionChangedSignificantly(worldPos,1f);
+				if(_needRecalculatePath )
+				{
+					_context.NavigationModule.BuildPath(worldPos);
+					_context.NavigationModule.DrawDebug(Color.green, 2f);
+					_needRecalculatePath = false;
+				}
+				InputData.DirectionWorld = _context.NavigationModule.CalculateMoveDirection(_transform.Position);
+				_hasMovedByPathThisFrame = true;
+			}
+			
 		}
 
 #if UNITY_EDITOR

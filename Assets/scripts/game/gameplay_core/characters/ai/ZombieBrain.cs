@@ -214,12 +214,7 @@ namespace game.gameplay_core.characters.ai
 			{
 				if(_navigationModule != null && !_navigationModule.Path.IsEmpty)
 				{
-					for(var i = 1; i < _navigationModule.Path.Positions.Count; i++)
-					{
-						var prevPos = _navigationModule.Path.Positions[i - 1];
-						var pos = _navigationModule.Path.Positions[i];
-						Debug.DrawLine(prevPos, pos, _navigationDebugColor);
-					}
+					_navigationModule.DrawDebug(_navigationDebugColor);
 				}
 			}
 		}
