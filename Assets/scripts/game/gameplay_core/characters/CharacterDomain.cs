@@ -9,6 +9,7 @@ using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.state_machine;
+using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
@@ -99,7 +100,8 @@ namespace game.gameplay_core.characters
 				IsDead = new IsDead(),
 				TriggerStagger = new ReactiveCommand(),
 
-				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
+				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
+				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
 			};
 
 			ExternalData = new CharacterExternalData(_context);

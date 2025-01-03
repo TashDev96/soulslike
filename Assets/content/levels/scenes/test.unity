@@ -11654,7 +11654,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 57.2
+  orthographic size: 11.44
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -38910,10 +38910,25 @@ MonoBehaviour:
     Goals:
     - WeightAdd: 30
       Action: RollBack
+      Duration: 0
     - WeightAdd: 60
       Action: Heal
+      Duration: 0
     Considerations:
     - rid: 4872847103003983938
+    <InertiaWeight>k__BackingField: 10
+  - Id: St
+    Goals:
+    - WeightAdd: 55
+      Action: StayBack
+      Duration: 15
+    - WeightAdd: 55
+      Action: StayBack
+      Duration: 10
+    Considerations:
+    - rid: 5783513688161386559
+    - rid: 5783513688161386563
+    <InertiaWeight>k__BackingField: 30
   Actions:
   - Id: Attack
     Type: 0
@@ -38933,7 +38948,12 @@ MonoBehaviour:
     Direction: 0
     Considerations:
     - rid: 4872847103003983942
-  DebugLastAction: 
+  - Id: StayBack
+    Type: 5
+    Direction: 0
+    Considerations:
+    - rid: 5783513688161386496
+  DebugString: 
   references:
     version: 2
     RefIds:
@@ -38997,6 +39017,65 @@ MonoBehaviour:
         _value: 1.1
         _metWeight: 30
         _notMetWeight: -20
+    - rid: 5783513688161386496
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 5783513688161386497
+        Weight:
+          rid: 5783513688161386498
+    - rid: 5783513688161386497
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        Stat: 0
+    - rid: 5783513688161386498
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 0.5
+        _metWeight: 10
+        _notMetWeight: 0
+    - rid: 5783513688161386559
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 5783513688161386561
+        Weight:
+          rid: 5783513688161386562
+    - rid: 5783513688161386561
+      type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data: 
+    - rid: 5783513688161386562
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 2
+        _value: 0.95
+        _metWeight: 100
+        _notMetWeight: 0
+    - rid: 5783513688161386563
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 5783513688161386564
+        Weight:
+          rid: 5783513688161386565
+    - rid: 5783513688161386564
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 0
+    - rid: 5783513688161386565
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 5
+        _metWeight: 0
+        _notMetWeight: -100
 --- !u!1 &1644955430
 GameObject:
   m_ObjectHideFlags: 0
@@ -45411,7 +45490,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

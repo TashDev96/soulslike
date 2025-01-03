@@ -16,6 +16,7 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly AttackState _attackState;
 		private readonly StaggerState _staggerState;
 		private CharacterCommand _nextCommand;
+		private ReactiveProperty<CharacterStateBase> _currentState = new();
 
 		private CharacterCommand NextCommand
 		{
@@ -31,9 +32,6 @@ namespace game.gameplay_core.characters.state_machine
 		}
 
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState => _currentState;
-		private ReactiveProperty<CharacterStateBase> _currentState = new();
-
-		 
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
@@ -155,8 +153,10 @@ namespace game.gameplay_core.characters.state_machine
 		private void SetState(CharacterStateBase newState)
 		{
 			_currentState.Value?.OnExit();
+			var oldState = _currentState.Value;
 			_currentState.Value = newState;
 			_currentState.Value.OnEnter();
+			_context.OnStateChanged.Execute(oldState, newState);
 			NextCommand = CharacterCommand.None;
 		}
 	}

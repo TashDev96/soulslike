@@ -13,6 +13,14 @@ namespace game.gameplay_core.characters.ai
 		public List<UtilityGoal> Goals = new();
 		[SerializeReference] [HideReferenceObjectPicker]
 		public List<Consideration> Considerations = new();
+		[field: SerializeField]
+		public float InertiaWeight { get; private set; }
+		
+		[NonSerialized]
+		[ShowInInspector]
+		[ShowIf("@UtilityAiEditorHelper.DebugEnabled")]
+		[GUIColor(0,1,0,1)]
+		public float LastWeight;
 
 #if UNITY_EDITOR
 		public void PropagateEditorData(SubUtilityBase data)

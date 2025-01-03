@@ -41,5 +41,6 @@ namespace game.gameplay_core.characters
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
+		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 	}
 }

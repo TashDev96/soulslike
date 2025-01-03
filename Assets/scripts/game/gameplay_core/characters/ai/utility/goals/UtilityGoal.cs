@@ -12,6 +12,8 @@ namespace game.gameplay_core.characters.ai
 		[ValueDropdown("@GetActionsDropDown()")]
 		public string Action;
 
+		public float Duration;
+
 #if UNITY_EDITOR
 
 		private SubUtilityBase _editorData;
