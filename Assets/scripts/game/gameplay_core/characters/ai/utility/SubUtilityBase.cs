@@ -55,11 +55,7 @@ namespace game.gameplay_core.characters.ai
 
 			foreach(var utilityAction in Actions)
 			{
-				var weight = 0f;
-				foreach(var consideration in utilityAction.Considerations)
-				{
-					weight += consideration.Evaluate(_context);
-				}
+				var weight = EvaluateConsiderations(utilityAction.Considerations, deltaTime);
 
 				if(_currentGoalChain != null)
 				{
@@ -127,13 +123,13 @@ namespace game.gameplay_core.characters.ai
 			var currentGoalWeight = 0f;
 			if(_currentGoalChain != null)
 			{
-				currentGoalWeight += EvaluateConsiderations(_currentGoalChain.Considerations);
+				currentGoalWeight += EvaluateConsiderations(_currentGoalChain.Considerations, deltaTime);
 				currentGoalWeight += _currentGoalChain.InertiaWeight;
 			}
 
 			foreach(var goalChain in GoalChains)
 			{
-				var weight = EvaluateConsiderations(goalChain.Considerations);
+				var weight = EvaluateConsiderations(goalChain.Considerations, deltaTime);
 				goalChain.LastWeight = weight;
 
 				if(weight >= maxWeight && weight > currentGoalWeight)
@@ -150,7 +146,7 @@ namespace game.gameplay_core.characters.ai
 			}
 		}
 
-		private float EvaluateConsiderations(ICollection<Consideration> considerations)
+		private float EvaluateConsiderations(ICollection<Consideration> considerations, float deltaTime)
 		{
 			var result = 0f;
 			foreach(var consideration in considerations)
@@ -191,8 +187,16 @@ namespace game.gameplay_core.characters.ai
 				case UtilityAction.ActionType.WalkToTransform:
 					break;
 				case UtilityAction.ActionType.KeepSafeDistance:
-					InputData.Command = CharacterCommand.Walk;
-					InputData.DirectionWorld = -vectorToTarget;
+					if(vectorToTarget.sqrMagnitude < action.Distance * action.Distance)
+					{
+						InputData.Command = CharacterCommand.Walk;
+						InputData.DirectionWorld = -vectorToTarget;
+					}
+					else
+					{
+						InputData.Command = CharacterCommand.Walk;
+						InputData.DirectionWorld = Mathf.Sin(Time.time) > 0 ? _transform.Right : -_transform.Right;
+					}
 					break;
 				case UtilityAction.ActionType.GetIntoAttackDistance:
 					MoveTo(_context.TargetTransform.Position);

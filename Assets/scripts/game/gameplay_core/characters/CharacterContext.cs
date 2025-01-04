@@ -13,6 +13,7 @@ namespace game.gameplay_core.characters
 {
 	public struct CharacterContext
 	{
+		public ReactiveProperty<float> LocationTime;
 		public CharacterDomain SelfLink;
 		public LockOnLogic LockOnLogic;
 		public MovementLogic MovementLogic;

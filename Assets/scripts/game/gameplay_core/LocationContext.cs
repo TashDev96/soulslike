@@ -18,5 +18,6 @@ namespace game.gameplay_core
 		public List<SpawnedObjectController> SpawnedObjects { get; set; }
 		public ReactiveCommand<float> LocationUpdate { get; set; }
 		public ReactiveProperty<Camera> MainCamera { get; set; }
+		public ReactiveProperty<float> LocationTime { get; set; }
 	}
 }

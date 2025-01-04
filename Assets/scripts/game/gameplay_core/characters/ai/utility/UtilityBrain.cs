@@ -58,6 +58,7 @@ namespace game.gameplay_core.characters.ai
 				if(otherCharacter.ExternalData.Team != _context.CharacterContext.Team.Value)
 				{	
 					_context.Target = otherCharacter;
+					_context.CharacterContext.LockOnLogic.LockOnTarget.Value = otherCharacter;
 				}
 			}
 		}

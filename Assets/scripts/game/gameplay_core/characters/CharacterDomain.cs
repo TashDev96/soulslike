@@ -73,6 +73,7 @@ namespace game.gameplay_core.characters
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_context = new CharacterContext
 			{
+				LocationTime = locationContext.LocationTime,
 				SelfLink = this,
 
 				MovementLogic = _movementLogic,

@@ -33,7 +33,8 @@ namespace game.gameplay_core
 			{
 				LocationSaveData = new LocationSaveData(),
 				LocationUpdate = new ReactiveCommand<float>(),
-				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera)
+				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera),
+				LocationTime = new ReactiveProperty<float>(),
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
@@ -56,8 +57,10 @@ namespace game.gameplay_core
 
 		private void HandleUpdate()
 		{
-			_locationContext.LocationUpdate.Execute(Time.deltaTime);
-			_cameraController.Update(Time.deltaTime);
+			var deltaTime = Time.deltaTime;
+			_locationContext.LocationTime.Value += deltaTime;
+			_locationContext.LocationUpdate.Execute(deltaTime);
+			_cameraController.Update(deltaTime);
 		}
 
 		private void LoadCharacters()

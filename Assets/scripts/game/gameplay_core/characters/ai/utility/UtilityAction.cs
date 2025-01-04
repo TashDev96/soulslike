@@ -26,6 +26,7 @@ namespace game.gameplay_core.characters.ai
 		public string Id;
 		public ActionType Type;
 		public Direction Direction;
+		public float Distance;
 
 		[SerializeReference] [HideReferenceObjectPicker]
 		public List<Consideration> Considerations = new();

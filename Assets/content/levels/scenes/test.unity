@@ -38921,10 +38921,7 @@ MonoBehaviour:
     Goals:
     - WeightAdd: 55
       Action: StayBack
-      Duration: 15
-    - WeightAdd: 55
-      Action: StayBack
-      Duration: 10
+      Duration: 5
     Considerations:
     - rid: 5783513688161386559
     - rid: 5783513688161386563
@@ -38933,24 +38930,29 @@ MonoBehaviour:
   - Id: Attack
     Type: 0
     Direction: 0
+    Distance: 0
     Considerations:
     - rid: 5490946356669055036
   - Id: Heal
     Type: 8
     Direction: 6
+    Distance: 0
     Considerations: []
   - Id: RollBack
     Type: 3
     Direction: 2
+    Distance: 0
     Considerations: []
   - Id: MoveForward
     Type: 6
     Direction: 0
+    Distance: 0
     Considerations:
     - rid: 4872847103003983942
   - Id: StayBack
     Type: 5
     Direction: 0
+    Distance: 6
     Considerations:
     - rid: 5783513688161386496
   DebugString: 
@@ -38976,7 +38978,7 @@ MonoBehaviour:
         _compareType: 1
         _value: 0.5
         _metWeight: 30
-        _notMetWeight: 0
+        _notMetWeight: -30
     - rid: 4872847103003983942
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
       data:
@@ -39045,17 +39047,143 @@ MonoBehaviour:
         ValueSource:
           rid: 5783513688161386561
         Weight:
-          rid: 5783513688161386562
+          rid: 5783513688161386566
     - rid: 5783513688161386561
       type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data: 
-    - rid: 5783513688161386562
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
       data:
-        _compareType: 2
-        _value: 0.95
-        _metWeight: 100
-        _notMetWeight: 0
+        _randomValuesOverTime:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0.044799805
+            value: 0
+            inSlope: 0.42855096
+            outSlope: 0.42855096
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.12892675
+          - serializedVersion: 3
+            time: 3.168985
+            value: 0.9142811
+            inSlope: 0.15821156
+            outSlope: 0.15821156
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.6016099
+            outWeight: 0
+          - serializedVersion: 3
+            time: 4.022221
+            value: 0.32550728
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 5.8357115
+            value: 0.63147426
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 7.0447054
+            value: 0.24206173
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 9.628166
+            value: 0.90838724
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 10.880133
+            value: 0.16788791
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 11.484629
+            value: 0.5851156
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 13.214737
+            value: 0.18643053
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 15.132452
+            value: 0.6685603
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 17.571283
+            value: 0.32550642
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 20.282742
+            value: 0.9164117
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 21.781923
+            value: 0.13079959
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 23.366123
+            value: 0.64074457
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 1
+          m_PostInfinity: 1
+          m_RotationOrder: 4
+        _timeOffset: 0.29
     - rid: 5783513688161386563
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
       data:
@@ -39074,8 +39202,12 @@ MonoBehaviour:
       data:
         _compareType: 1
         _value: 5
-        _metWeight: 0
+        _metWeight: -1
         _notMetWeight: -100
+    - rid: 5783513688161386566
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
+      data:
+        _multiplier: 1
 --- !u!1 &1644955430
 GameObject:
   m_ObjectHideFlags: 0
@@ -39812,7 +39944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
@@ -56364,7 +56496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5892839429199645874, guid: 52825454100dbe0448e865223bea6297, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8612867717841487573, guid: 52825454100dbe0448e865223bea6297, type: 3}
       propertyPath: m_LocalPosition.x
@@ -56555,6 +56687,10 @@ PrefabInstance:
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: _debugDrawer.DrawBrainInfo
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: _config.<WalkSpeed>k__BackingField
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8457744910901571341, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
