@@ -38925,7 +38925,7 @@ MonoBehaviour:
     Considerations:
     - rid: 5783513688161386559
     - rid: 5783513688161386563
-    <InertiaWeight>k__BackingField: 30
+    <InertiaWeight>k__BackingField: 40
   Actions:
   - Id: Attack
     Type: 0
@@ -39064,8 +39064,8 @@ MonoBehaviour:
             inWeight: 0
             outWeight: 0.12892675
           - serializedVersion: 3
-            time: 3.168985
-            value: 0.9142811
+            time: 3.3561568
+            value: 1.0439694
             inSlope: 0.15821156
             outSlope: 0.15821156
             tangentMode: 0
@@ -39100,8 +39100,8 @@ MonoBehaviour:
             inWeight: 0
             outWeight: 0
           - serializedVersion: 3
-            time: 9.628166
-            value: 0.90838724
+            time: 9.777916
+            value: 1.0294313
             inSlope: 0
             outSlope: 0
             tangentMode: 0
@@ -39154,8 +39154,8 @@ MonoBehaviour:
             inWeight: 0
             outWeight: 0
           - serializedVersion: 3
-            time: 20.282742
-            value: 0.9164117
+            time: 20.207851
+            value: 1.0115197
             inSlope: 0
             outSlope: 0
             tangentMode: 0

@@ -10,8 +10,6 @@ namespace game
 {
 	public class GameDomain : IGameDomain
 	{
-		private UnityEventsListener _unityEventsListener = UnityEventsListener.Create("__gameDomainEventsListener");
-
 		private readonly bool _sceneDebugMode;
 		private CoreGameDomain _coreGameDomain;
 		private UiDomain _uiDomain;
@@ -43,8 +41,11 @@ namespace game
 				_coreGameDomain = new CoreGameDomain();
 				await _coreGameDomain.PlayOnDebugLocation();
 			}
+			else
+			{
+				//TODO: open main menu
+			}
 
-			//open main menu
 		}
 	}
 }

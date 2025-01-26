@@ -7,8 +7,6 @@ namespace game.gameplay_core
 	{
 		private LocationDomain _locationDomain;
 
-		private bool _initialized = false;
-
 		private async UniTask Initialize()
 		{
 			await PreloadCoreGameAssets();
@@ -24,7 +22,7 @@ namespace game.gameplay_core
 
 		public async UniTask PlayOnLocation()
 		{
-			//load scene
+			//TODO: load scene
 		}
 
 		private async UniTask PreloadCoreGameAssets()

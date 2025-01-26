@@ -10,9 +10,7 @@ namespace game.gameplay_core.characters.ai.navigation
 		private readonly ReadOnlyTransform _characterTransform;
 
 		private readonly NavMeshPath _navMeshPath;
-
-		private int _currentIndex;
-
+ 
 		private float _currentLength;
 
 		public PathWrapper Path { get; }
@@ -33,8 +31,7 @@ namespace game.gameplay_core.characters.ai.navigation
 				Path.SetPath(_navMeshPath);
 			}
 
-			_currentLength = 0;
-			_currentIndex = 0;
+			_currentLength = 0; 
 		}
 
 		public bool CheckTargetPositionChangedSignificantly(Vector3 newTargetPosition, float mean = 0.1f)
