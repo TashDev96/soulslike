@@ -1,4 +1,4 @@
-namespace game.gameplay_core.characters.ai.blackbox
+namespace game.gameplay_core.characters.ai.utility.blackbox
 {
 	public class ActionHistoryNode
 	{

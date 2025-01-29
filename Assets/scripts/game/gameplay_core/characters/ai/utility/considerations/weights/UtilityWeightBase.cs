@@ -2,7 +2,7 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility.considerations.weights
 {
 	[Serializable] [HideReferenceObjectPicker]
 	public abstract class UtilityWeightBase

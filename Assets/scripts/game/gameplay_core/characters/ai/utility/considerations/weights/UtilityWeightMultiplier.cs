@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility.considerations.weights
 {
 	[Serializable]
 	public class UtilityWeightMultiplier : UtilityWeightBase

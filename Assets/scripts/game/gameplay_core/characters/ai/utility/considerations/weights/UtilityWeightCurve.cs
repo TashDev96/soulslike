@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility.considerations.weights
 {
 	[Serializable]
 	[OdinDontRegister]

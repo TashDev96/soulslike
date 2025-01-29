@@ -1,6 +1,7 @@
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using UnityEngine;
 

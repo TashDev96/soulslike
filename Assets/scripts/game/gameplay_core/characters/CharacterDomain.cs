@@ -4,6 +4,7 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters.ai;
+using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.runtime_data;

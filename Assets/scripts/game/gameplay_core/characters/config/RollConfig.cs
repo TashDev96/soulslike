@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.config
 {
 	[Serializable]
 	public class RollConfig

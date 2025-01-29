@@ -1,5 +1,4 @@
-using game.gameplay_core.characters.ai.blackbox;
-using game.gameplay_core.characters.ai.considerations.value_sources;
+using game.gameplay_core.characters.ai.utility.blackbox;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using game.gameplay_core.characters.ai.considerations;
+using game.gameplay_core.characters.ai.utility.considerations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility.goals
 {
 	[Serializable]
 	public class GoalsChain

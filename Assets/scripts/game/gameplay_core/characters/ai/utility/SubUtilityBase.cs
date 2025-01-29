@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
-using game.gameplay_core.characters.ai.blackbox;
-using game.gameplay_core.characters.ai.considerations;
+using game.gameplay_core.characters.ai.utility.blackbox;
+using game.gameplay_core.characters.ai.utility.considerations;
+using game.gameplay_core.characters.ai.utility.goals;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.state_machine.states;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility
 {
 	public class SubUtilityBase : MonoBehaviour, ISerializationCallbackReceiver
 	{

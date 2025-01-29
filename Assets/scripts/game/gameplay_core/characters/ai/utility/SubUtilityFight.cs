@@ -1,6 +1,6 @@
 using Sirenix.OdinInspector.Editor;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility
 {
 	[OdinDontRegister]
 	public class SubUtilityFight : SubUtilityBase

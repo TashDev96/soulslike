@@ -1,9 +1,8 @@
 using System;
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.ai.blackbox;
-using game.gameplay_core.characters.ai.considerations.value_sources;
+using game.gameplay_core.characters.ai.utility.blackbox;
 
-namespace game.gameplay_core.characters.ai.considerations
+namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 {
 	[Serializable]
 	public class ValueSourceStat : ValueSourceBase

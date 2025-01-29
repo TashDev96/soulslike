@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility.goals
 {
 	[Serializable]
 	public class UtilityGoal

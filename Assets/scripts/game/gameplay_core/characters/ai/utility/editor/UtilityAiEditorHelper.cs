@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai.editor
+namespace game.gameplay_core.characters.ai.utility.editor
 {
 	public class UtilityAiEditorHelper
 	{

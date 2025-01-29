@@ -2,7 +2,7 @@ using System;
 using game.gameplay_core.characters.runtime_data;
 using UnityEngine;
 
-namespace game.gameplay_core.characters
+namespace game.gameplay_core.characters.config
 {
 	[Serializable]
 	public class CharacterConfig

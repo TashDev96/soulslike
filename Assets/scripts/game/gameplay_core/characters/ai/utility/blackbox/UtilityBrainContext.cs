@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.ai.navigation;
 
-namespace game.gameplay_core.characters.ai.blackbox
+namespace game.gameplay_core.characters.ai.utility.blackbox
 {
 	public class UtilityBrainContext
 	{

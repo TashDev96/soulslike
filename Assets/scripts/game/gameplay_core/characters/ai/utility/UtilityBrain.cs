@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using dream_lib.src.extensions;
 using dream_lib.src.utils.components;
-using game.gameplay_core.characters.ai.blackbox;
 using game.gameplay_core.characters.ai.navigation;
+using game.gameplay_core.characters.ai.utility.blackbox;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai
+namespace game.gameplay_core.characters.ai.utility
 {
 	public class UtilityBrain : MonoBehaviour, ICharacterBrain
 	{
