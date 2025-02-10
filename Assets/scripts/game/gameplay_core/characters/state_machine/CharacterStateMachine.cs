@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -92,7 +93,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			var inputCommand = _context.InputData.Command;
 
-			var overrideMovement = NextCommand == CharacterCommand.Walk && inputCommand is not (CharacterCommand.Walk or CharacterCommand.None);
+			var overrideMovement = NextCommand.IsMovementCommand() && !inputCommand.IsMovementCommand() && inputCommand != CharacterCommand.None;
 
 			if(NextCommand == CharacterCommand.None || overrideMovement)
 			{
@@ -110,6 +111,17 @@ namespace game.gameplay_core.characters.state_machine
 				NextCommand = CharacterCommand.None;
 				_context.InputData.Command = CharacterCommand.None;
 				return;
+			}
+
+			if(NextCommand == CharacterCommand.Attack && _currentState.Value is RollState rollState)
+			{
+				if(rollState.CheckIsReadyToChangeState(NextCommand))
+				{
+					_attackState.IsRollAttackTriggered = true;
+					SetState(_attackState);
+					NextCommand = CharacterCommand.None;
+					return;
+				}
 			}
 
 			if(_currentState.Value.CheckIsReadyToChangeState(NextCommand))

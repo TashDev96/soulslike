@@ -33,6 +33,8 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
 		[field: SerializeField]
+		public float EnterFromRollTime { get; private set; }
+		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
 
 		[field: SerializeField]
@@ -63,6 +65,7 @@ namespace game.gameplay_core.damage_system
 			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
 			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);
 			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation.Clip, _animationPreview);
+			EnterFromRollTime = CharacterInspectorUtils.DrawTimingSlider("Enter From Roll Time:", EnterFromRollTime, Animation.Clip, _animationPreview);
 
 			GUILayout.Space(20);
 			GUILayout.Label("Hit Configs:");

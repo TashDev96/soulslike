@@ -21,6 +21,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
+		public bool IsRollAttackTriggered { get; set; }
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -102,7 +103,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			if(nextCommand == CharacterCommand.Walk)
+			if(nextCommand.IsMovementCommand())
 			{
 				if(_framesToUnlockWalk > 0)
 				{
@@ -129,11 +130,15 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+
+			if(IsRollAttackTriggered)
+			{
+				SetAttackInitialTime(_context.CurrentWeapon.Value.Config.RollAttack.EnterFromRollTime * newAnimation.Duration);
+			}
+			
 			if(_comboCounter > 0)
 			{
-				newAnimation.Time = _currentAttackConfig.EnterComboTime;
-				Time = _currentAttackConfig.EnterComboTime;
-				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
+				SetAttackInitialTime(_currentAttackConfig.EnterComboTime);
 			}
 			else
 			{
@@ -145,10 +150,24 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
+			IsRollAttackTriggered = false;
+
+			void SetAttackInitialTime(float time)
+			{
+				Time = time;
+				newAnimation.Time = time;
+				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(time));
+			}
 		}
 
 		private AttackConfig GetCurrentAttackConfig()
 		{
+			if(IsRollAttackTriggered)
+			{
+				_currentAttackIndex = 0;
+				return _context.CurrentWeapon.Value.Config.RollAttack;
+			}
+			
 			var weaponConfig = _context.CurrentWeapon.Value.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{

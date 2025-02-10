@@ -16,11 +16,16 @@ namespace game.gameplay_core.damage_system
 		public AttackConfig[] SpecialAttacks { get; private set; }
 
 		[field: SerializeField]
+		public AttackConfig RollAttack { get; private set; }
+	
+		
+		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToRegularCustomOrder { get; private set; }
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToStrongCustomOrder { get; private set; }
 		[field: SerializeField]
 		public SerializableDictionary<int, int> StrongToRegularCustomOrder { get; private set; }
+
 
 		public AttackConfig[] GetAttacksSequence(AttackType attackType)
 		{

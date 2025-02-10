@@ -1,6 +1,7 @@
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using UnityEngine;
@@ -9,16 +10,17 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class RollState : CharacterAnimationStateBase
 	{
+		private Vector3 _characterDirectionTarget;
 		private RollConfig _config;
 		private Vector3 _rollDirectionWorld;
-		private Vector3 _characterDirectionTarget;
-		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public RollState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
 		}
+
+		public override float Time { get; protected set; }
+		protected override float Duration { get; set; }
 
 		public override void OnEnter()
 		{
@@ -64,6 +66,13 @@ namespace game.gameplay_core.characters.state_machine.states
 			ResetForwardMovement();
 
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
+		}
+
+		public bool CanSwitchToAttack => _context.Config.Roll.ExitToRollAttackTiming.Contains(NormalizedTime);
+
+		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
+		{
+			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 
 		public override void Update(float deltaTime)

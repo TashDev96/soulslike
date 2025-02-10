@@ -13773,6 +13773,114 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &407880139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 407880143}
+  - component: {fileID: 407880142}
+  - component: {fileID: 407880141}
+  - component: {fileID: 407880140}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!135 &407880140
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407880139}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &407880141
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407880139}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &407880142
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407880139}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &407880143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407880139}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.401645, y: 4.734436, z: 11.077592}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -15650,12 +15758,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 636421841}
   - {fileID: 875381543}
+  - {fileID: 636421841}
   <Characters>k__BackingField:
   - {fileID: 5039234435017277223}
-  - {fileID: 4377911618002708333}
-  - {fileID: 1717593984}
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}
   <OnlySpawnPlayer>k__BackingField: 0
@@ -38915,7 +39021,7 @@ MonoBehaviour:
       Action: Heal
       Duration: 0
     Considerations:
-    - rid: 4872847103003983938
+    - rid: -2
     <InertiaWeight>k__BackingField: 10
   - Id: St
     Goals:
@@ -38923,8 +39029,8 @@ MonoBehaviour:
       Action: StayBack
       Duration: 5
     Considerations:
-    - rid: 5783513688161386559
-    - rid: 5783513688161386563
+    - rid: -2
+    - rid: -2
     <InertiaWeight>k__BackingField: 40
   Actions:
   - Id: Attack
@@ -38932,7 +39038,7 @@ MonoBehaviour:
     Direction: 0
     Distance: 0
     Considerations:
-    - rid: 5490946356669055036
+    - rid: -2
   - Id: Heal
     Type: 8
     Direction: 6
@@ -38948,266 +39054,19 @@ MonoBehaviour:
     Direction: 0
     Distance: 0
     Considerations:
-    - rid: 4872847103003983942
+    - rid: -2
   - Id: StayBack
     Type: 5
     Direction: 0
     Distance: 6
     Considerations:
-    - rid: 5783513688161386496
+    - rid: -2
   DebugString: 
   references:
     version: 2
     RefIds:
-    - rid: 4872847103003983938
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 4872847103003983939
-        Weight:
-          rid: 4872847103003983940
-    - rid: 4872847103003983939
-      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        Stat: 0
-    - rid: 4872847103003983940
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 1
-        _value: 0.5
-        _metWeight: 30
-        _notMetWeight: -30
-    - rid: 4872847103003983942
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 4872847103003983946
-        Weight:
-          rid: 4872847103003983944
-    - rid: 4872847103003983944
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 2
-        _value: 1.1
-        _metWeight: 30
-        _notMetWeight: 0
-    - rid: 4872847103003983946
-      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _normalizeToAttackRange: 1
-    - rid: 5490946356669055036
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 5490946356669055037
-        Weight:
-          rid: 5490946356669055038
-    - rid: 5490946356669055037
-      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _normalizeToAttackRange: 1
-    - rid: 5490946356669055038
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 1
-        _value: 1.1
-        _metWeight: 30
-        _notMetWeight: -20
-    - rid: 5783513688161386496
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 5783513688161386497
-        Weight:
-          rid: 5783513688161386498
-    - rid: 5783513688161386497
-      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        Stat: 0
-    - rid: 5783513688161386498
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 1
-        _value: 0.5
-        _metWeight: 10
-        _notMetWeight: 0
-    - rid: 5783513688161386559
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 5783513688161386561
-        Weight:
-          rid: 5783513688161386566
-    - rid: 5783513688161386561
-      type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _randomValuesOverTime:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0.044799805
-            value: 0
-            inSlope: 0.42855096
-            outSlope: 0.42855096
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0.12892675
-          - serializedVersion: 3
-            time: 3.3561568
-            value: 1.0439694
-            inSlope: 0.15821156
-            outSlope: 0.15821156
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0.6016099
-            outWeight: 0
-          - serializedVersion: 3
-            time: 4.022221
-            value: 0.32550728
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 5.8357115
-            value: 0.63147426
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 7.0447054
-            value: 0.24206173
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 9.777916
-            value: 1.0294313
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 10.880133
-            value: 0.16788791
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 11.484629
-            value: 0.5851156
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 13.214737
-            value: 0.18643053
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 15.132452
-            value: 0.6685603
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 17.571283
-            value: 0.32550642
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 20.207851
-            value: 1.0115197
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 21.781923
-            value: 0.13079959
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 23.366123
-            value: 0.64074457
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 1
-          m_PostInfinity: 1
-          m_RotationOrder: 4
-        _timeOffset: 0.29
-    - rid: 5783513688161386563
-      type: {class: Consideration, ns: game.gameplay_core.characters.ai.considerations, asm: GameAssembly}
-      data:
-        _commentEnabled: 0
-        Comment: 
-        ValueSource:
-          rid: 5783513688161386564
-        Weight:
-          rid: 5783513688161386565
-    - rid: 5783513688161386564
-      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _normalizeToAttackRange: 0
-    - rid: 5783513688161386565
-      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _compareType: 1
-        _value: 5
-        _metWeight: -1
-        _notMetWeight: -100
-    - rid: 5783513688161386566
-      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai, asm: GameAssembly}
-      data:
-        _multiplier: 1
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1644955430
 GameObject:
   m_ObjectHideFlags: 0
@@ -39960,17 +39819,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
   m_PrefabInstance: {fileID: 1717593982}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1717593984 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
-  m_PrefabInstance: {fileID: 1717593982}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1720366173
 Mesh:
   m_ObjectHideFlags: 0
@@ -45693,6 +45541,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339832027269603005, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339832027269603005, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2339832027269603005, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
@@ -45754,6 +45610,10 @@ PrefabInstance:
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8792662738043832350, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 9014584770393281075, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_Enabled
@@ -56548,17 +56408,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8612867717841487573, guid: 52825454100dbe0448e865223bea6297, type: 3}
   m_PrefabInstance: {fileID: 4377911618002708331}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4377911618002708333 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5293958133636013954, guid: 52825454100dbe0448e865223bea6297, type: 3}
-  m_PrefabInstance: {fileID: 4377911618002708331}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4488588704235958153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56678,7 +56527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
@@ -56823,3 +56672,4 @@ SceneRoots:
   - {fileID: 1152788088}
   - {fileID: 885313499}
   - {fileID: 1784887935}
+  - {fileID: 407880143}
