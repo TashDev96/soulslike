@@ -133,9 +133,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(IsRollAttackTriggered)
 			{
-				SetAttackInitialTime(_context.CurrentWeapon.Value.Config.RollAttack.EnterFromRollTime * newAnimation.Duration);
+				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
 			}
-			
+    
 			if(_comboCounter > 0)
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterComboTime);
