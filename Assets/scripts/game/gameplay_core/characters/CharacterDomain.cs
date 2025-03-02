@@ -36,7 +36,7 @@ namespace game.gameplay_core.characters
 		private Transform _uiPivot;
 		[SerializeField]
 		private MovementLogic _movementLogic;
-		
+
 		private CharacterWorldSpaceUi _worldSpaceUi;
 
 		private CharacterStateMachine _stateMachine;
@@ -48,6 +48,7 @@ namespace game.gameplay_core.characters
 		private StaggerLogic _staggerLogic;
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
+		private FallDamageLogic _fallDamageLogic;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -72,6 +73,10 @@ namespace game.gameplay_core.characters
 			});
 
 			_invulnerabilityLogic = new InvulnerabilityLogic();
+			_fallDamageLogic = new FallDamageLogic();
+
+			var isFalling = new ReactiveProperty<bool>();
+
 			_context = new CharacterContext
 			{
 				LocationTime = locationContext.LocationTime,
@@ -80,6 +85,8 @@ namespace game.gameplay_core.characters
 				MovementLogic = _movementLogic,
 				LockOnLogic = _lockOnLogic,
 				InvulnerabilityLogic = _invulnerabilityLogic,
+				IsFalling = isFalling,
+				FallDamageLogic = _fallDamageLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -103,7 +110,7 @@ namespace game.gameplay_core.characters
 				TriggerStagger = new ReactiveCommand(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
+				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>()
 			};
 
 			ExternalData = new CharacterExternalData(_context);
@@ -113,8 +120,27 @@ namespace game.gameplay_core.characters
 				CharacterTransform = transform,
 				UnityCharacterController = GetComponent<CharacterController>(),
 				IsDead = _context.IsDead,
-				RotationSpeed = _context.RotationSpeed
+				RotationSpeed = _context.RotationSpeed,
+				IsFalling = _context.IsFalling
 			});
+
+			if(isPlayer)
+			{
+				_fallDamageLogic.SetContext(new FallDamageLogic.Context
+				{
+					ApplyDamage = _context.ApplyDamage,
+					IsDead = _context.IsDead,
+					CharacterTransform = transform,
+					CharacterStats = _context.CharacterStats,
+					IsFalling = _context.IsFalling,
+					InvulnerabilityLogic = _context.InvulnerabilityLogic,
+					TriggerStagger = _context.TriggerStagger,
+
+					MinimumFallDamageHeight = 3.0f,
+					LethalFallHeight = 15.0f,
+					StaggerThreshold = 8.0f
+				});
+			}
 
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = _stateMachine.CurrentState;
@@ -209,11 +235,15 @@ namespace game.gameplay_core.characters
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
+
+				_fallDamageLogic?.CustomUpdate(deltaTimeStep);
+
 				calculateInputLogic = false;
 			}
 
 			_worldSpaceUi?.CustomUpdate(deltaTime);
 		}
+
 #if UNITY_EDITOR
 		private void OnDrawGizmos()
 		{

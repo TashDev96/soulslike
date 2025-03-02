@@ -19,6 +19,7 @@ namespace game.gameplay_core.characters
 		public LockOnLogic LockOnLogic;
 		public MovementLogic MovementLogic;
 		public InvulnerabilityLogic InvulnerabilityLogic;
+		public FallDamageLogic FallDamageLogic;
 
 		public CharacterConfig Config;
 		public ReadOnlyTransform Transform;
@@ -40,9 +41,13 @@ namespace game.gameplay_core.characters
 		public ApplyDamageCommand ApplyDamage;
 		public IsDead IsDead;
 		public ReactiveCommand TriggerStagger;
+		
+		// Add IsFalling reactive property
+		public ReactiveProperty<bool> IsFalling;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
+		
 	}
 }

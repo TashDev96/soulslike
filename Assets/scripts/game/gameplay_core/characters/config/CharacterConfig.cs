@@ -15,10 +15,12 @@ namespace game.gameplay_core.characters.config
 		public AnimationClip StaggerAnimation { get; private set; }
 		[field: SerializeField]
 		public AnimationClip DeathAnimation { get; set; }
-		
+		[field: SerializeField]
+		public AnimationClip FallAnimation { get; set; } // Added animation for falling
+
 		[field: Space]
 		[field: SerializeField]
-		public float WalkSpeed { get; private set; } = 5f;	
+		public float WalkSpeed { get; private set; } = 5f;
 		[field: Space]
 		[field: SerializeField]
 		public float RunSpeed { get; private set; } = 15f;
@@ -27,6 +29,5 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public CharacterStats DefaultStats { get; private set; }
-		
 	}
 }

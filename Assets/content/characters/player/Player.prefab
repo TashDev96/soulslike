@@ -99,6 +99,8 @@ MonoBehaviour:
     <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
     <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <DeathAnimation>k__BackingField: {fileID: 0}
+    <FallAnimation>k__BackingField: {fileID: 0}
+    <LandAnimation>k__BackingField: {fileID: 0}
     <WalkSpeed>k__BackingField: 5
     <RunSpeed>k__BackingField: 15
     <RotationSpeed>k__BackingField:
@@ -118,6 +120,9 @@ MonoBehaviour:
         _value: 3
       PoiseRestoreTime:
         _value: 5
+    <MinimumFallDamageHeight>k__BackingField: 3
+    <LethalFallHeight>k__BackingField: 20
+    <StaggerThreshold>k__BackingField: 8
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
   _movementLogic:
@@ -151,7 +156,7 @@ CharacterController:
   m_SlopeLimit: 35
   m_StepOffset: 0.4
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0.00001
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1937557130125307911
 MonoBehaviour:

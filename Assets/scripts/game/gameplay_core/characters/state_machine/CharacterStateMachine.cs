@@ -3,7 +3,6 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -16,8 +15,10 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly RollState _rollState;
 		private readonly AttackState _attackState;
 		private readonly StaggerState _staggerState;
+		private readonly FallState _fallState;
+
 		private CharacterCommand _nextCommand;
-		private ReactiveProperty<CharacterStateBase> _currentState = new();
+		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
 
 		private CharacterCommand NextCommand
 		{
@@ -26,7 +27,6 @@ namespace game.gameplay_core.characters.state_machine
 			{
 				if(value != _nextCommand)
 				{
-					// Debug.Log($"{Time.frameCount}set command {value}");
 				}
 				_nextCommand = value;
 			}
@@ -43,9 +43,12 @@ namespace game.gameplay_core.characters.state_machine
 			_attackState = new AttackState(_context);
 			_staggerState = new StaggerState(_context);
 			_rollState = new RollState(_context);
+			_fallState = new FallState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
+
+			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
 
 			SetState(_idleState);
 		}
@@ -70,6 +73,26 @@ namespace game.gameplay_core.characters.state_machine
 			str += $"command: {_context.InputData.Command}\n";
 			str += $"next command: {NextCommand}\n";
 			return str;
+		}
+
+		private void HandleIsFallingChanged(bool wasFalling, bool isFalling)
+		{
+			if(isFalling && !(_currentState.Value is FallState) && !_context.IsDead.Value)
+			{
+				if(!(_currentState.Value is AttackState) && !(_currentState.Value is RollState) && !(_currentState.Value is StaggerState))
+				{
+					_currentState.Value.OnInterrupt();
+					SetState(_fallState);
+				}
+			}
+
+			if(!isFalling && wasFalling && _currentState.Value is FallState fallState)
+			{
+				if(fallState.ShouldRollOnLanding)
+				{
+					SetState(_rollState);
+				}
+			}
 		}
 
 		private void HandleTriggerStagger()
@@ -124,12 +147,17 @@ namespace game.gameplay_core.characters.state_machine
 				}
 			}
 
+			if(_currentState.Value == _fallState && _fallState.IsComplete && _fallState.HasValidRollInput)
+			{
+				SetState(_rollState);
+			}
+
 			if(_currentState.Value.CheckIsReadyToChangeState(NextCommand))
 			{
 				switch(NextCommand)
 				{
 					case CharacterCommand.None:
-						if(_currentState.Value.IsComplete)
+						if(_currentState.Value.IsComplete && _currentState.Value != _idleState)
 						{
 							SetState(_idleState);
 						}
@@ -145,9 +173,7 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.Attack:
 					case CharacterCommand.StrongAttack:
-
 						SetState(_attackState);
-
 						break;
 					case CharacterCommand.Block:
 						break;
