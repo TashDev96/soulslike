@@ -17,8 +17,6 @@ namespace game.gameplay_core.characters.logic
 			public CharacterController UnityCharacterController;
 			public IsDead IsDead { get; set; }
 			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
-
-			// Uses the shared IsFalling property
 			public ReactiveProperty<bool> IsFalling { get; set; }
 		}
 
@@ -47,6 +45,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _prevPos;
 		private bool _isGroundedCache;
 		private bool _prevIsGrounded;
+		private Vector3 _lastWalkVelocity;
 
 		private CharacterController UnityCharacterController => _context.UnityCharacterController;
 
@@ -81,6 +80,7 @@ namespace game.gameplay_core.characters.logic
 			{
 				DebugDrawUtils.DrawText(_slidingVelocity.magnitude.RoundFormat(), CurrentPosition + Vector3.up, 10f);
 			}
+			_lastWalkVelocity = Vector3.zero;
 			_prevPos = CurrentPosition;
 			_prevIsGrounded = _isGroundedCache;
 			_isGroundedCache = false;
@@ -101,7 +101,8 @@ namespace game.gameplay_core.characters.logic
 					projectedMovement -= Vector3.Project(projectedMovement, _slidingVelocity.normalized);
 				}
 			}
-			MoveAndStoreIsGrounded(projectedMovement);
+			_lastWalkVelocity = projectedMovement / deltaTime;
+			MoveAndStoreFrameData(projectedMovement);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
@@ -176,8 +177,8 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateFalling(float deltaTime)
 		{
-			MoveAndStoreIsGrounded(Vector3.down * 0.0001f);
-			
+			MoveAndStoreFrameData(Vector3.down * 0.0001f);
+
 			if(_isGroundedCache)
 			{
 				_context.IsFalling.Value = false;
@@ -187,12 +188,12 @@ namespace game.gameplay_core.characters.logic
 			{
 				if(_prevIsGrounded)
 				{
-					FallVelocity = _slidingVelocity;
+					FallVelocity = _lastWalkVelocity + _slidingVelocity;
 				}
 				_context.IsFalling.Value = true;
 				FallVelocity = Vector3.Lerp(FallVelocity, Vector3.zero, _inAirDamping * deltaTime);
 				FallVelocity += Physics.gravity * deltaTime;
-				MoveAndStoreIsGrounded(FallVelocity * deltaTime);
+				MoveAndStoreFrameData(FallVelocity * deltaTime);
 			}
 		}
 
@@ -203,7 +204,7 @@ namespace game.gameplay_core.characters.logic
 				_slidingVelocity.y = 0;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
 				_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
-				MoveAndStoreIsGrounded(_slidingVelocity * deltaTime);
+				MoveAndStoreFrameData(_slidingVelocity * deltaTime);
 				if(_slidingVelocity.sqrMagnitude < 0.001f)
 				{
 					_slidingVelocity = Vector3.zero;
@@ -214,11 +215,11 @@ namespace game.gameplay_core.characters.logic
 				var slideDirection = Vector3.ProjectOnPlane(Vector3.down, _groundNormal).normalized;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingDamping);
 				_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
-				MoveAndStoreIsGrounded(_slidingVelocity * deltaTime);
+				MoveAndStoreFrameData(_slidingVelocity * deltaTime);
 			}
 		}
 
-		private void MoveAndStoreIsGrounded(Vector3 vector)
+		private void MoveAndStoreFrameData(Vector3 vector)
 		{
 			UnityCharacterController.Move(vector);
 
