@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+architecture framework description
+architecture is Domain-context based.
+objects are initialized in tree-way, each object recieving context. Is two child objects need a link to same property, it will be propagated through contexts.
+Also most of context variables are ReactiveProperrty<> or ReactiveCommand<>:
+[ReactiveProperty.cs](mdc:Assets/dream_lib/src/reactive/ReactiveProperty.cs)
+[ReactiveCommand.cs](mdc:Assets/dream_lib/src/reactive/ReactiveCommand.cs)
+example:
+[CharacterDomain.cs](mdc:Assets/scripts/game/gameplay_core/characters/CharacterDomain.cs)
+[CharacterContext.cs](mdc:Assets/scripts/game/gameplay_core/characters/CharacterContext.cs) - has IsDead property, which is propagated also to MovementLogic.cs and HealthLogic.cs
+
+
