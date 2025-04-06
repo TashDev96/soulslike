@@ -100,11 +100,34 @@ MonoBehaviour:
     <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <DeathAnimation>k__BackingField: {fileID: 0}
     <FallAnimation>k__BackingField: {fileID: 0}
-    <LandAnimation>k__BackingField: {fileID: 0}
-    <WalkSpeed>k__BackingField: 5
-    <RunSpeed>k__BackingField: 15
-    <RotationSpeed>k__BackingField:
-      _halfTurnDurationSeconds: 0.22
+    <Locomotion>k__BackingField:
+      <HalfTurnDurationSeconds>k__BackingField: 0.22
+      <WalkSpeed>k__BackingField: 5
+      <RunSpeed>k__BackingField: 15
+      <WalkAccelerationCurve>k__BackingField:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 3.030303
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.33
+          value: 1
+          inSlope: 3.030303
+          outSlope: 0
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
     <DefaultStats>k__BackingField:
       Hp:
         _value: 100
@@ -120,9 +143,6 @@ MonoBehaviour:
         _value: 3
       PoiseRestoreTime:
         _value: 5
-    <MinimumFallDamageHeight>k__BackingField: 3
-    <LethalFallHeight>k__BackingField: 20
-    <StaggerThreshold>k__BackingField: 8
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
   _movementLogic:

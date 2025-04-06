@@ -16,14 +16,11 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public AnimationClip DeathAnimation { get; set; }
 		[field: SerializeField]
-		public AnimationClip FallAnimation { get; set; } // Added animation for falling
+		public AnimationClip FallAnimation { get; set; }
 
-		[field: Space]
 		[field: SerializeField]
-		public float WalkSpeed { get; private set; } = 5f;
-		[field: Space]
-		[field: SerializeField]
-		public float RunSpeed { get; private set; } = 15f;
+		public LocomotionConfig Locomotion { get; private set; }
+		
 		[field: SerializeField]
 		public RotationSpeedData RotationSpeed { get; private set; }
 

@@ -2,6 +2,7 @@ using System;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.drawers;
+using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			public Transform CharacterTransform;
 			public CharacterController UnityCharacterController;
+			public LocomotionConfig LocomotionConfig;
 			public IsDead IsDead { get; set; }
 			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
 			public ReactiveProperty<bool> IsFalling { get; set; }
@@ -45,7 +47,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _prevPos;
 		private bool _isGroundedCache;
 		private bool _prevIsGrounded;
-		private Vector3 _lastWalkVelocity;
+		private Vector3 _lastUpdateVelocity;
 
 		private CharacterController UnityCharacterController => _context.UnityCharacterController;
 
@@ -80,7 +82,7 @@ namespace game.gameplay_core.characters.logic
 			{
 				DebugDrawUtils.DrawText(_slidingVelocity.magnitude.RoundFormat(), CurrentPosition + Vector3.up, 10f);
 			}
-			_lastWalkVelocity = Vector3.zero;
+			_lastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
 			_prevPos = CurrentPosition;
 			_prevIsGrounded = _isGroundedCache;
 			_isGroundedCache = false;
@@ -101,13 +103,13 @@ namespace game.gameplay_core.characters.logic
 					projectedMovement -= Vector3.Project(projectedMovement, _slidingVelocity.normalized);
 				}
 			}
-			_lastWalkVelocity = projectedMovement / deltaTime;
 			MoveAndStoreFrameData(projectedMovement);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			RotateCharacter(toDirection, _context.RotationSpeed.Value.DegreesPerSecond, deltaTime);
+			var degreesPerSecond = 180f / _context.LocomotionConfig.HalfTurnDurationSeconds;
+			RotateCharacter(toDirection, degreesPerSecond, deltaTime);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
@@ -188,12 +190,15 @@ namespace game.gameplay_core.characters.logic
 			{
 				if(_prevIsGrounded)
 				{
-					FallVelocity = _lastWalkVelocity + _slidingVelocity;
+					FallVelocity = _lastUpdateVelocity;
 				}
-				_context.IsFalling.Value = true;
-				FallVelocity = Vector3.Lerp(FallVelocity, Vector3.zero, _inAirDamping * deltaTime);
 				FallVelocity += Physics.gravity * deltaTime;
+				FallVelocity = Vector3.Lerp(FallVelocity, Vector3.zero, _inAirDamping * deltaTime);
 				MoveAndStoreFrameData(FallVelocity * deltaTime);
+				if(!_isGroundedCache)
+				{
+					_context.IsFalling.Value = true;
+				}
 			}
 		}
 

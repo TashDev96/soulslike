@@ -96,8 +96,8 @@ namespace game.gameplay_core.characters
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
 
-				WalkSpeed = new ReactiveProperty<float>(_config.WalkSpeed),
-				RunSpeed = new ReactiveProperty<float>(_config.RunSpeed),
+				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
+				RunSpeed = new ReactiveProperty<float>(_config.Locomotion.RunSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
 				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
@@ -121,7 +121,8 @@ namespace game.gameplay_core.characters
 				UnityCharacterController = GetComponent<CharacterController>(),
 				IsDead = _context.IsDead,
 				RotationSpeed = _context.RotationSpeed,
-				IsFalling = _context.IsFalling
+				IsFalling = _context.IsFalling,
+				LocomotionConfig =  _config.Locomotion,
 			});
 
 			if(isPlayer)
