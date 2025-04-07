@@ -43,5 +43,10 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			return false;
 		}
+
+		public virtual string GetDebugString()
+		{
+			return "";
+		}
 	}
 }

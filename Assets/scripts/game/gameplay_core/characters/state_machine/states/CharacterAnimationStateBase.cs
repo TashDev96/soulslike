@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -30,6 +31,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_context.MovementLogic.Walk(overrideDirection * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
+		}
+
+		public override string GetDebugString()
+		{
+			return $"{Time.RoundFormat()}/{Duration.RoundFormat()}";
 		}
 	}
 }

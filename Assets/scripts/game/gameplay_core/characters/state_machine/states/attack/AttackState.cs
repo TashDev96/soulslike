@@ -4,12 +4,12 @@ using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
 	public class AttackState : CharacterAnimationStateBase
 	{
+		private const int FramesToUnlockWalkAfterStateUnlocked = 5;
 		private int _currentAttackIndex;
 		private int _lastAttackType = 0;
 		private AttackType _attackType;
@@ -77,7 +77,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_currentAttackConfig.LockedStateTime.Contains(NormalizedTime))
 			{
-				_framesToUnlockWalk = 5;
+				_framesToUnlockWalk = FramesToUnlockWalkAfterStateUnlocked;
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
@@ -135,28 +135,29 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
 			}
-    
-			if(_comboCounter > 0)
-			{
-				SetAttackInitialTime(_currentAttackConfig.EnterComboTime);
-			}
 			else
 			{
-				Time = 0f;
-				ResetForwardMovement();
+				if(_comboCounter > 0)
+				{
+					SetAttackInitialTime(_currentAttackConfig.EnterComboTime);
+				}
+				else
+				{
+					Time = 0f;
+					ResetForwardMovement();
+				}
 			}
 
 			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
 
-			Debug.Log($"attack {_comboCounter} {_currentAttackIndex} {_attackType}");
 			IsComplete = false;
 			IsRollAttackTriggered = false;
 
 			void SetAttackInitialTime(float time)
 			{
-				Time = time;
-				newAnimation.Time = time;
-				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(time));
+				Time = time * newAnimation.Duration;
+				newAnimation.Time = time * newAnimation.Duration;
+				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 			}
 		}
 
@@ -167,7 +168,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				_currentAttackIndex = 0;
 				return _context.CurrentWeapon.Value.Config.RollAttack;
 			}
-			
+
 			var weaponConfig = _context.CurrentWeapon.Value.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{

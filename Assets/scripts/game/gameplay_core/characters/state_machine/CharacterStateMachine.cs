@@ -70,6 +70,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			var str = "";
 			str += $"state:   {_currentState.Value.GetType().Name}  complete: {_currentState.Value.IsComplete}\n";
+			str += $"{_currentState.Value.GetDebugString()}\n";
 			str += $"command: {_context.InputData.Command}\n";
 			str += $"next command: {NextCommand}\n";
 			return str;
