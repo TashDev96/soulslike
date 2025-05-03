@@ -2,17 +2,20 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
-		Block,
-		Interact,
-		UseItem,
-		Attack,
-		Run,
-		Roll,
-		LockOn,
-		Horizontal,
-		Vertical,
-		MouseScrollWheel,
-		MouseScrollWheelSecondary,
-		Pause
-	}
+        DebugKey2,
+        DebugKey,
+        Block,
+        Interact,
+        UseItem,
+        Attack,
+        Run,
+        Roll,
+        LockOn,
+        Horizontal,
+        Vertical,
+        MouseScrollWheel,
+        MouseScrollWheelSecondary,
+        Pause,
+
+    }
 }

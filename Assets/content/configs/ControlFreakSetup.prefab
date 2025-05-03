@@ -111,6 +111,60 @@ MonoBehaviour:
     list: []
   axes:
     list:
+    - name: DebugKey2
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 0
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0.125
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
+    - name: DebugKey
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 0
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0.125
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
     - name: Block
       axisType: 2
       deltaMode: 1
@@ -208,7 +262,7 @@ MonoBehaviour:
       keyboardNegativeAlt0: 0
       keyboardNegativeAlt1: 0
       keyboardNegativeAlt2: 0
-      analogToDigitalThresh: 0.125
+      analogToDigitalThresh: 0
       rawSmoothingTime: 0
       smoothingTime: 0
       digitalToAnalogAccelTime: 0.25
@@ -255,6 +309,33 @@ MonoBehaviour:
       affectedKeyPositive: 0
       affectedKeyNegative: 0
       keyboardPositive: 32
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0.125
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
+    - name: LockOn
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 325
       keyboardPositiveAlt0: 0
       keyboardPositiveAlt1: 0
       keyboardPositiveAlt2: 0
@@ -460,14 +541,14 @@ MonoBehaviour:
     blockX: 0
     blockY: 0
   leftStickConfig:
-    analogDeadZone: 0.3
-    analogEndZone: 0.65432096
+    analogDeadZone: 0
+    analogEndZone: 1
     analogRangeStartValue: 0
     digitalEnterThresh: 0.5
     digitalLeaveThresh: 0.2
     digitalToAnalogPressSpeed: 0.5
     digitalToAnalogReleaseSpeed: 0.5
-    useRamp: 0
+    useRamp: 1
     ramp:
       serializedVersion: 2
       m_Curve:
@@ -1521,16 +1602,20 @@ MonoBehaviour:
         axisPositiveSide: 1
       keyList: 
     digiL1Binding:
-      enabled: 0
-      axisList: []
+      enabled: 1
+      axisList:
+      - axisName: DebugKey
+        axisPositiveSide: 1
       keyList: 
     digiR1Binding:
       enabled: 0
       axisList: []
       keyList: 
     digiL2Binding:
-      enabled: 0
-      axisList: []
+      enabled: 1
+      axisList:
+      - axisName: DebugKey2
+        axisPositiveSide: 1
       keyList: 
     digiR2Binding:
       enabled: 0
