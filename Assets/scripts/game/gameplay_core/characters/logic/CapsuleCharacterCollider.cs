@@ -2,7 +2,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
 using UnityEngine;
 
-public class CapsuleCharacterController : MonoBehaviour
+public class CapsuleCharacterCollider : MonoBehaviour
 {
 	[SerializeField]
 	public float skinWidth = 0.05f;

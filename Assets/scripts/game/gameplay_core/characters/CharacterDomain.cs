@@ -118,7 +118,7 @@ namespace game.gameplay_core.characters
 			_movementLogic.SetContext(new MovementLogic.Context
 			{
 				CharacterTransform = transform,
-				UnityCharacterController = GetComponent<CapsuleCharacterController>(),
+				CharacterCollider = GetComponent<CapsuleCharacterCollider>(),
 				IsDead = _context.IsDead,
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,

@@ -18,7 +18,7 @@ namespace game.gameplay_core.characters.logic
 		public struct Context
 		{
 			public Transform CharacterTransform;
-			public CapsuleCharacterController UnityCharacterController;
+			public CapsuleCharacterCollider CharacterCollider;
 			public LocomotionConfig LocomotionConfig;
 			public IsDead IsDead { get; set; }
 			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
@@ -54,7 +54,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
 
-		private CapsuleCharacterController CharacterController => _context.UnityCharacterController;
+		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
 		private Vector3 CurrentPosition => _context.CharacterTransform.position;
 
@@ -76,9 +76,9 @@ namespace game.gameplay_core.characters.logic
 				return;
 			}
 
-			_debugFlags = _context.UnityCharacterController.Flags;
+			_debugFlags = _context.CharacterCollider.Flags;
 			
-			_context.UnityCharacterController.CustomUpdate(deltaTime);
+			_context.CharacterCollider.CustomUpdate(deltaTime);
 
 			UpdateFalling(deltaTime);
 
@@ -133,7 +133,7 @@ namespace game.gameplay_core.characters.logic
 
 		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
 		{
-			var charController = CharacterController;
+			var charController = CharacterCollider;
 			var radius = charController.radius;
 
 			var offset = radius + charController.skinWidth;
@@ -179,7 +179,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.AppendLine($"grounded {_isGroundedCache}, stable: {_hasStableGround}, gravity disabled: {_context.UnityCharacterController.IsFakeGrounded}");
+			sb.AppendLine($"grounded {_isGroundedCache}, stable: {_hasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
 			sb.AppendLine($"fall velocity {_fallVelocity}");
 			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
 		}
@@ -188,7 +188,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			
 
-			if(_context.UnityCharacterController.IsFakeGrounded)
+			if(_context.CharacterCollider.IsFakeGrounded)
 			{
 				_isGroundedCache = true;
 			}
@@ -224,9 +224,9 @@ namespace game.gameplay_core.characters.logic
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
 
-				if(!CharacterController.IsGrounded)
+				if(!CharacterCollider.IsGrounded)
 				{
-					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterController.stepOffset, out var distanceToGround))
+					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider.stepOffset, out var distanceToGround))
 					{
 						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
 					}
@@ -240,7 +240,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(_hasStableGround || CharacterController.IsOnStableSlope)
+			if(_hasStableGround || CharacterCollider.IsOnStableSlope)
 			{
 				_slidingVelocity.y = 0;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
@@ -262,15 +262,15 @@ namespace game.gameplay_core.characters.logic
 
 		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false)
 		{
-			CharacterController.Move(vector, disableIterations);
+			CharacterCollider.Move(vector, disableIterations);
 
 			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
-			_isGroundedCache |= CharacterController.IsGrounded;
+			_isGroundedCache |= CharacterCollider.IsGrounded;
 		}
 
 		private void HandleDeath(bool isDead)
 		{
-			CharacterController.enabled = !isDead;
+			CharacterCollider.enabled = !isDead;
 		}
 
 		private void HandleFallingChanged(bool isFalling)
