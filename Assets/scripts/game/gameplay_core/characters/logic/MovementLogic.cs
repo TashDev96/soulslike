@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Text;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.drawers;
@@ -15,7 +17,7 @@ namespace game.gameplay_core.characters.logic
 		public struct Context
 		{
 			public Transform CharacterTransform;
-			public CharacterController UnityCharacterController;
+			public CapsuleCharacterController UnityCharacterController;
 			public LocomotionConfig LocomotionConfig;
 			public IsDead IsDead { get; set; }
 			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
@@ -39,7 +41,6 @@ namespace game.gameplay_core.characters.logic
 
 		private Vector3 _slidingVelocity;
 
-		private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
 		private LayerMask _groundLayer;
 		private Vector3 _groundNormal;
 		private bool _hasStableGround;
@@ -49,11 +50,12 @@ namespace game.gameplay_core.characters.logic
 		private bool _prevIsGrounded;
 		private Vector3 _lastUpdateVelocity;
 
-		private CharacterController UnityCharacterController => _context.UnityCharacterController;
+		private Vector3 _fallVelocity;
+		private CollisionFlags _debugFlags;
+
+		private CapsuleCharacterController UnityCharacterController => _context.UnityCharacterController;
 
 		private Vector3 CurrentPosition => _context.CharacterTransform.position;
-
-		public Vector3 FallVelocity { get; private set; }
 
 		public void SetContext(Context context)
 		{
@@ -65,38 +67,44 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
+			_prevIsGrounded = _isGroundedCache;
+			_isGroundedCache = false;
+
 			if(_context.IsDead.Value)
 			{
 				return;
 			}
 
-			UpdateFalling(deltaTime);
-			GetGroundNormal();
+			_debugFlags = _context.UnityCharacterController.Flags;
+			
+			_context.UnityCharacterController.CustomUpdate(deltaTime);
 
-			if(UnityCharacterController.isGrounded)
+			UpdateFalling(deltaTime);
+
+			if(_isGroundedCache)
 			{
 				UpdateSliding(deltaTime);
 			}
 
-			if(_drawDebug && Time.frameCount % 10 == 0)
-			{
-				DebugDrawUtils.DrawText(_slidingVelocity.magnitude.RoundFormat(), CurrentPosition + Vector3.up, 10f);
-			}
 			_lastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
 			_prevPos = CurrentPosition;
-			_prevIsGrounded = _isGroundedCache;
-			_isGroundedCache = false;
+
 		}
 
 		public void Walk(Vector3 vector, float deltaTime)
 		{
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
-			if(UnityCharacterController.isGrounded)
+			if(_isGroundedCache)
 			{
 				if(_hasStableGround)
 				{
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
+
+					if(projectedMovement.magnitude > 0.01f)
+					{
+						//TryStepUpStairs(projectedMovement);
+					}
 				}
 				else
 				{
@@ -122,79 +130,106 @@ namespace game.gameplay_core.characters.logic
 			_context.CharacterTransform.rotation *= rotationStep;
 		}
 
-		private void GetGroundNormal()
+		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
 		{
-			if(!UnityCharacterController.isGrounded)
+			var charController = UnityCharacterController;
+			var radius = charController.radius;
+
+			var offset = radius + charController.skinWidth;
+
+			var origin = _context.CharacterTransform.position + Vector3.up * offset;
+
+			var hitResults = new RaycastHit[5];
+			var hitCount = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, hitResults, maxDistance + offset, _groundLayer);
+
+			if(hitCount > 0)
 			{
-				_groundNormal = Vector3.up;
-			}
+				distanceToGround = maxDistance + radius;
 
-			var capsule = UnityCharacterController;
-
-			var origin = _context.CharacterTransform.position + capsule.center;
-			var radius = capsule.radius + UnityCharacterController.skinWidth;
-			var maxDistance = capsule.height / 2 + 0.0001f - radius + UnityCharacterController.skinWidth;
-
-			var count = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, _groundCastResults, maxDistance, _groundLayer);
-
-			if(_drawDebug)
-			{
-				DebugDrawUtils.DrawHandlesSphere(origin, radius, new Color(1, 0, 0, 0.3f));
-				DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * maxDistance, radius, new Color(0, 1, 0, 0.3f));
-			}
-
-			if(count == 0)
-			{
-				_groundNormal = Vector3.up;
-				return;
-			}
-
-			_hasStableGround = false;
-			var normalsSum = Vector3.zero;
-
-			for(var i = 0; i < count; i++)
-			{
-				var result = _groundCastResults[i];
-				var angle = Vector3.Angle(Vector3.up, result.normal);
-				var isSliding = angle > UnityCharacterController.slopeLimit;
-				if(!isSliding)
+				for(var i = 0; i < hitCount; i++)
 				{
-					_hasStableGround = true;
-					_groundNormal = result.normal;
+					var hitDistance = hitResults[i].distance;
+					if(hitDistance < distanceToGround)
+					{
+						distanceToGround = hitDistance;
+					}
 				}
-
-				normalsSum += result.normal;
 
 				if(_drawDebug)
 				{
-					Debug.DrawRay(result.point, result.normal * 2, isSliding ? Color.red : Color.green);
+					//DebugDrawUtils.DrawHandlesSphere(origin, radius / 2, new Color(1, 0, 1, 0.3f));
+					//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * distanceToGround, radius, Color.green, 0.3f);
+
+					//DebugDrawUtils.DrawText(distanceToGround.RoundFormat(), origin + Vector3.down * (distanceToGround / 2), 10f);
 				}
+
+				return true;
 			}
 
-			if(!_hasStableGround)
+			if(_drawDebug)
 			{
-				_groundNormal = normalsSum / count;
+				//DebugDrawUtils.DrawHandlesSphere(origin, radius / 2, new Color(1, 0, 1, 0.3f));
+				//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * maxDistance, radius, Color.red, 0.3f);
 			}
+
+			distanceToGround = 0f;
+			return false;
+		}
+
+		public void GetDebugString(StringBuilder sb)
+		{
+			sb.AppendLine($"grounded {_isGroundedCache}, stable: {_hasStableGround}, gravity disabled: {_context.UnityCharacterController.IsFakeGrounded}");
+			sb.AppendLine($"fall velocity {_fallVelocity}");
+			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
 		}
 
 		private void UpdateFalling(float deltaTime)
 		{
-			MoveAndStoreFrameData(Vector3.down * 0.0001f);
+			// if(CheckGroundBelow(UnityCharacterController.stepOffset, out var distanceToGround))
+			// {
+			// 	if(!InputAdapter.GetButton(InputAxesNames.DebugKey))
+			// 	{
+			// 		MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f));
+			// 	}
+			// 	else
+			// 	{
+			// 		_isGroundedCache = true;
+			// 	}
+			// }
+
+			if(_context.UnityCharacterController.IsFakeGrounded)
+			{
+				_isGroundedCache = true;
+			}
+			else
+			{
+				MoveAndStoreFrameData(Vector3.down * 0.0001f, true);
+			}
 
 			if(_isGroundedCache)
 			{
 				_context.IsFalling.Value = false;
-				FallVelocity = Vector3.zero;
+				_fallVelocity = Vector3.zero;
 			}
 			else
 			{
 				if(_prevIsGrounded)
 				{
-					FallVelocity = _lastUpdateVelocity;
+					_fallVelocity = _lastUpdateVelocity;
+					if(_fallVelocity.y > 0)
+					{
+						//avoid trampline effect
+						_fallVelocity.y = 0;
+					}
 				}
-				FallVelocity += Physics.gravity * deltaTime;
-				FallVelocity = Vector3.Lerp(FallVelocity, Vector3.zero, _inAirDamping * deltaTime);
-				MoveAndStoreFrameData(FallVelocity * deltaTime);
+				if(!_context.UnityCharacterController.IsFakeGrounded)
+				{
+					_fallVelocity += Physics.gravity * deltaTime;
+					_fallVelocity = Vector3.Lerp(_fallVelocity, Vector3.zero, _inAirDamping * deltaTime);
+
+					MoveAndStoreFrameData(_fallVelocity * deltaTime);
+				}
+
 				if(!_isGroundedCache)
 				{
 					_context.IsFalling.Value = true;
@@ -204,7 +239,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(_hasStableGround)
+			if(_hasStableGround || UnityCharacterController.IsOnStableSlope)
 			{
 				_slidingVelocity.y = 0;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
@@ -224,17 +259,63 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		private void MoveAndStoreFrameData(Vector3 vector)
+		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false)
 		{
-			UnityCharacterController.Move(vector);
+			UnityCharacterController.Move(vector, disableIterations);
 
 			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
-			_isGroundedCache |= UnityCharacterController.isGrounded;
+			_isGroundedCache |= UnityCharacterController.IsGrounded;
 		}
 
 		private void HandleDeath(bool isDead)
 		{
 			UnityCharacterController.enabled = !isDead;
+		}
+
+		private void TryStepUpStairs(Vector3 movementDirection)
+		{
+			if(movementDirection.x0z().magnitude < 0.0001f)
+			{
+				return;
+			}
+
+			var charController = UnityCharacterController;
+			var stepHeight = charController.stepOffset;
+			var radius = charController.radius;
+
+			var moveDir = movementDirection.normalized;
+			var forwardDistance = radius + 0.05f;
+
+			var lowerPoint = _context.CharacterTransform.position + moveDir * forwardDistance;
+			var upperPoint = lowerPoint + Vector3.up * stepHeight;
+
+			if(_drawDebug)
+			{
+				Debug.DrawLine(lowerPoint, lowerPoint + Vector3.up * 0.5f, Color.magenta, 0.5f);
+			}
+
+			if(Physics.Raycast(upperPoint, Vector3.down, out var hit, stepHeight + 0.1f, _groundLayer))
+			{
+				var distanceToStepSurface = hit.distance;
+				var actualStepHeight = stepHeight - distanceToStepSurface + 0.05f;
+
+				if(_drawDebug)
+				{
+					Debug.DrawLine(upperPoint, hit.point, Color.green, 0.5f);
+					Debug.DrawRay(hit.point, hit.normal, Color.blue, 0.5f);
+				}
+
+				if(actualStepHeight > 0.05f)
+				{
+					MoveAndStoreFrameData(Vector3.up * actualStepHeight);
+					MoveAndStoreFrameData(moveDir * (forwardDistance * 0.5f));
+				}
+			}
+		}
+
+		private void HandleFallingChanged(bool isFalling)
+		{
+			DebugDrawUtils.DrawText(isFalling ? "start fall" : "end fall", _context.CharacterTransform.position, 2f);
 		}
 	}
 }

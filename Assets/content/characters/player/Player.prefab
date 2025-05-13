@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3919925399006202490}
   - component: {fileID: 618884517016294189}
-  - component: {fileID: 313819625180903426}
   - component: {fileID: 1937557130125307911}
   - component: {fileID: 9014584770393281075}
+  - component: {fileID: 7687702615470328083}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -150,34 +150,9 @@ MonoBehaviour:
     _slidingAcceleration: 10
     _slidingDamping: 0.7
     _slidingStopDamping: 2
-    _drawDebug: 0
+    _drawDebug: 1
   <UniqueId>k__BackingField: Player
   <DebugWeapon>k__BackingField: {fileID: 4536650897598067234}
---- !u!143 &313819625180903426
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163829566012686365}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 35
-  m_StepOffset: 0.4
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.00001
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1937557130125307911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,6 +189,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7687702615470328083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163829566012686365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
+  skinWidth: 0.05
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 1015
+  maxIterations: 4
+  _drawDebug: 1
+  radius: 0.2
+  height: 2
+  center: {x: 0, y: 1, z: 0}
+  isTrigger: 1
+  slopeLimit: 30
+  stepOffset: 0.5
+  HasStableGround: 0
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0

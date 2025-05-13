@@ -18,7 +18,9 @@ namespace game.gameplay_core
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
 		private IsometricCameraController _cameraController;
-		private ReactiveProperty<CharacterDomain> _player = new();
+		private readonly ReactiveProperty<CharacterDomain> _player = new();
+
+		private float _frameDelayDebug;
 
 		public void Initialize()
 		{
@@ -34,15 +36,15 @@ namespace game.gameplay_core
 				LocationSaveData = new LocationSaveData(),
 				LocationUpdate = new ReactiveCommand<float>(),
 				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera),
-				LocationTime = new ReactiveProperty<float>(),
+				LocationTime = new ReactiveProperty<float>()
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 
-			_cameraController = new IsometricCameraController(new IsometricCameraController.Context()
+			_cameraController = new IsometricCameraController(new IsometricCameraController.Context
 			{
 				Camera = _locationContext.MainCamera,
-				Player = _player,
+				Player = _player
 			});
 
 			LoadSceneObjects();
@@ -58,9 +60,19 @@ namespace game.gameplay_core
 		private void HandleUpdate()
 		{
 			var deltaTime = Time.deltaTime;
-			_locationContext.LocationTime.Value += deltaTime;
-			_locationContext.LocationUpdate.Execute(deltaTime);
-			_cameraController.Update(deltaTime);
+			if(_frameDelayDebug > 0)
+			{
+				_frameDelayDebug -= Time.unscaledDeltaTime;
+			}
+			else
+			{
+				_locationContext.LocationTime.Value += deltaTime;
+				_locationContext.LocationUpdate.Execute(deltaTime);
+				_cameraController.Update(deltaTime);
+#if UNITY_EDITOR
+				_frameDelayDebug = EditorComfortWindow.FrameDelay;
+#endif
+			}
 		}
 
 		private void LoadCharacters()

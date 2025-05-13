@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai;
@@ -47,7 +48,10 @@ namespace game.gameplay_core.characters.view
 				alignment = TextAnchor.LowerLeft
 			};
 			_graphDrawer = new GizmoGraphDrawer();
+			
 		}
+
+	
 
 #if UNITY_EDITOR
 
@@ -58,20 +62,23 @@ namespace game.gameplay_core.characters.view
 				return;
 			}
 
-			var str = "";
+			var sb = new StringBuilder();
 
-			str += $"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.HpMax.Value.CeilFormat()}\n";
+			sb.AppendLine($"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.HpMax.Value.CeilFormat()}");
 
 			if(DrawStateMachineInfo)
 			{
-				str += _stateMachine.GetDebugString();
+				sb.Append(_stateMachine.GetDebugString());
 			}
 			if(DrawBrainInfo)
 			{
-				str += _brain.GetDebugSting();
+				sb.Append(_brain.GetDebugSting());
 			}
 
-			Handles.Label(_transform.position + Vector3.up * 3f, str, _textStyle);
+			_context.MovementLogic.GetDebugString(sb);
+			
+
+			Handles.Label(_transform.position + Vector3.up * 3f, sb.ToString(), _textStyle);
 
 			_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
 
