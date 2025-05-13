@@ -7,6 +7,7 @@ using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.input;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -53,7 +54,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
 
-		private CapsuleCharacterController UnityCharacterController => _context.UnityCharacterController;
+		private CapsuleCharacterController CharacterController => _context.UnityCharacterController;
 
 		private Vector3 CurrentPosition => _context.CharacterTransform.position;
 
@@ -132,7 +133,7 @@ namespace game.gameplay_core.characters.logic
 
 		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
 		{
-			var charController = UnityCharacterController;
+			var charController = CharacterController;
 			var radius = charController.radius;
 
 			var offset = radius + charController.skinWidth;
@@ -185,17 +186,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateFalling(float deltaTime)
 		{
-			// if(CheckGroundBelow(UnityCharacterController.stepOffset, out var distanceToGround))
-			// {
-			// 	if(!InputAdapter.GetButton(InputAxesNames.DebugKey))
-			// 	{
-			// 		MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f));
-			// 	}
-			// 	else
-			// 	{
-			// 		_isGroundedCache = true;
-			// 	}
-			// }
+			
 
 			if(_context.UnityCharacterController.IsFakeGrounded)
 			{
@@ -205,6 +196,8 @@ namespace game.gameplay_core.characters.logic
 			{
 				MoveAndStoreFrameData(Vector3.down * 0.0001f, true);
 			}
+			
+			
 
 			if(_isGroundedCache)
 			{
@@ -222,7 +215,8 @@ namespace game.gameplay_core.characters.logic
 						_fallVelocity.y = 0;
 					}
 				}
-				if(!_context.UnityCharacterController.IsFakeGrounded)
+				
+				if(_context.IsFalling.Value)
 				{
 					_fallVelocity += Physics.gravity * deltaTime;
 					_fallVelocity = Vector3.Lerp(_fallVelocity, Vector3.zero, _inAirDamping * deltaTime);
@@ -230,16 +224,23 @@ namespace game.gameplay_core.characters.logic
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
 
-				if(!_isGroundedCache)
+				if(!CharacterController.IsGrounded)
 				{
-					_context.IsFalling.Value = true;
+					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterController.stepOffset, out var distanceToGround))
+					{
+						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
+					}
+					else
+					{
+						_context.IsFalling.Value = true;
+					}
 				}
 			}
 		}
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(_hasStableGround || UnityCharacterController.IsOnStableSlope)
+			if(_hasStableGround || CharacterController.IsOnStableSlope)
 			{
 				_slidingVelocity.y = 0;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
@@ -261,56 +262,15 @@ namespace game.gameplay_core.characters.logic
 
 		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false)
 		{
-			UnityCharacterController.Move(vector, disableIterations);
+			CharacterController.Move(vector, disableIterations);
 
 			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
-			_isGroundedCache |= UnityCharacterController.IsGrounded;
+			_isGroundedCache |= CharacterController.IsGrounded;
 		}
 
 		private void HandleDeath(bool isDead)
 		{
-			UnityCharacterController.enabled = !isDead;
-		}
-
-		private void TryStepUpStairs(Vector3 movementDirection)
-		{
-			if(movementDirection.x0z().magnitude < 0.0001f)
-			{
-				return;
-			}
-
-			var charController = UnityCharacterController;
-			var stepHeight = charController.stepOffset;
-			var radius = charController.radius;
-
-			var moveDir = movementDirection.normalized;
-			var forwardDistance = radius + 0.05f;
-
-			var lowerPoint = _context.CharacterTransform.position + moveDir * forwardDistance;
-			var upperPoint = lowerPoint + Vector3.up * stepHeight;
-
-			if(_drawDebug)
-			{
-				Debug.DrawLine(lowerPoint, lowerPoint + Vector3.up * 0.5f, Color.magenta, 0.5f);
-			}
-
-			if(Physics.Raycast(upperPoint, Vector3.down, out var hit, stepHeight + 0.1f, _groundLayer))
-			{
-				var distanceToStepSurface = hit.distance;
-				var actualStepHeight = stepHeight - distanceToStepSurface + 0.05f;
-
-				if(_drawDebug)
-				{
-					Debug.DrawLine(upperPoint, hit.point, Color.green, 0.5f);
-					Debug.DrawRay(hit.point, hit.normal, Color.blue, 0.5f);
-				}
-
-				if(actualStepHeight > 0.05f)
-				{
-					MoveAndStoreFrameData(Vector3.up * actualStepHeight);
-					MoveAndStoreFrameData(moveDir * (forwardDistance * 0.5f));
-				}
-			}
+			CharacterController.enabled = !isDead;
 		}
 
 		private void HandleFallingChanged(bool isFalling)

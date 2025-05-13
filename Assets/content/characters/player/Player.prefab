@@ -98,7 +98,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
     <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
-    <DeathAnimation>k__BackingField: {fileID: 0}
+    <DeathAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <FallAnimation>k__BackingField: {fileID: 0}
     <Locomotion>k__BackingField:
       <HalfTurnDurationSeconds>k__BackingField: 0.22
@@ -213,6 +213,7 @@ MonoBehaviour:
   isTrigger: 1
   slopeLimit: 30
   stepOffset: 0.5
+  minStepOffset: 0.01
   HasStableGround: 0
 --- !u!1 &1333606136359217733
 GameObject:

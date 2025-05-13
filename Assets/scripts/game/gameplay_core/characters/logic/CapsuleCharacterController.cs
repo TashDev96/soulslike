@@ -237,6 +237,11 @@ public class CapsuleCharacterController : MonoBehaviour
 		DebugDrawUtils.DrawWireCapsule(transform.position + center, height, radius, Color.white);
 	}
 
+	public void DrawCollider(float duration, Color color)
+	{
+		DebugDrawUtils.DrawWireCapsulePersistent(transform.position + center, height, radius, color, duration);
+	}
+
 	private void OnDrawGizmos()
 	{
 		if(!_drawDebug)
