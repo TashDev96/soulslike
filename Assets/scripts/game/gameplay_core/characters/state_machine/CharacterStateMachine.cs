@@ -62,7 +62,7 @@ namespace game.gameplay_core.characters.state_machine
 			if(calculateInputLogic)
 			{
 				TryRememberNextCommand();
-				TryExecuteNextCommand();
+				CalculateChangeState();
 			}
 		}
 
@@ -128,8 +128,17 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		private void TryExecuteNextCommand()
+		private void CalculateChangeState()
 		{
+
+			if(_context.IsFalling.Value && _currentState.Value is not FallState)
+			{
+				if(_currentState.Value.IsComplete || _currentState.Value.CheckIsReadyToChangeState(CharacterCommand.Walk))
+				{
+					SetState(_fallState);
+				}
+			}
+			
 			if(_currentState.Value.TryContinueWithCommand(NextCommand))
 			{
 				NextCommand = CharacterCommand.None;

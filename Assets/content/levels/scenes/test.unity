@@ -51447,10 +51447,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: _config.<DeathAnimation>k__BackingField
-      value: 
-      objectReference: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_Name
       value: Player
