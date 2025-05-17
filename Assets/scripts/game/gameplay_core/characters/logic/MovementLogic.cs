@@ -44,7 +44,6 @@ namespace game.gameplay_core.characters.logic
 
 		private LayerMask _groundLayer;
 		private Vector3 _groundNormal;
-		private bool _hasStableGround;
 
 		private Vector3 _prevPos;
 		private bool _isGroundedCache;
@@ -98,7 +97,7 @@ namespace game.gameplay_core.characters.logic
 
 			if(_isGroundedCache)
 			{
-				if(_hasStableGround)
+				if(CharacterCollider.HasStableGround)
 				{
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
 
@@ -134,9 +133,9 @@ namespace game.gameplay_core.characters.logic
 		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
 		{
 			var charController = CharacterCollider;
-			var radius = charController.radius;
+			var radius = charController._radius;
 
-			var offset = radius + charController.skinWidth;
+			var offset = radius + charController._skinWidth;
 
 			var origin = _context.CharacterTransform.position + Vector3.up * offset;
 
@@ -179,7 +178,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.AppendLine($"grounded {_isGroundedCache}, stable: {_hasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
+			sb.AppendLine($"grounded {_isGroundedCache}, stable: {CharacterCollider.HasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
 			sb.AppendLine($"fall velocity {_fallVelocity}");
 			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
 		}
@@ -226,7 +225,7 @@ namespace game.gameplay_core.characters.logic
 
 				if(!CharacterCollider.IsGrounded)
 				{
-					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider.stepOffset, out var distanceToGround))
+					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider._stepOffset, out var distanceToGround))
 					{
 						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
 					}
@@ -240,7 +239,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(_hasStableGround || CharacterCollider.IsOnStableSlope)
+			if(CharacterCollider.HasStableGround || CharacterCollider.IsOnStableSlope)
 			{
 				_slidingVelocity.y = 0;
 				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);

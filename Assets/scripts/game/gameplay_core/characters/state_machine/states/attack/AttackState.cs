@@ -115,6 +115,21 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 
+		public void SetEnterParams(CharacterCommand enterCommand)
+		{
+			switch(enterCommand)
+			{
+				case CharacterCommand.Attack:
+					_attackType = AttackType.Regular;
+					break;
+				case CharacterCommand.StrongAttack:
+					_attackType = AttackType.Strong;
+					break;
+				case CharacterCommand.AttackByIndex:
+					break;
+			}
+		}
+
 		private void LaunchAttack()
 		{
 			_currentAttackConfig = GetCurrentAttackConfig();

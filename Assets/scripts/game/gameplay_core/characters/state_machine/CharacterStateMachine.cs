@@ -183,7 +183,9 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.Attack:
 					case CharacterCommand.StrongAttack:
+						_attackState.SetEnterParams(NextCommand);
 						SetState(_attackState);
+						
 						break;
 					case CharacterCommand.Block:
 						break;

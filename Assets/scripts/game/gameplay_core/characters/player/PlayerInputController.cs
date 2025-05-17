@@ -61,6 +61,10 @@ namespace game.gameplay_core.characters.player
 			{
 				return CharacterCommand.Roll;
 			}
+			if(InputAdapter.GetButtonDown(InputAxesNames.StrongAttack))
+			{
+				return CharacterCommand.StrongAttack;
+			}	
 			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
 			{
 				return CharacterCommand.Attack;

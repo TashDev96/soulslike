@@ -201,20 +201,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
-  skinWidth: 0.05
-  collisionMask:
+  _skinWidth: 0.05
+  _collisionMask:
     serializedVersion: 2
     m_Bits: 1015
-  maxIterations: 4
+  _maxIterations: 4
   _drawDebug: 1
-  radius: 0.2
-  height: 2
-  center: {x: 0, y: 1, z: 0}
-  isTrigger: 1
-  slopeLimit: 30
-  stepOffset: 0.5
-  minStepOffset: 0.01
-  HasStableGround: 0
+  _radius: 0.2
+  _height: 2
+  _center: {x: 0, y: 1, z: 0}
+  _isTrigger: 1
+  _slopeLimit: 30
+  _stepOffset: 0.55
+  _minStepOffset: 0.01
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0

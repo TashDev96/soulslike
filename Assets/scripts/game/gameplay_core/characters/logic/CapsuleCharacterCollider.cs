@@ -1,3 +1,4 @@
+using System;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
 using UnityEngine;
@@ -5,21 +6,23 @@ using UnityEngine;
 public class CapsuleCharacterCollider : MonoBehaviour
 {
 	[SerializeField]
-	public float skinWidth = 0.05f;
+	public float _skinWidth = 0.05f;
 	[SerializeField]
-	private LayerMask collisionMask = ~0;
+	private LayerMask _collisionMask = ~0;
 	[SerializeField]
-	private int maxIterations = 4;
+	private int _maxIterations = 4;
 	[SerializeField]
 	private bool _drawDebug;
 
-	public float radius = 0.5f;
-	public float height = 2f;
-	public Vector3 center = Vector3.zero;
-	public bool isTrigger = true;
-	public float slopeLimit = 10f;
-	public float stepOffset = 0.2f;
-	public float minStepOffset = 0.01f;
+	public float _radius = 0.2f;
+	public float _height = 2f;
+	public Vector3 _center = Vector3.zero;
+	public bool _isTrigger = true;
+	public float _slopeLimit = 30f;
+	public float _stepOffset = 0.55f;
+	public float _minStepOffset = 0.01f;
+	
+	[NonSerialized]
 	public bool HasStableGround;
 
 	private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
@@ -58,18 +61,18 @@ public class CapsuleCharacterCollider : MonoBehaviour
 		{
 			var verticalAngle = Vector3.Angle(motion.normalized, motion.SetY(0).normalized);
 
-			if(verticalAngle < slopeLimit)
+			if(verticalAngle < _slopeLimit)
 			{
-				var stepMotion = motion + motion.normalized * skinWidth;
-				CalculateMovement(moveStartPosition + Vector3.up * stepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
-				var stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude+skinWidth;
+				var stepMotion = motion + motion.normalized * _skinWidth;
+				CalculateMovement(moveStartPosition + Vector3.up * _stepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
+				var stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude+_skinWidth;
 
-				DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + center, height, radius, stepUpSuccess ? Color.green : Color.red, 3f);
+				DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + _center, _height, _radius, stepUpSuccess ? Color.green : Color.red, 3f);
 
 				if(stepUpSuccess)
 				{
-					CalculateMovement(resultPositionUp, Vector3.down * stepOffset, true, out var resultPositionStepGravity, out var groundingFlags);
-					stepUpSuccess &= resultPositionStepGravity.y > normalResultPosition.y + minStepOffset;
+					CalculateMovement(resultPositionUp, Vector3.down * _stepOffset, true, out var resultPositionStepGravity, out var groundingFlags);
+					stepUpSuccess &= resultPositionStepGravity.y > normalResultPosition.y + _minStepOffset;
 
 					if(stepUpSuccess)
 					{
@@ -96,7 +99,7 @@ public class CapsuleCharacterCollider : MonoBehaviour
 		resultPosition = moveStartPosition;
 		var remainingMovement = motion;
 
-		var iterations = singleIteration ? 1 : maxIterations;
+		var iterations = singleIteration ? 1 : _maxIterations;
 
 		for(var i = 0; i < iterations && remainingMovement.sqrMagnitude > 0f; i++)
 		{
@@ -104,7 +107,7 @@ public class CapsuleCharacterCollider : MonoBehaviour
 
 			if(hitObstacle)
 			{
-				var distance = Mathf.Max(hit.distance - skinWidth, 0f);
+				var distance = Mathf.Max(hit.distance - _skinWidth, 0f);
 				resultPosition += remainingMovement.normalized * distance;
 				remainingMovement -= remainingMovement.normalized * distance;
 
@@ -114,7 +117,7 @@ public class CapsuleCharacterCollider : MonoBehaviour
 				if(IsGrounded)
 				{
 					var slopeAngle = Vector3.Angle(hit.normal, transform.up);
-					IsOnStableSlope = slopeAngle <= slopeLimit;
+					IsOnStableSlope = slopeAngle <= _slopeLimit;
 					GroundNormal = hit.normal;
 
 					if(IsOnStableSlope && Vector3.Dot(remainingMovement, -transform.up) > 0)
@@ -140,7 +143,7 @@ public class CapsuleCharacterCollider : MonoBehaviour
 		{
 			var flags = CollisionFlags.None;
 			var upDot = Vector3.Dot(hit.normal, transform.up);
-			var slopeThreshold = Mathf.Cos(slopeLimit * Mathf.Deg2Rad);
+			var slopeThreshold = Mathf.Cos(_slopeLimit * Mathf.Deg2Rad);
 			
 			if(upDot > slopeThreshold)
 			{
@@ -171,11 +174,11 @@ public class CapsuleCharacterCollider : MonoBehaviour
 			GroundNormal = Vector3.up;
 		}
 
-		var origin = transform.position + center;
-		var radius = this.radius + skinWidth;
-		var maxDistance = height / 2 + 0.0001f - radius + skinWidth;
+		var origin = transform.position + _center;
+		var radius = this._radius + _skinWidth;
+		var maxDistance = _height / 2 + 0.0001f - radius + _skinWidth;
 
-		var count = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, _groundCastResults, maxDistance, collisionMask);
+		var count = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, _groundCastResults, maxDistance, _collisionMask);
 
 		if(count == 0)
 		{
@@ -190,7 +193,7 @@ public class CapsuleCharacterCollider : MonoBehaviour
 		{
 			var result = _groundCastResults[i];
 			var angle = Vector3.Angle(Vector3.up, result.normal);
-			var isSliding = angle > slopeLimit;
+			var isSliding = angle > _slopeLimit;
 			if(!isSliding)
 			{
 				HasStableGround = true;
@@ -215,31 +218,31 @@ public class CapsuleCharacterCollider : MonoBehaviour
 	{
 		GetCapsule(resultPosition, out var p1, out var p2);
 
-		var castDistance = remainingMovement.magnitude + skinWidth;
+		var castDistance = remainingMovement.magnitude + _skinWidth;
 
-		var hitObstacle = Physics.CapsuleCast(p1, p2, radius, remainingMovement.normalized,
+		var hitObstacle = Physics.CapsuleCast(p1, p2, _radius, remainingMovement.normalized,
 			out hit, castDistance,
-			collisionMask, QueryTriggerInteraction.Ignore);
+			_collisionMask, QueryTriggerInteraction.Ignore);
 		return hitObstacle;
 	}
 
 	private void GetCapsule(Vector3 pos, out Vector3 p1, out Vector3 p2)
 	{
-		var localHeight = Mathf.Max(height, radius * 2f);
-		var half = localHeight * 0.5f - radius;
+		var localHeight = Mathf.Max(_height, _radius * 2f);
+		var half = localHeight * 0.5f - _radius;
 		var up = transform.up;
-		p1 = pos + up * half + transform.rotation * center;
-		p2 = pos - up * half + transform.rotation * center;
+		p1 = pos + up * half + transform.rotation * _center;
+		p2 = pos - up * half + transform.rotation * _center;
 	}
 
 	private void OnDrawGizmosSelected()
 	{
-		DebugDrawUtils.DrawWireCapsule(transform.position + center, height, radius, Color.white);
+		DebugDrawUtils.DrawWireCapsule(transform.position + _center, _height, _radius, Color.white);
 	}
 
 	public void DrawCollider(float duration, Color color)
 	{
-		DebugDrawUtils.DrawWireCapsulePersistent(transform.position + center, height, radius, color, duration);
+		DebugDrawUtils.DrawWireCapsulePersistent(transform.position + _center, _height, _radius, color, duration);
 	}
 
 	private void OnDrawGizmos()

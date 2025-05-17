@@ -2,6 +2,7 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+        StrongAttack,
         DebugKey2,
         DebugKey,
         Block,
