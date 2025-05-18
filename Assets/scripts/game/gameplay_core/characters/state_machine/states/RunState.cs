@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class WalkState : CharacterStateBase
+	public class RunState : CharacterStateBase
 	{
 
 		private float _acceleration;
 		private float _time;
 		
-		public WalkState(CharacterContext context) : base(context)
+		public RunState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
 		}
@@ -26,7 +26,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			switch(nextCommand)
 			{
-				case CharacterCommand.Walk:
+				case CharacterCommand.Run:
 					IsComplete = false;
 					return true;
 				default:
@@ -51,11 +51,21 @@ namespace game.gameplay_core.characters.state_machine.states
 			}
 
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
-			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * acceleration);
+			var velocity = inputWorld * (directionMultiplier * _context.RunSpeed.Value * acceleration);
 
 			_context.MovementLogic.Walk(velocity * deltaTime, deltaTime);
 
+			//TODO wait for slow down
 			IsComplete = true;
+		}
+
+		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
+		{
+			if(nextCommand == CharacterCommand.Attack)
+			{
+				return true;
+			}
+			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 	}
 }

@@ -103,7 +103,7 @@ MonoBehaviour:
     <Locomotion>k__BackingField:
       <HalfTurnDurationSeconds>k__BackingField: 0.22
       <WalkSpeed>k__BackingField: 5
-      <RunSpeed>k__BackingField: 15
+      <RunSpeed>k__BackingField: 10
       <WalkAccelerationCurve>k__BackingField:
         serializedVersion: 2
         m_Curve:

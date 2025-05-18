@@ -2,15 +2,15 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+        Attack,
         StrongAttack,
+        SpecialAttack,
+        Block,
         DebugKey2,
         DebugKey,
-        Block,
         Interact,
         UseItem,
-        Attack,
-        Run,
-        Roll,
+        RollDash,
         LockOn,
         Horizontal,
         Vertical,

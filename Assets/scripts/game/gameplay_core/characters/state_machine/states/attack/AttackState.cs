@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
@@ -11,7 +12,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 	{
 		private const int FramesToUnlockWalkAfterStateUnlocked = 5;
 		private int _currentAttackIndex;
-		private int _lastAttackType = 0;
 		private AttackType _attackType;
 		private AttackConfig _currentAttackConfig;
 		private readonly List<HitData> _hitsData = new();
@@ -21,7 +21,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
-		public bool IsRollAttackTriggered { get; set; }
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -115,19 +114,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 
-		public void SetEnterParams(CharacterCommand enterCommand)
+		public void SetEnterParams(AttackType attackType)
 		{
-			switch(enterCommand)
-			{
-				case CharacterCommand.Attack:
-					_attackType = AttackType.Regular;
-					break;
-				case CharacterCommand.StrongAttack:
-					_attackType = AttackType.Strong;
-					break;
-				case CharacterCommand.AttackByIndex:
-					break;
-			}
+			_attackType = attackType;
 		}
 
 		private void LaunchAttack()
@@ -146,7 +135,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
 
-			if(IsRollAttackTriggered)
+			if(_attackType == AttackType.RollAttack)
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
 			}
@@ -166,7 +155,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
 
 			IsComplete = false;
-			IsRollAttackTriggered = false;
 
 			void SetAttackInitialTime(float time)
 			{
@@ -178,30 +166,38 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private AttackConfig GetCurrentAttackConfig()
 		{
-			if(IsRollAttackTriggered)
-			{
-				_currentAttackIndex = 0;
-				return _context.CurrentWeapon.Value.Config.RollAttack;
-			}
-
 			var weaponConfig = _context.CurrentWeapon.Value.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{
 				return _context.InputData.ForcedAttackConfig;
 			}
 
-			var attacksList = weaponConfig.GetAttacksSequence(_attackType);
-
-			if(_comboCounter > 0)
+			switch(_attackType)
 			{
-				_currentAttackIndex = _comboCounter % attacksList.Length;
-			}
-			else
-			{
-				_currentAttackIndex = 0;
-			}
+				case AttackType.Regular:
+				case AttackType.Strong:
+				case AttackType.Special:
+					var attacksList = weaponConfig.GetAttacksSequence(_attackType);
 
-			return attacksList[_currentAttackIndex];
+					if(_comboCounter > 0)
+					{
+						_currentAttackIndex = _comboCounter % attacksList.Length;
+					}
+					else
+					{
+						_currentAttackIndex = 0;
+					}
+
+					return attacksList[_currentAttackIndex];
+				case AttackType.RunAttack:
+					_currentAttackIndex = 0;
+					return _context.CurrentWeapon.Value.Config.RunAttack;
+				case AttackType.RollAttack:
+					_currentAttackIndex = 0;
+					return _context.CurrentWeapon.Value.Config.RollAttack;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 		}
 	}
 }

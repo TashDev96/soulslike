@@ -14,6 +14,7 @@ namespace game.gameplay_core.characters.player
 		private readonly ReactiveProperty<Camera> _mainCamera;
 		private CharacterContext _characterContext;
 		private Vector2 _directionInputScreenSpace;
+		private float _rollDashHoldDuration;
 
 		public PlayerInputController(ReactiveProperty<Camera> locationContextMainCamera)
 		{
@@ -39,12 +40,22 @@ namespace game.gameplay_core.characters.player
 				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlaneWithSkew(_directionInputScreenSpace);
 			}
 
+			if(InputAdapter.GetButton(InputAxesNames.RollDash))
+			{
+				_rollDashHoldDuration += deltaTime;
+			} 
+
 			_inputData.Command = CalculateCommand(_directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
 
 			if(InputAdapter.GetButtonDown(InputAxesNames.LockOn))
 			{
 				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
+			}
+			
+			if(!InputAdapter.GetButton(InputAxesNames.RollDash))
+			{
+				_rollDashHoldDuration = 0;
 			}
 		}
 
@@ -56,8 +67,9 @@ namespace game.gameplay_core.characters.player
 		private CharacterCommand CalculateCommand(Vector3 directionInputLocalSpace)
 		{
 			var hasDirectionInput = directionInputLocalSpace.sqrMagnitude > 0;
+			var hasRunInput = _rollDashHoldDuration > .33f;
 
-			if(InputAdapter.GetButtonDown(InputAxesNames.Roll) && hasDirectionInput)
+			if(InputAdapter.GetButtonUp(InputAxesNames.RollDash) && !hasRunInput && hasDirectionInput)
 			{
 				return CharacterCommand.Roll;
 			}
@@ -68,6 +80,10 @@ namespace game.gameplay_core.characters.player
 			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
 			{
 				return CharacterCommand.Attack;
+			}	
+			if(InputAdapter.GetButtonDown(InputAxesNames.SpecialAttack))
+			{
+				return CharacterCommand.SpecialAttack;
 			}
 			if(InputAdapter.GetButtonDown(InputAxesNames.UseItem))
 			{
@@ -80,7 +96,7 @@ namespace game.gameplay_core.characters.player
 
 			if(hasDirectionInput)
 			{
-				return InputAdapter.GetButton(InputAxesNames.Run) ? CharacterCommand.Run : CharacterCommand.Walk;
+				return  hasRunInput ? CharacterCommand.Run : CharacterCommand.Walk;
 			}
 
 			return CharacterCommand.None;

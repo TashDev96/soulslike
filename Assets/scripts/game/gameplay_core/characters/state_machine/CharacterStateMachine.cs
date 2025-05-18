@@ -16,9 +16,11 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly AttackState _attackState;
 		private readonly StaggerState _staggerState;
 		private readonly FallState _fallState;
+		private RunState _runState;
 
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
+		
 
 		private CharacterCommand NextCommand
 		{
@@ -44,6 +46,7 @@ namespace game.gameplay_core.characters.state_machine
 			_staggerState = new StaggerState(_context);
 			_rollState = new RollState(_context);
 			_fallState = new FallState(_context);
+			_runState = new RunState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
@@ -130,7 +133,6 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void CalculateChangeState()
 		{
-
 			if(_context.IsFalling.Value && _currentState.Value is not FallState)
 			{
 				if(_currentState.Value.IsComplete || _currentState.Value.CheckIsReadyToChangeState(CharacterCommand.Walk))
@@ -138,7 +140,7 @@ namespace game.gameplay_core.characters.state_machine
 					SetState(_fallState);
 				}
 			}
-			
+
 			if(_currentState.Value.TryContinueWithCommand(NextCommand))
 			{
 				NextCommand = CharacterCommand.None;
@@ -150,7 +152,7 @@ namespace game.gameplay_core.characters.state_machine
 			{
 				if(rollState.CheckIsReadyToChangeState(NextCommand))
 				{
-					_attackState.IsRollAttackTriggered = true;
+					_attackState.SetEnterParams(AttackType.RollAttack);
 					SetState(_attackState);
 					NextCommand = CharacterCommand.None;
 					return;
@@ -176,16 +178,19 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_walkState);
 						break;
 					case CharacterCommand.Run:
-						SetState(_walkState);
+						SetState(_runState);
 						break;
 					case CharacterCommand.Roll:
 						SetState(_rollState);
 						break;
 					case CharacterCommand.Attack:
-					case CharacterCommand.StrongAttack:
-						_attackState.SetEnterParams(NextCommand);
+
+						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttack : AttackType.Regular);
 						SetState(_attackState);
-						
+						break;
+					case CharacterCommand.StrongAttack:
+						_attackState.SetEnterParams(AttackType.Strong);
+						SetState(_attackState);
 						break;
 					case CharacterCommand.Block:
 						break;

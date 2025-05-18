@@ -421,6 +421,35 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+    <RunAttack>k__BackingField:
+      <Animation>k__BackingField:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
+        _Speed: 1
+        _NormalizedStartTime: NaN
+      <BaseDamage>k__BackingField: 0
+      <RotationDisabledTime>k__BackingField: {x: 0, y: 1}
+      <LockedStateTime>k__BackingField: {x: 0, y: 0.73913044}
+      <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
+      <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0.2826087
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      <Range>k__BackingField: 1
+      <HitConfigs>k__BackingField:
+      - <InvolvedColliders>k__BackingField: 010000
+        <Timing>k__BackingField: {x: 0.2826087, y: 0.34057972}
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
     <RegularToRegularCustomOrder>k__BackingField:
       _list: []
       _keyCollision: 0

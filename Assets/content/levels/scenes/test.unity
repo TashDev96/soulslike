@@ -54542,15 +54542,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[0].name
-      value: StrongAttack
+      value: Attack
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[1].name
-      value: DebugKey2
+      value: StrongAttack
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[2].name
-      value: DebugKey
+      value: SpecialAttack
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[3].name
@@ -54558,23 +54558,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[4].name
-      value: Interact
+      value: DebugKey2
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[5].name
-      value: UseItem
+      value: DebugKey
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[6].name
-      value: Attack
+      value: Interact
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[7].name
-      value: Run
+      value: UseItem
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[8].name
-      value: Roll
+      value: RollDash
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[9].name
@@ -54601,7 +54601,15 @@ PrefabInstance:
       value: Pause
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].name
+      value: Pause
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].scale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].scale
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
@@ -54621,8 +54629,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[10].axisType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[11].axisType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].axisType
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[13].axisType
@@ -54633,24 +54649,52 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].axisType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].deltaMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.enabled
+      propertyPath: axes.list.Array.data[15].deltaMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceUpBinding.enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[11].smoothingTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].smoothingTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[13].smoothingTime
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[14].smoothingTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[0].keyboardPositive
+      value: 323
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[1].keyboardPositive
       value: 324
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[2].keyboardPositive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[3].keyboardPositive
@@ -54658,15 +54702,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[4].keyboardPositive
-      value: 101
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[5].keyboardPositive
-      value: 114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[6].keyboardPositive
-      value: 323
+      value: 101
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[7].keyboardPositive
+      value: 114
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[8].keyboardPositive
@@ -54697,6 +54745,14 @@ PrefabInstance:
       value: 119
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].keyboardNegative
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].keyboardPositive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[13].keyboardPositive
       value: 0
       objectReference: {fileID: 0}
@@ -54706,6 +54762,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].keyboardPositive
+      value: 27
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].affectSourceKeys
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].keyboardPositive
       value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
@@ -54729,28 +54793,64 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].digitalToScrollDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[1].analogToDigitalThresh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[2].analogToDigitalThresh
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[3].analogToDigitalThresh
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[4].analogToDigitalThresh
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[5].analogToDigitalThresh
       value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[6].analogToDigitalThresh
-      value: 0
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[8].analogToDigitalThresh
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[9].analogToDigitalThresh
       value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[10].analogToDigitalThresh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[11].analogToDigitalThresh
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].analogToDigitalThresh
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].analogToDigitalThresh
       value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].analogToDigitalThresh
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[9].digitalToAnalogAccelTime
@@ -54761,12 +54861,28 @@ PrefabInstance:
       value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[10].digitalToAnalogAccelTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[10].digitalToAnalogDecelTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[11].digitalToAnalogAccelTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[11].digitalToAnalogDecelTime
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].digitalToAnalogAccelTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[12].digitalToAnalogDecelTime
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].digitalToAnalogAccelTime
@@ -54777,7 +54893,23 @@ PrefabInstance:
       value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].digitalToAnalogAccelTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].digitalToAnalogDecelTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].digitalToScrollAutoRepeat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].digitalToScrollAutoRepeat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
@@ -54789,11 +54921,27 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].scrollToAnalogStepDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].scrollToDeltaSmoothingTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].scrollToAnalogSmoothingTime
       value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].scrollToAnalogSmoothingTime
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[14].digitalToScrollRepeatInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: axes.list.Array.data[15].digitalToScrollRepeatInterval
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
@@ -54817,6 +54965,18 @@ PrefabInstance:
       value: Roll
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[1].axisName
+      value: Run
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[0].axisName
+      value: RollDash
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[1].axisName
+      value: Run
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: anyGamepad.digiR1Binding.axisList.Array.data[0].axisPositiveSide
       value: 1
       objectReference: {fileID: 0}
@@ -54830,6 +54990,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[0].axisPositiveSide
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[1].axisPositiveSide
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[0].axisPositiveSide
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[1].axisPositiveSide
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5865372750619838363, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}

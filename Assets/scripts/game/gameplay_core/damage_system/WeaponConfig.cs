@@ -17,6 +17,8 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public AttackConfig RollAttack { get; private set; }
+		[field: SerializeField]
+		public AttackConfig RunAttack { get; private set; }
 	
 		
 		[field: SerializeField]

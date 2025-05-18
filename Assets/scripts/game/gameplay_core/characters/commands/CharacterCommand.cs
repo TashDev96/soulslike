@@ -8,6 +8,7 @@ namespace game.gameplay_core.characters.commands
 		Roll,
 		Attack,
 		StrongAttack,
+		SpecialAttack,
 		AttackByIndex,
 		Block,
 		UseItem,

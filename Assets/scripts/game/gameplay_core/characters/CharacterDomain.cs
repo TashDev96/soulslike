@@ -139,7 +139,7 @@ namespace game.gameplay_core.characters
 
 					MinimumFallDamageHeight = 3.0f,
 					LethalFallHeight = 15.0f,
-					StaggerThreshold = 8.0f
+					StaggerThreshold = 5.0f
 				});
 			}
 
