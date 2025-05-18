@@ -8,7 +8,7 @@ namespace game.gameplay_core.damage_system
 	public class HitConfig
 	{
 		[field: SerializeField]
-		public List<bool> InvolvedColliders { get; private set; } = new() { true, false, false };
+		public List<bool> InvolvedColliders { get; set; } = new() { true, false, false };
 
 		[field: SerializeField]
 		public Vector2 Timing { get; set; }

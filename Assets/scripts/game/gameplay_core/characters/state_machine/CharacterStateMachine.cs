@@ -184,12 +184,15 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_rollState);
 						break;
 					case CharacterCommand.Attack:
-
 						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttack : AttackType.Regular);
 						SetState(_attackState);
 						break;
 					case CharacterCommand.StrongAttack:
 						_attackState.SetEnterParams(AttackType.Strong);
+						SetState(_attackState);
+						break;
+					case CharacterCommand.SpecialAttack:
+						_attackState.SetEnterParams(AttackType.Special);
 						SetState(_attackState);
 						break;
 					case CharacterCommand.Block:

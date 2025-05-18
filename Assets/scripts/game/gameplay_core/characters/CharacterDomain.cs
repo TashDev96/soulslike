@@ -95,11 +95,13 @@ namespace game.gameplay_core.characters
 				CharacterStats = _config.DefaultStats,
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
+				
+				WeaponView = new ReactiveProperty<WeaponView>(DebugWeapon),
+				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 
 				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
 				RunSpeed = new ReactiveProperty<float>(_config.Locomotion.RunSpeed),
 				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
-				CurrentWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
 				CharacterId = new ReactiveProperty<string>(UniqueId),
@@ -148,7 +150,9 @@ namespace game.gameplay_core.characters
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
-			_context.CurrentWeapon.Value.Initialize(_context);
+			
+			_context.WeaponView.Value.Initialize(_context);
+			_context.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
 			foreach(var damageReceiver in damageReceivers)
@@ -232,7 +236,7 @@ namespace game.gameplay_core.characters
 				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
 				personalDeltaTime -= deltaTimeStep;
 				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
-				_context.CurrentWeapon.Value?.CustomUpdate(deltaTimeStep);
+				_context.WeaponView.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);

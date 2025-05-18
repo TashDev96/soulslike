@@ -37,6 +37,7 @@ Transform:
   - {fileID: 6747424450283158477}
   - {fileID: 8792662738043832350}
   - {fileID: 5318633997349167403}
+  - {fileID: 8372784585337061101}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &618884517016294189
@@ -61,6 +62,7 @@ MonoBehaviour:
       <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}
       <LeftAnimation>k__BackingField: {fileID: 7400000, guid: 10652e60d73513c45bf96e754ad3dd61, type: 2}
       <RollInvulnerabilityTiming>k__BackingField: {x: 0.33928573, y: 0.6428572}
+      <BodyAttackTiming>k__BackingField: {x: 0.08928572, y: 0.53571427}
       <ExitToRollAttackTiming>k__BackingField: {x: 0.67857146, y: 0.67857146}
       <RotationDisabledTime>k__BackingField: {x: 0.33928573, y: 1}
       <ForwardMovement>k__BackingField:
@@ -201,19 +203,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
-  _skinWidth: 0.05
-  _collisionMask:
-    serializedVersion: 2
-    m_Bits: 1015
-  _maxIterations: 4
   _drawDebug: 1
-  _radius: 0.2
-  _height: 2
-  _center: {x: 0, y: 1, z: 0}
-  _isTrigger: 1
-  _slopeLimit: 30
-  _stepOffset: 0.55
-  _minStepOffset: 0.01
+  _useRotationConstraints: 0
+  _fixXRotation: 1
+  _fixYRotation: 0
+  _fixZRotation: 1
+  _fixedRotation: {x: 0, y: 0, z: 0}
+  Radius: 0.2
+  Height: 2
+  Center: {x: 0, y: 1, z: 0}
+  CapsuleDirection: 1
+  _maxIterations: 4
+  CollisionMask:
+    serializedVersion: 2
+    m_Bits: 577
+  SkinWidth: 0.05
+  SlopeLimit: 30
+  StepOffset: 0.55
+  MinStepOffset: 0.01
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +310,108 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2788963343709239770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8372784585337061101}
+  - component: {fileID: 4105636029184598003}
+  m_Layer: 8
+  m_Name: BodyAttackView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8372784585337061101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788963343709239770}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2002501397304002300}
+  m_Father: {fileID: 3919925399006202490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4105636029184598003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2788963343709239770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5f28b10f024e27a74731ef6a8a1f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.damage_system.BodyAttackView
+  _rollColliders:
+  - {fileID: 4861262938078068880}
+  _fallColliders: []
+--- !u!1 &3767315977462634513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2002501397304002300}
+  - component: {fileID: 4861262938078068880}
+  m_Layer: 8
+  m_Name: RollCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2002501397304002300
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3767315977462634513}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8372784585337061101}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4861262938078068880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3767315977462634513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae8e199b7cd42f68dcb5a02eb55bfc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
+  _drawDebug: 0
+  _useRotationConstraints: 0
+  _fixXRotation: 0
+  _fixYRotation: 0
+  _fixZRotation: 0
+  _fixedRotation: {x: 0, y: 0, z: 0}
+  Radius: 1.21
+  Height: 1
+  Center: {x: 0, y: 1.22, z: 0}
+  CapsuleDirection: 1
 --- !u!1 &4528037216428223404
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +437,7 @@ Transform:
   m_GameObject: {fileID: 4528037216428223404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.403, z: 0.035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -610,6 +719,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8792662738043832350}
     m_Modifications:
+    - target: {fileID: 1841813809505577228, guid: 5561504db27593842943b63d78e2b20a, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2281710899546052467, guid: 5561504db27593842943b63d78e2b20a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.018289281

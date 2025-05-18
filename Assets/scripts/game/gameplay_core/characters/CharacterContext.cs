@@ -28,11 +28,13 @@ namespace game.gameplay_core.characters
 		public LockOnTargetView[] LockOnTargets;
 		public CharacterStats CharacterStats;
 		public CharacterInputData InputData;
+		
+		public BodyAttackView BodyAttackView { get; set; }
+		public ReactiveProperty<WeaponView> WeaponView;
 
 		public ReactiveProperty<float> WalkSpeed;
 		public ReactiveProperty<float> RunSpeed;
 		public ReactiveProperty<RotationSpeedData> RotationSpeed;
-		public ReactiveProperty<WeaponView> CurrentWeapon;
 		public ReactiveProperty<float> DeltaTimeMultiplier;
 		public ReactiveProperty<float> MaxDeltaTime;
 		public ReactiveProperty<Team> Team;
@@ -48,6 +50,7 @@ namespace game.gameplay_core.characters
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
+
 		
 	}
 }

@@ -7,7 +7,6 @@ using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.input;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -42,7 +41,6 @@ namespace game.gameplay_core.characters.logic
 
 		private Vector3 _slidingVelocity;
 
-		private LayerMask _groundLayer;
 		private Vector3 _groundNormal;
 
 		private Vector3 _prevPos;
@@ -61,7 +59,6 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
-			_groundLayer = LayerMask.GetMask("Default");
 			_prevPos = CurrentPosition;
 		}
 
@@ -76,7 +73,7 @@ namespace game.gameplay_core.characters.logic
 			}
 
 			_debugFlags = _context.CharacterCollider.Flags;
-			
+
 			_context.CharacterCollider.CustomUpdate(deltaTime);
 
 			UpdateFalling(deltaTime);
@@ -88,7 +85,6 @@ namespace game.gameplay_core.characters.logic
 
 			_lastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
 			_prevPos = CurrentPosition;
-
 		}
 
 		public void Walk(Vector3 vector, float deltaTime)
@@ -133,19 +129,19 @@ namespace game.gameplay_core.characters.logic
 		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
 		{
 			var charController = CharacterCollider;
-			var radius = charController._radius;
+			var radius = charController.Radius;
 
-			var offset = radius + charController._skinWidth;
+			var offset = radius + charController.SkinWidth;
 
 			var origin = _context.CharacterTransform.position + Vector3.up * offset;
 
-			var hitResults = new RaycastHit[5];
-			var hitCount = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, hitResults, maxDistance + offset, _groundLayer);
+			var hitResults = new RaycastHit[10];
+			var hitCount = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, hitResults, maxDistance + offset, CharacterCollider.CollisionMask);
 
 			if(hitCount > 0)
 			{
 				distanceToGround = maxDistance + radius;
-
+				
 				for(var i = 0; i < hitCount; i++)
 				{
 					var hitDistance = hitResults[i].distance;
@@ -178,15 +174,13 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.AppendLine($"grounded {_isGroundedCache}, stable: {CharacterCollider.HasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
-			sb.AppendLine($"fall velocity {_fallVelocity}");
+			sb.AppendLine($"grounded {_isGroundedCache}/{CharacterCollider.IsGrounded}, stable: {CharacterCollider.HasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
+			sb.AppendLine($"falling: {_context.IsFalling.Value}  fall velocity {_fallVelocity}");
 			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
 		}
 
 		private void UpdateFalling(float deltaTime)
 		{
-			
-
 			if(_context.CharacterCollider.IsFakeGrounded)
 			{
 				_isGroundedCache = true;
@@ -195,7 +189,7 @@ namespace game.gameplay_core.characters.logic
 			{
 				MoveAndStoreFrameData(Vector3.down * 0.0001f, true);
 			}
-			
+			_debugFlags = _context.CharacterCollider.Flags;
 			
 
 			if(_isGroundedCache)
@@ -214,7 +208,7 @@ namespace game.gameplay_core.characters.logic
 						_fallVelocity.y = 0;
 					}
 				}
-				
+
 				if(_context.IsFalling.Value)
 				{
 					_fallVelocity += Physics.gravity * deltaTime;
@@ -222,11 +216,14 @@ namespace game.gameplay_core.characters.logic
 
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
+				
+				
 
 				if(!CharacterCollider.IsGrounded)
 				{
-					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider._stepOffset, out var distanceToGround))
+					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider.StepOffset, out var distanceToGround))
 					{
+						
 						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
 					}
 					else

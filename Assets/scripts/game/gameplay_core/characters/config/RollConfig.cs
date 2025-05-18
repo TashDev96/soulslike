@@ -24,6 +24,9 @@ namespace game.gameplay_core.characters.config
 		public Vector2 RollInvulnerabilityTiming { get; private set; }
 		[field: SerializeField]
 		[field: ReadOnly]
+		public Vector2 BodyAttackTiming { get; private set; }
+		[field: SerializeField]
+		[field: ReadOnly]
 		public Vector2 ExitToRollAttackTiming { get; private set; }
 
 		[field: SerializeField]
@@ -48,6 +51,7 @@ namespace game.gameplay_core.characters.config
 
 			_animationPreview.ClearTimeChanges();
 			RollInvulnerabilityTiming = CharacterInspectorUtils.DrawTimingSliderMinMax("Roll Invulnerability Timing:", RollInvulnerabilityTiming, ForwardAnimation, _animationPreview);
+			BodyAttackTiming = CharacterInspectorUtils.DrawTimingSliderMinMax("Roll Body Attack Timing:", BodyAttackTiming, ForwardAnimation, _animationPreview);
 			ExitToRollAttackTiming = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Attack Animation Timing:", ExitToRollAttackTiming, ForwardAnimation, _animationPreview);
 
 			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, ForwardAnimation, _animationPreview);

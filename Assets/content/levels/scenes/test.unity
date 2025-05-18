@@ -4529,13 +4529,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165159742}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000032782552, y: 0.06365024, z: -0.06365006, w: 0.99594045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.055, y: 0.133, z: -0.093}
   m_LocalScale: {x: 3.709537, y: 3.709537, z: 3.709537}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 323371008}
-  m_LocalEulerAnglesHint: {x: 0.464, y: 7.284, z: -7.284}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &165159744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11818,7 +11818,7 @@ Transform:
   m_GameObject: {fileID: 323371007}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -5.88, y: 13.25, z: -8.46}
+  m_LocalPosition: {x: -5.52, y: 13.46, z: -7.27}
   m_LocalScale: {x: 3.709537, y: 3.709537, z: 3.709537}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12237,7 +12237,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 12.448276
+  orthographic size: 10.724138
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -18411,8 +18411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 875381543}
   - {fileID: 636421841}
+  - {fileID: 875381543}
   <Characters>k__BackingField: []
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}
@@ -51451,10 +51451,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.4932747
@@ -54945,8 +54941,12 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
+      propertyPath: anyGamepad.digiL1Binding.axisList.Array.data[0].axisName
+      value: Block
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: anyGamepad.digiL2Binding.axisList.Array.data[0].axisName
-      value: StrongAttack
+      value: SpecialAttack
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: anyGamepad.digiR1Binding.axisList.Array.data[0].axisName

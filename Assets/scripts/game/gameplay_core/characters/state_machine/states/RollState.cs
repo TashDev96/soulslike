@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
+using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -13,6 +16,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		private Vector3 _characterDirectionTarget;
 		private RollConfig _config;
 		private Vector3 _rollDirectionWorld;
+
+		
 
 		public RollState(CharacterContext context) : base(context)
 		{
@@ -28,6 +33,8 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 
 			_config = _context.Config.Roll;
+
+			_context.BodyAttackView.PrepareRollBodyAttack();
 
 			var animation = _config.ForwardAnimation;
 
@@ -68,6 +75,10 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 
+		
+		
+		
+
 		public bool CanSwitchToAttack => _context.Config.Roll.ExitToRollAttackTiming.Contains(NormalizedTime);
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
@@ -92,13 +103,20 @@ namespace game.gameplay_core.characters.state_machine.states
 				IsComplete = true;
 			}
 
-			if(_context.Config.Roll.RollInvulnerabilityTiming.Contains(NormalizedTime))
+			
+
+			if(_config.RollInvulnerabilityTiming.Contains(NormalizedTime))
 			{
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, true);
 			}
 			else
 			{
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
+			}
+			
+			if(_config.BodyAttackTiming.Contains(NormalizedTime))
+			{
+				_context.BodyAttackView.CastRollAttack();
 			}
 		}
 	}

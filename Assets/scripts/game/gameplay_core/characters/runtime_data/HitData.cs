@@ -11,7 +11,7 @@ namespace game.gameplay_core.characters.runtime_data
 		public HitConfig Config;
 
 		public HashSet<string> ImpactedCharacters = new();
-		public HashSet<Collider> ImpactedColliders = new();
+		public HashSet<Collider> ImpactedTargets = new();
 
 		public bool IsActive => IsStarted && !IsEnded;
 	}
