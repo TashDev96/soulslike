@@ -34,7 +34,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations
 		[NonSerialized]
 		[ShowInInspector]
 		[ShowIf("@UtilityAiEditorHelper.DebugEnabled")]
-		[GUIColor(0,1,0,1)]
+		[GUIColor(0, 1, 0)]
 		public float LastWeight;
 
 		public float Evaluate(UtilityBrainContext context)

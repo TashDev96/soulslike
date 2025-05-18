@@ -43,7 +43,7 @@ namespace game.gameplay_core.characters.player
 			if(InputAdapter.GetButton(InputAxesNames.RollDash))
 			{
 				_rollDashHoldDuration += deltaTime;
-			} 
+			}
 
 			_inputData.Command = CalculateCommand(_directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
@@ -52,7 +52,7 @@ namespace game.gameplay_core.characters.player
 			{
 				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
 			}
-			
+
 			if(!InputAdapter.GetButton(InputAxesNames.RollDash))
 			{
 				_rollDashHoldDuration = 0;
@@ -76,11 +76,11 @@ namespace game.gameplay_core.characters.player
 			if(InputAdapter.GetButtonDown(InputAxesNames.StrongAttack))
 			{
 				return CharacterCommand.StrongAttack;
-			}	
+			}
 			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
 			{
 				return CharacterCommand.Attack;
-			}	
+			}
 			if(InputAdapter.GetButtonDown(InputAxesNames.SpecialAttack))
 			{
 				return CharacterCommand.SpecialAttack;
@@ -96,7 +96,7 @@ namespace game.gameplay_core.characters.player
 
 			if(hasDirectionInput)
 			{
-				return  hasRunInput ? CharacterCommand.Run : CharacterCommand.Walk;
+				return hasRunInput ? CharacterCommand.Run : CharacterCommand.Walk;
 			}
 
 			return CharacterCommand.None;

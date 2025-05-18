@@ -40,12 +40,10 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float Range { get; set; } = 1f;
 
-		
 		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
-		
-		
+
 #if UNITY_EDITOR
 
 		private PreviewAnimationDrawer _animationPreview;

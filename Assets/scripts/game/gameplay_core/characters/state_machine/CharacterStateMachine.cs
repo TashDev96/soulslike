@@ -16,11 +16,10 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly AttackState _attackState;
 		private readonly StaggerState _staggerState;
 		private readonly FallState _fallState;
-		private RunState _runState;
+		private readonly RunState _runState;
 
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
-		
 
 		private CharacterCommand NextCommand
 		{

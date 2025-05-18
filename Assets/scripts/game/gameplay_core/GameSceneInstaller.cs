@@ -18,10 +18,9 @@ namespace game.gameplay_core
 		public Camera MainCamera { get; private set; }
 		[field: SerializeField]
 		public Transform TestPlayerSpawnPos { get; private set; }
-		
-		[field:SerializeField]
+
+		[field: SerializeField]
 		public bool OnlySpawnPlayer { get; private set; }
-		
 
 #if UNITY_EDITOR
 

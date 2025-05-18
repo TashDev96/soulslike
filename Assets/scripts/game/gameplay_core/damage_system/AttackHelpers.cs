@@ -8,15 +8,15 @@ namespace game.gameplay_core.damage_system
 {
 	public class AttackHelpers
 	{
-		private	static readonly int LayerMask = UnityEngine.LayerMask.GetMask("DamageReceivers");
+		private static readonly int LayerMask = UnityEngine.LayerMask.GetMask("DamageReceivers");
 		private static readonly Collider[] Results = new Collider[40];
 
-		public static void CastAttack(float baseDamage, HitData hitData, FakeCapsuleCollider hitCollider, CharacterContext casterContext, bool drawDebug = false)
+		public static void CastAttack(float baseDamage, HitData hitData, CapsuleCaster hitCaster, CharacterContext casterContext, bool drawDebug = false)
 		{
-			var radius = hitCollider.Radius;
-			
-			hitCollider.GetCapsulePoints(out var point0, out var point1);
-			 
+			var radius = hitCaster.Radius;
+
+			hitCaster.GetCapsulePoints(out var point0, out var point1);
+
 			if(drawDebug)
 			{
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.red, Time.deltaTime);
@@ -29,15 +29,15 @@ namespace game.gameplay_core.damage_system
 				{
 					continue;
 				}
-				
+
 				hitData.ImpactedTargets.Add(Results[j]);
 				var damageReceiver = Results[j].GetComponent<DamageReceiver>();
-				
+
 				if(!damageReceiver)
 				{
 					continue;
 				}
-				
+
 				if(damageReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
 				{
 					continue;
@@ -56,7 +56,7 @@ namespace game.gameplay_core.damage_system
 					PoiseDamageAmount = hitData.Config.PoiseDamage,
 					WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
 					DoneByPlayer = casterContext.IsPlayer.Value,
-					DamageDealer = casterContext.SelfLink,
+					DamageDealer = casterContext.SelfLink
 				});
 			}
 		}

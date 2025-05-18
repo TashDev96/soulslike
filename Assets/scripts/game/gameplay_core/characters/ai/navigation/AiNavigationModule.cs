@@ -10,7 +10,7 @@ namespace game.gameplay_core.characters.ai.navigation
 		private readonly ReadOnlyTransform _characterTransform;
 
 		private readonly NavMeshPath _navMeshPath;
- 
+
 		private float _currentLength;
 
 		public PathWrapper Path { get; }
@@ -31,7 +31,7 @@ namespace game.gameplay_core.characters.ai.navigation
 				Path.SetPath(_navMeshPath);
 			}
 
-			_currentLength = 0; 
+			_currentLength = 0;
 		}
 
 		public bool CheckTargetPositionChangedSignificantly(Vector3 newTargetPosition, float mean = 0.1f)
@@ -49,6 +49,16 @@ namespace game.gameplay_core.characters.ai.navigation
 			}
 
 			return (targetPos - currentPosition).normalized;
+		}
+
+		public void DrawDebug(Color color, float duration = 0)
+		{
+			for(var i = 1; i < Path.Positions.Count; i++)
+			{
+				var prevPos = Path.Positions[i - 1];
+				var pos = Path.Positions[i];
+				Debug.DrawLine(prevPos, pos, color, duration);
+			}
 		}
 
 		private void SampleByLength(float length, out Vector3 position, out Vector3 direction)
@@ -69,16 +79,6 @@ namespace game.gameplay_core.characters.ai.navigation
 
 			position = Path.Positions[^1];
 			direction = Path.Directions[^1];
-		}
-
-		public void DrawDebug(Color color, float duration =0)
-		{
-			for(var i = 1; i < Path.Positions.Count; i++)
-			{
-				var prevPos = Path.Positions[i - 1];
-				var pos = Path.Positions[i];
-				Debug.DrawLine(prevPos, pos, color, duration);
-			}
 		}
 	}
 }

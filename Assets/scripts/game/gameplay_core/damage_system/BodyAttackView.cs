@@ -8,10 +8,10 @@ namespace game.gameplay_core.damage_system
 	public class BodyAttackView : MonoBehaviour
 	{
 		[SerializeField]
-		private FakeCapsuleCollider[] _rollColliders;
+		private CapsuleCaster[] _rollColliders;
 
 		[SerializeField]
-		private FakeCapsuleCollider[] _fallColliders;
+		private CapsuleCaster[] _fallColliders;
 
 		private CharacterContext _context;
 
@@ -28,7 +28,7 @@ namespace game.gameplay_core.damage_system
 		{
 			foreach(var rollCollider in _rollColliders)
 			{
-				AttackHelpers.CastAttack(_rollDamage, _rollHitData, rollCollider, _context, true);	
+				AttackHelpers.CastAttack(_rollDamage, _rollHitData, rollCollider, _context, true);
 			}
 		}
 

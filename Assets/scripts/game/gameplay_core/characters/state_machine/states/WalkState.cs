@@ -5,10 +5,9 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class WalkState : CharacterStateBase
 	{
-
 		private float _acceleration;
 		private float _time;
-		
+
 		public WalkState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;

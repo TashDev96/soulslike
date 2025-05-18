@@ -20,11 +20,11 @@ namespace game.gameplay_core.location.view
 
 		private void HandleTrigger(bool isTriggered)
 		{
-			if(_normalState!=null)
+			if(_normalState != null)
 			{
 				_normalState?.SetActive(!isTriggered);
 			}
-			if(_swappedState!=null)
+			if(_swappedState != null)
 			{
 				_swappedState.SetActive(isTriggered);
 			}

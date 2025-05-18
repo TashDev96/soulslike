@@ -10,7 +10,7 @@ namespace game.gameplay_core.damage_system
 	public class WeaponView : MonoBehaviour
 	{
 		[SerializeField]
-		private FakeCapsuleCollider[] _hitColliders;
+		private CapsuleCaster[] _hitColliders;
 		public WeaponConfig Config;
 
 		private readonly List<TransformCache> _previousCollidersPositions = new();
@@ -30,7 +30,7 @@ namespace game.gameplay_core.damage_system
 				{
 					continue;
 				}
-				
+
 				var colliderTransform = _hitColliders[i].transform;
 
 				var prevRotation = Quaternion.Euler(_previousCollidersPositions[i].EulerAngles);
@@ -55,7 +55,7 @@ namespace game.gameplay_core.damage_system
 					colliderTransform.position = castPos;
 					colliderTransform.rotation = castRotation;
 
-					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData,  _hitColliders[i], _context, true);
+					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData, _hitColliders[i], _context, true);
 				}
 
 				colliderTransform.position = currentPosition;

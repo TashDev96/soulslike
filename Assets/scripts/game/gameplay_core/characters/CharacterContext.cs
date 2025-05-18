@@ -28,8 +28,6 @@ namespace game.gameplay_core.characters
 		public LockOnTargetView[] LockOnTargets;
 		public CharacterStats CharacterStats;
 		public CharacterInputData InputData;
-		
-		public BodyAttackView BodyAttackView { get; set; }
 		public ReactiveProperty<WeaponView> WeaponView;
 
 		public ReactiveProperty<float> WalkSpeed;
@@ -43,7 +41,7 @@ namespace game.gameplay_core.characters
 		public ApplyDamageCommand ApplyDamage;
 		public IsDead IsDead;
 		public ReactiveCommand TriggerStagger;
-		
+
 		// Add IsFalling reactive property
 		public ReactiveProperty<bool> IsFalling;
 
@@ -51,6 +49,6 @@ namespace game.gameplay_core.characters
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 
-		
+		public BodyAttackView BodyAttackView { get; set; }
 	}
 }

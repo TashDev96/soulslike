@@ -6,10 +6,10 @@ namespace game.gameplay_core.characters.ai.navigation
 {
 	public class PathWrapper
 	{
+		private const float CatmullRomTension = 0.1f;
 		private readonly List<Vector3> _positions = new();
 		private readonly List<Vector3> _directions = new();
 		private readonly List<float> _distances = new();
-		private const float CatmullRomTension = 0.1f;
 		public bool IsEmpty => _positions.Count == 0;
 
 		public float Length { get; private set; }

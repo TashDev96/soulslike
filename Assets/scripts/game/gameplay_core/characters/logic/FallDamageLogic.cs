@@ -6,146 +6,135 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
-public class FallDamageLogic
-    {
-        public struct Context
-        {
-            public ApplyDamageCommand ApplyDamage { get; set; }
-            public IsDead IsDead { get; set; }
-            public Transform CharacterTransform { get; set; }
-            public CharacterStats CharacterStats { get; set; }
-            public ReactiveProperty<bool> IsFalling { get; set; }
-            public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
-            public ReactiveCommand TriggerStagger { get; set; }
-            
+	public class FallDamageLogic
+	{
+		public struct Context
+		{
+			public ApplyDamageCommand ApplyDamage { get; set; }
+			public IsDead IsDead { get; set; }
+			public Transform CharacterTransform { get; set; }
+			public CharacterStats CharacterStats { get; set; }
+			public ReactiveProperty<bool> IsFalling { get; set; }
+			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
+			public ReactiveCommand TriggerStagger { get; set; }
 
-            public float MinimumFallDamageHeight { get; set; }
-            public float LethalFallHeight { get; set; }
-            public float StaggerThreshold { get; set; }
-        }
+			public float MinimumFallDamageHeight { get; set; }
+			public float LethalFallHeight { get; set; }
+			public float StaggerThreshold { get; set; }
+		}
 
-        private Context _context;
-        private float _fallStartY;
-        
+		private const float PROTECTION_COOLDOWN = 0.5f;
+		private const float PROTECTION_DURATION = 1.5f;
 
-        public ReactiveProperty<bool> FallDamageProtectionActive { get; } = new ReactiveProperty<bool>(false);
-        
+		[SerializeField]
+		private readonly float _minFallDamagePercent = 0.1f;
 
-        private float _lastProtectionActivationTime;
-        private const float PROTECTION_COOLDOWN = 0.5f; 
-        private const float PROTECTION_DURATION = 1.5f; 
-        
-        [SerializeField]
-        private float _minFallDamagePercent = 0.1f; 
-        
-        [SerializeField]
-        private float _maxFallDamagePercent = 1.0f; 
+		[SerializeField]
+		private readonly float _maxFallDamagePercent = 1.0f;
 
-        public void SetContext(Context context)
-        {
-            _context = context;
-            
+		private Context _context;
+		private float _fallStartY;
 
-            _context.IsFalling.OnChangedFromTo += HandleFallingChanged;
-            _lastProtectionActivationTime = -PROTECTION_COOLDOWN; 
-        }
+		private float _lastProtectionActivationTime;
 
-        public void CustomUpdate(float deltaTime)
-        {
+		public ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
 
-            if (FallDamageProtectionActive.Value)
-            {
-                float timeSinceActivation = Time.realtimeSinceStartup - _lastProtectionActivationTime;
-                if (timeSinceActivation > PROTECTION_DURATION)
-                {
-                    FallDamageProtectionActive.Value = false;
-                    Debug.Log("Fall damage protection expired");
-                }
-            }
-        }
+		public void SetContext(Context context)
+		{
+			_context = context;
 
-        private void HandleFallingChanged(bool wasFalling, bool isFalling)
-        {
-            if (isFalling && !wasFalling)
-            {
+			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
+			_lastProtectionActivationTime = -PROTECTION_COOLDOWN;
+		}
 
-                HandleStartFalling();
-            }
-            else if (!isFalling && wasFalling)
-            {
+		public void CustomUpdate(float deltaTime)
+		{
+			if(FallDamageProtectionActive.Value)
+			{
+				var timeSinceActivation = Time.realtimeSinceStartup - _lastProtectionActivationTime;
+				if(timeSinceActivation > PROTECTION_DURATION)
+				{
+					FallDamageProtectionActive.Value = false;
+					Debug.Log("Fall damage protection expired");
+				}
+			}
+		}
 
-                HandleLanded();
-            }
-        }
+		public bool TryActivateFallDamageProtection()
+		{
+			var currentTime = Time.realtimeSinceStartup;
+			var timeSinceLastActivation = currentTime - _lastProtectionActivationTime;
 
-        private void HandleStartFalling()
-        {
-            if (!_context.IsDead.Value)
-            {
-                _fallStartY = _context.CharacterTransform.position.y;
-            }
-        }
+			if(timeSinceLastActivation > PROTECTION_COOLDOWN)
+			{
+				FallDamageProtectionActive.Value = true;
+				_lastProtectionActivationTime = currentTime;
+				Debug.Log("Fall damage protection activated");
+				return true;
+			}
 
-        private void HandleLanded()
-        {
-            if (!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
-            {
-                float fallDistance = _fallStartY - _context.CharacterTransform.position.y;
-                
-                if (fallDistance > _context.MinimumFallDamageHeight)
-                {
+			return false;
+		}
 
-                    float damagePercentage = Mathf.Lerp(
-                        _minFallDamagePercent, 
-                        _maxFallDamagePercent, 
-                        Mathf.InverseLerp(_context.MinimumFallDamageHeight, _context.LethalFallHeight, fallDistance)
-                    );
-                    
-                    float damage = damagePercentage * _context.CharacterStats.HpMax.Value;
-                    
+		private void HandleFallingChanged(bool wasFalling, bool isFalling)
+		{
+			if(isFalling && !wasFalling)
+			{
+				HandleStartFalling();
+			}
+			else if(!isFalling && wasFalling)
+			{
+				HandleLanded();
+			}
+		}
 
-                    var damageInfo = new DamageInfo
-                    {
-                        DamageAmount = damage,
-                        PoiseDamageAmount = fallDistance > _context.StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
-                        WorldPos = _context.CharacterTransform.position,
-                        DoneByPlayer = false, 
-                        DamageDealer = null   
-                    };
-                    
-                    _context.ApplyDamage.Execute(damageInfo);
-                    
+		private void HandleStartFalling()
+		{
+			if(!_context.IsDead.Value)
+			{
+				_fallStartY = _context.CharacterTransform.position.y;
+			}
+		}
 
-                    if (fallDistance > _context.StaggerThreshold)
-                    {
-                        _context.TriggerStagger.Execute();
-                    }
-                    
-                    Debug.Log($"Fall damage applied: {damage} from height {fallDistance}m");
-                }
-            }
-            else if (FallDamageProtectionActive.Value)
-            {
-                Debug.Log("Fall damage prevented by perfectly timed roll!");
-            }
-        }
+		private void HandleLanded()
+		{
+			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
+			{
+				var fallDistance = _fallStartY - _context.CharacterTransform.position.y;
 
-        public bool TryActivateFallDamageProtection()
-        {
-            float currentTime = Time.realtimeSinceStartup;
-            float timeSinceLastActivation = currentTime - _lastProtectionActivationTime;
-            
+				if(fallDistance > _context.MinimumFallDamageHeight)
+				{
+					var damagePercentage = Mathf.Lerp(
+						_minFallDamagePercent,
+						_maxFallDamagePercent,
+						Mathf.InverseLerp(_context.MinimumFallDamageHeight, _context.LethalFallHeight, fallDistance)
+					);
 
-            if (timeSinceLastActivation > PROTECTION_COOLDOWN)
-            {
-                FallDamageProtectionActive.Value = true;
-                _lastProtectionActivationTime = currentTime;
-                Debug.Log("Fall damage protection activated");
-                return true;
-            }
-            
-            return false;
-        }
- 
-    }
+					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
+
+					var damageInfo = new DamageInfo
+					{
+						DamageAmount = damage,
+						PoiseDamageAmount = fallDistance > _context.StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
+						WorldPos = _context.CharacterTransform.position,
+						DoneByPlayer = false,
+						DamageDealer = null
+					};
+
+					_context.ApplyDamage.Execute(damageInfo);
+
+					if(fallDistance > _context.StaggerThreshold)
+					{
+						_context.TriggerStagger.Execute();
+					}
+
+					Debug.Log($"Fall damage applied: {damage} from height {fallDistance}m");
+				}
+			}
+			else if(FallDamageProtectionActive.Value)
+			{
+				Debug.Log("Fall damage prevented by perfectly timed roll!");
+			}
+		}
+	}
 }

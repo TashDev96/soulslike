@@ -4,11 +4,11 @@ using dream_lib.src.utils.drawers;
 using game.gameplay_core.utils;
 using UnityEngine;
 
-public class CapsuleCharacterCollider : FakeCapsuleCollider
+public class CapsuleCharacterCollider : CapsuleCaster
 {
 	[SerializeField]
 	private int _maxIterations = 4;
-	
+
 	public LayerMask CollisionMask = ~0;
 
 	public float SkinWidth = 0.05f;

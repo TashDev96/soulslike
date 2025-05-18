@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.utils
 {
-	public class FakeCapsuleCollider : MonoBehaviour
+	public class CapsuleCaster : MonoBehaviour
 	{
 		public enum Direction
 		{
@@ -39,8 +39,6 @@ namespace game.gameplay_core.utils
 		public Vector3 Center = Vector3.zero;
 		public Direction CapsuleDirection = Direction.YAxis;
 
-		
-		
 		private Transform _transform;
 
 		private void Awake()
@@ -178,7 +176,7 @@ namespace game.gameplay_core.utils
 			{
 				return;
 			}
-			
+
 			if(!_transform)
 			{
 				_transform = transform;

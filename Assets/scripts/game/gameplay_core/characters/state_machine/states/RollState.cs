@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
-using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -17,15 +14,15 @@ namespace game.gameplay_core.characters.state_machine.states
 		private RollConfig _config;
 		private Vector3 _rollDirectionWorld;
 
-		
+		public override float Time { get; protected set; }
+		protected override float Duration { get; set; }
+
+		public bool CanSwitchToAttack => _context.Config.Roll.ExitToRollAttackTiming.Contains(NormalizedTime);
 
 		public RollState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
 		}
-
-		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public override void OnEnter()
 		{
@@ -75,12 +72,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 
-		
-		
-		
-
-		public bool CanSwitchToAttack => _context.Config.Roll.ExitToRollAttackTiming.Contains(NormalizedTime);
-
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
 			return base.CheckIsReadyToChangeState(nextCommand);
@@ -103,8 +94,6 @@ namespace game.gameplay_core.characters.state_machine.states
 				IsComplete = true;
 			}
 
-			
-
 			if(_config.RollInvulnerabilityTiming.Contains(NormalizedTime))
 			{
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, true);
@@ -113,7 +102,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
 			}
-			
+
 			if(_config.BodyAttackTiming.Contains(NormalizedTime))
 			{
 				_context.BodyAttackView.CastRollAttack();

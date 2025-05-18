@@ -11,7 +11,7 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
-		public AttackConfig[] StrongAttacks { get; private set; } 
+		public AttackConfig[] StrongAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] SpecialAttacks { get; private set; }
 
@@ -19,15 +19,13 @@ namespace game.gameplay_core.damage_system
 		public AttackConfig RollAttack { get; private set; }
 		[field: SerializeField]
 		public AttackConfig RunAttack { get; private set; }
-	
-		
+
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToRegularCustomOrder { get; private set; }
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToStrongCustomOrder { get; private set; }
 		[field: SerializeField]
 		public SerializableDictionary<int, int> StrongToRegularCustomOrder { get; private set; }
-
 
 		public AttackConfig[] GetAttacksSequence(AttackType attackType)
 		{

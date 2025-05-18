@@ -14,8 +14,8 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public float RunSpeed { get; private set; } = 15f;
-		
+
 		[field: SerializeField]
-		public AnimationCurve WalkAccelerationCurve { get; private set; } = new (new Keyframe(0, 0), new Keyframe(0.33f, 1));
+		public AnimationCurve WalkAccelerationCurve { get; private set; } = new(new Keyframe(0, 0), new Keyframe(0.33f, 1));
 	}
 }

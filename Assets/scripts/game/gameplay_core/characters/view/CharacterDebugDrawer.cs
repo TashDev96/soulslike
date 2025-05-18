@@ -48,10 +48,7 @@ namespace game.gameplay_core.characters.view
 				alignment = TextAnchor.LowerLeft
 			};
 			_graphDrawer = new GizmoGraphDrawer();
-			
 		}
-
-	
 
 #if UNITY_EDITOR
 
@@ -76,7 +73,6 @@ namespace game.gameplay_core.characters.view
 			}
 
 			_context.MovementLogic.GetDebugString(sb);
-			
 
 			Handles.Label(_transform.position + Vector3.up * 3f, sb.ToString(), _textStyle);
 

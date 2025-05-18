@@ -4,141 +4,129 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-public class FallState : CharacterAnimationStateBase
-    {
-        private const float LANDING_WINDOW_DURATION = 1.0f; 
-        
-        private float _fallDuration;
-        private bool _hasPlayedFallAnimation;
-        private float _initialFallY;
-        private float _lastRollInputTime = -10f;
-        public bool HasValidRollInput = false; 
-        
-        public override float Time { get; protected set; }
-        protected override float Duration { get; set; } = float.MaxValue; 
-        
+	public class FallState : CharacterAnimationStateBase
+	{
+		private const float LANDING_WINDOW_DURATION = 1.0f;
+		public bool HasValidRollInput;
 
-        public bool ShouldRollOnLanding => HasValidRollInput;
-        
-        public FallState(CharacterContext context) : base(context)
-        {
-            IsReadyToRememberNextCommand = true;
-        }
+		private float _fallDuration;
+		private bool _hasPlayedFallAnimation;
+		private float _initialFallY;
+		private float _lastRollInputTime = -10f;
 
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            IsComplete = false;
-            _hasPlayedFallAnimation = false;
-            _fallDuration = 0f;
-            _initialFallY = _context.Transform.Position.y;
-            HasValidRollInput = false;
-            _lastRollInputTime = -10f;
-            
-            PlayFallingAnimation();
-            
+		public override float Time { get; protected set; }
+		protected override float Duration { get; set; } = float.MaxValue;
 
-            _context.IsFalling.OnChangedFromTo += HandleFallingChanged;
-        }
-        
-        public override void OnExit()
-        {
-            base.OnExit();
-            
+		public bool ShouldRollOnLanding => HasValidRollInput;
 
-            _context.IsFalling.OnChangedFromTo -= HandleFallingChanged;
-        }
+		public FallState(CharacterContext context) : base(context)
+		{
+			IsReadyToRememberNextCommand = true;
+		}
 
-        private void HandleFallingChanged(bool wasFalling, bool isFalling)
-        {
-            if (!isFalling && wasFalling)
-            {
-                CheckRollOnLanding();
-                IsComplete = true;
-            }
-        }
-        
-        private void CheckRollOnLanding()
-        {
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			IsComplete = false;
+			_hasPlayedFallAnimation = false;
+			_fallDuration = 0f;
+			_initialFallY = _context.Transform.Position.y;
+			HasValidRollInput = false;
+			_lastRollInputTime = -10f;
 
-            float currentTime = UnityEngine.Time.realtimeSinceStartup;
-            float timeSinceRollInput = currentTime - _lastRollInputTime;
-            
+			PlayFallingAnimation();
 
-            if (timeSinceRollInput <= LANDING_WINDOW_DURATION)
-            {
-                HasValidRollInput = true;
-                
+			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
+		}
 
-                if (_context.FallDamageLogic != null)
-                {
-                    bool success = _context.FallDamageLogic.TryActivateFallDamageProtection();
-                    if (success)
-                    {
-                        Debug.Log("Perfectly timed roll will prevent fall damage!");
-                    }
-                }
-            }
-        }
+		public override void OnExit()
+		{
+			base.OnExit();
 
-        public override void Update(float deltaTime)
-        {
-            Time += deltaTime;
-            _fallDuration += deltaTime;
-            
-            float currentHeight = _context.Transform.Position.y;
-            float fallDistance = _initialFallY - currentHeight;
-            
+			_context.IsFalling.OnChangedFromTo -= HandleFallingChanged;
+		}
 
-            if (!_hasPlayedFallAnimation && _fallDuration > 0.5f && fallDistance > 1.0f)
-            {
-                PlayFallingAnimation();
-                _hasPlayedFallAnimation = true;
-            }
-            
+		public override void Update(float deltaTime)
+		{
+			Time += deltaTime;
+			_fallDuration += deltaTime;
 
-            if (_context.InputData.Command == CharacterCommand.Roll)
-            {
-                float currentTime = UnityEngine.Time.realtimeSinceStartup;
-                
+			var currentHeight = _context.Transform.Position.y;
+			var fallDistance = _initialFallY - currentHeight;
 
-                _lastRollInputTime = currentTime;
+			if(!_hasPlayedFallAnimation && _fallDuration > 0.5f && fallDistance > 1.0f)
+			{
+				PlayFallingAnimation();
+				_hasPlayedFallAnimation = true;
+			}
 
-                if (_context.FallDamageLogic != null && _context.IsFalling.Value)
-                {
-                    _context.FallDamageLogic.TryActivateFallDamageProtection();
-                }
-            }
-        }
-        
-        public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
-        {
-            return IsComplete;
-        }
-        
+			if(_context.InputData.Command == CharacterCommand.Roll)
+			{
+				var currentTime = UnityEngine.Time.realtimeSinceStartup;
 
-        public override bool TryContinueWithCommand(CharacterCommand command)
-        {
+				_lastRollInputTime = currentTime;
 
-            if (command == CharacterCommand.Roll)
-            {
-                return true;
-            }
-            
-            return base.TryContinueWithCommand(command);
-        }
-        
-        private void PlayFallingAnimation()
-        {
-            if (_context.Config.FallAnimation != null)
-            {
-                _context.Animator.Play(_context.Config.FallAnimation, 0.2f, FadeMode.FromStart);
-            }
-            else
-            {
+				if(_context.FallDamageLogic != null && _context.IsFalling.Value)
+				{
+					_context.FallDamageLogic.TryActivateFallDamageProtection();
+				}
+			}
+		}
 
-                _context.Animator.Play(_context.Config.IdleAnimation, 0.2f, FadeMode.FromStart);
-            }
-        }
-    }
+		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
+		{
+			return IsComplete;
+		}
+
+		public override bool TryContinueWithCommand(CharacterCommand command)
+		{
+			if(command == CharacterCommand.Roll)
+			{
+				return true;
+			}
+
+			return base.TryContinueWithCommand(command);
+		}
+
+		private void HandleFallingChanged(bool wasFalling, bool isFalling)
+		{
+			if(!isFalling && wasFalling)
+			{
+				CheckRollOnLanding();
+				IsComplete = true;
+			}
+		}
+
+		private void CheckRollOnLanding()
+		{
+			var currentTime = UnityEngine.Time.realtimeSinceStartup;
+			var timeSinceRollInput = currentTime - _lastRollInputTime;
+
+			if(timeSinceRollInput <= LANDING_WINDOW_DURATION)
+			{
+				HasValidRollInput = true;
+
+				if(_context.FallDamageLogic != null)
+				{
+					var success = _context.FallDamageLogic.TryActivateFallDamageProtection();
+					if(success)
+					{
+						Debug.Log("Perfectly timed roll will prevent fall damage!");
+					}
+				}
+			}
+		}
+
+		private void PlayFallingAnimation()
+		{
+			if(_context.Config.FallAnimation != null)
+			{
+				_context.Animator.Play(_context.Config.FallAnimation, 0.2f, FadeMode.FromStart);
+			}
+			else
+			{
+				_context.Animator.Play(_context.Config.IdleAnimation, 0.2f, FadeMode.FromStart);
+			}
+		}
+	}
 }

@@ -11,9 +11,8 @@ namespace game.gameplay_core.camera
 			public IReadOnlyReactiveProperty<Camera> Camera;
 			public ReactiveProperty<CharacterDomain> Player;
 		}
-		
 
-		private Context _context;
+		private readonly Context _context;
 		private readonly float _cameraAltitude;
 
 		public IsometricCameraController(Context context)
@@ -29,12 +28,11 @@ namespace game.gameplay_core.camera
 
 			var cameraRight = cameraTransform.right;
 			var cameraUp = cameraTransform.up;
-			
+
 			var offsetRight = Vector3.Dot(vectorToTarget, cameraRight);
 			var offsetUp = Vector3.Dot(vectorToTarget, cameraUp);
-			
-			cameraTransform.position = cameraTransform.position + cameraRight * offsetRight + cameraUp * offsetUp;
 
+			cameraTransform.position = cameraTransform.position + cameraRight * offsetRight + cameraUp * offsetUp;
 		}
 	}
 }

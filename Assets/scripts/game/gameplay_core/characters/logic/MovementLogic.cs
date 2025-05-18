@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.config;
@@ -141,7 +140,7 @@ namespace game.gameplay_core.characters.logic
 			if(hitCount > 0)
 			{
 				distanceToGround = maxDistance + radius;
-				
+
 				for(var i = 0; i < hitCount; i++)
 				{
 					var hitDistance = hitResults[i].distance;
@@ -190,7 +189,6 @@ namespace game.gameplay_core.characters.logic
 				MoveAndStoreFrameData(Vector3.down * 0.0001f, true);
 			}
 			_debugFlags = _context.CharacterCollider.Flags;
-			
 
 			if(_isGroundedCache)
 			{
@@ -216,14 +214,11 @@ namespace game.gameplay_core.characters.logic
 
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
-				
-				
 
 				if(!CharacterCollider.IsGrounded)
 				{
 					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider.StepOffset, out var distanceToGround))
 					{
-						
 						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
 					}
 					else

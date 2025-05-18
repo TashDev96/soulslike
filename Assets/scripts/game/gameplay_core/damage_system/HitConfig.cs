@@ -21,6 +21,5 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public float PoiseDamage { get; set; } = 1;
-
 	}
 }

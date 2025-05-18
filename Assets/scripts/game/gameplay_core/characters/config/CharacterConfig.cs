@@ -20,7 +20,7 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public LocomotionConfig Locomotion { get; private set; }
-		
+
 		[field: SerializeField]
 		public RotationSpeedData RotationSpeed { get; private set; }
 

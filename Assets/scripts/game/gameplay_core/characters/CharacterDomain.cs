@@ -95,7 +95,7 @@ namespace game.gameplay_core.characters
 				CharacterStats = _config.DefaultStats,
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
-				
+
 				WeaponView = new ReactiveProperty<WeaponView>(DebugWeapon),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 
@@ -124,7 +124,7 @@ namespace game.gameplay_core.characters
 				IsDead = _context.IsDead,
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
-				LocomotionConfig =  _config.Locomotion,
+				LocomotionConfig = _config.Locomotion
 			});
 
 			if(isPlayer)
@@ -150,7 +150,7 @@ namespace game.gameplay_core.characters
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
-			
+
 			_context.WeaponView.Value.Initialize(_context);
 			_context.BodyAttackView.Initialize(_context);
 
