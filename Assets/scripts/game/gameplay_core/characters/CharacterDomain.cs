@@ -138,6 +138,7 @@ namespace game.gameplay_core.characters
 					IsFalling = _context.IsFalling,
 					InvulnerabilityLogic = _context.InvulnerabilityLogic,
 					TriggerStagger = _context.TriggerStagger,
+					BodyAttackView = _context.BodyAttackView,
 
 					MinimumFallDamageHeight = 3.0f,
 					LethalFallHeight = 15.0f,

@@ -17,6 +17,8 @@ namespace game.gameplay_core.characters.logic
 			public ReactiveProperty<bool> IsFalling { get; set; }
 			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
 			public ReactiveCommand TriggerStagger { get; set; }
+			
+			public BodyAttackView BodyAttackView { get; set; }
 
 			public float MinimumFallDamageHeight { get; set; }
 			public float LethalFallHeight { get; set; }
@@ -122,6 +124,7 @@ namespace game.gameplay_core.characters.logic
 					};
 
 					_context.ApplyDamage.Execute(damageInfo);
+					_context.BodyAttackView.CastFallAttack(fallDistance);
 
 					if(fallDistance > _context.StaggerThreshold)
 					{

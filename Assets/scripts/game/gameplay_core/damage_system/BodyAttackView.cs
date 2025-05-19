@@ -18,6 +18,10 @@ namespace game.gameplay_core.damage_system
 		private readonly HitConfig _rollHitConfig = new();
 		private HitData _rollHitData;
 		private float _rollDamage;
+		
+		private readonly HitConfig _fallHitConfig = new();
+		private HitData _fallHitData;
+		private float _fallDamage;
 
 		public void Initialize(CharacterContext characterContext)
 		{
@@ -42,6 +46,23 @@ namespace game.gameplay_core.damage_system
 			{
 				Config = _rollHitConfig
 			};
+		}
+
+		public void CastFallAttack(float fallDistance)
+		{
+			_fallHitConfig.PoiseDamage = fallDistance;
+			_fallHitConfig.DamageMultiplier = 1; //todo depends on armor weight and spikes
+			_fallDamage = fallDistance;
+
+			_fallHitData = new HitData()
+			{
+				Config = _fallHitConfig
+			};
+			
+			foreach(var fallColliders in _fallColliders)
+			{
+				AttackHelpers.CastAttack(_fallDamage, _fallHitData, fallColliders, _context, true);
+			}
 		}
 	}
 }
