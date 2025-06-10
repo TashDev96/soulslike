@@ -60,7 +60,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			if(nextCommand == CharacterCommand.Attack)
+			if(nextCommand == CharacterCommand.RegularAttack)
 			{
 				return true;
 			}

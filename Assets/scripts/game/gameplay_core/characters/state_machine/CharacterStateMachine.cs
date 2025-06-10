@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -147,15 +148,13 @@ namespace game.gameplay_core.characters.state_machine
 				return;
 			}
 
-			if(NextCommand == CharacterCommand.Attack && _currentState.Value is RollState rollState)
+			if( NextCommand.IsAttackCommand() && _currentState.Value is RollState { CanSwitchToAttack: true })
 			{
-				if(rollState.CheckIsReadyToChangeState(NextCommand))
-				{
-					_attackState.SetEnterParams(AttackType.RollAttack);
-					SetState(_attackState);
-					NextCommand = CharacterCommand.None;
-					return;
-				}
+				var rollAttackType = NextCommand is CharacterCommand.StrongAttack ? AttackType.RollAttackStrong : AttackType.RollAttackRegular;
+				_attackState.SetEnterParams(rollAttackType);
+				SetState(_attackState);
+				NextCommand = CharacterCommand.None;
+				return;
 			}
 
 			if(_currentState.Value == _fallState && _fallState.IsComplete && _fallState.HasValidRollInput)
@@ -182,16 +181,12 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.Roll:
 						SetState(_rollState);
 						break;
-					case CharacterCommand.Attack:
-						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttack : AttackType.Regular);
+					case CharacterCommand.RegularAttack:
+						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackRegular : AttackType.Regular);
 						SetState(_attackState);
 						break;
 					case CharacterCommand.StrongAttack:
-						_attackState.SetEnterParams(AttackType.Strong);
-						SetState(_attackState);
-						break;
-					case CharacterCommand.SpecialAttack:
-						_attackState.SetEnterParams(AttackType.Special);
+						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackStrong : AttackType.Strong);
 						SetState(_attackState);
 						break;
 					case CharacterCommand.Block:

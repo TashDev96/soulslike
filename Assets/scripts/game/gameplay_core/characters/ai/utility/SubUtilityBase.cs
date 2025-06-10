@@ -170,15 +170,15 @@ namespace game.gameplay_core.characters.ai.utility
 			switch(action.Type)
 			{
 				case UtilityAction.ActionType.LightAttack:
-					InputData.Command = CharacterCommand.Attack;
+					InputData.Command = CharacterCommand.RegularAttack;
 					InputData.DirectionWorld = vectorToTarget;
 					break;
 				case UtilityAction.ActionType.StrongAttack:
-					InputData.Command = CharacterCommand.Attack;
+					InputData.Command = CharacterCommand.RegularAttack;
 					InputData.DirectionWorld = vectorToTarget;
 					break;
 				case UtilityAction.ActionType.SpecialAttack:
-					InputData.Command = CharacterCommand.Attack;
+					InputData.Command = CharacterCommand.RegularAttack;
 					InputData.DirectionWorld = vectorToTarget;
 					break;
 				case UtilityAction.ActionType.Roll:

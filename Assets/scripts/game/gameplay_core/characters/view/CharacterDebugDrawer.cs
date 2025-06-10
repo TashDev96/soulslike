@@ -80,7 +80,7 @@ namespace game.gameplay_core.characters.view
 
 			if(_stateMachine.CurrentState.Value is AttackState attackState)
 			{
-				if(_context.InputData.Command == CharacterCommand.Attack)
+				if(_context.InputData.Command == CharacterCommand.RegularAttack)
 				{
 					_graphDrawer.FreePoints.Add(new GraphPoint(attackState.Time, AttackGraphY)
 					{

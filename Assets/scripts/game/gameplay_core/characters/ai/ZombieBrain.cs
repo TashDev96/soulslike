@@ -180,7 +180,7 @@ namespace game.gameplay_core.characters.ai
 
 			if(distanceToTarget < _attackDistance)
 			{
-				_context.InputData.Command = CharacterCommand.Attack;
+				_context.InputData.Command = CharacterCommand.RegularAttack;
 				_context.InputData.DirectionWorld = directionToTarget;
 			}
 			else

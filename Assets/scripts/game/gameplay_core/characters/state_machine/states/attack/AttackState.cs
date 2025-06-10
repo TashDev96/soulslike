@@ -84,7 +84,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
-			if(nextCommand is not CharacterCommand.Attack and not CharacterCommand.StrongAttack)
+			if(nextCommand is not CharacterCommand.RegularAttack and not CharacterCommand.StrongAttack)
 			{
 				return false;
 			}
@@ -135,7 +135,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
 
-			if(_attackType == AttackType.RollAttack)
+			if(_attackType.IsRollAttack())
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
 			}
@@ -176,7 +176,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				case AttackType.Regular:
 				case AttackType.Strong:
-				case AttackType.Special:
 					var attacksList = weaponConfig.GetAttacksSequence(_attackType);
 
 					if(_comboCounter > 0)
@@ -189,12 +188,18 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					}
 
 					return attacksList[_currentAttackIndex];
-				case AttackType.RunAttack:
-					_currentAttackIndex = 0;
-					return _context.WeaponView.Value.Config.RunAttack;
-				case AttackType.RollAttack:
+				case AttackType.RollAttackRegular:
 					_currentAttackIndex = 0;
 					return _context.WeaponView.Value.Config.RollAttack;
+				case AttackType.RollAttackStrong:
+					_currentAttackIndex = 0;
+					return _context.WeaponView.Value.Config.RollAttackStrong;
+				case AttackType.RunAttackRegular:
+					_currentAttackIndex = 0;
+					return _context.WeaponView.Value.Config.RunAttack;
+				case AttackType.RunAttackStrong:
+					_currentAttackIndex = 0;
+					return _context.WeaponView.Value.Config.RunAttackStrong;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

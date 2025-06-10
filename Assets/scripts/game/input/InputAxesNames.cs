@@ -4,7 +4,6 @@ namespace game.input
 	{
         Attack,
         StrongAttack,
-        SpecialAttack,
         Block,
         DebugKey2,
         DebugKey,

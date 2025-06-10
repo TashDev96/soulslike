@@ -56,6 +56,11 @@ namespace game.gameplay_core.damage_system
 				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, Animation.Clip);
 			}
 
+			if(_animationPreview.Clip != Animation.Clip)
+			{
+				_animationPreview.Clip = Animation.Clip;
+			}
+
 			EditorGUI.BeginChangeCheck();
 
 			_animationPreview.ClearTimeChanges();

@@ -79,11 +79,7 @@ namespace game.gameplay_core.characters.player
 			}
 			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
 			{
-				return CharacterCommand.Attack;
-			}
-			if(InputAdapter.GetButtonDown(InputAxesNames.SpecialAttack))
-			{
-				return CharacterCommand.SpecialAttack;
+				return CharacterCommand.RegularAttack;
 			}
 			if(InputAdapter.GetButtonDown(InputAxesNames.UseItem))
 			{
