@@ -15,6 +15,8 @@ namespace game.gameplay_core.characters.player
 		private CharacterContext _characterContext;
 		private Vector2 _directionInputScreenSpace;
 		private float _rollDashHoldDuration;
+		private RollDashInputState _rollInputState;
+		private CharacterCommand _nextFrameForcedCommand;
 
 		public PlayerInputController(ReactiveProperty<Camera> locationContextMainCamera)
 		{
@@ -68,19 +70,44 @@ namespace game.gameplay_core.characters.player
 		{
 			var hasDirectionInput = directionInputLocalSpace.sqrMagnitude > 0;
 			var hasRunInput = _rollDashHoldDuration > .33f;
+			var attackInput = GetAttackInput();
 
-			if(InputAdapter.GetButtonUp(InputAxesNames.RollDash) && !hasRunInput && hasDirectionInput)
+			if(_nextFrameForcedCommand != CharacterCommand.None)
 			{
+				var result = _nextFrameForcedCommand;
+				_nextFrameForcedCommand = CharacterCommand.None;
+				return result;
+			}
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.RollDash))
+			{
+				_rollInputState = RollDashInputState.HasInput;
+			}
+
+			if(InputAdapter.GetButtonUp(InputAxesNames.RollDash))
+			{
+				_rollInputState = _rollInputState == RollDashInputState.Triggered ? RollDashInputState.None : RollDashInputState.Released;
+			}
+
+			var forceRoll = attackInput != CharacterCommand.None && _rollInputState == RollDashInputState.HasInput;
+
+			if((forceRoll || _rollInputState == RollDashInputState.Released) && !hasRunInput && hasDirectionInput)
+			{
+				_nextFrameForcedCommand = attackInput;
+				_rollInputState = forceRoll ? RollDashInputState.Triggered : RollDashInputState.None;
 				return CharacterCommand.Roll;
 			}
-			if(InputAdapter.GetButtonDown(InputAxesNames.StrongAttack))
+
+			if(_rollInputState == RollDashInputState.Released)
 			{
-				return CharacterCommand.StrongAttack;
+				_rollInputState = RollDashInputState.None;
 			}
-			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
+
+			if(attackInput != CharacterCommand.None)
 			{
-				return CharacterCommand.RegularAttack;
+				return attackInput;
 			}
+
 			if(InputAdapter.GetButtonDown(InputAxesNames.UseItem))
 			{
 				return CharacterCommand.UseItem;
@@ -96,6 +123,27 @@ namespace game.gameplay_core.characters.player
 			}
 
 			return CharacterCommand.None;
+		}
+
+		private CharacterCommand GetAttackInput()
+		{
+			if(InputAdapter.GetButtonDown(InputAxesNames.StrongAttack))
+			{
+				return CharacterCommand.StrongAttack;
+			}
+			if(InputAdapter.GetButtonDown(InputAxesNames.Attack))
+			{
+				return CharacterCommand.RegularAttack;
+			}
+			return CharacterCommand.None;
+		}
+
+		private enum RollDashInputState
+		{
+			None,
+			HasInput,
+			Released,
+			Triggered
 		}
 	}
 }

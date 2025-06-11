@@ -94,6 +94,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			if(_currentAttackConfig.ExitToComboTime.Contains(NormalizedTime))
 			{
 				_comboCounter++;
+				SetEnterParams(nextCommand is CharacterCommand.StrongAttack ? AttackType.Strong : AttackType.Regular);
 				LaunchAttack();
 				return true;
 			}

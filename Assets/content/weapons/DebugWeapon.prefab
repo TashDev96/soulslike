@@ -320,8 +320,8 @@ MonoBehaviour:
       <BaseDamage>k__BackingField: 20
       <RotationDisabledTime>k__BackingField: {x: 0.30434784, y: 0.5507247}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.5507247}
-      <ExitToComboTime>k__BackingField: {x: 0.46376812, y: 1}
-      <EnterComboTime>k__BackingField: 0.2826087
+      <ExitToComboTime>k__BackingField: {x: 0.47826087, y: 0.65217394}
+      <EnterComboTime>k__BackingField: 0.18115942
       <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
@@ -405,7 +405,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.7321428}
       <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
       <EnterComboTime>k__BackingField: 0
-      <EnterFromRollTime>k__BackingField: 0.26785713
+      <EnterFromRollTime>k__BackingField: 0.16071428
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve: []
