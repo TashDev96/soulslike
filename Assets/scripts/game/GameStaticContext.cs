@@ -1,4 +1,5 @@
 using dream_lib.src.reactive;
+using game.ui;
 using UnityEngine;
 
 namespace game
@@ -9,5 +10,6 @@ namespace game
 
 		public ReactiveProperty<Camera> MainCamera { get; set; }
 		public ReactiveProperty<RectTransform> WorldToScreenUiParent { get; set; }
+		public UiDomain UiDomain { get; set; }
 	}
 }

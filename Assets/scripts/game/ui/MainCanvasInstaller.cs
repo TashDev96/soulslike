@@ -6,5 +6,8 @@ namespace game.ui
 	{
 		[field: SerializeField]
 		public RectTransform WorldToScreenRoot { get; private set; }
+
+		[field: SerializeField]
+		public UiLocationHUD UiLocationHUD { get; private set; }
 	}
 }

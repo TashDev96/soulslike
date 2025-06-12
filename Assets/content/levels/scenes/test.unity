@@ -12237,7 +12237,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 10.310345
+  orthographic size: 20.37931
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -18411,8 +18411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 636421841}
   - {fileID: 875381543}
+  - {fileID: 636421841}
   <Characters>k__BackingField: []
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}

@@ -20,29 +20,38 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public float BaseDamage { get; private set; }
+		[field: SerializeField]
+		public float StaminaCost { get; private set; } = 10;
 
 		[ShowInInspector]
 		public float Duration => Animation.Clip ? Animation.Clip.length : 0.1f;
 
+		[field: HideInInspector]
 		[field: SerializeField]
 		public Vector2 RotationDisabledTime { get; private set; }
+		[field: HideInInspector]
 		[field: SerializeField]
 		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
+		[field: HideInInspector]
 		[field: SerializeField]
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
+		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
-		[field: SerializeField]
 		public float EnterFromRollTime { get; private set; }
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
 
+		[field: BoxGroup("Ai Data")]
 		[field: SerializeField]
 		public float Range { get; set; } = 1f;
 
 		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
+
+		
+		
 
 #if UNITY_EDITOR
 

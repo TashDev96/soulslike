@@ -52,7 +52,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * acceleration);
 
-			_context.MovementLogic.Walk(velocity * deltaTime, deltaTime);
+			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
 
 			IsComplete = true;
 		}

@@ -17,6 +17,7 @@ namespace game.gameplay_core
 		public List<CharacterDomain> Characters { get; set; }
 		public List<SpawnedObjectController> SpawnedObjects { get; set; }
 		public ReactiveCommand<float> LocationUpdate { get; set; }
+		public ReactiveCommand<float> LocationUiUpdate { get; set; }
 		public ReactiveProperty<Camera> MainCamera { get; set; }
 		public ReactiveProperty<float> LocationTime { get; set; }
 	}

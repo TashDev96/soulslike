@@ -86,7 +86,7 @@ namespace game.gameplay_core.characters.logic
 			_prevPos = CurrentPosition;
 		}
 
-		public void Walk(Vector3 vector, float deltaTime)
+		public void ApplyLocomotion(Vector3 vector, float deltaTime)
 		{
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 

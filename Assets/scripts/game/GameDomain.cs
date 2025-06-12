@@ -26,13 +26,16 @@ namespace game
 
 		private async UniTask InitializeAsync()
 		{
+			
+			_uiDomain = new UiDomain();
+			
 			GameStaticContext.Instance = new GameStaticContext
 			{
 				WorldToScreenUiParent = new ReactiveProperty<RectTransform>(),
-				MainCamera = new ReactiveProperty<Camera>()
+				MainCamera = new ReactiveProperty<Camera>(),
+				UiDomain = _uiDomain,
 			};
 
-			_uiDomain = new UiDomain();
 			await _uiDomain.Initialize();
 
 			if(_sceneDebugMode)

@@ -1,4 +1,5 @@
 using dream_lib.src.extensions;
+using dream_lib.src.reactive;
 using dream_lib.src.ui;
 using game.gameplay_core.characters.runtime_data;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace game.gameplay_core.characters.view.ui
 	{
 		public struct CharacterWorldSpaceUiContext
 		{
+			public ReactiveCommand<float> LocationUiUpdate;
 			public CharacterStats CharacterStats { get; set; }
 			public Transform UiPivotWorld { get; set; }
 		}
@@ -28,11 +30,12 @@ namespace game.gameplay_core.characters.view.ui
 				Current = context.CharacterStats.Hp,
 				Max = context.CharacterStats.HpMax
 			});
+
+			context.LocationUiUpdate.OnExecute += CustomUpdate;
 		}
 
-		public void CustomUpdate(float deltaTime)
+		private void CustomUpdate(float deltaTime)
 		{
-			_healthBar.CustomUpdate();
 			var screenPos = GameStaticContext.Instance.MainCamera.Value.WorldToScreenPoint(_context.UiPivotWorld.position).Round();
 			_transform.position = screenPos;
 		}

@@ -8,6 +8,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		private float _acceleration;
 		private float _time;
 
+		public override float RequiredStaminaOffset => _context.CharacterStats.StaminaMax.Value * 0.2f;
+
 		public RunState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
@@ -52,7 +54,10 @@ namespace game.gameplay_core.characters.state_machine.states
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
 			var velocity = inputWorld * (directionMultiplier * _context.RunSpeed.Value * acceleration);
 
-			_context.MovementLogic.Walk(velocity * deltaTime, deltaTime);
+			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
+			const float staminaCostPerSecond = 2f;
+			_context.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
+			
 
 			//TODO wait for slow down
 			IsComplete = true;

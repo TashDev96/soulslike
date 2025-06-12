@@ -20,6 +20,7 @@ namespace game.gameplay_core.characters
 		public MovementLogic MovementLogic;
 		public InvulnerabilityLogic InvulnerabilityLogic;
 		public FallDamageLogic FallDamageLogic;
+		public StaminaLogic StaminaLogic;
 
 		public CharacterConfig Config;
 		public ReadOnlyTransform Transform;

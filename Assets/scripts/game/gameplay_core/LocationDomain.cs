@@ -8,6 +8,7 @@ using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.location_save_system;
+using game.ui;
 using UnityEngine;
 
 namespace game.gameplay_core
@@ -35,6 +36,7 @@ namespace game.gameplay_core
 			{
 				LocationSaveData = new LocationSaveData(),
 				LocationUpdate = new ReactiveCommand<float>(),
+				LocationUiUpdate = new ReactiveCommand<float>(),
 				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera),
 				LocationTime = new ReactiveProperty<float>()
 			};
@@ -53,6 +55,12 @@ namespace game.gameplay_core
 
 			_unityEventsListener = UnityEventsListener.Create("__locationDomainUnityEvents");
 			_unityEventsListener.OnUpdate += HandleUpdate;
+
+			GameStaticContext.Instance.UiDomain.ShowLocationUi(new UiLocationHUD.Context()
+			{
+				Player = _player.Value,
+				LocationUiUpdate = _locationContext.LocationUiUpdate,
+			});
 
 			RegisterCheats();
 		}
@@ -73,6 +81,8 @@ namespace game.gameplay_core
 				_frameDelayDebug = EditorComfortWindow.FrameDelay;
 #endif
 			}
+			
+			_locationContext.LocationUiUpdate.Execute(deltaTime);
 		}
 
 		private void LoadCharacters()

@@ -9,6 +9,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		public bool IsReadyToRememberNextCommand { get; set; }
 		public virtual bool CanInterruptByStagger => true;
 
+		public virtual float RequiredStaminaOffset => 0;
+
 		protected CharacterStateBase(CharacterContext context)
 		{
 			_context = context;
@@ -46,6 +48,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		public virtual string GetDebugString()
 		{
 			return "";
+		}
+
+		public virtual float GetEnterStaminaCost()
+		{
+			return 0;
 		}
 	}
 }

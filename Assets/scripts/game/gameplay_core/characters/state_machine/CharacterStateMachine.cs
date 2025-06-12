@@ -3,7 +3,6 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -141,6 +140,14 @@ namespace game.gameplay_core.characters.state_machine
 				}
 			}
 
+			if(_currentState.Value is RunState && _context.CharacterStats.Stamina.Value <=0)
+			{
+				if(NextCommand == CharacterCommand.Run)
+				{
+					SetState(_walkState);
+				}
+			}
+
 			if(_currentState.Value.TryContinueWithCommand(NextCommand))
 			{
 				NextCommand = CharacterCommand.None;
@@ -148,7 +155,7 @@ namespace game.gameplay_core.characters.state_machine
 				return;
 			}
 
-			if( NextCommand.IsAttackCommand() && _currentState.Value is RollState { CanSwitchToAttack: true })
+			if(NextCommand.IsAttackCommand() && _currentState.Value is RollState { CanSwitchToAttack: true })
 			{
 				var rollAttackType = NextCommand is CharacterCommand.StrongAttack ? AttackType.RollAttackStrong : AttackType.RollAttackRegular;
 				_attackState.SetEnterParams(rollAttackType);
@@ -206,6 +213,21 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			_currentState.Value?.OnExit();
 			var oldState = _currentState.Value;
+
+			if(!_context.StaminaLogic.CheckCanEnterState(newState))
+			{
+				if(newState is RunState)
+				{
+					newState = _walkState;
+				}
+				else
+				{
+					newState = _idleState;
+				}
+			}
+			
+			_context.StaminaLogic.SpendStaminaForStateEnter(newState);
+			
 			_currentState.Value = newState;
 			_currentState.Value.OnEnter();
 			_context.OnStateChanged.Execute(oldState, newState);

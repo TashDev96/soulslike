@@ -46,6 +46,7 @@ namespace game.gameplay_core.characters
 
 		private HealthLogic _healthLogic;
 		private StaggerLogic _staggerLogic;
+		private StaminaLogic _staminaLogic;
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
@@ -74,6 +75,7 @@ namespace game.gameplay_core.characters
 
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_fallDamageLogic = new FallDamageLogic();
+			_staminaLogic = new StaminaLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -87,6 +89,7 @@ namespace game.gameplay_core.characters
 				InvulnerabilityLogic = _invulnerabilityLogic,
 				IsFalling = isFalling,
 				FallDamageLogic = _fallDamageLogic,
+				StaminaLogic = _staminaLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -146,6 +149,14 @@ namespace game.gameplay_core.characters
 				});
 			}
 
+			_staminaLogic.Initialize(new StaminaLogic.Context()
+			{
+				CharacterConfig = _context.Config,
+				CurrentWeapon = _context.WeaponView,
+				Stamina = _context.CharacterStats.Stamina,
+				StaminaMax = _context.CharacterStats.StaminaMax,
+			});
+			
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = _stateMachine.CurrentState;
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
@@ -174,6 +185,8 @@ namespace game.gameplay_core.characters
 				CharacterStats = _context.CharacterStats,
 				InvulnerabilityLogic = _context.InvulnerabilityLogic
 			});
+			
+		
 
 			_staggerLogic = new StaggerLogic(new StaggerLogic.Context
 			{
@@ -241,13 +254,12 @@ namespace game.gameplay_core.characters
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
+				_staminaLogic.Update(deltaTimeStep);
 
 				_fallDamageLogic?.CustomUpdate(deltaTimeStep);
 
 				calculateInputLogic = false;
 			}
-
-			_worldSpaceUi?.CustomUpdate(deltaTime);
 		}
 
 #if UNITY_EDITOR

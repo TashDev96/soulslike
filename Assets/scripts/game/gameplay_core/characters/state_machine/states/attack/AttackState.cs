@@ -101,6 +101,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return false;
 		}
 
+		public override float GetEnterStaminaCost()
+		{
+			GetCurrentAttackConfig(out var config, out _);
+			return config.StaminaCost;
+		}
+
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
 			if(nextCommand.IsMovementCommand())
@@ -122,7 +128,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void LaunchAttack()
 		{
-			_currentAttackConfig = GetCurrentAttackConfig();
+			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 			Duration = _currentAttackConfig.Duration;
 
 			_hitsData.Clear();
@@ -165,12 +171,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 		}
 
-		private AttackConfig GetCurrentAttackConfig()
+		private void GetCurrentAttackConfig(out AttackConfig attackConfig, out int newAttackIndex)
 		{
 			var weaponConfig = _context.WeaponView.Value.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{
-				return _context.InputData.ForcedAttackConfig;
+				newAttackIndex = _currentAttackIndex;
+				attackConfig = _context.InputData.ForcedAttackConfig;
 			}
 
 			switch(_attackType)
@@ -181,26 +188,31 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 					if(_comboCounter > 0)
 					{
-						_currentAttackIndex = _comboCounter % attacksList.Length;
+						newAttackIndex = _comboCounter % attacksList.Length;
 					}
 					else
 					{
-						_currentAttackIndex = 0;
+						newAttackIndex = 0;
 					}
 
-					return attacksList[_currentAttackIndex];
+					attackConfig = attacksList[_currentAttackIndex];
+					return;
 				case AttackType.RollAttackRegular:
-					_currentAttackIndex = 0;
-					return _context.WeaponView.Value.Config.RollAttack;
+					newAttackIndex = 0;
+					attackConfig = _context.WeaponView.Value.Config.RollAttack;
+					return;
 				case AttackType.RollAttackStrong:
-					_currentAttackIndex = 0;
-					return _context.WeaponView.Value.Config.RollAttackStrong;
+					newAttackIndex = 0;
+					attackConfig = _context.WeaponView.Value.Config.RollAttackStrong;
+					return;
 				case AttackType.RunAttackRegular:
-					_currentAttackIndex = 0;
-					return _context.WeaponView.Value.Config.RunAttack;
+					newAttackIndex = 0;
+					attackConfig = _context.WeaponView.Value.Config.RunAttack;
+					return;
 				case AttackType.RunAttackStrong:
-					_currentAttackIndex = 0;
-					return _context.WeaponView.Value.Config.RunAttackStrong;
+					newAttackIndex = 0;
+					attackConfig = _context.WeaponView.Value.Config.RunAttackStrong;
+					return;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
