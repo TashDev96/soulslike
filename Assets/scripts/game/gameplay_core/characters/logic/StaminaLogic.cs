@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
@@ -18,6 +19,8 @@ namespace game.gameplay_core.characters.logic
 
 		private Context _context;
 
+		private readonly HashSet<string> _regenLockReasons = new();
+
 		public void Initialize(Context context)
 		{
 			_context = context;
@@ -25,6 +28,10 @@ namespace game.gameplay_core.characters.logic
 
 		public bool CheckCanEnterState(CharacterStateBase stateBase)
 		{
+			if(stateBase.GetEnterStaminaCost() <= 0)
+			{
+				return true;
+			}
 			var staminaCost = stateBase.GetEnterStaminaCost() + stateBase.RequiredStaminaOffset;
 
 			//here potential rpg tweaks
@@ -33,9 +40,21 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			if(_context.Stamina.Value < _context.StaminaMax.Value)
+			if(_context.Stamina.Value < _context.StaminaMax.Value && _regenLockReasons.Count == 0)
 			{
-				_context.Stamina.Value += deltaTime;
+				_context.Stamina.Value += deltaTime * 10f;
+			}
+		}
+
+		public void SetStaminaRegenLock(string reason, bool isLocked)
+		{
+			if(isLocked)
+			{
+				_regenLockReasons.Add(reason);
+			}
+			else
+			{
+				_regenLockReasons.Remove(reason);
 			}
 		}
 

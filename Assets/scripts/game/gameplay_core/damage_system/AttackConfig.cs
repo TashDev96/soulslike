@@ -31,14 +31,21 @@ namespace game.gameplay_core.damage_system
 		public Vector2 RotationDisabledTime { get; private set; }
 		[field: HideInInspector]
 		[field: SerializeField]
+		public Vector2 StaminaRegenDisabledTime { get; private set; }
+
+		[field: HideInInspector]
+		[field: SerializeField]
 		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
+
 		[field: HideInInspector]
 		[field: SerializeField]
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
+
 		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
 		public float EnterFromRollTime { get; private set; }
+
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
 
@@ -49,9 +56,6 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
-
-		
-		
 
 #if UNITY_EDITOR
 
@@ -74,6 +78,7 @@ namespace game.gameplay_core.damage_system
 
 			_animationPreview.ClearTimeChanges();
 			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation.Clip, _animationPreview);
+			StaminaRegenDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Stamina Regen Disabled Time:", StaminaRegenDisabledTime, Animation.Clip, _animationPreview);
 			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
 			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);
 			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation.Clip, _animationPreview);

@@ -140,7 +140,7 @@ namespace game.gameplay_core.characters.state_machine
 				}
 			}
 
-			if(_currentState.Value is RunState && _context.CharacterStats.Stamina.Value <=0)
+			if(_currentState.Value is RunState && _context.CharacterStats.Stamina.Value <= 0)
 			{
 				if(NextCommand == CharacterCommand.Run)
 				{
@@ -218,6 +218,10 @@ namespace game.gameplay_core.characters.state_machine
 			{
 				if(newState is RunState)
 				{
+					if(_currentState.Value is WalkState)
+					{
+						return;
+					}
 					newState = _walkState;
 				}
 				else
@@ -225,8 +229,6 @@ namespace game.gameplay_core.characters.state_machine
 					newState = _idleState;
 				}
 			}
-			
-			_context.StaminaLogic.SpendStaminaForStateEnter(newState);
 			
 			_currentState.Value = newState;
 			_currentState.Value.OnEnter();

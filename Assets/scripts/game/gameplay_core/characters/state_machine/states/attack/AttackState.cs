@@ -10,12 +10,16 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 {
 	public class AttackState : CharacterAnimationStateBase
 	{
+		private const string StaminaRegenDisableKey = "AttackState";
+
 		private const int FramesToUnlockWalkAfterStateUnlocked = 5;
 		private int _currentAttackIndex;
 		private AttackType _attackType;
 		private AttackConfig _currentAttackConfig;
 		private readonly List<HitData> _hitsData = new();
 		private int _comboCounter;
+		private bool _staminaSpent;
+		private bool _staminaRegenDisabled;
 
 		private int _framesToUnlockWalk;
 
@@ -41,6 +45,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
+			if(!_staminaRegenDisabled)
+			{
+				if(_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				{
+					_staminaRegenDisabled = true;
+					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
+				}
+			}
+			else if(!_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+			{
+				_staminaRegenDisabled = false;
+				_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+			}
+
 			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
 			var hasActiveHit = false;
@@ -52,6 +70,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
 				{
 					hitData.IsStarted = true;
+					if(!_staminaSpent)
+					{
+						_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
+					}
 				}
 
 				if(hitData.IsActive)
@@ -80,6 +102,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
+		}
+
+		public override void OnExit()
+		{
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+			base.OnExit();
 		}
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
@@ -131,6 +159,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 			Duration = _currentAttackConfig.Duration;
 
+			_staminaSpent = false;
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
 			{

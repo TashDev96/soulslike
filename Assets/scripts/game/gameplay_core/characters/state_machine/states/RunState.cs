@@ -21,6 +21,13 @@ namespace game.gameplay_core.characters.state_machine.states
 			_time = 0;
 			IsComplete = false;
 			_context.Animator.Play(_context.Config.IdleAnimation, 0.3f);
+			_context.StaminaLogic.SetStaminaRegenLock("RunState",true);
+		}
+
+		public override void OnExit()
+		{
+			_context.StaminaLogic.SetStaminaRegenLock("RunState",false);
+			base.OnExit();
 		}
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
