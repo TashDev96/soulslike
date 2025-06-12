@@ -5,6 +5,7 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class RunState : CharacterStateBase
 	{
+		private const string StaminaRegenLockKey = "RunState";
 		private float _acceleration;
 		private float _time;
 
@@ -21,12 +22,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			_time = 0;
 			IsComplete = false;
 			_context.Animator.Play(_context.Config.IdleAnimation, 0.3f);
-			_context.StaminaLogic.SetStaminaRegenLock("RunState",true);
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey,true);
 		}
 
 		public override void OnExit()
 		{
-			_context.StaminaLogic.SetStaminaRegenLock("RunState",false);
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey,false);
 			base.OnExit();
 		}
 

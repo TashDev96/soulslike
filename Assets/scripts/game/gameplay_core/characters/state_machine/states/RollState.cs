@@ -10,9 +10,12 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class RollState : CharacterAnimationStateBase
 	{
+		private const string StaminaRegenLockKey = nameof(RollState);
 		private Vector3 _characterDirectionTarget;
 		private RollConfig _config;
 		private Vector3 _rollDirectionWorld;
+
+		private bool _staminaSpent;
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
@@ -30,6 +33,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 
 			_config = _context.Config.Roll;
+			_staminaSpent = false;
+
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
 
 			_context.BodyAttackView.PrepareRollBodyAttack();
 
@@ -96,6 +102,12 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			if(_config.RollInvulnerabilityTiming.Contains(NormalizedTime))
 			{
+				if(!_staminaSpent)
+				{
+					_context.StaminaLogic.SpendStamina(CalculateStaminaCost());
+					_staminaSpent = true;
+					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
+				}
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, true);
 			}
 			else
@@ -107,6 +119,17 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_context.BodyAttackView.CastRollAttack();
 			}
+		}
+
+		public override float GetEnterStaminaCost()
+		{
+			return 1;
+		}
+
+		private float CalculateStaminaCost()
+		{
+			var staminaSpendAmount = _context.Config.Roll.BaseStaminaCost; //todo rpg calculate based on armor weight
+			return staminaSpendAmount;
 		}
 	}
 }

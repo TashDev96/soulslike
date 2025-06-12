@@ -130,33 +130,31 @@ namespace game.gameplay_core.characters
 				LocomotionConfig = _config.Locomotion
 			});
 
-			if(isPlayer)
+			_fallDamageLogic.SetContext(new FallDamageLogic.Context
 			{
-				_fallDamageLogic.SetContext(new FallDamageLogic.Context
-				{
-					ApplyDamage = _context.ApplyDamage,
-					IsDead = _context.IsDead,
-					CharacterTransform = transform,
-					CharacterStats = _context.CharacterStats,
-					IsFalling = _context.IsFalling,
-					InvulnerabilityLogic = _context.InvulnerabilityLogic,
-					TriggerStagger = _context.TriggerStagger,
-					BodyAttackView = _context.BodyAttackView,
+				ApplyDamage = _context.ApplyDamage,
+				IsDead = _context.IsDead,
+				CharacterTransform = transform,
+				CharacterStats = _context.CharacterStats,
+				IsFalling = _context.IsFalling,
+				InvulnerabilityLogic = _context.InvulnerabilityLogic,
+				TriggerStagger = _context.TriggerStagger,
+				BodyAttackView = _context.BodyAttackView,
+				StaminaLogic = _context.StaminaLogic,
 
-					MinimumFallDamageHeight = 3.0f,
-					LethalFallHeight = 15.0f,
-					StaggerThreshold = 5.0f
-				});
-			}
+				MinimumFallDamageHeight = 3.0f,
+				LethalFallHeight = 15.0f,
+				StaggerThreshold = 5.0f
+			});
 
-			_staminaLogic.Initialize(new StaminaLogic.Context()
+			_staminaLogic.Initialize(new StaminaLogic.Context
 			{
 				CharacterConfig = _context.Config,
 				CurrentWeapon = _context.WeaponView,
 				Stamina = _context.CharacterStats.Stamina,
-				StaminaMax = _context.CharacterStats.StaminaMax,
+				StaminaMax = _context.CharacterStats.StaminaMax
 			});
-			
+
 			_stateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = _stateMachine.CurrentState;
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
@@ -185,8 +183,6 @@ namespace game.gameplay_core.characters
 				CharacterStats = _context.CharacterStats,
 				InvulnerabilityLogic = _context.InvulnerabilityLogic
 			});
-			
-		
 
 			_staggerLogic = new StaggerLogic(new StaggerLogic.Context
 			{

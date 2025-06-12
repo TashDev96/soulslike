@@ -58,14 +58,9 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		public void SpendStamina(float staminaCostPerSecond)
+		public void SpendStamina(float amount)
 		{
-			_context.Stamina.Value -= staminaCostPerSecond;
-		}
-
-		public void SpendStaminaForStateEnter(CharacterStateBase newState)
-		{
-			SpendStamina(newState.GetEnterStaminaCost());
+			_context.Stamina.Value -= amount;
 		}
 	}
 }

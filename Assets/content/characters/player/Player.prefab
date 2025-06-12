@@ -98,6 +98,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+      <BaseStaminaCost>k__BackingField: 10
     <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
     <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
     <DeathAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}

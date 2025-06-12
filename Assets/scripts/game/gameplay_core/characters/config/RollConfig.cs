@@ -35,6 +35,8 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; set; }
+		[field: SerializeField]
+		public float BaseStaminaCost { get; set; } = 15f;
 
 #if UNITY_EDITOR
 		private PreviewAnimationDrawer _animationPreview;

@@ -10,19 +10,20 @@ namespace game.gameplay_core.characters.logic
 	{
 		public struct Context
 		{
-			public ApplyDamageCommand ApplyDamage { get; set; }
-			public IsDead IsDead { get; set; }
-			public Transform CharacterTransform { get; set; }
-			public CharacterStats CharacterStats { get; set; }
-			public ReactiveProperty<bool> IsFalling { get; set; }
-			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
-			public ReactiveCommand TriggerStagger { get; set; }
+			public ApplyDamageCommand ApplyDamage;
+			public IsDead IsDead;
+			public Transform CharacterTransform;
+			public CharacterStats CharacterStats;
+			public ReactiveProperty<bool> IsFalling;
+			public InvulnerabilityLogic InvulnerabilityLogic;
+			public ReactiveCommand TriggerStagger;
 			
-			public BodyAttackView BodyAttackView { get; set; }
+			public BodyAttackView BodyAttackView;
+			public StaminaLogic StaminaLogic;
 
-			public float MinimumFallDamageHeight { get; set; }
-			public float LethalFallHeight { get; set; }
-			public float StaggerThreshold { get; set; }
+			public float MinimumFallDamageHeight;
+			public float LethalFallHeight;
+			public float StaggerThreshold;
 		}
 
 		private const float PROTECTION_COOLDOWN = 0.5f;
@@ -125,6 +126,7 @@ namespace game.gameplay_core.characters.logic
 
 					_context.ApplyDamage.Execute(damageInfo);
 					_context.BodyAttackView.CastFallAttack(fallDistance);
+					_context.StaminaLogic.SpendStamina(damage);
 
 					if(fallDistance > _context.StaggerThreshold)
 					{
