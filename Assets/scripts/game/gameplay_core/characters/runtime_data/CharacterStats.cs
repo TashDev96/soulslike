@@ -1,4 +1,5 @@
 using System;
+using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -19,9 +20,9 @@ namespace game.gameplay_core.characters.runtime_data
 		[BoxGroup("Poise")]
 		public PoiseMax PoiseMax;
 		[BoxGroup("Poise")]
-		public PoiseRestoreTime PoiseRestoreTimer;
+		public PoiseRestoreTimer PoiseRestoreTimer;
 		[BoxGroup("Poise")]
-		public PoiseRestoreTime PoiseRestoreTimerMax;
+		public ReactiveProperty<float> PoiseRestoreTimerMax;
 
 		public CharacterStats()
 		{
@@ -31,8 +32,8 @@ namespace game.gameplay_core.characters.runtime_data
 			StaminaMax = new StaminaMax();
 			Poise = new Poise();
 			PoiseMax = new PoiseMax();
-			PoiseRestoreTimer = new PoiseRestoreTime();
-			PoiseRestoreTimerMax = new PoiseRestoreTime();
+			PoiseRestoreTimer = new PoiseRestoreTimer();
+			PoiseRestoreTimerMax = new PoiseRestoreTimer();
 		}
 
 #if UNITY_EDITOR

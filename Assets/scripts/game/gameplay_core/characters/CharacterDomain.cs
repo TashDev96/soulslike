@@ -45,7 +45,7 @@ namespace game.gameplay_core.characters
 		private ReadOnlyTransform _transform;
 
 		private HealthLogic _healthLogic;
-		private StaggerLogic _staggerLogic;
+		private PoiseLogic _poiseLogic;
 		private StaminaLogic _staminaLogic;
 		private StatsLogic _statsLogic;
 		private LockOnLogic _lockOnLogic;
@@ -196,7 +196,7 @@ namespace game.gameplay_core.characters
 				InvulnerabilityLogic = _context.InvulnerabilityLogic
 			});
 
-			_staggerLogic = new StaggerLogic(new StaggerLogic.Context
+			_poiseLogic = new PoiseLogic(new PoiseLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				Stats = _context.CharacterStats,
@@ -263,8 +263,9 @@ namespace game.gameplay_core.characters
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
 				_staminaLogic.Update(deltaTimeStep);
+				_poiseLogic.Update(deltaTimeStep);
 
-				_fallDamageLogic?.CustomUpdate(deltaTimeStep);
+				_fallDamageLogic.CustomUpdate(deltaTimeStep);
 
 				calculateInputLogic = false;
 			}

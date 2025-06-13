@@ -4,7 +4,7 @@ using dream_lib.src.reactive;
 namespace game.gameplay_core.characters.runtime_data.bindings.stats
 {
 	[Serializable]
-	public class PoiseRestoreTime : ReactiveProperty<float>
+	public class PoiseRestoreTimer : ReactiveProperty<float>
 	{
 	}
 }
