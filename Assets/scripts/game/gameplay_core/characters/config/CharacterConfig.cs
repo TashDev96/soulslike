@@ -1,12 +1,14 @@
-using System;
 using game.gameplay_core.characters.runtime_data;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.config
 {
-	[Serializable]
-	public class CharacterConfig
+	[CreateAssetMenu(menuName = "Configs/Character")]
+	public class CharacterConfig : ScriptableObject
 	{
+		[field: SerializeField]
+		public CharacterConfig ParentConfig { get; private set; }
+
 		[field: SerializeField]
 		public RollConfig Roll;
 		[field: SerializeField]
@@ -25,6 +27,6 @@ namespace game.gameplay_core.characters.config
 		public RotationSpeedData RotationSpeed { get; private set; }
 
 		[field: SerializeField]
-		public CharacterStats DefaultStats { get; private set; }
+		public BaseStats BaseStats { get; private set; }
 	}
 }

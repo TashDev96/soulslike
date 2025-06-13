@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: b1362e7a1b63d4bdd8b3399b4d505ff1, type: 2}
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _rotationSpeed._halfTurnDurationSeconds
       value: 2.2
       objectReference: {fileID: 0}

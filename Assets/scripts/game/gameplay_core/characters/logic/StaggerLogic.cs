@@ -50,7 +50,7 @@ namespace game.gameplay_core.characters.logic
 				Poise.Value = PoiseMax.Value;
 			}
 
-			_poiseRestoreTimer = _context.Stats.PoiseRestoreTime.Value;
+			_poiseRestoreTimer = _context.Stats.PoiseRestoreTimer.Value;
 		}
 	}
 }

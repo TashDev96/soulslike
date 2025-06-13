@@ -14,9 +14,26 @@ namespace game.gameplay_core.characters.runtime_data
 		public Stamina Stamina;
 		public StaminaMax StaminaMax;
 
+		[BoxGroup("Poise")]
 		public Poise Poise;
+		[BoxGroup("Poise")]
 		public PoiseMax PoiseMax;
-		public PoiseRestoreTime PoiseRestoreTime;
+		[BoxGroup("Poise")]
+		public PoiseRestoreTime PoiseRestoreTimer;
+		[BoxGroup("Poise")]
+		public PoiseRestoreTime PoiseRestoreTimerMax;
+
+		public CharacterStats()
+		{
+			Hp = new Hp();
+			HpMax = new HpMax();
+			Stamina = new Stamina();
+			StaminaMax = new StaminaMax();
+			Poise = new Poise();
+			PoiseMax = new PoiseMax();
+			PoiseRestoreTimer = new PoiseRestoreTime();
+			PoiseRestoreTimerMax = new PoiseRestoreTime();
+		}
 
 #if UNITY_EDITOR
 		[Button]
@@ -25,6 +42,7 @@ namespace game.gameplay_core.characters.runtime_data
 			Hp.Value = HpMax.Value;
 			Stamina.Value = StaminaMax.Value;
 			Poise.Value = PoiseMax.Value;
+			PoiseRestoreTimer.Value = PoiseRestoreTimerMax.Value;
 			EditorUtility.SetDirty(Selection.activeObject);
 		}
 #endif

@@ -47,9 +47,13 @@ namespace game.gameplay_core.characters
 		private HealthLogic _healthLogic;
 		private StaggerLogic _staggerLogic;
 		private StaminaLogic _staminaLogic;
+		private StatsLogic _statsLogic;
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
+
+		[ShowInInspector]
+		private CharacterStats _characterStats;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -58,6 +62,7 @@ namespace game.gameplay_core.characters
 		private WeaponView DebugWeapon { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
+		public CharacterConfig Config => _config;
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -79,6 +84,13 @@ namespace game.gameplay_core.characters
 
 			var isFalling = new ReactiveProperty<bool>();
 
+			_characterStats = new CharacterStats();
+			_statsLogic = new StatsLogic(new StatsLogic.Context
+			{
+				CharacterStats = _characterStats,
+				CharacterConfig = _config
+			});
+
 			_context = new CharacterContext
 			{
 				LocationTime = locationContext.LocationTime,
@@ -95,7 +107,7 @@ namespace game.gameplay_core.characters
 				Transform = _transform,
 				Animator = GetComponent<AnimancerComponent>(),
 				DeadStateRoot = _deadStateRoot,
-				CharacterStats = _config.DefaultStats,
+				CharacterStats = _characterStats,
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
 
