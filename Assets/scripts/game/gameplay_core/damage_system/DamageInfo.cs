@@ -10,5 +10,6 @@ namespace game.gameplay_core.damage_system
 		public Vector3 WorldPos;
 		public bool DoneByPlayer;
 		public CharacterDomain DamageDealer;
+		public int DeflectionRating;
 	}
 }

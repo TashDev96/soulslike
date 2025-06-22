@@ -22,6 +22,8 @@ namespace game.gameplay_core.damage_system
 		public float BaseDamage { get; private set; }
 		[field: SerializeField]
 		public float StaminaCost { get; private set; } = 10;
+		[field: SerializeField]
+		public int AttackDeflectionRatingBonus { get; private set; } = 0;
 
 		[ShowInInspector]
 		public float Duration => Animation.Clip ? Animation.Clip.length : 0.1f;

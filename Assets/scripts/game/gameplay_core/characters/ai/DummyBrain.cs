@@ -8,6 +8,9 @@ namespace game.gameplay_core.characters.ai
 	{
 		private CharacterContext _characterContext;
 
+		[SerializeField]
+		private bool _forceBlock;
+
 		private float _timer;
 		private Vector3 _startPos;
 		private CharacterCommand _selectedCommand;
@@ -24,6 +27,13 @@ namespace game.gameplay_core.characters.ai
 
 		public void Think(float deltaTime)
 		{
+
+			if(_forceBlock)
+			{
+				_characterContext.InputData.Command = CharacterCommand.StayBlock;
+				return;
+			}
+			
 			_timer -= deltaTime;
 			if(_timer <= 0)
 			{

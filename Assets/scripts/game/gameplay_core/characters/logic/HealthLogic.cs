@@ -11,7 +11,6 @@ namespace game.gameplay_core.characters.logic
 			public ApplyDamageCommand ApplyDamage { get; set; }
 			public CharacterStats CharacterStats { get; set; }
 			public IsDead IsDead { get; set; }
-			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
 		}
 
 		private readonly Context _context;

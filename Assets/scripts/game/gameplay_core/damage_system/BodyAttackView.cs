@@ -32,7 +32,7 @@ namespace game.gameplay_core.damage_system
 		{
 			foreach(var rollCollider in _rollColliders)
 			{
-				AttackHelpers.CastAttack(_rollDamage, _rollHitData, rollCollider, _context, true);
+				AttackHelpers.CastAttack(_rollDamage, _rollHitData, rollCollider, _context, 999,true);
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace game.gameplay_core.damage_system
 			
 			foreach(var fallColliders in _fallColliders)
 			{
-				AttackHelpers.CastAttack(_fallDamage, _fallHitData, fallColliders, _context, true);
+				AttackHelpers.CastAttack(_fallDamage, _fallHitData, fallColliders, _context, 999, true);
 			}
 		}
 	}

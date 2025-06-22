@@ -12237,7 +12237,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 20.37931
+  orthographic size: 10.5172415
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -18411,9 +18411,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 875381543}
   - {fileID: 636421841}
-  <Characters>k__BackingField: []
+  - {fileID: 875381543}
+  <Characters>k__BackingField:
+  - {fileID: 5039234435017277234}
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}
   <OnlySpawnPlayer>k__BackingField: 0
@@ -62860,7 +62861,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.06
+      value: -7.08
       objectReference: {fileID: 0}
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -62868,7 +62869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.74
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62908,7 +62909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
@@ -62936,7 +62937,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5039234435017277230}
+      addedObject: {fileID: 5039234435017277235}
   m_SourcePrefab: {fileID: 100100000, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
 --- !u!4 &5039234435017277222 stripped
 Transform:
@@ -62948,7 +62949,18 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
   m_PrefabInstance: {fileID: 5039234435017277221}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5039234435017277230
+--- !u!114 &5039234435017277234 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+  m_PrefabInstance: {fileID: 5039234435017277221}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039234435017277224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5039234435017277235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62957,15 +62969,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5039234435017277224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9ebba56e4d34c169ab50225a4ced27e, type: 3}
+  m_Script: {fileID: 11500000, guid: ae7dadf5bdf746a894a510209488da90, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  _subUtilities:
-  - {fileID: 1637548381}
-  _aggroZones:
-  - {fileID: 529340877}
-  _attackDistance: 2
-  _fightModeDistance: 4
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.ai.DummyBrain
+  _forceBlock: 1
 --- !u!1001 &8108957380275419158
 PrefabInstance:
   m_ObjectHideFlags: 0

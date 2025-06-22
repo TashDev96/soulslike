@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -17,6 +18,8 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly StaggerState _staggerState;
 		private readonly FallState _fallState;
 		private readonly RunState _runState;
+		private readonly StayBlockState _stayBlockState;
+		private readonly WalkBlockState _walkBlockState;
 
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
@@ -46,13 +49,24 @@ namespace game.gameplay_core.characters.state_machine
 			_rollState = new RollState(_context);
 			_fallState = new FallState(_context);
 			_runState = new RunState(_context);
+			_stayBlockState = new StayBlockState(_context);
+			_walkBlockState = new WalkBlockState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
+			_context.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
 
 			SetState(_idleState);
+		}
+
+		private void HnadleAttackDeflected()
+		{
+			if(_currentState.Value is AttackState attackState)
+			{
+				SetState(new DeflectedAttackState(_context, attackState.CurrentAttackAnimation, attackState.CurrentAttackConfig));
+			}
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)
@@ -102,6 +116,7 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			if(_currentState.Value.CanInterruptByStagger && !_context.IsDead.Value)
 			{
+				Debug.Log("stag");
 				_currentState.Value.OnInterrupt();
 				SetState(_staggerState);
 			}
@@ -196,7 +211,11 @@ namespace game.gameplay_core.characters.state_machine
 						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackStrong : AttackType.Strong);
 						SetState(_attackState);
 						break;
-					case CharacterCommand.Block:
+					case CharacterCommand.StayBlock:
+						SetState(_stayBlockState);
+						break;
+					case CharacterCommand.WalkBlock:
+						SetState(_walkBlockState);
 						break;
 					case CharacterCommand.UseItem:
 						break;

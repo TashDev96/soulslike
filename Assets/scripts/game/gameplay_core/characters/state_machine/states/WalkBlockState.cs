@@ -1,0 +1,113 @@
+using game.gameplay_core.characters.commands;
+using UnityEngine;
+
+namespace game.gameplay_core.characters.state_machine.states
+{
+	public class WalkBlockState : CharacterStateBase
+	{
+		private const string StaminaRegenLockKey = nameof(WalkBlockState);
+		private bool _isBlocking;
+		private float _time;
+
+		public WalkBlockState(CharacterContext context) : base(context)
+		{
+			IsReadyToRememberNextCommand = true;
+		}
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			IsComplete = false;
+			_isBlocking = true;
+			_time = 0;
+			
+			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
+			
+			if(_context.WeaponView.Value != null)
+			{
+				_context.WeaponView.Value.SetBlockColliderActive(true);
+			}
+		}
+
+		public override void OnExit()
+		{
+			_isBlocking = false;
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
+			
+			if(_context.WeaponView.Value != null)
+			{
+				_context.WeaponView.Value.SetBlockColliderActive(false);
+			}
+			
+			base.OnExit();
+		}
+
+		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
+		{
+			switch(nextCommand)
+			{
+				case CharacterCommand.WalkBlock:
+					IsComplete = false;
+					return true;
+				case CharacterCommand.StayBlock:
+					return false;
+				default:
+					return false;
+			}
+		}
+
+		public override void Update(float deltaTime)
+		{
+			_time += deltaTime;
+			
+			if(_isBlocking)
+			{
+				var blockStaminaCost = _context.WeaponView.Value?.Config.BlockStaminaCost ?? 5f;
+				_context.StaminaLogic.SpendStamina(blockStaminaCost * deltaTime);
+				
+				if(_context.CharacterStats.Stamina.Value <= 0)
+				{
+					IsComplete = true;
+					return;
+				}
+			}
+
+			var inputWorld = _context.InputData.DirectionWorld.normalized;
+
+			if(!_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
+			}
+
+			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.Forward, inputWorld));
+			if(_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				directionMultiplier = 1;
+			}
+
+			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
+			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * 0.5f * acceleration);
+
+			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
+
+			IsComplete = true;
+		}
+
+		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
+		{
+			if(nextCommand == CharacterCommand.StayBlock)
+			{
+				return true;
+			}
+			return base.CheckIsReadyToChangeState(nextCommand);
+		}
+
+		public override bool CanInterruptByStagger => false;
+
+		public override float GetEnterStaminaCost()
+		{
+			return 1f;
+		}
+	}
+} 

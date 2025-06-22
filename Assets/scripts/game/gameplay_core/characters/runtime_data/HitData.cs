@@ -13,6 +13,8 @@ namespace game.gameplay_core.characters.runtime_data
 		public HashSet<string> ImpactedCharacters = new();
 		public HashSet<Collider> ImpactedTargets = new();
 
+		public float BlockDamageMultiplier = 1f;
+
 		public bool IsActive => IsStarted && !IsEnded;
 	}
 }

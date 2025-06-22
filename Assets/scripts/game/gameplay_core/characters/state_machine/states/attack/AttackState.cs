@@ -22,6 +22,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private bool _staminaRegenDisabled;
 
 		private int _framesToUnlockWalk;
+		public AnimancerState CurrentAttackAnimation { get; private set; }
+		public AttackConfig CurrentAttackConfig => _currentAttackConfig;
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
@@ -44,20 +46,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
-
-			if(!_staminaRegenDisabled)
-			{
-				if(_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
-				{
-					_staminaRegenDisabled = true;
-					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
-				}
-			}
-			else if(!_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
-			{
-				_staminaRegenDisabled = false;
-				_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
-			}
+			
+			UpdateStaminaRegenLock();
 
 			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
@@ -102,6 +92,23 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
+
+			void UpdateStaminaRegenLock()
+			{
+				if(!_staminaRegenDisabled)
+				{
+					if(_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+					{
+						_staminaRegenDisabled = true;
+						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
+					}
+				}
+				else if(!_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				{
+					_staminaRegenDisabled = false;
+					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+				}
+			}
 		}
 
 		public override void OnExit()
@@ -169,8 +176,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			var newAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
-
+			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			
 			if(_attackType.IsRollAttack())
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
@@ -194,8 +201,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			void SetAttackInitialTime(float time)
 			{
-				Time = time * newAnimation.Duration;
-				newAnimation.Time = time * newAnimation.Duration;
+				Time = time * CurrentAttackAnimation.Duration;
+				CurrentAttackAnimation.Time = time * CurrentAttackAnimation.Duration;
 				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 			}
 		}

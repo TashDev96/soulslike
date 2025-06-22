@@ -69,6 +69,7 @@ namespace game.gameplay_core.characters.player
 		private CharacterCommand CalculateCommand(Vector3 directionInputLocalSpace)
 		{
 			var hasDirectionInput = directionInputLocalSpace.sqrMagnitude > 0;
+			var hasBlockInput = InputAdapter.GetButton(InputAxesNames.Block);
 			var hasRunInput = _rollDashHoldDuration > .33f;
 			var attackInput = GetAttackInput();
 
@@ -119,7 +120,16 @@ namespace game.gameplay_core.characters.player
 
 			if(hasDirectionInput)
 			{
-				return hasRunInput ? CharacterCommand.Run : CharacterCommand.Walk;
+				if(hasRunInput)
+				{
+					return CharacterCommand.Run;
+				}
+				return hasBlockInput ? CharacterCommand.WalkBlock : CharacterCommand.Walk;
+			}
+
+			if(hasBlockInput)
+			{
+				return CharacterCommand.StayBlock;
 			}
 
 			return CharacterCommand.None;

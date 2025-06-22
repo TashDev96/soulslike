@@ -81,6 +81,7 @@ namespace game.gameplay_core.characters
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
+			_poiseLogic = new PoiseLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -102,6 +103,7 @@ namespace game.gameplay_core.characters
 				IsFalling = isFalling,
 				FallDamageLogic = _fallDamageLogic,
 				StaminaLogic = _staminaLogic,
+				PoiseLogic = _poiseLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -127,7 +129,8 @@ namespace game.gameplay_core.characters
 				TriggerStagger = new ReactiveCommand(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>()
+				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
+				DeflectCurrentAttack = new ReactiveCommand(),
 			};
 
 			ExternalData = new CharacterExternalData(_context);
@@ -187,16 +190,17 @@ namespace game.gameplay_core.characters
 					InvulnerabilityLogic = _context.InvulnerabilityLogic
 				});
 			}
+			
+		
 
 			_healthLogic = new HealthLogic(new HealthLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				IsDead = _context.IsDead,
 				CharacterStats = _context.CharacterStats,
-				InvulnerabilityLogic = _context.InvulnerabilityLogic
 			});
 
-			_poiseLogic = new PoiseLogic(new PoiseLogic.Context
+			_poiseLogic.SetContext(new PoiseLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				Stats = _context.CharacterStats,
@@ -227,6 +231,19 @@ namespace game.gameplay_core.characters
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(transform, _context, _stateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
+			
+			
+			void CreateCharacterUi()
+			{
+				var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterUi);
+				_worldSpaceUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
+				_worldSpaceUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
+				{
+					CharacterStats = _context.CharacterStats,
+					UiPivotWorld = _uiPivot,
+					LocationUiUpdate = locationContext.LocationUiUpdate,
+				});
+			}
 		}
 
 		[Button]
@@ -235,16 +252,7 @@ namespace game.gameplay_core.characters
 			UniqueId = name + Random.value;
 		}
 
-		private void CreateCharacterUi()
-		{
-			var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterUi);
-			_worldSpaceUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
-			_worldSpaceUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
-			{
-				CharacterStats = _context.CharacterStats,
-				UiPivotWorld = _uiPivot
-			});
-		}
+		
 
 		private void CustomUpdate(float deltaTime)
 		{

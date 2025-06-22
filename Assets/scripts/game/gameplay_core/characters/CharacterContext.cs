@@ -21,6 +21,7 @@ namespace game.gameplay_core.characters
 		public InvulnerabilityLogic InvulnerabilityLogic;
 		public FallDamageLogic FallDamageLogic;
 		public StaminaLogic StaminaLogic;
+		public PoiseLogic PoiseLogic;
 
 		public CharacterConfig Config;
 		public ReadOnlyTransform Transform;
@@ -51,5 +52,8 @@ namespace game.gameplay_core.characters
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 
 		public BodyAttackView BodyAttackView { get; set; }
+		
+
+		public ReactiveCommand DeflectCurrentAttack;
 	}
 }

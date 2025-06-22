@@ -20,12 +20,32 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Roll")]
 		[field: SerializeField]
 		public AttackConfig RollAttackStrong { get; private set; }
+		
 		[field: BoxGroup("Run")]
 		[field: SerializeField]
 		public AttackConfig RunAttack { get; private set; }
 		[field: BoxGroup("Run")]
 		[field: SerializeField]
 		public AttackConfig RunAttackStrong { get; private set; }
+
+		[field: BoxGroup("Block")]
+		[field: SerializeField]
+		[field: Range(0,100)]
+		public float BlockStability { get; private set; } = 100f;
+		[field: BoxGroup("Block")]
+		[field: SerializeField]
+		[field: Range(0f, 1f)]
+		public float DamageReduction { get; private set; } = 0.8f;
+		[field: BoxGroup("Block")]
+		[field: SerializeField]
+		public float BlockStaminaCost { get; private set; } = 5f;
+		[field: BoxGroup("Block")]
+		[field: SerializeField]
+		public int BlockDeflectionRating { get; private set; } = 5;
+		[field: BoxGroup("Block")]
+		[field: SerializeField]
+		public int AttackDeflectionRating { get; private set; } = 5;
+		
 
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToRegularCustomOrder { get; private set; }

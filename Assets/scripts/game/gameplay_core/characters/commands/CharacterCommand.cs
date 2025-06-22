@@ -4,12 +4,13 @@ namespace game.gameplay_core.characters.commands
 	{
 		None,
 		Walk,
+		WalkBlock,
 		Run,
 		Roll,
 		RegularAttack,
 		StrongAttack,
 		AttackByIndex,
-		Block,
+		StayBlock,
 		UseItem,
 		Interact
 	}

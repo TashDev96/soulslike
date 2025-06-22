@@ -11,6 +11,10 @@ namespace game.gameplay_core.damage_system
 	{
 		[SerializeField]
 		private CapsuleCaster[] _hitColliders;
+		
+		[SerializeField]
+		private BlockReceiver[] _blockColliders;
+		
 		public WeaponConfig Config;
 
 		private readonly List<TransformCache> _previousCollidersPositions = new();
@@ -20,6 +24,42 @@ namespace game.gameplay_core.damage_system
 		public void Initialize(CharacterContext characterContext)
 		{
 			_context = characterContext;
+			SetBlockColliderActive(false);
+			
+			foreach(var blockReceiver in _blockColliders)
+			{
+				blockReceiver.Initialize(new BlockReceiver.Context()
+				{
+					Team = _context.Team,
+					CharacterId = _context.CharacterId,
+					ApplyDamage = _context.ApplyDamage,
+					InvulnerabilityLogic = _context.InvulnerabilityLogic,
+					StaminaLogic = _context.StaminaLogic,
+					PoiseLogic = _context.PoiseLogic,
+					WeaponConfig = Config,
+				});
+			}
+		}
+
+		public void SetBlockColliderActive(bool active)
+		{
+			if(_blockColliders != null)
+			{
+				for(var i = 0; i < _blockColliders.Length; i++)
+				{
+					_blockColliders[i].gameObject.SetActive(active);
+				}
+			}
+		}
+
+		public bool HasSufficientStaminaForBlock(float staminaCost)
+		{
+			return _context.CharacterStats.Stamina.Value >= staminaCost;
+		}
+
+		public void ConsumeBlockStamina(float staminaCost)
+		{
+			_context.StaminaLogic.SpendStamina(staminaCost);
 		}
 
 		public void CastAttackInterpolated(AttackConfig attackConfig, HitData hitData)
@@ -55,7 +95,9 @@ namespace game.gameplay_core.damage_system
 					colliderTransform.position = castPos;
 					colliderTransform.rotation = castRotation;
 
-					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData, _hitColliders[i], _context, true);
+					var deflectionRating = _context.WeaponView.Value.Config.AttackDeflectionRating + attackConfig.AttackDeflectionRatingBonus;
+
+					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData, _hitColliders[i], _context, deflectionRating, true);
 				}
 
 				colliderTransform.position = currentPosition;
