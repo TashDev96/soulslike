@@ -30,7 +30,8 @@ namespace game.gameplay_core.characters
 		public LockOnTargetView[] LockOnTargets;
 		public CharacterStats CharacterStats;
 		public CharacterInputData InputData;
-		public ReactiveProperty<WeaponView> WeaponView;
+		public ReactiveProperty<WeaponView> RightWeapon;
+		public ReactiveProperty<WeaponView> LeftWeapon;
 
 		public ReactiveProperty<float> WalkSpeed;
 		public ReactiveProperty<float> RunSpeed;

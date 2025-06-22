@@ -68,7 +68,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 				if(hitData.IsActive)
 				{
-					_context.WeaponView.Value.CastAttackInterpolated(_currentAttackConfig, hitData);
+					_context.RightWeapon.Value.CastAttackInterpolated(_currentAttackConfig, hitData);
 
 					if(NormalizedTime >= hitTiming.y)
 					{
@@ -209,7 +209,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void GetCurrentAttackConfig(out AttackConfig attackConfig, out int newAttackIndex)
 		{
-			var weaponConfig = _context.WeaponView.Value.Config;
+			var weaponConfig = _context.RightWeapon.Value.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{
 				newAttackIndex = _currentAttackIndex;
@@ -235,19 +235,19 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return;
 				case AttackType.RollAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _context.WeaponView.Value.Config.RollAttack;
+					attackConfig = _context.RightWeapon.Value.Config.RollAttack;
 					return;
 				case AttackType.RollAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _context.WeaponView.Value.Config.RollAttackStrong;
+					attackConfig = _context.RightWeapon.Value.Config.RollAttackStrong;
 					return;
 				case AttackType.RunAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _context.WeaponView.Value.Config.RunAttack;
+					attackConfig = _context.RightWeapon.Value.Config.RunAttack;
 					return;
 				case AttackType.RunAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _context.WeaponView.Value.Config.RunAttackStrong;
+					attackConfig = _context.RightWeapon.Value.Config.RunAttackStrong;
 					return;
 				default:
 					throw new ArgumentOutOfRangeException();

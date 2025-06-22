@@ -24,9 +24,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
 			
-			if(_context.WeaponView.Value != null)
+			if(_context.RightWeapon.Value != null)
 			{
-				_context.WeaponView.Value.SetBlockColliderActive(true);
+				_context.RightWeapon.Value.SetBlockColliderActive(true);
 			}
 		}
 
@@ -35,9 +35,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_isBlocking = false;
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
 			
-			if(_context.WeaponView.Value != null)
+			if(_context.RightWeapon.Value != null)
 			{
-				_context.WeaponView.Value.SetBlockColliderActive(false);
+				_context.RightWeapon.Value.SetBlockColliderActive(false);
 			}
 			
 			base.OnExit();
@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			
 			if(_isBlocking)
 			{
-				var blockStaminaCost = _context.WeaponView.Value?.Config.BlockStaminaCost ?? 5f;
+				var blockStaminaCost = _context.RightWeapon.Value?.Config.BlockStaminaCost ?? 5f;
 				_context.StaminaLogic.SpendStamina(blockStaminaCost * deltaTime);
 				
 				if(_context.CharacterStats.Stamina.Value <= 0)

@@ -1,4 +1,5 @@
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -6,8 +7,7 @@ namespace game.gameplay_core.characters.state_machine.states
 	{
 		private const string StaminaRegenKey = nameof(StayBlockState);
 		private bool _isBlocking;
-		
-		
+		private WeaponView _weapon;
 
 		public StayBlockState(CharacterContext context) : base(context)
 		{
@@ -22,10 +22,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			
 			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
 			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
+
+			_weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
 			
-			if(_context.WeaponView.Value != null)
+			if(_weapon != null)
 			{
-				_context.WeaponView.Value.SetBlockColliderActive(true);
+				_weapon.SetBlockColliderActive(true);
 			}
 		}
 
@@ -34,9 +36,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_isBlocking = false;
 			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
 			
-			if(_context.WeaponView.Value != null)
+			if(_weapon != null)
 			{
-				_context.WeaponView.Value.SetBlockColliderActive(false);
+				_weapon.SetBlockColliderActive(false);
 			}
 			
 			base.OnExit();

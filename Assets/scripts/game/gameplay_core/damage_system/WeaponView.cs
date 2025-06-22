@@ -95,7 +95,7 @@ namespace game.gameplay_core.damage_system
 					colliderTransform.position = castPos;
 					colliderTransform.rotation = castRotation;
 
-					var deflectionRating = _context.WeaponView.Value.Config.AttackDeflectionRating + attackConfig.AttackDeflectionRatingBonus;
+					var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + attackConfig.AttackDeflectionRatingBonus;
 
 					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData, _hitColliders[i], _context, deflectionRating, true);
 				}

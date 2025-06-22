@@ -119,7 +119,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: WeaponPivot
+    path: RightHandHoldPivot
   m_PositionCurves:
   - curve:
       serializedVersion: 2
@@ -235,7 +235,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: WeaponPivot
+    path: RightHandHoldPivot
   m_ScaleCurves: []
   m_FloatCurves: []
   m_PPtrCurves: []
@@ -402,7 +402,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -522,7 +522,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -642,7 +642,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -753,7 +753,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -864,7 +864,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -975,7 +975,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -988,7 +988,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1000,7 +1000,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -1012,7 +1012,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponPivot
+    path: RightHandHoldPivot
     classID: 4
     script: {fileID: 0}
     flags: 0

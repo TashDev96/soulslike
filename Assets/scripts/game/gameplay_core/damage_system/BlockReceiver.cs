@@ -26,6 +26,7 @@ namespace game.gameplay_core.damage_system
 		public void Initialize(Context context)
 		{
 			_context = context;
+			gameObject.SetActive(false);
 		}
 
 		public void ApplyDamage(DamageInfo damageInfo, out bool deflectAttack)

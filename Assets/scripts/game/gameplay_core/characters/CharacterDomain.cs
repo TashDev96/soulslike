@@ -60,6 +60,8 @@ namespace game.gameplay_core.characters
 
 		[field: SerializeField]
 		private WeaponView DebugWeapon { get; set; }
+		[field: SerializeField]
+		private WeaponView DebugWeaponLeft { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
@@ -113,7 +115,8 @@ namespace game.gameplay_core.characters
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
 
-				WeaponView = new ReactiveProperty<WeaponView>(DebugWeapon),
+				RightWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
+				LeftWeapon = new ReactiveProperty<WeaponView>(DebugWeaponLeft),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 
 				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
@@ -165,7 +168,7 @@ namespace game.gameplay_core.characters
 			_staminaLogic.Initialize(new StaminaLogic.Context
 			{
 				CharacterConfig = _context.Config,
-				CurrentWeapon = _context.WeaponView,
+				CurrentWeapon = _context.RightWeapon,
 				Stamina = _context.CharacterStats.Stamina,
 				StaminaMax = _context.CharacterStats.StaminaMax
 			});
@@ -176,7 +179,8 @@ namespace game.gameplay_core.characters
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
 
-			_context.WeaponView.Value.Initialize(_context);
+			_context.RightWeapon.Value.Initialize(_context);
+			_context.LeftWeapon.Value?.Initialize(_context);
 			_context.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
@@ -266,7 +270,7 @@ namespace game.gameplay_core.characters
 				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
 				personalDeltaTime -= deltaTimeStep;
 				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
-				_context.WeaponView.Value?.CustomUpdate(deltaTimeStep);
+				_context.RightWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
