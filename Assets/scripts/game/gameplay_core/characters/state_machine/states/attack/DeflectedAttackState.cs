@@ -12,6 +12,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			_animationState = animationState;
 			_attackConfig = attackConfig;
+			IsReadyToRememberNextCommand = true;
 		}
 
 		public override void OnEnter()
