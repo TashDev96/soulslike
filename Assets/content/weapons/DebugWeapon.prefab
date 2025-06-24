@@ -307,6 +307,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
       <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
       <EnterComboTime>k__BackingField: 0.2857143
+      <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -391,6 +392,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.72222227}
       <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
       <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -458,6 +460,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.5507247}
       <ExitToComboTime>k__BackingField: {x: 0.47826087, y: 0.65217394}
       <EnterComboTime>k__BackingField: 0.18115942
+      <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -543,6 +546,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.7321428}
       <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
       <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0.2857143
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve: []
@@ -574,6 +578,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.73913044}
       <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
       <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0.2826087
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve: []
@@ -605,6 +610,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.7321428}
       <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
       <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -663,6 +669,7 @@ MonoBehaviour:
       <LockedStateTime>k__BackingField: {x: 0, y: 0.73913044}
       <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
       <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:

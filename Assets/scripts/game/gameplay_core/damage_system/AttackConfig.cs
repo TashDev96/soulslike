@@ -46,6 +46,8 @@ namespace game.gameplay_core.damage_system
 		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
+		[field: HideInInspector]
+		[field: SerializeField]
 		public float EnterFromRollTime { get; private set; }
 
 		[field: SerializeField]
