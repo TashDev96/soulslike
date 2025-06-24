@@ -20,13 +20,15 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 			_isBlocking = true;
 			
-			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
+			
+			
 			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
 
 			_weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
 			
 			if(_weapon != null)
 			{
+				_context.Animator.Play(_weapon.Config.BlockStayAnimation, 0.2f);
 				_weapon.SetBlockColliderActive(true);
 			}
 		}
@@ -52,8 +54,10 @@ namespace game.gameplay_core.characters.state_machine.states
 					IsComplete = false;
 					return true;
 				case CharacterCommand.WalkBlock:
+					IsComplete = true;
 					return false;
 				default:
+					IsComplete = true;
 					return false;
 			}
 		}

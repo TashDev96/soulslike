@@ -1,4 +1,5 @@
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -8,6 +9,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private const string StaminaRegenLockKey = nameof(WalkBlockState);
 		private bool _isBlocking;
 		private float _time;
+		private WeaponView _weapon;
 
 		public WalkBlockState(CharacterContext context) : base(context)
 		{
@@ -21,12 +23,14 @@ namespace game.gameplay_core.characters.state_machine.states
 			_isBlocking = true;
 			_time = 0;
 			
-			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
 			
-			if(_context.RightWeapon.Value != null)
+			_weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			
+			if(_weapon != null)
 			{
-				_context.RightWeapon.Value.SetBlockColliderActive(true);
+				_context.Animator.Play(_weapon.Config.BlockStayAnimation, 0.2f);
+				_weapon.SetBlockColliderActive(true);
 			}
 		}
 
@@ -35,9 +39,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_isBlocking = false;
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
 			
-			if(_context.RightWeapon.Value != null)
+			if(_weapon != null)
 			{
-				_context.RightWeapon.Value.SetBlockColliderActive(false);
+				_weapon.SetBlockColliderActive(false);
 			}
 			
 			base.OnExit();
@@ -63,9 +67,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			
 			if(_isBlocking)
 			{
-				var blockStaminaCost = _context.RightWeapon.Value?.Config.BlockStaminaCost ?? 5f;
-				_context.StaminaLogic.SpendStamina(blockStaminaCost * deltaTime);
-				
 				if(_context.CharacterStats.Stamina.Value <= 0)
 				{
 					IsComplete = true;

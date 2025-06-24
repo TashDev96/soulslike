@@ -12237,7 +12237,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 10.5172415
+  orthographic size: 13.103448
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -12262,7 +12262,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -41.7, y: 60.9, z: -42.7}
+  m_LocalPosition: {x: -48.99, y: 60.9, z: -42.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18411,8 +18411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 636421841}
   - {fileID: 875381543}
+  - {fileID: 636421841}
   <Characters>k__BackingField:
   - {fileID: 5039234435017277234}
   <MainCamera>k__BackingField: {fileID: 330585545}
@@ -51454,35 +51454,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.4932747
-      objectReference: {fileID: 0}
-    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 3.226
-      objectReference: {fileID: 0}
-    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-      propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.4209674
+      objectReference: {fileID: 0}
+    - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.90707576
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -51490,7 +51490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -130.209
       objectReference: {fileID: 0}
     - target: {fileID: 3919925399006202490, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -54538,476 +54538,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.size
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[0].name
-      value: Attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[1].name
-      value: StrongAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[2].name
-      value: Block
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[3].name
-      value: DebugKey2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[4].name
-      value: DebugKey
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[5].name
-      value: Interact
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[6].name
-      value: UseItem
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[7].name
-      value: RollDash
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[8].name
-      value: LockOn
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].name
-      value: Horizontal
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].name
-      value: Vertical
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].name
-      value: Mouse Scroll Wheel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].name
-      value: Mouse Scroll Wheel Secondary
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[13].name
-      value: Pause
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].name
-      value: Pause
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].name
-      value: Pause
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].scale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].scale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR1Binding.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR2Binding.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR3Binding.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].axisType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].axisType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].axisType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].axisType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[13].axisType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].axisType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].axisType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].deltaMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].deltaMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].smoothingTime
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].smoothingTime
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[13].smoothingTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].smoothingTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[0].keyboardPositive
-      value: 323
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[1].keyboardPositive
-      value: 324
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: axes.list.Array.data[2].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[3].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[4].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[5].keyboardPositive
-      value: 101
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[6].keyboardPositive
-      value: 114
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[7].keyboardPositive
-      value: 32
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[8].keyboardPositive
-      value: 325
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].keyboardNegative
-      value: 97
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].keyboardPositive
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].keyboardNegative
-      value: 115
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].keyboardPositive
-      value: 119
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].keyboardNegative
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].keyboardNegative
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[13].keyboardPositive
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].affectSourceKeys
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].keyboardPositive
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].affectSourceKeys
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].keyboardPositive
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR1Binding.axisList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR2Binding.axisList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR3Binding.axisList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[0].analogToDigitalThresh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].digitalToScrollDelay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].digitalToScrollDelay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[1].analogToDigitalThresh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[2].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[3].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[4].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[5].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[6].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[8].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].analogToDigitalThresh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].analogToDigitalThresh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].analogToDigitalThresh
-      value: 0.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].digitalToAnalogAccelTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[9].digitalToAnalogDecelTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].digitalToAnalogAccelTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[10].digitalToAnalogDecelTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].digitalToAnalogAccelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[11].digitalToAnalogDecelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].digitalToAnalogAccelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[12].digitalToAnalogDecelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].digitalToAnalogAccelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].digitalToAnalogDecelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].digitalToAnalogAccelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].digitalToAnalogDecelTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].digitalToScrollAutoRepeat
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].digitalToScrollAutoRepeat
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].scrollToAnalogStepDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].scrollToDeltaSmoothingTime
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].scrollToAnalogStepDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].scrollToDeltaSmoothingTime
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].scrollToAnalogSmoothingTime
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].scrollToAnalogSmoothingTime
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[14].digitalToScrollRepeatInterval
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[15].digitalToScrollRepeatInterval
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiL1Binding.axisList.Array.data[0].axisName
-      value: Block
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiL2Binding.axisList.Array.data[0].axisName
-      value: SpecialAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR1Binding.axisList.Array.data[0].axisName
-      value: Attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR2Binding.axisList.Array.data[0].axisName
-      value: StrongAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR3Binding.axisList.Array.data[0].axisName
-      value: StrongAttack
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[0].axisName
-      value: Roll
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[1].axisName
-      value: Run
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[0].axisName
-      value: RollDash
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[1].axisName
-      value: Run
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR1Binding.axisList.Array.data[0].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR2Binding.axisList.Array.data[0].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiR3Binding.axisList.Array.data[0].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[0].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceUpBinding.axisList.Array.data[1].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[0].axisPositiveSide
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: anyGamepad.digiFaceRightBinding.axisList.Array.data[1].axisPositiveSide
-      value: 1
+      value: 304
       objectReference: {fileID: 0}
     - target: {fileID: 5865372750619838363, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: m_Name

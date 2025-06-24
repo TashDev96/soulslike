@@ -111,6 +111,87 @@ MonoBehaviour:
     list: []
   axes:
     list:
+    - name: Attack
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 323
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
+    - name: StrongAttack
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 324
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
+    - name: Block
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 0
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0.125
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
     - name: DebugKey2
       axisType: 2
       deltaMode: 1
@@ -139,33 +220,6 @@ MonoBehaviour:
       scrollToAnalogStepDuration: 0.1
       scrollToDeltaSmoothingTime: 0.1
     - name: DebugKey
-      axisType: 2
-      deltaMode: 1
-      snap: 0
-      scale: 1
-      affectSourceKeys: 1
-      affectedKeyPositive: 0
-      affectedKeyNegative: 0
-      keyboardPositive: 0
-      keyboardPositiveAlt0: 0
-      keyboardPositiveAlt1: 0
-      keyboardPositiveAlt2: 0
-      keyboardNegative: 0
-      keyboardNegativeAlt0: 0
-      keyboardNegativeAlt1: 0
-      keyboardNegativeAlt2: 0
-      analogToDigitalThresh: 0.125
-      rawSmoothingTime: 0
-      smoothingTime: 0
-      digitalToAnalogAccelTime: 0.25
-      digitalToAnalogDecelTime: 0.25
-      digitalToScrollAutoRepeat: 1
-      digitalToScrollRepeatInterval: 0.5
-      digitalToScrollDelay: 1
-      scrollToAnalogSmoothingTime: 0.05
-      scrollToAnalogStepDuration: 0.1
-      scrollToDeltaSmoothingTime: 0.1
-    - name: Block
       axisType: 2
       deltaMode: 1
       snap: 0
@@ -246,61 +300,7 @@ MonoBehaviour:
       scrollToAnalogSmoothingTime: 0.05
       scrollToAnalogStepDuration: 0.1
       scrollToDeltaSmoothingTime: 0.1
-    - name: Attack
-      axisType: 2
-      deltaMode: 1
-      snap: 0
-      scale: 1
-      affectSourceKeys: 1
-      affectedKeyPositive: 0
-      affectedKeyNegative: 0
-      keyboardPositive: 323
-      keyboardPositiveAlt0: 0
-      keyboardPositiveAlt1: 0
-      keyboardPositiveAlt2: 0
-      keyboardNegative: 0
-      keyboardNegativeAlt0: 0
-      keyboardNegativeAlt1: 0
-      keyboardNegativeAlt2: 0
-      analogToDigitalThresh: 0
-      rawSmoothingTime: 0
-      smoothingTime: 0
-      digitalToAnalogAccelTime: 0.25
-      digitalToAnalogDecelTime: 0.25
-      digitalToScrollAutoRepeat: 1
-      digitalToScrollRepeatInterval: 0.5
-      digitalToScrollDelay: 1
-      scrollToAnalogSmoothingTime: 0.05
-      scrollToAnalogStepDuration: 0.1
-      scrollToDeltaSmoothingTime: 0.1
-    - name: Run
-      axisType: 2
-      deltaMode: 1
-      snap: 0
-      scale: 1
-      affectSourceKeys: 1
-      affectedKeyPositive: 0
-      affectedKeyNegative: 0
-      keyboardPositive: 32
-      keyboardPositiveAlt0: 0
-      keyboardPositiveAlt1: 0
-      keyboardPositiveAlt2: 0
-      keyboardNegative: 0
-      keyboardNegativeAlt0: 0
-      keyboardNegativeAlt1: 0
-      keyboardNegativeAlt2: 0
-      analogToDigitalThresh: 0.125
-      rawSmoothingTime: 0
-      smoothingTime: 0
-      digitalToAnalogAccelTime: 0.25
-      digitalToAnalogDecelTime: 0.25
-      digitalToScrollAutoRepeat: 1
-      digitalToScrollRepeatInterval: 0.5
-      digitalToScrollDelay: 1
-      scrollToAnalogSmoothingTime: 0.05
-      scrollToAnalogStepDuration: 0.1
-      scrollToDeltaSmoothingTime: 0.1
-    - name: Roll
+    - name: RollDash
       axisType: 2
       deltaMode: 1
       snap: 0
@@ -1578,8 +1578,10 @@ MonoBehaviour:
         axisPositiveSide: 1
       keyList: 
     digiFaceRightBinding:
-      enabled: 0
-      axisList: []
+      enabled: 1
+      axisList:
+      - axisName: RollDash
+        axisPositiveSide: 1
       keyList: 
     digiFaceLeftBinding:
       enabled: 0
@@ -1604,22 +1606,26 @@ MonoBehaviour:
     digiL1Binding:
       enabled: 1
       axisList:
-      - axisName: DebugKey
+      - axisName: Block
         axisPositiveSide: 1
       keyList: 
     digiR1Binding:
-      enabled: 0
-      axisList: []
+      enabled: 1
+      axisList:
+      - axisName: Attack
+        axisPositiveSide: 1
       keyList: 
     digiL2Binding:
       enabled: 1
       axisList:
-      - axisName: DebugKey2
+      - axisName: SpecialAttack
         axisPositiveSide: 1
       keyList: 
     digiR2Binding:
-      enabled: 0
-      axisList: []
+      enabled: 1
+      axisList:
+      - axisName: StrongAttack
+        axisPositiveSide: 1
       keyList: 
     digiL3Binding:
       enabled: 0
@@ -1627,7 +1633,9 @@ MonoBehaviour:
       keyList: 
     digiR3Binding:
       enabled: 0
-      axisList: []
+      axisList:
+      - axisName: StrongAttack
+        axisPositiveSide: 1
       keyList: 
     analogL2Binding:
       enabled: 0

@@ -715,6 +715,24 @@ MonoBehaviour:
     <BlockStaminaCost>k__BackingField: 5
     <BlockDeflectionRating>k__BackingField: 2
     <AttackDeflectionRating>k__BackingField: 3
+    <BlockStayAnimation>k__BackingField:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Clip: {fileID: 0}
+      _Speed: 1
+      _NormalizedStartTime: NaN
+    <BlockWalkAnimation>k__BackingField:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Clip: {fileID: 0}
+      _Speed: 1
+      _NormalizedStartTime: NaN
     <RegularToRegularCustomOrder>k__BackingField:
       _list: []
       _keyCollision: 0

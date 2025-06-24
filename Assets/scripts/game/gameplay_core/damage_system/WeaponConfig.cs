@@ -1,4 +1,5 @@
 using System;
+using Animancer;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.state_machine.states.attack;
 using Sirenix.OdinInspector;
@@ -45,6 +46,13 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Block")]
 		[field: SerializeField]
 		public int AttackDeflectionRating { get; private set; } = 5;
+		
+		[field: BoxGroup("Block/Animations")]
+		[field: SerializeField]
+		public ClipTransition BlockStayAnimation { get; private set; }
+		[field: BoxGroup("Block/Animations")]
+		[field: SerializeField]
+		public ClipTransition BlockWalkAnimation { get; private set; }
 		
 
 		[field: SerializeField]
