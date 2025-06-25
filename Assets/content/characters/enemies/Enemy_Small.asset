@@ -60,6 +60,8 @@ MonoBehaviour:
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <DeathAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <FallAnimation>k__BackingField: {fileID: 0}
+  <WalkAnimation>k__BackingField: {fileID: 0}
+  <RunAnimation>k__BackingField: {fileID: 0}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.22
     <WalkSpeed>k__BackingField: 5
@@ -90,6 +92,6 @@ MonoBehaviour:
       m_RotationOrder: 4
   <BaseStats>k__BackingField:
     HpMax: 100
-    StaminaMax: 50
+    StaminaMax: 20
     PoiseMax: 0
     PoiseRestoreTimerMax: 5

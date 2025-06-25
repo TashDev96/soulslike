@@ -129,7 +129,7 @@ namespace game.gameplay_core.characters
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = new IsDead(),
-				TriggerStagger = new ReactiveCommand(),
+				TriggerStagger = new ReactiveCommand<StaggerReason>(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
 				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),

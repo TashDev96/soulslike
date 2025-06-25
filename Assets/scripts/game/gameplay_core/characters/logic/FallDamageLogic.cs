@@ -1,6 +1,7 @@
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace game.gameplay_core.characters.logic
 			public CharacterStats CharacterStats;
 			public ReactiveProperty<bool> IsFalling;
 			public InvulnerabilityLogic InvulnerabilityLogic;
-			public ReactiveCommand TriggerStagger;
+			public ReactiveCommand<StaggerReason> TriggerStagger;
 			
 			public BodyAttackView BodyAttackView;
 			public StaminaLogic StaminaLogic;
@@ -130,7 +131,7 @@ namespace game.gameplay_core.characters.logic
 
 					if(fallDistance > _context.StaggerThreshold)
 					{
-						_context.TriggerStagger.Execute();
+						_context.TriggerStagger.Execute(StaggerReason.Fall);
 					}
 
 					Debug.Log($"Fall damage applied: {damage} from height {fallDistance}m");

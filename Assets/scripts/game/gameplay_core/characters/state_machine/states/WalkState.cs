@@ -18,7 +18,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 			_time = 0;
 			IsComplete = false;
-			_context.Animator.Play(_context.Config.IdleAnimation, 0.3f);
+			_context.Animator.Play(_context.Config.WalkAnimation, 0.3f);
 		}
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)

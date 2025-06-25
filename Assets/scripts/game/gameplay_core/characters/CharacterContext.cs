@@ -43,7 +43,7 @@ namespace game.gameplay_core.characters
 		public IReadOnlyReactiveProperty<bool> IsPlayer;
 		public ApplyDamageCommand ApplyDamage;
 		public IsDead IsDead;
-		public ReactiveCommand TriggerStagger;
+		public ReactiveCommand<StaggerReason> TriggerStagger;
 
 		// Add IsFalling reactive property
 		public ReactiveProperty<bool> IsFalling;

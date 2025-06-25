@@ -15,7 +15,6 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly WalkState _walkState;
 		private readonly RollState _rollState;
 		private readonly AttackState _attackState;
-		private readonly StaggerState _staggerState;
 		private readonly FallState _fallState;
 		private readonly RunState _runState;
 		private readonly StayBlockState _stayBlockState;
@@ -45,7 +44,6 @@ namespace game.gameplay_core.characters.state_machine
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
 			_attackState = new AttackState(_context);
-			_staggerState = new StaggerState(_context);
 			_rollState = new RollState(_context);
 			_fallState = new FallState(_context);
 			_runState = new RunState(_context);
@@ -112,13 +110,12 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		private void HandleTriggerStagger()
+		private void HandleTriggerStagger(StaggerReason staggerReason)
 		{
 			if(_currentState.Value.CanInterruptByStagger && !_context.IsDead.Value)
 			{
-				Debug.Log("stag");
 				_currentState.Value.OnInterrupt();
-				SetState(_staggerState);
+				SetState(new StaggerState(_context, _currentState.Value, staggerReason));
 			}
 		}
 

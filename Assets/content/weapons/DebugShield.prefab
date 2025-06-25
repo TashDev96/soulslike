@@ -682,6 +682,15 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 6b812dd11bfb74f42b2b85c349424d28, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <BlockBreakAnimation>k__BackingField:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Clip: {fileID: 7400000, guid: 80833d67cd02645f78aafe38288b02d9, type: 2}
+      _Speed: 1
+      _NormalizedStartTime: NaN
     <RegularToRegularCustomOrder>k__BackingField:
       _list: []
       _keyCollision: 0
