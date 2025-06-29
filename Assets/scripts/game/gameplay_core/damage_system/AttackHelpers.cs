@@ -8,19 +8,22 @@ namespace game.gameplay_core.damage_system
 {
 	public class AttackHelpers
 	{
-		private static readonly int LayerMask = UnityEngine.LayerMask.GetMask("DamageReceivers");
+		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
+		private static readonly int LayerMaskObstacles = LayerMask.GetMask(  "Default");
 		private static readonly Collider[] Results = new Collider[40];
 
-		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool drawDebug = false)
+		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkOnlyBlockReceivers, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
 			hitCaster.GetCapsulePoints(out var point0, out var point1);
-			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMask);
+			
 			
 			if(drawDebug)
 			{
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, Time.deltaTime);
 			}
+
+			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskBlockers  );
 
 			for(var j = 0; j < count; j++)
 			{
@@ -31,6 +34,16 @@ namespace game.gameplay_core.damage_system
 					{
 						DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
 					}
+					return true;
+				}
+			}
+
+			if(!checkOnlyBlockReceivers)
+			{
+				count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskObstacles);
+				if(count > 0)
+				{
+					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
 					return true;
 				}
 			}
@@ -49,7 +62,7 @@ namespace game.gameplay_core.damage_system
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.red, Time.deltaTime);
 			}
 
-			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMask);
+			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskBlockers);
 
 			for(var j = 0; j < count; j++)
 			{
@@ -63,17 +76,17 @@ namespace game.gameplay_core.damage_system
 				{
 					continue;
 				}
-				
+
 				if(blockReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
 				{
 					continue;
 				}
-				
+
 				if(hitData.ImpactedCharacters.Contains(blockReceiver.CharacterId) || blockReceiver.CharacterId == casterContext.CharacterId.Value)
 				{
 					continue;
 				}
-				
+
 				hitData.ImpactedTargets.Add(Results[j]);
 				hitData.ImpactedCharacters.Add(blockReceiver.CharacterId);
 
@@ -84,7 +97,7 @@ namespace game.gameplay_core.damage_system
 					WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
 					DoneByPlayer = casterContext.IsPlayer.Value,
 					DamageDealer = casterContext.SelfLink,
-					DeflectionRating = deflectionRating,
+					DeflectionRating = deflectionRating
 				}, out var attackDeflected);
 
 				if(attackDeflected)

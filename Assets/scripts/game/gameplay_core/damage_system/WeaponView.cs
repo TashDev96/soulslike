@@ -17,6 +17,9 @@ namespace game.gameplay_core.damage_system
 		private CapsuleCaster[] _preciseHitColliders;
 		
 		[SerializeField]
+		private CapsuleCaster[] _handleColliders;
+		
+		[SerializeField]
 		private BlockReceiver[] _blockColliders;
 		
 		public WeaponConfig Config;
@@ -62,6 +65,7 @@ namespace game.gameplay_core.damage_system
 			{
 				WeaponColliderType.Attack => _hitColliders,
 				WeaponColliderType.PreciseContact => _preciseHitColliders,
+				WeaponColliderType.Handle => _handleColliders,
 				_ => _hitColliders
 			};
 
@@ -122,6 +126,7 @@ namespace game.gameplay_core.damage_system
 	public enum WeaponColliderType {
 		Attack,
 		PreciseContact,
+		Handle,
 		Block
 	}
 }

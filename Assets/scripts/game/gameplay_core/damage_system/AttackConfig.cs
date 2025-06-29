@@ -42,13 +42,16 @@ namespace game.gameplay_core.damage_system
 		[field: HideInInspector]
 		[field: SerializeField]
 		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
-
 		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterComboTime { get; private set; }
 		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterFromRollTime { get; private set; }
+		
+		[field: HideInInspector]
+		[field:SerializeField]
+		public float StartHandleObstacleCastTime { get; set; }
 
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
@@ -60,6 +63,8 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
+		
+		
 
 #if UNITY_EDITOR
 
@@ -84,9 +89,14 @@ namespace game.gameplay_core.damage_system
 			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation.Clip, _animationPreview);
 			StaminaRegenDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Stamina Regen Disabled Time:", StaminaRegenDisabledTime, Animation.Clip, _animationPreview);
 			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
+			StartHandleObstacleCastTime = CharacterInspectorUtils.DrawTimingSlider("Start Handle Obstacle Cast Time", StartHandleObstacleCastTime, Animation.Clip, _animationPreview);
+			
+			EditorGUILayout.Space();
+			SirenixEditorGUI.BeginBox("Cross-state Timings");
 			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);
 			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation.Clip, _animationPreview);
 			EnterFromRollTime = CharacterInspectorUtils.DrawTimingSlider("Enter From Roll Time:", EnterFromRollTime, Animation.Clip, _animationPreview);
+			SirenixEditorGUI.EndBox();
 
 			GUILayout.Space(20);
 			GUILayout.Label("Hit Configs:");

@@ -23,6 +23,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private bool _staminaRegenDisabled;
 
 		private int _framesToUnlockWalk;
+		private AttackStage _stage;
 		public AnimancerState CurrentAttackAnimation { get; private set; }
 		public AttackConfig CurrentAttackConfig => _currentAttackConfig;
 
@@ -47,12 +48,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
-			
+
 			UpdateStaminaRegenLock();
 
 			UpdateForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
 			var hasActiveHit = false;
+			var allHitsComplete = true;
 
 			foreach(var hitData in _hitsData)
 			{
@@ -78,6 +80,22 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 
 				hasActiveHit |= hitData.IsActive;
+				allHitsComplete &= hitData.IsEnded;
+			}
+
+			if(hasActiveHit)
+			{
+				_stage = AttackStage.Impact;
+			}
+			if(allHitsComplete)
+			{
+				_stage = AttackStage.Impact;
+			}
+
+			var deflectedByHandleCast = false;
+			if(_stage == AttackStage.Windup && NormalizedTime > _currentAttackConfig.StartHandleObstacleCastTime)
+			{
+				_context.RightWeapon.Value.CastCollidersInterpolated(WeaponColliderType.Handle, null, CastHandleForObstacles);
 			}
 
 			_context.MaxDeltaTime.Value = hasActiveHit ? CharacterConstants.MaxDeltaTimeAttacking : CharacterConstants.MaxDeltaTimeNormal;
@@ -94,14 +112,27 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 
-			
 			void DoCast(HitData hitData, CapsuleCaster capsule)
 			{
 				var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
 
 				AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, capsule, _context, deflectionRating, true);
 			}
-			
+
+			void CastHandleForObstacles(HitData _, CapsuleCaster caster)
+			{
+				if(deflectedByHandleCast)
+				{
+					return;
+				}
+
+				if(AttackHelpers.CastAttackObstacles(caster, false, true))
+				{
+					deflectedByHandleCast = true;
+					_context.DeflectCurrentAttack.Execute();
+				}
+			}
+
 			void UpdateStaminaRegenLock()
 			{
 				if(!_staminaRegenDisabled)
@@ -175,6 +206,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 			Duration = _currentAttackConfig.Duration;
 
+			_stage = AttackStage.Windup;
 			_staminaSpent = false;
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
@@ -186,7 +218,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
-			
+
 			if(_attackType.IsRollAttack())
 			{
 				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
@@ -261,6 +293,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private enum AttackStage
+		{
+			Windup,
+			Impact,
+			Recovery
 		}
 	}
 }
