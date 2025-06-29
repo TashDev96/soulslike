@@ -106,7 +106,7 @@ namespace game.gameplay_core.damage_system
 
 				DrawSelectColliders(HitConfigs[i]);
 
-				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing:", HitConfigs[i].Timing, Animation.Clip, _animationPreview);
+				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing (120 fps):", HitConfigs[i].Timing, Animation.Clip, _animationPreview, 120f);
 				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
 				HitConfigs[i].PoiseDamage = SirenixEditorFields.FloatField("Poise Damage:", HitConfigs[i].PoiseDamage);
 				GUILayout.Space(10);

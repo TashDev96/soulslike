@@ -8,9 +8,9 @@ namespace game.editor
 {
 	public static class CharacterInspectorUtils
 	{
-		public static Vector2 DrawTimingSliderMinMax(string label, Vector2 value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null)
+		public static Vector2 DrawTimingSliderMinMax(string label, Vector2 value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null, float fps = 60f)
 		{
-			GetAnimationParams(animation, out var fps, out var duration);
+			GetAnimationParams(animation, out var duration);
 
 			GUILayout.Label(label);
 			animationPreview?.RegisterTimeBefore(value.x);
@@ -23,9 +23,9 @@ namespace game.editor
 			return result;
 		}
 
-		public static float DrawTimingSlider(string label, float value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null)
+		public static float DrawTimingSlider(string label, float value, AnimationClip animation, PreviewAnimationDrawer animationPreview = null, float fps = 60f)
 		{
-			GetAnimationParams(animation, out var fps, out var duration);
+			GetAnimationParams(animation, out var duration);
 
 			GUILayout.Label(label);
 			animationPreview?.RegisterTimeBefore(value);
@@ -36,9 +36,8 @@ namespace game.editor
 			return result;
 		}
 
-		private static void GetAnimationParams(AnimationClip animation, out float fps, out float duration)
+		private static void GetAnimationParams(AnimationClip animation, out float duration)
 		{
-			fps = animation ? animation.frameRate : 60f;
 			duration = animation ? animation.length : 0.1f;
 		}
 	}
