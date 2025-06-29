@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
@@ -11,6 +12,9 @@ namespace game.gameplay_core.damage_system
 	{
 		[SerializeField]
 		private CapsuleCaster[] _hitColliders;
+		
+		[SerializeField]
+		private CapsuleCaster[] _preciseHitColliders;
 		
 		[SerializeField]
 		private BlockReceiver[] _blockColliders;
@@ -52,26 +56,23 @@ namespace game.gameplay_core.damage_system
 			}
 		}
 
-		public bool HasSufficientStaminaForBlock(float staminaCost)
+		public void CastCollidersInterpolated(WeaponColliderType colliderType, HitData hitData, Action<HitData, CapsuleCaster> handleInterpolatedCast)
 		{
-			return _context.CharacterStats.Stamina.Value >= staminaCost;
-		}
-
-		public void ConsumeBlockStamina(float staminaCost)
-		{
-			_context.StaminaLogic.SpendStamina(staminaCost);
-		}
-
-		public void CastAttackInterpolated(AttackConfig attackConfig, HitData hitData)
-		{
-			for(var i = 0; i < _hitColliders.Length; i++)
+			var castColliders = colliderType switch
 			{
-				if(!hitData.Config.InvolvedColliders[i])
+				WeaponColliderType.Attack => _hitColliders,
+				WeaponColliderType.PreciseContact => _preciseHitColliders,
+				_ => _hitColliders
+			};
+
+			for(var i = 0; i < castColliders.Length; i++)
+			{
+				if(colliderType == WeaponColliderType.Attack && !hitData.Config.InvolvedColliders[i])
 				{
 					continue;
 				}
 
-				var colliderTransform = _hitColliders[i].transform;
+				var colliderTransform = castColliders[i].transform;
 
 				var prevRotation = Quaternion.Euler(_previousCollidersPositions[i].EulerAngles);
 				var currentRotation = colliderTransform.rotation;
@@ -95,9 +96,7 @@ namespace game.gameplay_core.damage_system
 					colliderTransform.position = castPos;
 					colliderTransform.rotation = castRotation;
 
-					var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + attackConfig.AttackDeflectionRatingBonus;
-
-					AttackHelpers.CastAttack(attackConfig.BaseDamage, hitData, _hitColliders[i], _context, deflectionRating, true);
+					handleInterpolatedCast(hitData, castColliders[i]);
 				}
 
 				colliderTransform.position = currentPosition;
@@ -118,5 +117,11 @@ namespace game.gameplay_core.damage_system
 				_previousCollidersPositions[i].Set(hitCollider.transform);
 			}
 		}
+	}
+	
+	public enum WeaponColliderType {
+		Attack,
+		PreciseContact,
+		Block
 	}
 }

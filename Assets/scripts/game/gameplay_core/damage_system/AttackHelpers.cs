@@ -11,6 +11,33 @@ namespace game.gameplay_core.damage_system
 		private static readonly int LayerMask = UnityEngine.LayerMask.GetMask("DamageReceivers");
 		private static readonly Collider[] Results = new Collider[40];
 
+		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool drawDebug = false)
+		{
+			var radius = hitCaster.Radius;
+			hitCaster.GetCapsulePoints(out var point0, out var point1);
+			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMask);
+			
+			if(drawDebug)
+			{
+				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, Time.deltaTime);
+			}
+
+			for(var j = 0; j < count; j++)
+			{
+				var blockReceiver = Results[j].GetComponent<BlockReceiver>();
+				if(blockReceiver)
+				{
+					if(drawDebug)
+					{
+						DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
+					}
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public static void CastAttack(float baseDamage, HitData hitData, CapsuleCaster hitCaster, CharacterContext casterContext, int deflectionRating = 0, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
@@ -62,6 +89,10 @@ namespace game.gameplay_core.damage_system
 
 				if(attackDeflected)
 				{
+					if(drawDebug)
+					{
+						DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.yellow, 1f);
+					}
 					casterContext.DeflectCurrentAttack.Execute();
 					return;
 				}

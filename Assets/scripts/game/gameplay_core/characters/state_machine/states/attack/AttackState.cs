@@ -5,6 +5,7 @@ using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.utils;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
@@ -68,7 +69,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 				if(hitData.IsActive)
 				{
-					_context.RightWeapon.Value.CastAttackInterpolated(_currentAttackConfig, hitData);
+					_context.RightWeapon.Value.CastCollidersInterpolated(WeaponColliderType.Attack, hitData, DoCast);
 
 					if(NormalizedTime >= hitTiming.y)
 					{
@@ -93,6 +94,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
 
+			
+			void DoCast(HitData hitData, CapsuleCaster capsule)
+			{
+				var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
+
+				AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, capsule, _context, deflectionRating, true);
+			}
+			
 			void UpdateStaminaRegenLock()
 			{
 				if(!_staminaRegenDisabled)
