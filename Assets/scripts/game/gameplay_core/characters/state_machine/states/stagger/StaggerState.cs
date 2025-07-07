@@ -44,7 +44,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				case StaggerReason.BlockBreak:
 					if(_previousState is BlockStateBase blockStateBase)
 					{
-						_animation = _context.Animator.Play(blockStateBase.Weapon.Config.BlockBreakAnimation, 0.1f, FadeMode.FromStart);
+						_animation = _context.Animator.Play(blockStateBase.BlockingWeapon.Config.BlockBreakAnimation, 0.1f, FadeMode.FromStart);
 						return;
 					}
 					break;

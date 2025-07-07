@@ -235,6 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hitColliders:
   - {fileID: 7394442961053861244}
+  _preciseHitColliders: []
+  _handleColliders: []
   _blockColliders:
   - {fileID: 265853795931742268}
   Config:
@@ -257,6 +259,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
       <EnterComboTime>k__BackingField: 0.2857143
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -342,6 +345,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -410,6 +414,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.47826087, y: 0.65217394}
       <EnterComboTime>k__BackingField: 0.18115942
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -496,6 +501,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve: []
@@ -528,6 +534,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve: []
@@ -560,6 +567,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -619,6 +627,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -689,6 +698,15 @@ MonoBehaviour:
         _Callbacks: []
         _Names: []
       _Clip: {fileID: 7400000, guid: 80833d67cd02645f78aafe38288b02d9, type: 2}
+      _Speed: 1
+      _NormalizedStartTime: NaN
+    <BlockHitAnimation>k__BackingField:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Clip: {fileID: 7400000, guid: 8d2edfc86392c402a93b7f93cb6730ee, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
     <RegularToRegularCustomOrder>k__BackingField:

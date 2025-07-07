@@ -39,11 +39,8 @@ namespace game.gameplay_core.damage_system
 				{
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
-					ApplyDamage = _context.ApplyDamage,
-					InvulnerabilityLogic = _context.InvulnerabilityLogic,
-					StaminaLogic = _context.StaminaLogic,
-					PoiseLogic = _context.PoiseLogic,
 					WeaponConfig = Config,
+					BlockLogic = _context.BlockLogic,
 				});
 			}
 		}

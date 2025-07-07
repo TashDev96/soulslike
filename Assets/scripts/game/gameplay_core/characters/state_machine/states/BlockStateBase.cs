@@ -1,12 +1,14 @@
-using game.gameplay_core.characters.commands;
+using Animancer;
 using game.gameplay_core.damage_system;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class BlockStateBase : CharacterStateBase
 	{
 		protected bool _isBlocking;
-		public WeaponView Weapon { get; private set; }
+		protected AnimancerState _receiveHitAnimation;
+		public WeaponView BlockingWeapon { get; private set; }
 
 		public override bool CanInterruptByStagger => true;
 
@@ -21,47 +23,58 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 			_isBlocking = true;
 
-			Weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			BlockingWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
 
-			if(Weapon != null)
+			if(BlockingWeapon != null)
 			{
-				_context.Animator.Play(Weapon.Config.BlockStayAnimation, 0.2f);
-				Weapon.SetBlockColliderActive(true);
+				BlockingWeapon.SetBlockColliderActive(true);
+				PlayBlockAnimation();
 			}
 
-			OnEnterStaminaLogic();
+			_context.BlockLogic.OnBlockTriggered.OnExecute += HandleBlockTriggered;
 		}
 
 		public override void OnExit()
 		{
 			_isBlocking = false;
 
-			if(Weapon != null)
+			if(BlockingWeapon != null)
 			{
-				Weapon.SetBlockColliderActive(false);
+				BlockingWeapon.SetBlockColliderActive(false);
 			}
 
-			OnExitStaminaLogic();
+			_context.BlockLogic.OnBlockTriggered.OnExecute -= HandleBlockTriggered;
+
 			base.OnExit();
 		}
 
 		public override void Update(float deltaTime)
 		{
+			if(_receiveHitAnimation != null)
+			{
+				if(_receiveHitAnimation.NormalizedTime >= 1)
+				{
+					PlayBlockAnimation();
+					_receiveHitAnimation = null;
+				}
+				else
+				{
+					return;
+				}
+				
+			} 
+
 			if(_isBlocking)
 			{
 				if(_context.CharacterStats.Stamina.Value <= 0)
 				{
 					IsComplete = true;
-					return;
 				}
 			}
 			else
 			{
 				IsComplete = true;
-				return;
 			}
-
-			UpdateBlockLogic(deltaTime);
 		}
 
 		public override float GetEnterStaminaCost()
@@ -69,8 +82,11 @@ namespace game.gameplay_core.characters.state_machine.states
 			return 1f;
 		}
 
-		protected abstract void OnEnterStaminaLogic();
-		protected abstract void OnExitStaminaLogic();
-		protected abstract void UpdateBlockLogic(float deltaTime);
+		protected abstract void PlayBlockAnimation();
+
+		private void HandleBlockTriggered()
+		{
+			_receiveHitAnimation = _context.Animator.Play(BlockingWeapon.Config.BlockHitAnimation);
+		}
 	}
-} 
+}

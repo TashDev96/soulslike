@@ -1,3 +1,4 @@
+using Animancer;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace game.gameplay_core.characters.state_machine.states
 	public class WalkBlockState : BlockStateBase
 	{
 		private const string StaminaRegenLockKey = nameof(WalkBlockState);
-		private float _time;
+		private float _time; 
 
 		public WalkBlockState(CharacterContext context) : base(context)
 		{
@@ -16,6 +17,13 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_time = 0;
 			base.OnEnter();
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
+		}
+
+		public override void OnExit()
+		{
+			base.OnExit();
+			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
 		}
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
@@ -41,18 +49,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 
-		protected override void OnEnterStaminaLogic()
+		public override void Update(float deltaTime)
 		{
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
-		}
+			base.Update(deltaTime);
 
-		protected override void OnExitStaminaLogic()
-		{
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
-		}
+			var slowDownWalk = _receiveHitAnimation!=null;
 
-		protected override void UpdateBlockLogic(float deltaTime)
-		{
 			_time += deltaTime;
 
 			var inputWorld = _context.InputData.DirectionWorld.normalized;
@@ -70,10 +72,19 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * 0.5f * acceleration);
-
+			if(slowDownWalk)
+			{
+				velocity *= 0.5f;
+			}
+			
 			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
 
 			IsComplete = true;
 		}
+
+		protected override void PlayBlockAnimation()
+		{
+			_context.Animator.Play(BlockingWeapon.Config.BlockWalkAnimation);
+		}
 	}
-} 
+}

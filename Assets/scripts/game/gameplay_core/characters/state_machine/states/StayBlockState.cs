@@ -35,18 +35,21 @@ namespace game.gameplay_core.characters.state_machine.states
 			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 
-		protected override void OnEnterStaminaLogic()
+		public override void OnEnter()
 		{
+			base.OnEnter();
 			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
 		}
 
-		protected override void OnExitStaminaLogic()
+		public override void OnExit()
 		{
+			base.OnExit();
 			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
 		}
 
-		protected override void UpdateBlockLogic(float deltaTime)
+		protected override void PlayBlockAnimation()
 		{
+			_context.Animator.Play(BlockingWeapon.Config.BlockStayAnimation, 0.2f);
 		}
 	}
 }

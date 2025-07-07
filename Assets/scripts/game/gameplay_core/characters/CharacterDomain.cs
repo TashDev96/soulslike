@@ -51,6 +51,7 @@ namespace game.gameplay_core.characters
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
+		private BlockLogic _blockLogic;
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
@@ -80,6 +81,7 @@ namespace game.gameplay_core.characters
 				MovementLogic = _movementLogic
 			});
 
+			_blockLogic = new BlockLogic();
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
@@ -106,6 +108,7 @@ namespace game.gameplay_core.characters
 				FallDamageLogic = _fallDamageLogic,
 				StaminaLogic = _staminaLogic,
 				PoiseLogic = _poiseLogic,
+				BlockLogic = _blockLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -146,6 +149,17 @@ namespace game.gameplay_core.characters
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
 				LocomotionConfig = _config.Locomotion
+			});
+			
+			
+			_blockLogic.SetContext(new BlockLogic.Context()
+			{
+				Team = _context.Team,
+				CharacterId = _context.CharacterId,
+				ApplyDamage = _context.ApplyDamage,
+				InvulnerabilityLogic = _context.InvulnerabilityLogic,
+				StaminaLogic = _context.StaminaLogic,
+				PoiseLogic = _context.PoiseLogic,
 			});
 
 			_fallDamageLogic.SetContext(new FallDamageLogic.Context

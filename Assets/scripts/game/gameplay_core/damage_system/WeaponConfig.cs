@@ -56,6 +56,9 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Block/Animations")]
 		[field: SerializeField]
 		public ClipTransition BlockBreakAnimation { get; private set; }
+		[field: BoxGroup("Block/Animations")]
+		[field: SerializeField]
+		public ClipTransition BlockHitAnimation { get; private set; }
 		
 
 		[field: SerializeField]
