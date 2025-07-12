@@ -2,6 +2,7 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+        Parry,
         Attack,
         StrongAttack,
         Block,

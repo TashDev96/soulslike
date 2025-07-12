@@ -8,5 +8,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		RunAttackStrong,
 		RollAttackRegular,
 		RollAttackStrong,
+		Riposte,
 	}
 }

@@ -66,6 +66,7 @@ namespace game.gameplay_core.characters
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
+		public CharacterStateMachine CharacterStateMachine => _stateMachine;
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -137,6 +138,10 @@ namespace game.gameplay_core.characters
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
 				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
 				DeflectCurrentAttack = new ReactiveCommand(),
+				
+				ParryTarget = new ReactiveProperty<CharacterDomain>(),
+				CanRiposte = new ReactiveProperty<bool>(),
+				OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
 			};
 
 			ExternalData = new CharacterExternalData(_context);

@@ -111,6 +111,33 @@ MonoBehaviour:
     list: []
   axes:
     list:
+    - name: Parry
+      axisType: 2
+      deltaMode: 1
+      snap: 0
+      scale: 1
+      affectSourceKeys: 1
+      affectedKeyPositive: 0
+      affectedKeyNegative: 0
+      keyboardPositive: 0
+      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt1: 0
+      keyboardPositiveAlt2: 0
+      keyboardNegative: 0
+      keyboardNegativeAlt0: 0
+      keyboardNegativeAlt1: 0
+      keyboardNegativeAlt2: 0
+      analogToDigitalThresh: 0.125
+      rawSmoothingTime: 0
+      smoothingTime: 0
+      digitalToAnalogAccelTime: 0.25
+      digitalToAnalogDecelTime: 0.25
+      digitalToScrollAutoRepeat: 1
+      digitalToScrollRepeatInterval: 0.5
+      digitalToScrollDelay: 1
+      scrollToAnalogSmoothingTime: 0.05
+      scrollToAnalogStepDuration: 0.1
+      scrollToDeltaSmoothingTime: 0.1
     - name: Attack
       axisType: 2
       deltaMode: 1
@@ -173,7 +200,7 @@ MonoBehaviour:
       affectSourceKeys: 1
       affectedKeyPositive: 0
       affectedKeyNegative: 0
-      keyboardPositive: 0
+      keyboardPositive: 304
       keyboardPositiveAlt0: 0
       keyboardPositiveAlt1: 0
       keyboardPositiveAlt2: 0
@@ -1618,7 +1645,7 @@ MonoBehaviour:
     digiL2Binding:
       enabled: 1
       axisList:
-      - axisName: SpecialAttack
+      - axisName: Parry
         axisPositiveSide: 1
       keyList: 
     digiR2Binding:

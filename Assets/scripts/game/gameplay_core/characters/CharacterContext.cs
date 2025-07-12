@@ -57,5 +57,10 @@ namespace game.gameplay_core.characters
 		
 
 		public ReactiveCommand DeflectCurrentAttack;
+		
+		// Parry support
+		public ReactiveProperty<CharacterDomain> ParryTarget;
+		public ReactiveProperty<bool> CanRiposte;
+		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 	}
 }

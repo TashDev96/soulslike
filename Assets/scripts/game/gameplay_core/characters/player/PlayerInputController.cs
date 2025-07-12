@@ -72,12 +72,18 @@ namespace game.gameplay_core.characters.player
 			var hasBlockInput = InputAdapter.GetButton(InputAxesNames.Block);
 			var hasRunInput = _rollDashHoldDuration > .33f;
 			var attackInput = GetAttackInput();
+			var parryInput = GetParryInput();
 
 			if(_nextFrameForcedCommand != CharacterCommand.None)
 			{
 				var result = _nextFrameForcedCommand;
 				_nextFrameForcedCommand = CharacterCommand.None;
 				return result;
+			}
+
+			if(parryInput != CharacterCommand.None)
+			{
+				return parryInput;
 			}
 
 			if(InputAdapter.GetButtonDown(InputAxesNames.RollDash))
@@ -146,6 +152,21 @@ namespace game.gameplay_core.characters.player
 				return CharacterCommand.RegularAttack;
 			}
 			return CharacterCommand.None;
+		}
+
+		private CharacterCommand GetParryInput()
+		{
+			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && HasParryWeapon())
+			{
+				return CharacterCommand.Parry;
+			}
+			return CharacterCommand.None;
+		}
+
+		private bool HasParryWeapon()
+		{
+			var weapon = _characterContext.LeftWeapon.HasValue ? _characterContext.LeftWeapon.Value : _characterContext.RightWeapon.Value;
+			return weapon != null && weapon.Config.CanParry;
 		}
 
 		private enum RollDashInputState

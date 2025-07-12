@@ -5,5 +5,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		Poise,
 		BlockBreak,
 		Fall,
+		ParryStun,
 	}
 }

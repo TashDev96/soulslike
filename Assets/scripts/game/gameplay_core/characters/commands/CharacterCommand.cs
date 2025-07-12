@@ -11,6 +11,7 @@ namespace game.gameplay_core.characters.commands
 		StrongAttack,
 		AttackByIndex,
 		StayBlock,
+		Parry,
 		UseItem,
 		Interact
 	}

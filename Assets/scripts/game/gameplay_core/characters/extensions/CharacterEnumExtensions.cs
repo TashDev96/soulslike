@@ -14,6 +14,11 @@ namespace game.gameplay_core.characters.commands
 			return command is CharacterCommand.RegularAttack or CharacterCommand.StrongAttack or CharacterCommand.AttackByIndex;
 		}
 
+		public static bool IsParryCommand(this CharacterCommand command)
+		{
+			return command == CharacterCommand.Parry;
+		}
+
 		public static bool IsRollAttack(this AttackType attackType)
 		{
 			return attackType is AttackType.RollAttackRegular or AttackType.RollAttackStrong;

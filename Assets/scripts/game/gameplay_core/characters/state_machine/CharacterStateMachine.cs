@@ -3,7 +3,6 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -19,6 +18,7 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly RunState _runState;
 		private readonly StayBlockState _stayBlockState;
 		private readonly WalkBlockState _walkBlockState;
+		private readonly ParryState _parryState;
 
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
@@ -49,22 +49,23 @@ namespace game.gameplay_core.characters.state_machine
 			_runState = new RunState(_context);
 			_stayBlockState = new StayBlockState(_context);
 			_walkBlockState = new WalkBlockState(_context);
+			_parryState = new ParryState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
 			_context.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
+			_context.BlockLogic.OnParrySuccess.OnExecute += HandleParrySuccess;
+			_context.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
 
 			SetState(_idleState);
 		}
 
-		private void HnadleAttackDeflected()
+		public void TriggerParryStun()
 		{
-			if(_currentState.Value is AttackState attackState)
-			{
-				SetState(new DeflectedAttackState(_context, attackState.CurrentAttackAnimation, attackState.CurrentAttackConfig));
-			}
+			_currentState.Value.OnInterrupt();
+			SetState(new ParryStunState(_context));
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)
@@ -88,6 +89,33 @@ namespace game.gameplay_core.characters.state_machine
 			str += $"command: {_context.InputData.Command}\n";
 			str += $"next command: {NextCommand}\n";
 			return str;
+		}
+
+		private void HandleParrySuccess(CharacterDomain attacker)
+		{
+			attacker.CharacterStateMachine.TriggerParryStun();
+
+			if(_currentState.Value is ParryState)
+			{
+				_context.CanRiposte.Value = true;
+				_context.ParryTarget.Value = attacker;
+			}
+		}
+
+		private void HandleParryFail()
+		{
+			if(_currentState.Value is ParryState parryState)
+			{
+				parryState.OnParryFailed();
+			}
+		}
+
+		private void HnadleAttackDeflected()
+		{
+			if(_currentState.Value is AttackState attackState)
+			{
+				SetState(new DeflectedAttackState(_context, attackState.CurrentAttackAnimation, attackState.CurrentAttackConfig));
+			}
 		}
 
 		private void HandleIsFallingChanged(bool wasFalling, bool isFalling)
@@ -201,8 +229,18 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_rollState);
 						break;
 					case CharacterCommand.RegularAttack:
-						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackRegular : AttackType.Regular);
-						SetState(_attackState);
+						if(CanRiposte())
+						{
+							_attackState.SetEnterParams(AttackType.Riposte);
+							SetState(_attackState);
+							_context.CanRiposte.Value = false;
+							_context.ParryTarget.Value = null;
+						}
+						else
+						{
+							_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackRegular : AttackType.Regular);
+							SetState(_attackState);
+						}
 						break;
 					case CharacterCommand.StrongAttack:
 						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackStrong : AttackType.Strong);
@@ -213,6 +251,12 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.WalkBlock:
 						SetState(_walkBlockState);
+						break;
+					case CharacterCommand.Parry:
+						if(CanParry())
+						{
+							SetState(_parryState);
+						}
 						break;
 					case CharacterCommand.UseItem:
 						break;
@@ -245,11 +289,25 @@ namespace game.gameplay_core.characters.state_machine
 					newState = _idleState;
 				}
 			}
-			
+
 			_currentState.Value = newState;
 			_currentState.Value.OnEnter();
 			_context.OnStateChanged.Execute(oldState, newState);
 			NextCommand = CharacterCommand.None;
+		}
+
+		private bool CanParry()
+		{
+			var weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			return weapon != null && weapon.Config.CanParry &&
+			       _context.CharacterStats.Stamina.Value >= weapon.Config.ParryStaminaCost;
+		}
+
+		private bool CanRiposte()
+		{
+			return _context.CanRiposte.Value &&
+			       _context.ParryTarget.Value != null &&
+			       _context.ParryTarget.Value.CharacterStateMachine.CurrentState.Value is ParryStunState;
 		}
 	}
 }
