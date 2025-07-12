@@ -1,11 +1,11 @@
 using Animancer;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class BlockStateBase : CharacterStateBase
 	{
+		private const string HitReactReason = "BlockHitReactReason";
 		protected bool _isBlocking;
 		protected AnimancerState _receiveHitAnimation;
 		public WeaponView BlockingWeapon { get; private set; }
@@ -45,6 +45,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_context.BlockLogic.OnBlockTriggered.OnExecute -= HandleBlockTriggered;
 
+			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
+
 			base.OnExit();
 		}
 
@@ -56,13 +58,13 @@ namespace game.gameplay_core.characters.state_machine.states
 				{
 					PlayBlockAnimation();
 					_receiveHitAnimation = null;
+					_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
 				}
 				else
 				{
 					return;
 				}
-				
-			} 
+			}
 
 			if(_isBlocking)
 			{
@@ -87,6 +89,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private void HandleBlockTriggered()
 		{
 			_receiveHitAnimation = _context.Animator.Play(BlockingWeapon.Config.BlockHitAnimation);
+			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, true);
 		}
 	}
 }
