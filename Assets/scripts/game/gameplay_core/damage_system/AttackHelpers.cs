@@ -9,24 +9,22 @@ namespace game.gameplay_core.damage_system
 	public class AttackHelpers
 	{
 		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
-		private static readonly int LayerMaskWalls = LayerMask.GetMask(  "Default");
+		private static readonly int LayerMaskWalls = LayerMask.GetMask("Default");
 		private static readonly Collider[] Results = new Collider[40];
 
 		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
 			hitCaster.GetCapsulePoints(out var point0, out var point1);
-			
-			
+
 			if(drawDebug)
 			{
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, Time.deltaTime);
 			}
 
-
 			if(checkWalls)
 			{
-				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskWalls);
+				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskWalls);
 				if(count > 0)
 				{
 					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
@@ -36,7 +34,7 @@ namespace game.gameplay_core.damage_system
 
 			if(checkBlockReceivers)
 			{
-				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskBlockers  );
+				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskBlockers);
 
 				for(var j = 0; j < count; j++)
 				{
@@ -51,7 +49,6 @@ namespace game.gameplay_core.damage_system
 					}
 				}
 			}
-
 
 			return false;
 		}

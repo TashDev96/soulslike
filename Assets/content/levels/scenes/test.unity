@@ -12313,7 +12313,7 @@ Camera:
   far clip plane: 1000
   field of view: 22.4
   orthographic: 1
-  orthographic size: 10.655172
+  orthographic size: 13.086206
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -62524,7 +62524,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7dadf5bdf746a894a510209488da90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.ai.DummyBrain
-  _forceBlock: 1
+  _movementCommand: 2
+  _forceCommand: 0
+  _commandToForce: 4
+  _directionToForce: {x: 0, y: 0, z: 0}
 --- !u!1001 &8108957380275419158
 PrefabInstance:
   m_ObjectHideFlags: 0

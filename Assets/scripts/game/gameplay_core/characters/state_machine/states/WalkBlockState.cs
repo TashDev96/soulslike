@@ -1,4 +1,3 @@
-using Animancer;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace game.gameplay_core.characters.state_machine.states
 	public class WalkBlockState : BlockStateBase
 	{
 		private const string StaminaRegenLockKey = nameof(WalkBlockState);
-		private float _time; 
+		private float _time;
 
 		public WalkBlockState(CharacterContext context) : base(context)
 		{
@@ -53,7 +52,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.Update(deltaTime);
 
-			var slowDownWalk = _receiveHitAnimation!=null;
+			var slowDownWalk = _receiveHitAnimation != null;
 
 			_time += deltaTime;
 
@@ -74,9 +73,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * 0.5f * acceleration);
 			if(slowDownWalk)
 			{
-				velocity *= 0.5f;
+				velocity *= 0.3f;
 			}
-			
+
 			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
 
 			IsComplete = true;
