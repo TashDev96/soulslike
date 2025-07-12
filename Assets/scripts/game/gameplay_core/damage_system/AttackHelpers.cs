@@ -9,10 +9,10 @@ namespace game.gameplay_core.damage_system
 	public class AttackHelpers
 	{
 		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
-		private static readonly int LayerMaskObstacles = LayerMask.GetMask(  "Default");
+		private static readonly int LayerMaskWalls = LayerMask.GetMask(  "Default");
 		private static readonly Collider[] Results = new Collider[40];
 
-		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkOnlyBlockReceivers, bool drawDebug = false)
+		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
 			hitCaster.GetCapsulePoints(out var point0, out var point1);
@@ -23,30 +23,35 @@ namespace game.gameplay_core.damage_system
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, Time.deltaTime);
 			}
 
-			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskBlockers  );
 
-			for(var j = 0; j < count; j++)
+			if(checkWalls)
 			{
-				var blockReceiver = Results[j].GetComponent<BlockReceiver>();
-				if(blockReceiver)
-				{
-					if(drawDebug)
-					{
-						DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
-					}
-					return true;
-				}
-			}
-
-			if(!checkOnlyBlockReceivers)
-			{
-				count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskObstacles);
+				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskWalls);
 				if(count > 0)
 				{
 					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
 					return true;
 				}
 			}
+
+			if(checkBlockReceivers)
+			{
+				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results,   LayerMaskBlockers  );
+
+				for(var j = 0; j < count; j++)
+				{
+					var blockReceiver = Results[j].GetComponent<BlockReceiver>();
+					if(blockReceiver)
+					{
+						if(drawDebug)
+						{
+							DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
+						}
+						return true;
+					}
+				}
+			}
+
 
 			return false;
 		}
