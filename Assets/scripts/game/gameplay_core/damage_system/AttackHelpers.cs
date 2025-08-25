@@ -92,6 +92,11 @@ namespace game.gameplay_core.damage_system
 				hitData.ImpactedTargets.Add(Results[j]);
 				hitData.ImpactedCharacters.Add(blockReceiver.CharacterId);
 
+				if(blockReceiver.TryResolveParry(casterContext.SelfLink))
+				{
+					return;
+				}
+
 				blockReceiver.ApplyDamage(new DamageInfo
 				{
 					DamageAmount = baseDamage * hitData.Config.DamageMultiplier,

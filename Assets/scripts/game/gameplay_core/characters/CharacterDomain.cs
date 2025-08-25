@@ -39,7 +39,6 @@ namespace game.gameplay_core.characters
 
 		private CharacterWorldSpaceUi _worldSpaceUi;
 
-		private CharacterStateMachine _stateMachine;
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
 		private ReadOnlyTransform _transform;
@@ -66,7 +65,7 @@ namespace game.gameplay_core.characters
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
-		public CharacterStateMachine CharacterStateMachine => _stateMachine;
+		public CharacterStateMachine CharacterStateMachine { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -138,10 +137,8 @@ namespace game.gameplay_core.characters
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
 				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
 				DeflectCurrentAttack = new ReactiveCommand(),
-				
-				ParryTarget = new ReactiveProperty<CharacterDomain>(),
-				CanRiposte = new ReactiveProperty<bool>(),
-				OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
+
+				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
 
 			ExternalData = new CharacterExternalData(_context);
@@ -155,16 +152,15 @@ namespace game.gameplay_core.characters
 				IsFalling = _context.IsFalling,
 				LocomotionConfig = _config.Locomotion
 			});
-			
-			
-			_blockLogic.SetContext(new BlockLogic.Context()
+
+			_blockLogic.SetContext(new BlockLogic.Context
 			{
 				Team = _context.Team,
 				CharacterId = _context.CharacterId,
 				ApplyDamage = _context.ApplyDamage,
 				InvulnerabilityLogic = _context.InvulnerabilityLogic,
 				StaminaLogic = _context.StaminaLogic,
-				PoiseLogic = _context.PoiseLogic,
+				PoiseLogic = _context.PoiseLogic
 			});
 
 			_fallDamageLogic.SetContext(new FallDamageLogic.Context
@@ -192,8 +188,8 @@ namespace game.gameplay_core.characters
 				StaminaMax = _context.CharacterStats.StaminaMax
 			});
 
-			_stateMachine = new CharacterStateMachine(_context);
-			_context.CurrentState = _stateMachine.CurrentState;
+			CharacterStateMachine = new CharacterStateMachine(_context);
+			_context.CurrentState = CharacterStateMachine.CurrentState;
 			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
@@ -213,14 +209,12 @@ namespace game.gameplay_core.characters
 					InvulnerabilityLogic = _context.InvulnerabilityLogic
 				});
 			}
-			
-		
 
 			_healthLogic = new HealthLogic(new HealthLogic.Context
 			{
 				ApplyDamage = _context.ApplyDamage,
 				IsDead = _context.IsDead,
-				CharacterStats = _context.CharacterStats,
+				CharacterStats = _context.CharacterStats
 			});
 
 			_poiseLogic.SetContext(new PoiseLogic.Context
@@ -252,10 +246,9 @@ namespace game.gameplay_core.characters
 			}
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
-			_debugDrawer.Initialize(transform, _context, _stateMachine, _brain);
+			_debugDrawer.Initialize(transform, _context, CharacterStateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
-			
-			
+
 			void CreateCharacterUi()
 			{
 				var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterUi);
@@ -264,7 +257,7 @@ namespace game.gameplay_core.characters
 				{
 					CharacterStats = _context.CharacterStats,
 					UiPivotWorld = _uiPivot,
-					LocationUiUpdate = locationContext.LocationUiUpdate,
+					LocationUiUpdate = locationContext.LocationUiUpdate
 				});
 			}
 		}
@@ -274,8 +267,6 @@ namespace game.gameplay_core.characters
 		{
 			UniqueId = name + Random.value;
 		}
-
-		
 
 		private void CustomUpdate(float deltaTime)
 		{
@@ -288,7 +279,7 @@ namespace game.gameplay_core.characters
 			{
 				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
 				personalDeltaTime -= deltaTimeStep;
-				_stateMachine.Update(deltaTimeStep, calculateInputLogic);
+				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_context.RightWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);

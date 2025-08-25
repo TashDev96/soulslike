@@ -37,12 +37,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		public override void OnEnter()
 		{
 			_comboCounter = 0;
-			
-			if (_attackType == AttackType.Riposte)
-			{
-				SetupRiposteAttack();
-			}
-			
 			LaunchAttack();
 		}
 
@@ -296,24 +290,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					newAttackIndex = 0;
 					attackConfig = _context.RightWeapon.Value.Config.RunAttackStrong;
 					return;
-				case AttackType.Riposte:
-					newAttackIndex = 0;
-					attackConfig = _context.RightWeapon.Value.Config.RiposteAttack;
-					return;
+
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-		}
-
-		private void SetupRiposteAttack()
-		{
-			// TODO: Implement proper riposte positioning
-			// var target = _context.ParryTarget.Value;
-			// if (target != null)
-			// {
-			//     var directionToTarget = (target.Transform.Position - _context.Transform.Position).normalized;
-			//     _context.MovementLogic.RotateCharacter(directionToTarget, 1000f, 0.1f);
-			// }
 		}
 
 		private enum AttackStage

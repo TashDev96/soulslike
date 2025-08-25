@@ -6,44 +6,46 @@ namespace game.gameplay_core.characters.ai
 {
 	public class DummyBrain : MonoBehaviour, ICharacterBrain
 	{
-		private CharacterContext _characterContext;
-
 		[SerializeField]
 		private CharacterCommand _movementCommand;
-		
+
 		[Header("Forced command")]
 		[SerializeField]
 		private bool _forceCommand;
 		[SerializeField]
 		private CharacterCommand _commandToForce;
 		[SerializeField]
+		private float _forceCommandInterval;
+		[SerializeField]
 		private Vector3 _directionToForce;
+		private CharacterContext _characterContext;
 
 		private float _timer;
 		private Vector3 _startPos;
 		private CharacterCommand _selectedCommand;
-		
-		
-
-		 
 
 		public void Initialize(CharacterContext context)
 		{
 			_characterContext = context;
-			_startPos = transform.position.AddRandom(-0.1f,0.1f);
-			
+			_startPos = transform.position.AddRandom(-0.1f, 0.1f);
 		}
 
 		public void Think(float deltaTime)
 		{
-
-			if(_forceCommand)
-			{
-				_characterContext.InputData.Command = CharacterCommand.StayBlock;
-				return;
-			}
 			
 			_timer -= deltaTime;
+			
+			if(_forceCommand)
+			{
+				if(_timer <= 0)
+				{
+					_characterContext.InputData.Command = _commandToForce;
+					_timer = _forceCommandInterval;
+					return;
+				}
+			}
+
+			
 			if(_timer <= 0)
 			{
 				switch(Random.value)

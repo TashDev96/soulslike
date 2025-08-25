@@ -156,6 +156,11 @@ namespace game.gameplay_core.characters.player
 
 		private CharacterCommand GetParryInput()
 		{
+			if(InputAdapter.GetButtonDown(InputAxesNames.Attack) && InputAdapter.GetButton(InputAxesNames.Block))
+			{
+				return CharacterCommand.Parry;
+			}
+
 			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && HasParryWeapon())
 			{
 				return CharacterCommand.Parry;

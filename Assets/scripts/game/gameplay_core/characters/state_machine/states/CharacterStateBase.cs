@@ -25,6 +25,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public virtual void OnEnter()
 		{
+			IsComplete = false;
 		}
 
 		public virtual void OnExit()

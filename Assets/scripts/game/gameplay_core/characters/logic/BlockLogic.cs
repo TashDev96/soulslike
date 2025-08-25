@@ -19,11 +19,9 @@ namespace game.gameplay_core.characters.logic
 
 		
 		private readonly ReactiveCommand _onBlockTriggered = new ReactiveCommand();
-		private readonly ReactiveCommand<CharacterDomain> _onParrySuccess = new ReactiveCommand<CharacterDomain>();
 		private readonly ReactiveCommand _onParryFail = new ReactiveCommand();
 		
 		public IReadOnlyReactiveCommand OnBlockTriggered => _onBlockTriggered;
-		public IReadOnlyReactiveCommand<CharacterDomain> OnParrySuccess => _onParrySuccess;
 		public IReadOnlyReactiveCommand OnParryFail => _onParryFail;
 		
 		private Context _context;
@@ -62,43 +60,6 @@ namespace game.gameplay_core.characters.logic
 			_context.ApplyDamage.Execute(damageInfo);
 			_onBlockTriggered.Execute();
 		}
-
-		public void ResolveParry(DamageInfo damageInfo, WeaponConfig parryWeapon, out bool deflectAttack)
-		{
-			var parryStaminaCost = parryWeapon.ParryStaminaCost;
-			_context.StaminaLogic.SpendStaminaForBlock(parryStaminaCost, out var hadEnoughStamina);
-			
-			deflectAttack = true;
-			
-			if (hadEnoughStamina)
-			{
-				damageInfo.DamageAmount = 0;
-				damageInfo.PoiseDamageAmount = 0;
-				
-				_onParrySuccess.Execute(damageInfo.DamageDealer);
-			}
-			else
-			{
-				_context.PoiseLogic.TriggerStaggerFromBlockWithNoStamina();
-				_onParryFail.Execute();
-			}
-		}
 		
-		public void ResolvePartialParry(DamageInfo damageInfo, WeaponConfig parryWeapon, out bool deflectAttack)
-		{
-			deflectAttack = false;
-			
-			var partialParryReduction = 0.5f;
-			damageInfo.DamageAmount *= partialParryReduction;
-			damageInfo.PoiseDamageAmount = 0;
-			
-			if (_context.InvulnerabilityLogic.IsInvulnerable)
-			{
-				return;
-			}
-			
-			_context.ApplyDamage.Execute(damageInfo);
-			_onParryFail.Execute();
-		}
 	}
 }

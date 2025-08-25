@@ -21,7 +21,7 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Roll")]
 		[field: SerializeField]
 		public AttackConfig RollAttackStrong { get; private set; }
-		
+
 		[field: BoxGroup("Run")]
 		[field: SerializeField]
 		public AttackConfig RunAttack { get; private set; }
@@ -31,7 +31,7 @@ namespace game.gameplay_core.damage_system
 
 		[field: BoxGroup("Block")]
 		[field: SerializeField]
-		[field: Range(0,100)]
+		[field: Range(0, 100)]
 		public float BlockStability { get; private set; } = 100f;
 		[field: BoxGroup("Block")]
 		[field: SerializeField]
@@ -46,7 +46,7 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Block")]
 		[field: SerializeField]
 		public int AttackDeflectionRating { get; private set; } = 5;
-		
+
 		[field: BoxGroup("Block/Animations")]
 		[field: SerializeField]
 		public ClipTransition BlockStayAnimation { get; private set; }
@@ -59,42 +59,34 @@ namespace game.gameplay_core.damage_system
 		[field: BoxGroup("Block/Animations")]
 		[field: SerializeField]
 		public ClipTransition BlockHitAnimation { get; private set; }
-		
+
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
-		public bool CanParry { get; private set; } = false;
-		
+		public bool CanParry { get; private set; }
+
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
 		public float ParryActiveFrameStart { get; private set; } = 0.1f;
-		
+
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
 		public float ParryActiveFrameEnd { get; private set; } = 0.3f;
-		
+
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
 		public float ParryRecoveryFrameEnd { get; private set; } = 0.8f;
-		
+
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
 		public float ParryStaminaCost { get; private set; } = 15f;
-		
+
 		[field: BoxGroup("Parry/Animations")]
 		[field: SerializeField]
 		public ClipTransition ParryAnimation { get; private set; }
-		
-		[field: BoxGroup("Parry/Animations")]
-		[field: SerializeField]
-		public ClipTransition ParrySuccessAnimation { get; private set; }
-		
+
 		[field: BoxGroup("Riposte")]
 		[field: SerializeField]
 		public AttackConfig RiposteAttack { get; private set; }
-		
-		[field: BoxGroup("Riposte")]
-		[field: SerializeField]
-		public float RiposteDamageMultiplier { get; private set; } = 2.0f;
 
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToRegularCustomOrder { get; private set; }
@@ -111,13 +103,11 @@ namespace game.gameplay_core.damage_system
 					return RegularAttacks;
 				case AttackType.Strong:
 					return StrongAttacks;
-				case AttackType.Riposte:
-					return new[] { RiposteAttack };
 				default:
 					throw new ArgumentOutOfRangeException(nameof(attackType), attackType, null);
 			}
 		}
-		
+
 		public AttackConfig GetRiposteAttack()
 		{
 			return RiposteAttack;

@@ -207,11 +207,7 @@ namespace game.gameplay_core.characters.config.editor
 					var val1 = valueProperty1.GetValue(value1);
 					var val2 = valueProperty2.GetValue(value2);
 					
-					if (IsValueType(val1) && IsValueType(val2))
-					{
-						return object.Equals(val1, val2);
-					}
-					return true;
+					return AreValuesEqual(val1, val2);
 				}
 			}
 
@@ -220,7 +216,45 @@ namespace game.gameplay_core.characters.config.editor
 				return object.Equals(value1, value2);
 			}
 
-			return true;
+			if (value1 is AnimationCurve curve1 && value2 is AnimationCurve curve2)
+			{
+				return AreAnimationCurvesEqual(curve1, curve2);
+			}
+
+			if (value1 is UnityEngine.Object unityObj1 && value2 is UnityEngine.Object unityObj2)
+			{
+				return unityObj1 == unityObj2;
+			}
+
+			return object.ReferenceEquals(value1, value2);
+		}
+
+		private bool AreAnimationCurvesEqual(AnimationCurve curve1, AnimationCurve curve2)
+		{
+			if (curve1 == null && curve2 == null) return true;
+			if (curve1 == null || curve2 == null) return false;
+
+			if (curve1.keys.Length != curve2.keys.Length) return false;
+
+			for (int i = 0; i < curve1.keys.Length; i++)
+			{
+				var key1 = curve1.keys[i];
+				var key2 = curve2.keys[i];
+
+				if (!Mathf.Approximately(key1.time, key2.time) ||
+					!Mathf.Approximately(key1.value, key2.value) ||
+					!Mathf.Approximately(key1.inTangent, key2.inTangent) ||
+					!Mathf.Approximately(key1.outTangent, key2.outTangent) ||
+					key1.inWeight != key2.inWeight ||
+					key1.outWeight != key2.outWeight ||
+					key1.weightedMode != key2.weightedMode)
+				{
+					return false;
+				}
+			}
+
+			return curve1.preWrapMode == curve2.preWrapMode && 
+				   curve1.postWrapMode == curve2.postWrapMode;
 		}
 
 		private bool IsValueType(object value)
@@ -264,8 +298,21 @@ namespace game.gameplay_core.characters.config.editor
 				if (valueProperty != null)
 				{
 					var innerValue = valueProperty.GetValue(value);
-					return innerValue?.ToString() ?? "null";
+					return GetDisplayValue(innerValue);
 				}
+			}
+
+			if (value is AnimationCurve curve)
+			{
+				if (curve.keys.Length == 0) return "Empty Curve";
+				var firstKey = curve.keys[0];
+				var lastKey = curve.keys[curve.keys.Length - 1];
+				return $"Curve ({curve.keys.Length} keys, {firstKey.time:F2}-{lastKey.time:F2})";
+			}
+
+			if (value is UnityEngine.Object unityObj)
+			{
+				return unityObj != null ? unityObj.name : "null";
 			}
 
 			return value.ToString();

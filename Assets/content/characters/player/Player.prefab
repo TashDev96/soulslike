@@ -195,8 +195,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -218,7 +216,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -878,8 +875,20 @@ PrefabInstance:
       value: DebugWeapon
       objectReference: {fileID: 0}
     - target: {fileID: 7415371893634768153, guid: 5561504db27593842943b63d78e2b20a, type: 3}
-      propertyPath: Config.<RollAttack>k__BackingField.<EnterFromRollTime>k__BackingField
-      value: 0.30434784
+      propertyPath: Config.<RiposteAttack>k__BackingField.<Animation>k__BackingField._Speed
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7415371893634768153, guid: 5561504db27593842943b63d78e2b20a, type: 3}
+      propertyPath: Config.<RiposteAttack>k__BackingField.<LockedStateTime>k__BackingField.y
+      value: 0.5546875
+      objectReference: {fileID: 0}
+    - target: {fileID: 7415371893634768153, guid: 5561504db27593842943b63d78e2b20a, type: 3}
+      propertyPath: Config.<RiposteAttack>k__BackingField.<HitConfigs>k__BackingField.Array.data[0].<Timing>k__BackingField.x
+      value: 0.31249997
+      objectReference: {fileID: 0}
+    - target: {fileID: 7415371893634768153, guid: 5561504db27593842943b63d78e2b20a, type: 3}
+      propertyPath: Config.<RiposteAttack>k__BackingField.<HitConfigs>k__BackingField.Array.data[0].<Timing>k__BackingField.y
+      value: 0.32617185
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

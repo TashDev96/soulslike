@@ -61,6 +61,7 @@ namespace game.gameplay_core.characters.view
 
 			var sb = new StringBuilder();
 
+			sb.AppendLine($"{Time.frameCount % 100}");
 			sb.AppendLine($"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.HpMax.Value.CeilFormat()}");
 			sb.AppendLine($"st: {_context.CharacterStats.Stamina.Value.CeilFormat(1)}/{_context.CharacterStats.StaminaMax.Value.CeilFormat()}");
 

@@ -1,8 +1,7 @@
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.logic;
-using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters;
+using game.gameplay_core.characters.logic;
+using game.gameplay_core.characters.state_machine.states;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -32,27 +31,21 @@ namespace game.gameplay_core.damage_system
 
 		public void ApplyDamage(DamageInfo damageInfo, out bool deflectAttack)
 		{
-			if (_context.CurrentState.Value is ParryState parryState)
-			{
-				if (parryState.IsInActiveFrames)
-				{
-					_context.BlockLogic.ResolveParry(damageInfo, _context.WeaponConfig, out deflectAttack);
-					_context.OnParryTriggered.Execute(GetAttackerFromDamageInfo(damageInfo));
-					return;
-				}
-				else if (parryState.IsInRecoveryFrames)
-				{
-					_context.BlockLogic.ResolvePartialParry(damageInfo, _context.WeaponConfig, out deflectAttack);
-					return;
-				}
-			}
-			
 			_context.BlockLogic.ResolveBlock(damageInfo, _context.WeaponConfig, out deflectAttack);
 		}
 
-		private CharacterDomain GetAttackerFromDamageInfo(DamageInfo damageInfo)
+		public bool TryResolveParry(CharacterDomain damageDealer)
 		{
-			return damageInfo.DamageDealer;
+			if(_context.CurrentState.Value is ParryState parryState)
+			{
+				if(parryState.IsInActiveFrames)
+				{
+					damageDealer.CharacterStateMachine.TriggerParryStun();
+					_context.OnParryTriggered.Execute(damageDealer);
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

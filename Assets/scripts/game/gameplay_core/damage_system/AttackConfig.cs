@@ -23,10 +23,10 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float StaminaCost { get; private set; } = 10;
 		[field: SerializeField]
-		public int AttackDeflectionRatingBonus { get; private set; } = 0;
+		public int AttackDeflectionRatingBonus { get; private set; }
 
 		[ShowInInspector]
-		public float Duration => Animation.Clip ? Animation.Clip.length : 0.1f;
+		public float Duration => Animation.Clip ? Animation.Clip.length * Animation.Speed : 0.1f;
 
 		[field: HideInInspector]
 		[field: SerializeField]
@@ -48,9 +48,9 @@ namespace game.gameplay_core.damage_system
 		[field: HideInInspector]
 		[field: SerializeField]
 		public float EnterFromRollTime { get; private set; }
-		
+
 		[field: HideInInspector]
-		[field:SerializeField]
+		[field: SerializeField]
 		public float StartHandleObstacleCastTime { get; set; }
 
 		[field: SerializeField]
@@ -63,8 +63,6 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
-		
-		
 
 #if UNITY_EDITOR
 
@@ -90,7 +88,7 @@ namespace game.gameplay_core.damage_system
 			StaminaRegenDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Stamina Regen Disabled Time:", StaminaRegenDisabledTime, Animation.Clip, _animationPreview);
 			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
 			StartHandleObstacleCastTime = CharacterInspectorUtils.DrawTimingSlider("Start Handle Obstacle Cast Time", StartHandleObstacleCastTime, Animation.Clip, _animationPreview);
-			
+
 			EditorGUILayout.Space();
 			SirenixEditorGUI.BeginBox("Cross-state Timings");
 			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);

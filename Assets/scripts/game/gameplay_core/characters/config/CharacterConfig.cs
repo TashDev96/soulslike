@@ -16,6 +16,10 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public AnimationClip StaggerAnimation { get; private set; }
 		[field: SerializeField]
+		public AnimationClip ParryStunAnimation { get; private set; }
+		[field: SerializeField]
+		public AnimationClip RipostedAnimation { get; private set; }
+		[field: SerializeField]
 		public AnimationClip DeathAnimation { get; set; }
 		[field: SerializeField]
 		public AnimationClip FallAnimation { get; set; }

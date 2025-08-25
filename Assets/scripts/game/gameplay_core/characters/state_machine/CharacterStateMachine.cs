@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
 {
@@ -12,13 +13,16 @@ namespace game.gameplay_core.characters.state_machine
 
 		private readonly IdleState _idleState;
 		private readonly WalkState _walkState;
+		private readonly RunState _runState;
 		private readonly RollState _rollState;
 		private readonly AttackState _attackState;
 		private readonly FallState _fallState;
-		private readonly RunState _runState;
 		private readonly StayBlockState _stayBlockState;
 		private readonly WalkBlockState _walkBlockState;
 		private readonly ParryState _parryState;
+
+		// TODO: Fix Unity compilation issue with RiposteState
+		// private readonly RiposteState _riposteState;
 
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
@@ -54,7 +58,6 @@ namespace game.gameplay_core.characters.state_machine
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
 			_context.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
-			_context.BlockLogic.OnParrySuccess.OnExecute += HandleParrySuccess;
 			_context.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
@@ -66,6 +69,12 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			_currentState.Value.OnInterrupt();
 			SetState(new ParryStunState(_context));
+		}
+
+		public void LockInAnimation(AnimationClip animationClip, float duration, bool canInterruptByStagger = false)
+		{
+			_currentState.Value.OnInterrupt();
+			SetState(new LockedInAnimationState(_context, animationClip, duration, canInterruptByStagger));
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)
@@ -91,16 +100,7 @@ namespace game.gameplay_core.characters.state_machine
 			return str;
 		}
 
-		private void HandleParrySuccess(CharacterDomain attacker)
-		{
-			attacker.CharacterStateMachine.TriggerParryStun();
-
-			if(_currentState.Value is ParryState)
-			{
-				_context.CanRiposte.Value = true;
-				_context.ParryTarget.Value = attacker;
-			}
-		}
+		
 
 		private void HandleParryFail()
 		{
@@ -172,41 +172,29 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void CalculateChangeState()
 		{
-			if(_context.IsFalling.Value && _currentState.Value is not FallState)
+			if(TryEnterFall())
 			{
-				if(_currentState.Value.IsComplete || _currentState.Value.CheckIsReadyToChangeState(CharacterCommand.Walk))
-				{
-					SetState(_fallState);
-				}
-			}
-
-			if(_currentState.Value is RunState && _context.CharacterStats.Stamina.Value <= 0)
-			{
-				if(NextCommand == CharacterCommand.Run)
-				{
-					SetState(_walkState);
-				}
-			}
-
-			if(_currentState.Value.TryContinueWithCommand(NextCommand))
-			{
-				NextCommand = CharacterCommand.None;
-				_context.InputData.Command = CharacterCommand.None;
 				return;
 			}
 
-			if(NextCommand.IsAttackCommand() && _currentState.Value is RollState { CanSwitchToAttack: true })
+			if(CheckRunExhaustedEnd())
 			{
-				var rollAttackType = NextCommand is CharacterCommand.StrongAttack ? AttackType.RollAttackStrong : AttackType.RollAttackRegular;
-				_attackState.SetEnterParams(rollAttackType);
-				SetState(_attackState);
-				NextCommand = CharacterCommand.None;
 				return;
 			}
 
-			if(_currentState.Value == _fallState && _fallState.IsComplete && _fallState.HasValidRollInput)
+			if(TryContinueCurrentState())
 			{
-				SetState(_rollState);
+				return;
+			}
+
+			if(TryEnterRollAttack())
+			{
+				return;
+			}
+
+			if(TryEnterRollAfterFall())
+			{
+				return;
 			}
 
 			if(_currentState.Value.CheckIsReadyToChangeState(NextCommand))
@@ -229,12 +217,12 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_rollState);
 						break;
 					case CharacterCommand.RegularAttack:
-						if(CanRiposte())
+
+						var riposteableEnemy = FindRiposteableEnemy();
+
+						if(riposteableEnemy != null)
 						{
-							_attackState.SetEnterParams(AttackType.Riposte);
-							SetState(_attackState);
-							_context.CanRiposte.Value = false;
-							_context.ParryTarget.Value = null;
+							SetState(new RiposteState(_context, riposteableEnemy));
 						}
 						else
 						{
@@ -269,6 +257,66 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
+		private bool TryEnterRollAfterFall()
+		{
+			if(_currentState.Value == _fallState && _fallState.IsComplete && _fallState.HasValidRollInput)
+			{
+				SetState(_rollState);
+				return true;
+			}
+			return false;
+		}
+
+		private bool CheckRunExhaustedEnd()
+		{
+			if(_currentState.Value is RunState && _context.CharacterStats.Stamina.Value <= 0)
+			{
+				if(NextCommand == CharacterCommand.Run)
+				{
+					SetState(_walkState);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool TryContinueCurrentState()
+		{
+			if(_currentState.Value.TryContinueWithCommand(NextCommand))
+			{
+				NextCommand = CharacterCommand.None;
+				_context.InputData.Command = CharacterCommand.None;
+				return true;
+			}
+			return false;
+		}
+
+		private bool TryEnterFall()
+		{
+			if(_context.IsFalling.Value && _currentState.Value is not FallState)
+			{
+				if(_currentState.Value.IsComplete || _currentState.Value.CheckIsReadyToChangeState(CharacterCommand.Walk))
+				{
+					SetState(_fallState);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool TryEnterRollAttack()
+		{
+			if(NextCommand.IsAttackCommand() && _currentState.Value is RollState { CanSwitchToAttack: true })
+			{
+				var rollAttackType = NextCommand is CharacterCommand.StrongAttack ? AttackType.RollAttackStrong : AttackType.RollAttackRegular;
+				_attackState.SetEnterParams(rollAttackType);
+				SetState(_attackState);
+				NextCommand = CharacterCommand.None;
+				return true;
+			}
+			return false;
+		}
+
 		private void SetState(CharacterStateBase newState)
 		{
 			_currentState.Value?.OnExit();
@@ -299,15 +347,91 @@ namespace game.gameplay_core.characters.state_machine
 		private bool CanParry()
 		{
 			var weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
-			return weapon != null && weapon.Config.CanParry &&
-			       _context.CharacterStats.Stamina.Value >= weapon.Config.ParryStaminaCost;
+			return weapon != null && weapon.Config.CanParry;
 		}
 
-		private bool CanRiposte()
+		private CharacterDomain FindRiposteableEnemy()
 		{
-			return _context.CanRiposte.Value &&
-			       _context.ParryTarget.Value != null &&
-			       _context.ParryTarget.Value.CharacterStateMachine.CurrentState.Value is ParryStunState;
+			const float maxRiposteDistance = 3f;
+			const float attackerLookingAtVictimMaxAngle = 10f;
+			const float victimLookingAtAttackerMaxAngle = 20f;
+
+			var selfPosition = _context.Transform.Position;
+			var selfForward = _context.Transform.Forward;
+
+			foreach(var character in _context.LockOnLogic.AllCharacters)
+			{
+				if(character == _context.SelfLink || character.ExternalData.IsDead)
+				{
+					continue;
+				}
+
+				if(!(character.CharacterStateMachine.CurrentState.Value is ParryStunState parryStunState) ||
+				   !parryStunState.CanReceiveRiposte)
+				{
+					continue;
+				}
+
+				var targetPosition = character.ExternalData.Transform.Position;
+				var distance = (targetPosition - selfPosition).magnitude;
+
+				if(distance > maxRiposteDistance)
+				{
+					Debug.DrawLine(_context.Transform.Position, targetPosition, Color.red, 1f);;
+					continue;
+				}
+
+				if(!CheckRiposteAngle(selfPosition, selfForward, targetPosition, character.ExternalData.Transform.Forward))
+				{
+					continue;
+				}
+
+				return character;
+			}
+
+			return null;
+
+			bool CheckRiposteAngle(Vector3 attackerPos, Vector3 attackerForward, Vector3 victimPos, Vector3 victimForward)
+			{
+				var attackerToVictim = (victimPos - attackerPos).normalized;
+				var victimToAttacker = (attackerPos - victimPos).normalized;
+
+				var attackerLookingAtVictimAngle = Vector3.Angle(attackerForward, attackerToVictim);
+				var victimLookingAtAttackerAngle = Vector3.Angle(victimForward, victimToAttacker);
+
+				var debugDistance = 2f;
+				var attackerInsideCone = attackerLookingAtVictimAngle <= attackerLookingAtVictimMaxAngle;
+				var victimInsideCone = victimLookingAtAttackerAngle <= victimLookingAtAttackerMaxAngle;
+
+				const float debugDuration = 2f;
+				Debug.DrawLine(attackerPos, attackerPos + attackerForward * debugDistance, Color.yellow, debugDuration);
+				Debug.DrawLine(attackerPos, attackerPos + attackerToVictim * debugDistance, attackerInsideCone ? Color.green : Color.red, debugDuration);
+				
+				var attackerConeLeft = Quaternion.AngleAxis(-attackerLookingAtVictimMaxAngle, Vector3.up) * attackerForward;
+				var attackerConeRight = Quaternion.AngleAxis(attackerLookingAtVictimMaxAngle, Vector3.up) * attackerForward;
+				Debug.DrawLine(attackerPos, attackerPos + attackerConeLeft * debugDistance, Color.yellow, debugDuration);
+				Debug.DrawLine(attackerPos, attackerPos + attackerConeRight * debugDistance, Color.yellow, debugDuration);
+
+				Debug.DrawLine(victimPos, victimPos + victimForward * debugDistance, Color.yellow, debugDuration);
+				Debug.DrawLine(victimPos, victimPos + victimToAttacker * debugDistance, victimInsideCone ? Color.green : Color.red, debugDuration);
+				
+				var victimConeLeft = Quaternion.AngleAxis(-victimLookingAtAttackerMaxAngle, Vector3.up) * victimForward;
+				var victimConeRight = Quaternion.AngleAxis(victimLookingAtAttackerMaxAngle, Vector3.up) * victimForward;
+				Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, Color.yellow, debugDuration);
+				Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, Color.yellow, debugDuration);
+
+				if(attackerLookingAtVictimAngle > attackerLookingAtVictimMaxAngle)
+				{
+					return false;
+				}
+
+				if(victimLookingAtAttackerAngle > victimLookingAtAttackerMaxAngle)
+				{
+					return false;
+				}
+
+				return true;
+			}
 		}
 	}
 }

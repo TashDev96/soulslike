@@ -55,7 +55,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private void PlayStunAnimation()
 		{
-			var animation = _context.Config.StaggerAnimation;
+			var animation = _context.Config.ParryStunAnimation;
 			if (animation != null)
 			{
 				_animation = _context.Animator.Play(animation, 0.1f, FadeMode.FromStart);

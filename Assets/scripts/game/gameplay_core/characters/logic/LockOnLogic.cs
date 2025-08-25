@@ -20,6 +20,7 @@ namespace game.gameplay_core.characters.logic
 		public ReactiveProperty<CharacterDomain> LockOnTarget { get; } = new();
 		public bool IsLockedOn => LockOnTarget.HasValue;
 		public bool DisableRotationForThisFrame { get; set; }
+		public List<CharacterDomain> AllCharacters => _context.AllCharacters;
 
 		public LockOnLogic(Context context)
 		{

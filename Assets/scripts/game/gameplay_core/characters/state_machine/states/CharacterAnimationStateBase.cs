@@ -15,6 +15,12 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 		}
 
+		public override void OnEnter()
+		{
+			Time = 0;
+			base.OnEnter();
+		}
+
 		public override string GetDebugString()
 		{
 			return $"{Time.RoundFormat()}/{Duration.RoundFormat()}";

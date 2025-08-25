@@ -20,7 +20,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			IsComplete = false;
+
 			_isBlocking = true;
 
 			BlockingWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
