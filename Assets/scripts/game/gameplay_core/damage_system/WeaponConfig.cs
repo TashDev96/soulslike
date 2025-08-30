@@ -66,23 +66,7 @@ namespace game.gameplay_core.damage_system
 
 		[field: BoxGroup("Parry")]
 		[field: SerializeField]
-		public float ParryActiveFrameStart { get; private set; } = 0.1f;
-
-		[field: BoxGroup("Parry")]
-		[field: SerializeField]
-		public float ParryActiveFrameEnd { get; private set; } = 0.3f;
-
-		[field: BoxGroup("Parry")]
-		[field: SerializeField]
-		public float ParryRecoveryFrameEnd { get; private set; } = 0.8f;
-
-		[field: BoxGroup("Parry")]
-		[field: SerializeField]
-		public float ParryStaminaCost { get; private set; } = 15f;
-
-		[field: BoxGroup("Parry/Animations")]
-		[field: SerializeField]
-		public ClipTransition ParryAnimation { get; private set; }
+		public AttackConfig Parry { get; private set; }
 
 		[field: BoxGroup("Riposte")]
 		[field: SerializeField]

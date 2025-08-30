@@ -61,7 +61,7 @@ namespace game.gameplay_core.damage_system
 		public float Range { get; set; } = 1f;
 
 		[field: SerializeField]
-		[field: HideInInspector]
+		//[field: HideInInspector]
 		public List<HitConfig> HitConfigs { get; private set; }
 
 #if UNITY_EDITOR

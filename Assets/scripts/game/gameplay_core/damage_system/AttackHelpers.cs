@@ -72,49 +72,64 @@ namespace game.gameplay_core.damage_system
 				{
 					continue;
 				}
-				var blockReceiver = Results[j].GetComponent<BlockReceiver>();
 
-				if(!blockReceiver)
+				var parryReceiver = Results[j].GetComponent<ParryReceiver>();
+				if(parryReceiver)
 				{
-					continue;
-				}
-
-				if(blockReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
-				{
-					continue;
-				}
-
-				if(hitData.ImpactedCharacters.Contains(blockReceiver.CharacterId) || blockReceiver.CharacterId == casterContext.CharacterId.Value)
-				{
-					continue;
-				}
-
-				hitData.ImpactedTargets.Add(Results[j]);
-				hitData.ImpactedCharacters.Add(blockReceiver.CharacterId);
-
-				if(blockReceiver.TryResolveParry(casterContext.SelfLink))
-				{
-					return;
-				}
-
-				blockReceiver.ApplyDamage(new DamageInfo
-				{
-					DamageAmount = baseDamage * hitData.Config.DamageMultiplier,
-					PoiseDamageAmount = hitData.Config.PoiseDamage,
-					WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
-					DoneByPlayer = casterContext.IsPlayer.Value,
-					DamageDealer = casterContext.SelfLink,
-					DeflectionRating = deflectionRating
-				}, out var attackDeflected);
-
-				if(attackDeflected)
-				{
-					if(drawDebug)
+					if(parryReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
 					{
-						DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.yellow, 1f);
+						continue;
 					}
-					casterContext.DeflectCurrentAttack.Execute();
-					return;
+
+					if(hitData.ImpactedCharacters.Contains(parryReceiver.CharacterId) || parryReceiver.CharacterId == casterContext.CharacterId.Value)
+					{
+						continue;
+					}
+
+					hitData.ImpactedTargets.Add(Results[j]);
+					hitData.ImpactedCharacters.Add(parryReceiver.CharacterId);
+
+					if(parryReceiver.TryResolveParry(casterContext.SelfLink))
+					{
+						return;
+					}
+				}
+
+				var blockReceiver = Results[j].GetComponent<BlockReceiver>();
+				if(blockReceiver)
+				{
+					if(blockReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
+					{
+						continue;
+					}
+
+					if(hitData.ImpactedCharacters.Contains(blockReceiver.CharacterId) || blockReceiver.CharacterId == casterContext.CharacterId.Value)
+					{
+						continue;
+					}
+
+					hitData.ImpactedTargets.Add(Results[j]);
+					hitData.ImpactedCharacters.Add(blockReceiver.CharacterId);
+
+					blockReceiver.ApplyDamage(new DamageInfo
+					{
+						DamageAmount = baseDamage * hitData.Config.DamageMultiplier,
+						PoiseDamageAmount = hitData.Config.PoiseDamage,
+						WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
+						DoneByPlayer = casterContext.IsPlayer.Value,
+						DamageDealer = casterContext.SelfLink,
+						DeflectionRating = deflectionRating
+					}, out var attackDeflected);
+
+					if(attackDeflected)
+					{
+						if(drawDebug)
+						{
+							DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.yellow, 1f);
+						}
+						casterContext.DeflectCurrentAttack.Execute();
+						return;
+					}
 				}
 			}
 

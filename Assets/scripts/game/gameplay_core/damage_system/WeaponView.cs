@@ -41,8 +41,6 @@ namespace game.gameplay_core.damage_system
 					CharacterId = _context.CharacterId,
 					WeaponConfig = Config,
 					BlockLogic = _context.BlockLogic,
-					CurrentState = _context.CurrentState,
-					OnParryTriggered = _context.OnParryTriggered,
 				});
 			}
 		}

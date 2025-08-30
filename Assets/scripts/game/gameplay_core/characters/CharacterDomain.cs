@@ -121,6 +121,7 @@ namespace game.gameplay_core.characters
 				RightWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				LeftWeapon = new ReactiveProperty<WeaponView>(DebugWeaponLeft),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
+				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
 
 				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
 				RunSpeed = new ReactiveProperty<float>(_config.Locomotion.RunSpeed),
@@ -207,6 +208,17 @@ namespace game.gameplay_core.characters
 					CharacterId = _context.CharacterId,
 					ApplyDamage = _context.ApplyDamage,
 					InvulnerabilityLogic = _context.InvulnerabilityLogic
+				});
+			}
+
+		 
+			if(_context.ParryReceiver != null)
+			{
+				_context.ParryReceiver.Initialize(new ParryReceiver.Context
+				{
+					Team = _context.Team,
+					CharacterId = _context.CharacterId,
+					OnParryTriggered = _context.OnParryTriggered
 				});
 			}
 

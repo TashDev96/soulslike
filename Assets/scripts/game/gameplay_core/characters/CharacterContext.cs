@@ -54,6 +54,7 @@ namespace game.gameplay_core.characters
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 
 		public BodyAttackView BodyAttackView;
+		public ParryReceiver ParryReceiver;
 
 		public ReactiveCommand DeflectCurrentAttack;
 

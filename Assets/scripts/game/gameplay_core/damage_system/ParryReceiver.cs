@@ -1,18 +1,16 @@
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
-using game.gameplay_core.characters.logic;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
 {
-	public class BlockReceiver : MonoBehaviour
+	public class ParryReceiver : MonoBehaviour
 	{
 		public struct Context
 		{
 			public IReadOnlyReactiveProperty<Team> Team { get; set; }
 			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public WeaponConfig WeaponConfig { get; set; }
-			public BlockLogic BlockLogic { get; set; }
+			public ReactiveCommand<CharacterDomain> OnParryTriggered { get; set; }
 		}
 
 		private Context _context;
@@ -26,11 +24,16 @@ namespace game.gameplay_core.damage_system
 			gameObject.SetActive(false);
 		}
 
-		public void ApplyDamage(DamageInfo damageInfo, out bool deflectAttack)
+		public void SetActive(bool active)
 		{
-			_context.BlockLogic.ResolveBlock(damageInfo, _context.WeaponConfig, out deflectAttack);
+			gameObject.SetActive(active);
 		}
 
-
+		public bool TryResolveParry(CharacterDomain damageDealer)
+		{
+			damageDealer.CharacterStateMachine.TriggerParryStun();
+			_context.OnParryTriggered.Execute(damageDealer);
+			return true;
+		}
 	}
 }

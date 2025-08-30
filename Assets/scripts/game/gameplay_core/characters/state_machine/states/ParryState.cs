@@ -1,25 +1,27 @@
+using System.Collections.Generic;
 using Animancer;
+using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public class ParryState : CharacterAnimationStateBase
 	{
-		private float _activeFrameStart;
-		private float _activeFrameEnd;
-		private float _recoveryFrameEnd;
-
 		private WeaponView _parryWeapon;
+		private AttackConfig _parryConfig;
+		private readonly List<HitData> _hitsData = new();
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
-		public override bool CanInterruptByStagger => !IsInRecoveryFrames;
 		public bool IsParrySuccessful { get; private set; }
 
 		public bool IsInActiveFrames { get; private set; }
 
 		public bool IsInRecoveryFrames { get; private set; }
+
+		public override bool CanInterruptByStagger => !IsInRecoveryFrames;
 
 		public ParryState(CharacterContext context) : base(context)
 		{
@@ -31,41 +33,84 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 
 			_parryWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			_parryConfig = _parryWeapon?.Config.Parry;
+			
 
-			if(_parryWeapon != null)
+			if(_parryConfig != null && _parryWeapon.Config.CanParry)
 			{
-				_activeFrameStart = _parryWeapon.Config.ParryActiveFrameStart;
-				_activeFrameEnd = _parryWeapon.Config.ParryActiveFrameEnd;
-				_recoveryFrameEnd = _parryWeapon.Config.ParryRecoveryFrameEnd;
+				Duration = _parryConfig.Duration;
 
-				_parryWeapon.SetBlockColliderActive(true);
-
-				var animation = _parryWeapon.Config.ParryAnimation;
-				if(animation != null)
+				_hitsData.Clear();
+				for(var i = 0; i < _parryConfig.HitConfigs.Count; i++)
 				{
-					var animationState = _context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
-					Duration = animationState.Duration;
+					_hitsData.Add(new HitData
+					{
+						Config = _parryConfig.HitConfigs[i]
+					});
 				}
-			}
 
-			_context.StaminaLogic.SpendStamina(_parryWeapon?.Config.ParryStaminaCost ?? 15f);
+				_context.Animator.Play(_parryConfig.Animation, 0.1f, FadeMode.FromStart);
+				_context.StaminaLogic.SpendStamina(_parryConfig.StaminaCost);
+			}
+			else
+			{
+				IsComplete = true;
+			}
 		}
 
 		public override void Update(float deltaTime)
 		{
 			Time += deltaTime;
 
-			if(Duration > 0)
+			if(_parryConfig == null)
 			{
-				var normalizedTime = Time / Duration;
+				IsComplete = true;
+				return;
+			}
 
-				IsInActiveFrames = normalizedTime >= _activeFrameStart && normalizedTime <= _activeFrameEnd;
-				IsInRecoveryFrames = normalizedTime > _activeFrameEnd && normalizedTime <= _recoveryFrameEnd;
+			var wasInActiveFrames = IsInActiveFrames;
+			IsInActiveFrames = false;
+			IsInRecoveryFrames = false;
 
-				if(normalizedTime >= 1f)
+			var hasActiveHit = false;
+			var allHitsComplete = true;
+
+			foreach(var hitData in _hitsData)
+			{
+				var hitTiming = hitData.Config.Timing;
+
+				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
 				{
-					IsComplete = true;
+					hitData.IsStarted = true;
 				}
+
+				if(hitData.IsActive)
+				{
+					IsInActiveFrames = true;
+					hasActiveHit = true;
+
+					if(NormalizedTime >= hitTiming.y)
+					{
+						hitData.IsEnded = true;
+					}
+				}
+
+				allHitsComplete &= hitData.IsEnded;
+			}
+
+			if(allHitsComplete && !hasActiveHit)
+			{
+				IsInRecoveryFrames = true;
+			}
+
+			if(wasInActiveFrames != IsInActiveFrames && _context.ParryReceiver != null)
+			{
+				_context.ParryReceiver.SetActive(IsInActiveFrames);
+			}
+
+			if(Time >= _parryConfig.Duration)
+			{
+				IsComplete = true;
 			}
 		}
 
@@ -73,7 +118,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			IsParrySuccessful = false;
 
-			if(_parryWeapon != null)
+			if(_parryConfig != null)
 			{
 				IsComplete = true;
 			}
@@ -81,9 +126,9 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void OnExit()
 		{
-			if(_parryWeapon != null)
+			if(_context.ParryReceiver != null)
 			{
-				_parryWeapon.SetBlockColliderActive(false);
+				_context.ParryReceiver.gameObject.SetActive(false);
 			}
 
 			base.OnExit();
@@ -91,7 +136,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override float GetEnterStaminaCost()
 		{
-			return _parryWeapon?.Config.ParryStaminaCost ?? 15f;
+			var parryWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			return parryWeapon?.Config.Parry?.StaminaCost ?? 15f;
 		}
 
 		public override string GetDebugString()
