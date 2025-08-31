@@ -18,7 +18,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private readonly CharacterDomain _riposteTarget;
 
 		public AnimancerState CurrentRiposteAnimation { get; private set; }
-		public AttackConfig CurrentAttackConfig { get; private set; }
+		public AttackConfig RiposteAttackConfig { get; private set; }
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
@@ -31,20 +31,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			CurrentAttackConfig = _context.RightWeapon.Value.Config.RiposteAttack;
-			Duration = CurrentAttackConfig.Duration;
+			RiposteAttackConfig = _context.RightWeapon.Value.Config.RiposteAttack;
+			Duration = RiposteAttackConfig.Duration;
 
 			_staminaSpent = false;
 			_hitsData.Clear();
-			for(var i = 0; i < CurrentAttackConfig.HitConfigs.Count; i++)
+			for(var i = 0; i < RiposteAttackConfig.HitConfigs.Count; i++)
 			{
 				_hitsData.Add(new HitData
 				{
-					Config = CurrentAttackConfig.HitConfigs[i]
+					Config = RiposteAttackConfig.HitConfigs[i]
 				});
 			}
 
-			CurrentRiposteAnimation = _context.Animator.Play(CurrentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			CurrentRiposteAnimation = _context.Animator.Play(RiposteAttackConfig.Animation, 0.1f, FadeMode.FromStart);
 
 			Time = 0f;
 			ResetForwardMovement();
@@ -56,14 +56,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			Time += deltaTime;
 
-			if(_context.InputData.HasDirectionInput && !CurrentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
+			if(_context.InputData.HasDirectionInput && !RiposteAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
 
-			UpdateForwardMovement(CurrentAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
+			UpdateForwardMovement(RiposteAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
 			foreach(var hitData in _hitsData)
 			{
@@ -74,7 +74,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					hitData.IsStarted = true;
 					if(!_staminaSpent)
 					{
-						_context.StaminaLogic.SpendStamina(CurrentAttackConfig.StaminaCost);
+						_context.StaminaLogic.SpendStamina(RiposteAttackConfig.StaminaCost);
 						_staminaSpent = true;
 					}
 					ApplyGuaranteedDamage(hitData);
@@ -86,7 +86,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 			}
 
-			if(Time >= CurrentAttackConfig.Duration)
+			if(Time >= RiposteAttackConfig.Duration)
 			{
 				IsComplete = true;
 			}
@@ -97,13 +97,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				if(!_staminaRegenDisabled)
 				{
-					if(CurrentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+					if(RiposteAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
 					{
 						_staminaRegenDisabled = true;
 						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
-				else if(!CurrentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				else if(!RiposteAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
 				{
 					_staminaRegenDisabled = false;
 					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
@@ -125,12 +125,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			var result = !CurrentAttackConfig.LockedStateTime.Contains(NormalizedTime);
+			var result = !RiposteAttackConfig.LockedStateTime.Contains(NormalizedTime);
 			if(result)
 			{
 				Debug.LogError(NormalizedTime);
 			}
-			return !CurrentAttackConfig.LockedStateTime.Contains(NormalizedTime);
+			return !RiposteAttackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 
 		private void ApplyGuaranteedDamage(HitData hitData)
@@ -141,7 +141,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			var hitConfig = hitData.Config;
-			var damageAmount = CurrentAttackConfig.BaseDamage * hitConfig.DamageMultiplier;
+			var damageAmount = RiposteAttackConfig.BaseDamage * hitConfig.DamageMultiplier;
 
 			var damageInfo = new DamageInfo
 			{
@@ -162,17 +162,17 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				return;
 			}
+			
+			_riposteTarget.transform.rotation = Quaternion.LookRotation( (_context.Transform.Position-_riposteTarget.transform.position).SetY(0) );
+			_riposteTarget.transform.position = _context.Transform.Position - _riposteTarget.transform.forward * 1.5f;
 
-			var targetAnimationClip = GetTargetRiposteAnimation();
+			var targetAnimationClip = _riposteTarget.ExternalData.Config.RipostedAnimation;
 			if(targetAnimationClip != null)
 			{
-				_riposteTarget.CharacterStateMachine.LockInAnimation(targetAnimationClip, Duration);
+				_riposteTarget.CharacterStateMachine.LockInAnimation(targetAnimationClip);
 			}
 		}
 
-		private AnimationClip GetTargetRiposteAnimation()
-		{
-			return _riposteTarget.ExternalData.Config.RipostedAnimation;
-		}
+	 
 	}
 }

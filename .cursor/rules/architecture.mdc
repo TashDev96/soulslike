@@ -15,3 +15,5 @@ example:
 [CharacterContext.cs](mdc:Assets/scripts/game/gameplay_core/characters/CharacterContext.cs) - has IsDead property, which is propagated also to MovementLogic.cs and HealthLogic.cs
 
 
+don't explain your code, just write it
+don't create single line private methods, inline them

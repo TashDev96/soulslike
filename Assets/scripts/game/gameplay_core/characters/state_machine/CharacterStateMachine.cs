@@ -71,10 +71,10 @@ namespace game.gameplay_core.characters.state_machine
 			SetState(new ParryStunState(_context));
 		}
 
-		public void LockInAnimation(AnimationClip animationClip, float duration, bool canInterruptByStagger = false)
+		public void LockInAnimation(AnimationClip animationClip, bool canInterruptByStagger = false)
 		{
 			_currentState.Value.OnInterrupt();
-			SetState(new LockedInAnimationState(_context, animationClip, duration, canInterruptByStagger));
+			SetState(new LockedInAnimationState(_context, animationClip, canInterruptByStagger));
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)

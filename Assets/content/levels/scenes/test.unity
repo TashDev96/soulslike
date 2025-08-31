@@ -11660,17 +11660,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
---- !u!114 &322733497 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
-  m_PrefabInstance: {fileID: 322733496}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0b75d7768c47879dda0ca7358d3584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &323371007
 GameObject:
   m_ObjectHideFlags: 0
@@ -18134,10 +18123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 636421841}
   - {fileID: 875381543}
+  - {fileID: 636421841}
   <Characters>k__BackingField:
-  - {fileID: 322733497}
   - {fileID: 5039234435017277234}
   <MainCamera>k__BackingField: {fileID: 330585545}
   <TestPlayerSpawnPos>k__BackingField: {fileID: 667157909}
@@ -60917,7 +60905,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.63
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 48769269560892466, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_LocalPosition.z

@@ -790,19 +790,34 @@ MonoBehaviour:
       _Speed: 1
       _NormalizedStartTime: NaN
     <CanParry>k__BackingField: 0
-    <ParryActiveFrameStart>k__BackingField: 0.1
-    <ParryActiveFrameEnd>k__BackingField: 0.3
-    <ParryRecoveryFrameEnd>k__BackingField: 0.8
-    <ParryStaminaCost>k__BackingField: 15
-    <ParryAnimation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 0}
-      _Speed: 1
-      _NormalizedStartTime: NaN
+    <Parry>k__BackingField:
+      <Animation>k__BackingField:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 0}
+        _Speed: 1
+        _NormalizedStartTime: NaN
+      <BaseDamage>k__BackingField: 0
+      <StaminaCost>k__BackingField: 10
+      <AttackDeflectionRatingBonus>k__BackingField: 0
+      <RotationDisabledTime>k__BackingField: {x: 0, y: 0}
+      <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0}
+      <LockedStateTime>k__BackingField: {x: 0, y: 1}
+      <ExitToComboTime>k__BackingField: {x: 0, y: 1}
+      <EnterComboTime>k__BackingField: 0
+      <EnterFromRollTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      <Range>k__BackingField: 1
+      <HitConfigs>k__BackingField: []
     <RiposteAttack>k__BackingField:
       <Animation>k__BackingField:
         _FadeDuration: 0.25
@@ -827,55 +842,19 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: -0.0007769945
-          value: 0.00039045114
-          inSlope: -0.0018150839
-          outSlope: 0.27156472
-          tangentMode: 65
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.1989717
-          value: 0.054635152
-          inSlope: 0.27156472
-          outSlope: 0.14877076
-          tangentMode: 69
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.51367295
-          value: 0.1014535
-          inSlope: 0.14877076
-          outSlope: 2.176072
-          tangentMode: 69
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.7036793
-          value: 0.514921
-          inSlope: 2.176072
-          outSlope: -0.03966309
-          tangentMode: 69
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.9944585
-          value: 0.5033878
-          inSlope: -0.11899399
-          outSlope: -0.11899399
-          tangentMode: 1
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 1.5633532
-          value: 0.49808115
-          inSlope: -0.00932802
-          outSlope: -0.00932802
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
           tangentMode: 34
           weightedMode: 0
           inWeight: 0.33333334
