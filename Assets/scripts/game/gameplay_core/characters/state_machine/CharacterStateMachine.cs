@@ -219,10 +219,15 @@ namespace game.gameplay_core.characters.state_machine
 					case CharacterCommand.RegularAttack:
 
 						var riposteableEnemy = FindRiposteableEnemy();
+						var backstabbableEnemy = FindBackstabbableEnemy();
 
 						if(riposteableEnemy != null)
 						{
-							SetState(new RiposteState(_context, riposteableEnemy));
+							SetState(new RiposteAttackState(_context, riposteableEnemy));
+						}
+						else if(backstabbableEnemy != null)
+						{
+							SetState(new BackstabAttackState(_context, backstabbableEnemy));
 						}
 						else
 						{
@@ -350,6 +355,40 @@ namespace game.gameplay_core.characters.state_machine
 			return weapon != null && weapon.Config.CanParry;
 		}
 
+		private CharacterDomain FindBackstabbableEnemy()
+		{
+			const float maxBackstabDistance = 3f;
+			const float attackerBehindVictimMaxAngle = 45f;
+
+			var selfPosition = _context.Transform.Position;
+			var selfForward = _context.Transform.Forward;
+
+			foreach(var character in _context.LockOnLogic.AllCharacters)
+			{
+				if(character == _context.SelfLink || character.ExternalData.IsDead)
+				{
+					continue;
+				}
+
+				var targetPosition = character.ExternalData.Transform.Position;
+				var distance = (targetPosition - selfPosition).magnitude;
+
+				if(distance > maxBackstabDistance)
+				{
+					continue;
+				}
+
+				if(!CheckAngleForBackstab(selfPosition, selfForward, targetPosition, character.ExternalData.Transform.Forward, attackerBehindVictimMaxAngle))
+				{
+					continue;
+				}
+
+				return character;
+			}
+
+			return null;
+		}
+
 		private CharacterDomain FindRiposteableEnemy()
 		{
 			const float maxRiposteDistance = 3f;
@@ -381,7 +420,7 @@ namespace game.gameplay_core.characters.state_machine
 					continue;
 				}
 
-				if(!CheckRiposteAngle(selfPosition, selfForward, targetPosition, character.ExternalData.Transform.Forward))
+				if(!CheckAngleForRiposte(selfPosition, selfForward, targetPosition, character.ExternalData.Transform.Forward, attackerLookingAtVictimMaxAngle, victimLookingAtAttackerMaxAngle))
 				{
 					continue;
 				}
@@ -390,48 +429,62 @@ namespace game.gameplay_core.characters.state_machine
 			}
 
 			return null;
+		}
 
-			bool CheckRiposteAngle(Vector3 attackerPos, Vector3 attackerForward, Vector3 victimPos, Vector3 victimForward)
-			{
-				var attackerToVictim = (victimPos - attackerPos).normalized;
-				var victimToAttacker = (attackerPos - victimPos).normalized;
+		private bool CheckAngleForBackstab(Vector3 attackerPos, Vector3 attackerForward, Vector3 victimPos, Vector3 victimForward, float attackerBehindVictimMaxAngle)
+		{
+			var attackerToVictim = (victimPos - attackerPos).normalized;
+			var victimToAttacker = (attackerPos - victimPos).normalized;
 
-				var attackerLookingAtVictimAngle = Vector3.Angle(attackerForward, attackerToVictim);
-				var victimLookingAtAttackerAngle = Vector3.Angle(victimForward, victimToAttacker);
+			var attackerLookingAtVictimAngle = Vector3.Angle(attackerForward, attackerToVictim);
+			var victimLookingAwayFromAttackerAngle = Vector3.Angle(victimForward, -victimToAttacker);
 
-				var debugDistance = 2f;
-				var attackerInsideCone = attackerLookingAtVictimAngle <= attackerLookingAtVictimMaxAngle;
-				var victimInsideCone = victimLookingAtAttackerAngle <= victimLookingAtAttackerMaxAngle;
+			var attackerInsideCone = attackerLookingAtVictimAngle <= attackerBehindVictimMaxAngle;
+			var victimLookingAway = victimLookingAwayFromAttackerAngle <= attackerBehindVictimMaxAngle;
 
-				const float debugDuration = 2f;
-				Debug.DrawLine(attackerPos, attackerPos + attackerForward * debugDistance, Color.yellow, debugDuration);
-				Debug.DrawLine(attackerPos, attackerPos + attackerToVictim * debugDistance, attackerInsideCone ? Color.green : Color.red, debugDuration);
-				
-				var attackerConeLeft = Quaternion.AngleAxis(-attackerLookingAtVictimMaxAngle, Vector3.up) * attackerForward;
-				var attackerConeRight = Quaternion.AngleAxis(attackerLookingAtVictimMaxAngle, Vector3.up) * attackerForward;
-				Debug.DrawLine(attackerPos, attackerPos + attackerConeLeft * debugDistance, Color.yellow, debugDuration);
-				Debug.DrawLine(attackerPos, attackerPos + attackerConeRight * debugDistance, Color.yellow, debugDuration);
+			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, -victimToAttacker, 
+				attackerBehindVictimMaxAngle, attackerBehindVictimMaxAngle, attackerInsideCone && victimLookingAway, Color.blue);
 
-				Debug.DrawLine(victimPos, victimPos + victimForward * debugDistance, Color.yellow, debugDuration);
-				Debug.DrawLine(victimPos, victimPos + victimToAttacker * debugDistance, victimInsideCone ? Color.green : Color.red, debugDuration);
-				
-				var victimConeLeft = Quaternion.AngleAxis(-victimLookingAtAttackerMaxAngle, Vector3.up) * victimForward;
-				var victimConeRight = Quaternion.AngleAxis(victimLookingAtAttackerMaxAngle, Vector3.up) * victimForward;
-				Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, Color.yellow, debugDuration);
-				Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, Color.yellow, debugDuration);
+			return attackerInsideCone && victimLookingAway;
+		}
 
-				if(attackerLookingAtVictimAngle > attackerLookingAtVictimMaxAngle)
-				{
-					return false;
-				}
+		private bool CheckAngleForRiposte(Vector3 attackerPos, Vector3 attackerForward, Vector3 victimPos, Vector3 victimForward, float attackerLookingAtVictimMaxAngle, float victimLookingAtAttackerMaxAngle)
+		{
+			var attackerToVictim = (victimPos - attackerPos).normalized;
+			var victimToAttacker = (attackerPos - victimPos).normalized;
 
-				if(victimLookingAtAttackerAngle > victimLookingAtAttackerMaxAngle)
-				{
-					return false;
-				}
+			var attackerLookingAtVictimAngle = Vector3.Angle(attackerForward, attackerToVictim);
+			var victimLookingAtAttackerAngle = Vector3.Angle(victimForward, victimToAttacker);
 
-				return true;
-			}
+			var attackerInsideCone = attackerLookingAtVictimAngle <= attackerLookingAtVictimMaxAngle;
+			var victimInsideCone = victimLookingAtAttackerAngle <= victimLookingAtAttackerMaxAngle;
+
+			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, victimToAttacker, 
+				attackerLookingAtVictimMaxAngle, victimLookingAtAttackerMaxAngle, attackerInsideCone && victimInsideCone, Color.yellow);
+
+			return attackerInsideCone && victimInsideCone;
+		}
+
+		private void DrawAngleDebugLines(Vector3 attackerPos, Vector3 attackerForward, Vector3 attackerToVictim, Vector3 victimPos, Vector3 victimForward, Vector3 victimToAttacker, float attackerMaxAngle, float victimMaxAngle, bool success, Color debugColor)
+		{
+			const float debugDistance = 2f;
+			const float debugDuration = 2f;
+
+			Debug.DrawLine(attackerPos, attackerPos + attackerForward * debugDistance, debugColor, debugDuration);
+			Debug.DrawLine(attackerPos, attackerPos + attackerToVictim * debugDistance, success ? Color.green : Color.red, debugDuration);
+			
+			var attackerConeLeft = Quaternion.AngleAxis(-attackerMaxAngle, Vector3.up) * attackerForward;
+			var attackerConeRight = Quaternion.AngleAxis(attackerMaxAngle, Vector3.up) * attackerForward;
+			Debug.DrawLine(attackerPos, attackerPos + attackerConeLeft * debugDistance, debugColor, debugDuration);
+			Debug.DrawLine(attackerPos, attackerPos + attackerConeRight * debugDistance, debugColor, debugDuration);
+
+			Debug.DrawLine(victimPos, victimPos + victimForward * debugDistance, debugColor, debugDuration);
+			Debug.DrawLine(victimPos, victimPos + victimToAttacker * debugDistance, success ? Color.green : Color.red, debugDuration);
+			
+			var victimConeLeft = Quaternion.AngleAxis(-victimMaxAngle, Vector3.up) * victimForward;
+			var victimConeRight = Quaternion.AngleAxis(victimMaxAngle, Vector3.up) * victimForward;
+			Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, debugColor, debugDuration);
+			Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, debugColor, debugDuration);
 		}
 	}
 }

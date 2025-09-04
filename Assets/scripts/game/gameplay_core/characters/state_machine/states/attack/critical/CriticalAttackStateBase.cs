@@ -8,62 +8,64 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
-	public class RiposteState : CharacterAnimationStateBase
+	public class CriticalAttackStateBase : CharacterAnimationStateBase
 	{
-		private const string StaminaRegenDisableKey = "RiposteState";
+		private const string StaminaRegenDisableKey = "CriticalAttackState";
 
 		private bool _staminaSpent;
 		private bool _staminaRegenDisabled;
 		private readonly List<HitData> _hitsData = new();
-		private readonly CharacterDomain _riposteTarget;
+		protected readonly CharacterDomain _target;
 
-		public AnimancerState CurrentRiposteAnimation { get; private set; }
-		public AttackConfig RiposteAttackConfig { get; private set; }
+		private AttackConfig _attackConfig;
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
-		public RiposteState(CharacterContext context, CharacterDomain riposteTarget) : base(context)
+		public CriticalAttackStateBase(CharacterContext context, CharacterDomain target) : base(context)
 		{
-			_riposteTarget = riposteTarget;
+			_target = target;
+		}
+
+		public void SetEnterParams(AttackConfig attackConfig)
+		{
+			_attackConfig = attackConfig;
 		}
 
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			RiposteAttackConfig = _context.RightWeapon.Value.Config.RiposteAttack;
-			Duration = RiposteAttackConfig.Duration;
+			Duration = _attackConfig.Duration;
 
 			_staminaSpent = false;
 			_hitsData.Clear();
-			for(var i = 0; i < RiposteAttackConfig.HitConfigs.Count; i++)
+			for(var i = 0; i < _attackConfig.HitConfigs.Count; i++)
 			{
 				_hitsData.Add(new HitData
 				{
-					Config = RiposteAttackConfig.HitConfigs[i]
+					Config = _attackConfig.HitConfigs[i]
 				});
 			}
 
-			CurrentRiposteAnimation = _context.Animator.Play(RiposteAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			_context.Animator.Play(_attackConfig.Animation, 0.1f, FadeMode.FromStart);
 
 			Time = 0f;
 			ResetForwardMovement();
 
-			LockTargetInAnimation();
 		}
 
 		public override void Update(float deltaTime)
 		{
 			Time += deltaTime;
 
-			if(_context.InputData.HasDirectionInput && !RiposteAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
+			if(_context.InputData.HasDirectionInput && !_attackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
 
-			UpdateForwardMovement(RiposteAttackConfig.ForwardMovement.Evaluate(Time), deltaTime);
+			UpdateForwardMovement(_attackConfig.ForwardMovement.Evaluate(Time), deltaTime);
 
 			foreach(var hitData in _hitsData)
 			{
@@ -74,7 +76,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					hitData.IsStarted = true;
 					if(!_staminaSpent)
 					{
-						_context.StaminaLogic.SpendStamina(RiposteAttackConfig.StaminaCost);
+						_context.StaminaLogic.SpendStamina(_attackConfig.StaminaCost);
 						_staminaSpent = true;
 					}
 					ApplyGuaranteedDamage(hitData);
@@ -86,7 +88,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 			}
 
-			if(Time >= RiposteAttackConfig.Duration)
+			if(Time >= _attackConfig.Duration)
 			{
 				IsComplete = true;
 			}
@@ -97,13 +99,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				if(!_staminaRegenDisabled)
 				{
-					if(RiposteAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+					if(_attackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
 					{
 						_staminaRegenDisabled = true;
 						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
-				else if(!RiposteAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				else if(!_attackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
 				{
 					_staminaRegenDisabled = false;
 					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
@@ -119,60 +121,42 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override float GetEnterStaminaCost()
 		{
-			var weaponConfig = _context.RightWeapon.Value.Config;
-			return weaponConfig.RiposteAttack.StaminaCost;
+			return 1;
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			var result = !RiposteAttackConfig.LockedStateTime.Contains(NormalizedTime);
+			var result = !_attackConfig.LockedStateTime.Contains(NormalizedTime);
 			if(result)
 			{
 				Debug.LogError(NormalizedTime);
 			}
-			return !RiposteAttackConfig.LockedStateTime.Contains(NormalizedTime);
+			return !_attackConfig.LockedStateTime.Contains(NormalizedTime);
 		}
 
 		private void ApplyGuaranteedDamage(HitData hitData)
 		{
-			if(_riposteTarget == null || _riposteTarget.ExternalData.IsDead)
+			if(_target == null || _target.ExternalData.IsDead)
 			{
 				return;
 			}
 
 			var hitConfig = hitData.Config;
-			var damageAmount = RiposteAttackConfig.BaseDamage * hitConfig.DamageMultiplier;
+			var damageAmount = _attackConfig.BaseDamage * hitConfig.DamageMultiplier;
 
 			var damageInfo = new DamageInfo
 			{
 				DamageAmount = damageAmount,
 				PoiseDamageAmount = hitConfig.PoiseDamage,
-				WorldPos = _riposteTarget.ExternalData.Transform.Position,
+				WorldPos = _target.ExternalData.Transform.Position,
 				DoneByPlayer = _context.IsPlayer.Value,
 				DamageDealer = _context.SelfLink,
 				DeflectionRating = 0
 			};
 
-			_riposteTarget.ExternalData.ApplyDamage.Execute(damageInfo);
+			_target.ExternalData.ApplyDamage.Execute(damageInfo);
 		}
 
-		private void LockTargetInAnimation()
-		{
-			if(_riposteTarget == null || _riposteTarget.ExternalData.IsDead)
-			{
-				return;
-			}
-			
-			_riposteTarget.transform.rotation = Quaternion.LookRotation( (_context.Transform.Position-_riposteTarget.transform.position).SetY(0) );
-			_riposteTarget.transform.position = _context.Transform.Position - _riposteTarget.transform.forward * 1.5f;
-
-			var targetAnimationClip = _riposteTarget.ExternalData.Config.RipostedAnimation;
-			if(targetAnimationClip != null)
-			{
-				_riposteTarget.CharacterStateMachine.LockInAnimation(targetAnimationClip);
-			}
-		}
-
-	 
+	
 	}
 }

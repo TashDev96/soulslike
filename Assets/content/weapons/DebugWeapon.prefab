@@ -869,6 +869,58 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+    <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+    <BackstabAttack>k__BackingField:
+      <Animation>k__BackingField:
+        _FadeDuration: 0.25
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
+        _Speed: 1
+        _NormalizedStartTime: NaN
+      <BaseDamage>k__BackingField: 9.84
+      <StaminaCost>k__BackingField: 10
+      <AttackDeflectionRatingBonus>k__BackingField: 0
+      <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
+      <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
+      <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
+      <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}
+      <EnterComboTime>k__BackingField: 0.28515625
+      <EnterFromRollTime>k__BackingField: 0.30468747
+      <StartHandleObstacleCastTime>k__BackingField: 0.22265624
+      <ForwardMovement>k__BackingField:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      <Range>k__BackingField: 1
+      <HitConfigs>k__BackingField:
+      - <InvolvedColliders>k__BackingField: 010000
+        <Timing>k__BackingField: {x: 0.22851561, y: 0.23046874}
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
     <RegularToRegularCustomOrder>k__BackingField:
       _list: []
       _keyCollision: 0
