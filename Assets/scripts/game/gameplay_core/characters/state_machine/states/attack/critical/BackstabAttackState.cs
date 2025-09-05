@@ -1,7 +1,7 @@
 using dream_lib.src.extensions;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine.states.attack
+namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
 	public class BackstabAttackState:CriticalAttackStateBase
 	{

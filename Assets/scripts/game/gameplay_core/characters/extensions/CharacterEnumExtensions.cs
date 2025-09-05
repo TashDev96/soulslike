@@ -1,6 +1,7 @@
+using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine.states.attack;
 
-namespace game.gameplay_core.characters.commands
+namespace game.gameplay_core.characters.extensions
 {
 	public static class CharacterEnumExtensions
 	{

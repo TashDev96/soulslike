@@ -1,7 +1,7 @@
 using System;
 using Animancer;
 
-namespace game.gameplay_core.characters.state_machine.states
+namespace game.gameplay_core.characters.state_machine.states.stagger
 {
 	public class StaggerState : CharacterStateBase
 	{

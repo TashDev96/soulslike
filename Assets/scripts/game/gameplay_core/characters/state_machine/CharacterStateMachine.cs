@@ -1,8 +1,11 @@
 using System;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
+using game.gameplay_core.characters.state_machine.states.attack.critical;
+using game.gameplay_core.characters.state_machine.states.stagger;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine

@@ -11,6 +11,7 @@ using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states;
+using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
@@ -51,6 +52,7 @@ namespace game.gameplay_core.characters
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
 		private BlockLogic _blockLogic;
+		private InventoryLogic _inventoryLogic;
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
@@ -86,6 +88,7 @@ namespace game.gameplay_core.characters
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
+			_inventoryLogic = new InventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -141,6 +144,8 @@ namespace game.gameplay_core.characters
 
 				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
+
+			_inventoryLogic.Initialize(_context);
 
 			ExternalData = new CharacterExternalData(_context);
 

@@ -6,7 +6,7 @@ using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine.states.attack
+namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
 	public class CriticalAttackStateBase : CharacterAnimationStateBase
 	{

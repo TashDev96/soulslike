@@ -56,10 +56,10 @@ namespace game.gameplay_core
 			_unityEventsListener = UnityEventsListener.Create("__locationDomainUnityEvents");
 			_unityEventsListener.OnUpdate += HandleUpdate;
 
-			GameStaticContext.Instance.UiDomain.ShowLocationUi(new UiLocationHUD.Context()
+			GameStaticContext.Instance.UiDomain.ShowLocationUi(new UiLocationHUD.Context
 			{
 				Player = _player.Value,
-				LocationUiUpdate = _locationContext.LocationUiUpdate,
+				LocationUiUpdate = _locationContext.LocationUiUpdate
 			});
 
 			RegisterCheats();
@@ -81,7 +81,7 @@ namespace game.gameplay_core
 				_frameDelayDebug = EditorComfortWindow.FrameDelay;
 #endif
 			}
-			
+
 			_locationContext.LocationUiUpdate.Execute(deltaTime);
 		}
 

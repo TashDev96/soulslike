@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using game.gameplay_core;
+using game.gameplay_core.inventory;
 using game.ui;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace game
 	{
 		private readonly bool _sceneDebugMode;
 		private CoreGameDomain _coreGameDomain;
+		private InventoryDomain _inventoryDomain;
 		private UiDomain _uiDomain;
 
 		public GameDomain(bool sceneDebugMode)
@@ -26,6 +28,10 @@ namespace game
 
 		private async UniTask InitializeAsync()
 		{
+
+			_inventoryDomain = new InventoryDomain();
+
+			await _inventoryDomain.Initialize(_sceneDebugMode);
 			
 			_uiDomain = new UiDomain();
 			
@@ -34,6 +40,7 @@ namespace game
 				WorldToScreenUiParent = new ReactiveProperty<RectTransform>(),
 				MainCamera = new ReactiveProperty<Camera>(),
 				UiDomain = _uiDomain,
+				InventoryDomain = _inventoryDomain,
 			};
 
 			await _uiDomain.Initialize();

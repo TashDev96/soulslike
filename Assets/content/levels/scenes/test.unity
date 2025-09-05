@@ -18103,6 +18103,7 @@ GameObject:
   - component: {fileID: 466086404}
   - component: {fileID: 466086401}
   - component: {fileID: 466086403}
+  - component: {fileID: 466086405}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -18171,6 +18172,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sceneDebugMode: 1
+--- !u!114 &466086405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466086400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1fae26fb3c41bc818a33ca595cc6e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <InventoryData>k__BackingField:
+  - ConfigId: DebugWeaponConfig
+    IsInitialized: 0
+    ComponentsData:
+      _list: []
+      _keyCollision: 0
 --- !u!1 &486636996
 GameObject:
   m_ObjectHideFlags: 0

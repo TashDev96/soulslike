@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473e31eb31c15495eae3d76fbd5b22ca
+    m_Address: DebugWeaponConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d0438033ce39ff459b646935761f4c3
     m_Address: Player
     m_ReadOnly: 0

@@ -2,6 +2,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.state_machine.states;
+using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-namespace game.gameplay_core.characters.state_machine.states
+namespace game.gameplay_core.characters.state_machine.states.stagger
 {
 	public enum StaggerReason
 	{

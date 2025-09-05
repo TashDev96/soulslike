@@ -49,6 +49,27 @@ public static class AddressableManager
 		}
 	}
 
+	public static T LoadAssetImmediately<T>(string address, AssetOwner owner)
+	{
+		if(_loadedAssets.TryGetValue(address, out var loadedAsset))
+		{
+			return (T)loadedAsset;
+		}
+
+		try
+		{
+			var asset = Addressables.LoadAssetAsync<T>(address).WaitForCompletion();
+			_loadedAssets[address] = asset;
+			_assetOwners[owner].Add(address);
+			return asset;
+		}
+		catch(Exception e)
+		{
+			Debug.LogError($"Failed to load asset instantly at address {address}: {e.Message}");
+			return default;
+		}
+	}
+
 	public static T GetPreloadedAsset<T>(string address)
 	{
 		if(_loadedAssets.TryGetValue(address, out var loadedAsset))

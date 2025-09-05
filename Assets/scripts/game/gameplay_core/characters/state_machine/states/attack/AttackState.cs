@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.utils;

@@ -1,16 +1,13 @@
 #if UNITY_EDITOR
-using game.gameplay_core.characters.config;
-using game.gameplay_core.characters.runtime_data;
-using UnityEngine;
-using UnityEditor;
-using Sirenix.OdinInspector.Editor;
-using Sirenix.OdinInspector;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using dream_lib.src.reactive;
+using Sirenix.OdinInspector.Editor;
+using UnityEditor;
+using UnityEngine;
 
-namespace game.gameplay_core.characters.config.editor
+namespace game.gameplay_core.characters.config.Editor
 {
 	[CustomEditor(typeof(CharacterConfig))]
 	public class CharacterConfigEditor : OdinEditor
