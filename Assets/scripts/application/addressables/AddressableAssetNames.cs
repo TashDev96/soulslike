@@ -2,8 +2,9 @@
 public static class AddressableAssetNames
 {
     public const string PlayerMaterial = "PlayerMaterial";
+    public const string DebugWeaponConfig = "DebugWeaponConfig";
     public const string Player = "Player";
     public const string MainCanvas = "MainCanvas";
     public const string CharacterUi = "CharacterUi";
-    public const string DebugWeaponConfig = "DebugWeaponConfig";
+    public const string MainHealingItemConfig = "MainHealingItemConfig";
 }

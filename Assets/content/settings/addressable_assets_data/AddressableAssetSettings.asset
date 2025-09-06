@@ -71,7 +71,7 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 3d64521f9cc22e844afcb6c5cdcc1f65
-        m_Value: content/addressable_assets_data
+        m_Value: content/settings/addressable_assets_data
       - m_Id: 604978e451e60be4eb2a9eadd182477e
         m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: ce2619c138dce794f84f2fdb699f8e46
@@ -79,7 +79,7 @@ MonoBehaviour:
       - m_Id: eb44f4317049438499aedf298d534d83
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: f7210a68e3076dc4abc9ad6a04cad708
-        m_Value: content/addressable_assets_data
+        m_Value: content/settings/addressable_assets_data
     m_ProfileEntryNames:
     - m_Id: 3d64521f9cc22e844afcb6c5cdcc1f65
       m_Name: Remote.LoadPath

@@ -35,6 +35,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c110b6beada2a4e4790f5ff4d00ae551
+    m_Address: MainHealingItemConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de32b7b91d5785f429f704b49cd19da7
     m_Address: CharacterUi
     m_ReadOnly: 0
