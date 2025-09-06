@@ -1,3 +1,4 @@
+using game.gameplay_core.characters;
 using game.gameplay_core.inventory.serialized_data;
 
 namespace game.gameplay_core.inventory
@@ -12,5 +13,10 @@ namespace game.gameplay_core.inventory
 		}
 
 		public abstract void SaveData();
+
+		public virtual void InitializeForLocation(CharacterContext context)
+		{
+			
+		}
 	}
 }

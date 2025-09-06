@@ -34,7 +34,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			Time += deltaTime;
+			base.Update(deltaTime);
 			
 			_stunTimeLeft -= deltaTime;
 			

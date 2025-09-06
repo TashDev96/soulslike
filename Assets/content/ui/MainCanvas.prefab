@@ -682,6 +682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6983f0d3ba45486dada8d07814838c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.ui.UiLocationHUD
+  _healthBat: {fileID: 335462179239854163}
   _staminaBar: {fileID: 1365169636919533150}
 --- !u!1 &6819442006374594572
 GameObject:
@@ -744,7 +745,7 @@ MonoBehaviour:
   _slowFillerDelayMax: 1
   _slowFillerStickPercentThreshold: 0.034
   _slowFillerSpeed: 0.25
-  _autoHide: 1
+  _autoHide: 0
   _notLockedShowDuration: 10
 --- !u!225 &3771079590493155284
 CanvasGroup:

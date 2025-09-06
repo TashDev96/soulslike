@@ -56,7 +56,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 		public override void Update(float deltaTime)
 		{
-			Time += deltaTime;
+			base.Update(deltaTime);
 
 			if(_context.InputData.HasDirectionInput && !_attackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{

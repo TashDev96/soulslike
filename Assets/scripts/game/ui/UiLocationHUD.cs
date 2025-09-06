@@ -14,10 +14,19 @@ namespace game.ui
 		}
 
 		[SerializeField]
+		private UiBar _healthBat;
+		[SerializeField]
 		private UiBar _staminaBar;
 
 		public void SetContext(Context context)
 		{
+			_healthBat.SetContext(new UiBar.Context
+			{
+				Current = context.Player.ExternalData.Stats.Hp,
+				Max = context.Player.ExternalData.Stats.HpMax,
+				CustomUpdate = context.LocationUiUpdate
+			});
+			
 			_staminaBar.SetContext(new UiBar.Context
 			{
 				Current = context.Player.ExternalData.Stats.Stamina,

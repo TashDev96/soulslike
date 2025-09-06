@@ -43,8 +43,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override void Update(float deltaTime)
 		{
-			Time += deltaTime;
-
+			base.Update(deltaTime);
+			
 			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);

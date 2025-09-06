@@ -1,7 +1,7 @@
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.serialized_data;
 
-namespace game.gameplay_core.inventory
+namespace game.gameplay_core.inventory.items_logic
 {
 	public class WeaponItemLogic : BaseItemLogic
 	{

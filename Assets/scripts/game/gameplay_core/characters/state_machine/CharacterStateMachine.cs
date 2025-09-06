@@ -24,9 +24,6 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly WalkBlockState _walkBlockState;
 		private readonly ParryState _parryState;
 
-		// TODO: Fix Unity compilation issue with RiposteState
-		// private readonly RiposteState _riposteState;
-
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
 
@@ -255,6 +252,11 @@ namespace game.gameplay_core.characters.state_machine
 						}
 						break;
 					case CharacterCommand.UseItem:
+						
+						if(_context.CurrentConsumableItem.HasValue && _context.CurrentConsumableItem.Value.CheckCanStartConsumption())
+						{
+							SetState(new ConsumeState(_context, _context.CurrentConsumableItem.Value));
+						}
 						break;
 					case CharacterCommand.Interact:
 						break;

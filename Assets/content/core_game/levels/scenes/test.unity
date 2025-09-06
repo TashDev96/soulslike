@@ -18124,8 +18124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SavableObjects>k__BackingField:
-  - {fileID: 875381543}
   - {fileID: 636421841}
+  - {fileID: 875381543}
   <Characters>k__BackingField:
   - {fileID: 5039234435017277234}
   <MainCamera>k__BackingField: {fileID: 330585545}
@@ -18186,6 +18186,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <InventoryData>k__BackingField:
   - ConfigId: DebugWeaponConfig
+    IsInitialized: 0
+    ComponentsData:
+      _list: []
+      _keyCollision: 0
+  - ConfigId: MainHealingItemConfig
     IsInitialized: 0
     ComponentsData:
       _list: []
@@ -53064,10 +53069,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5344686605928421292, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
-      propertyPath: axes.list.Array.data[0].keyboardPositive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5865372750619838363, guid: cdd5d37d39c5a7848a9034925936850b, type: 3}
       propertyPath: m_Name
       value: ControlFreakSetup
@@ -61001,6 +61002,10 @@ PrefabInstance:
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: _config.<WalkSpeed>k__BackingField
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5463184190765401211, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7284828856307327202, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: Config.<BlockStability>k__BackingField

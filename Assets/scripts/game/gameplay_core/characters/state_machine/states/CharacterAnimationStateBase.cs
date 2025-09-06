@@ -21,6 +21,11 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 		}
 
+		public override void Update(float deltaTime)
+		{
+			Time += deltaTime;
+		}
+
 		public override string GetDebugString()
 		{
 			return $"{Time.RoundFormat()}/{Duration.RoundFormat()}";
@@ -41,6 +46,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_context.MovementLogic.ApplyLocomotion(overrideDirection * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
+		}
+
+		protected bool CheckTiming(Vector2 timing)
+		{
+			return timing.Contains(NormalizedTime);
 		}
 	}
 }

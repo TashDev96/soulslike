@@ -9,6 +9,8 @@ using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.inventory;
+using game.gameplay_core.inventory.items_logic;
 using UnityEngine;
 
 namespace game.gameplay_core.characters
@@ -61,5 +63,6 @@ namespace game.gameplay_core.characters
 
 		// Parry support
 		public ReactiveCommand<CharacterDomain> OnParryTriggered;
+		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 	}
 }

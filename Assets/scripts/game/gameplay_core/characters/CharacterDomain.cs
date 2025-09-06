@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
@@ -15,6 +16,9 @@ using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.inventory;
+using game.gameplay_core.inventory.items_logic;
+using game.gameplay_core.inventory.serialized_data;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -123,6 +127,7 @@ namespace game.gameplay_core.characters
 
 				RightWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
 				LeftWeapon = new ReactiveProperty<WeaponView>(DebugWeaponLeft),
+				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
 
@@ -145,7 +150,8 @@ namespace game.gameplay_core.characters
 				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
 
-			_inventoryLogic.Initialize(_context);
+
+			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
 
@@ -277,6 +283,30 @@ namespace game.gameplay_core.characters
 					LocationUiUpdate = locationContext.LocationUiUpdate
 				});
 			}
+		}
+
+		private void InitializeInventory()
+		{
+			List<InventoryItemSaveData> saveData;
+			
+			if(_context.IsPlayer.Value)
+			{
+				saveData = GameStaticContext.Instance.InventoryDomain.InventoryItemsData;	
+			}
+			else
+			{
+				var npcInventoryComponent = gameObject.GetComponent<NpcInventoryConfigView>();
+				if(npcInventoryComponent != null)
+				{
+					saveData = npcInventoryComponent.Items;
+				}
+				else
+				{
+					saveData = new List<InventoryItemSaveData>();
+				}
+			}
+			
+			_inventoryLogic.Initialize(_context, saveData );
 		}
 
 		[Button]

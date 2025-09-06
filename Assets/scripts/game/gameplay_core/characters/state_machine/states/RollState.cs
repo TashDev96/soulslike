@@ -78,6 +78,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 
+		public override void OnExit()
+		{
+			base.OnExit();
+			_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
+		}
+
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
 			return base.CheckIsReadyToChangeState(nextCommand);
@@ -85,7 +91,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			Time += deltaTime;
+			base.Update(deltaTime);
 
 			if(_context.LockOnLogic.IsLockedOn)
 			{

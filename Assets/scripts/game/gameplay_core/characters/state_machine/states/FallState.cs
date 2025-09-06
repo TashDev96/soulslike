@@ -47,7 +47,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			Time += deltaTime;
+			base.Update(deltaTime);
 			_fallDuration += deltaTime;
 
 			var currentHeight = _context.Transform.Position.y;
