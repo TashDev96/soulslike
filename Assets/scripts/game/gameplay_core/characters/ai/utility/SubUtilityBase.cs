@@ -205,6 +205,7 @@ namespace game.gameplay_core.characters.ai.utility
 				case UtilityAction.ActionType.Strafe:
 					break;
 				case UtilityAction.ActionType.Heal:
+					InputData.Command = CharacterCommand.UseItem;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

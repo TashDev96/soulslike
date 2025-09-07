@@ -19,6 +19,10 @@ namespace game.gameplay_core.characters.ai.utility.considerations.weights
 		[SerializeField]
 		private float _notMetWeight;
 
+		public float ThresholdValue => _value;
+		public float MetWeight => _metWeight;
+		public float NotMetWeight => _notMetWeight;
+
 		protected override float EvaluateInternal(float seedValue)
 		{
 			if(CheckMetCriteria(seedValue))

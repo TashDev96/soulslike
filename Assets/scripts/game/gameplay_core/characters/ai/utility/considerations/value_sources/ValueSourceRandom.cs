@@ -12,6 +12,8 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 		[SerializeField]
 		private float _timeOffset;
 
+		public AnimationCurve RandomValuesOverTime => _randomValuesOverTime;
+
 		public override float GetValue(UtilityBrainContext context)
 		{
 			return _randomValuesOverTime.Evaluate(_timeOffset + context.CharacterContext.LocationTime.Value);

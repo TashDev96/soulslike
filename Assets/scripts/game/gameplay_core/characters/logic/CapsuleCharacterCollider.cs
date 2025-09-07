@@ -50,6 +50,7 @@ namespace game.gameplay_core.characters.logic
 			var wasGrounded = IsGrounded;
 
 			var moveStartPosition = transform.position;
+			var stepUpSuccess = false;
 
 			CalculateMovement(moveStartPosition, motion, disableIterations, out var normalResultPosition, out var normalMovementFlags);
 
@@ -61,7 +62,7 @@ namespace game.gameplay_core.characters.logic
 				{
 					var stepMotion = motion + motion.normalized * SkinWidth;
 					CalculateMovement(moveStartPosition + Vector3.up * StepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
-					var stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
+					stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
 
 					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red, 3f);
 
@@ -75,20 +76,24 @@ namespace game.gameplay_core.characters.logic
 							transform.position = resultPositionStepGravity;
 							Flags = flagsUp | groundingFlags;
 							_stepGravityDisableTimer = 0.2f;
-							return;
 						}
 					}
 				}
 			}
 
-			Flags |= normalMovementFlags;
-			if(_stepGravityDisableTimer > 0)
+			if(!stepUpSuccess)
 			{
-				Flags |= CollisionFlags.Below;
+				Flags |= normalMovementFlags;
+				if(_stepGravityDisableTimer > 0)
+				{
+					Flags |= CollisionFlags.Below;
+				}
+				transform.position = normalResultPosition;
 			}
-			transform.position = normalResultPosition;
+			
+			TriggerTriggers(moveStartPosition, transform.position);
 		}
-
+		
 		private void CalculateMovement(Vector3 moveStartPosition, Vector3 motion, bool singleIteration, out Vector3 resultPosition, out CollisionFlags flags)
 		{
 			flags = CollisionFlags.None;

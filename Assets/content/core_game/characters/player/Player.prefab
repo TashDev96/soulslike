@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1937557130125307911}
   - component: {fileID: 9014584770393281075}
   - component: {fileID: 7687702615470328083}
+  - component: {fileID: 1275262306807060881}
+  - component: {fileID: 4081949895489720870}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -117,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
-  _drawDebug: 1
+  _drawDebug: 0
   _useRotationConstraints: 0
   _fixXRotation: 1
   _fixYRotation: 0
@@ -135,6 +137,41 @@ MonoBehaviour:
   SlopeLimit: 30
   StepOffset: 0.55
   MinStepOffset: 0.01
+--- !u!136 &1275262306807060881
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163829566012686365}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &4081949895489720870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163829566012686365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e857e8c2b864391b8109ceb8064a0ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0

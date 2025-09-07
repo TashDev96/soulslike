@@ -1,3 +1,4 @@
+using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -39,11 +40,16 @@ namespace game.gameplay_core.utils
 		public Vector3 Center = Vector3.zero;
 		public Direction CapsuleDirection = Direction.YAxis;
 
+		
+		private readonly RaycastHit[] _triggersCastResults = new RaycastHit[20];
+		
 		private Transform _transform;
+		private int _triggersLayerMask;
 
 		private void Awake()
 		{
 			_transform = transform;
+			_triggersLayerMask = LayerMask.GetMask("Triggers");
 		}
 
 		public void DrawCollider(float duration, Color color)
@@ -162,6 +168,10 @@ namespace game.gameplay_core.utils
 
 		private void OnDrawGizmosSelected()
 		{
+			if(!enabled)
+			{
+				return;
+			}
 			if(!_transform)
 			{
 				_transform = transform;
@@ -169,10 +179,30 @@ namespace game.gameplay_core.utils
 			GetCapsulePoints(out var p1, out var p2);
 			DebugDrawUtils.DrawWireCapsule(p1, p2, GetScaledRadius(), Color.white);
 		}
+		
+		public void TriggerTriggers(Vector3 startPos, Vector3 endPos)
+		{
+			GetCapsulePoints(startPos, out var p1, out var p2);
+
+			var castDistance = (endPos-startPos).magnitude;
+			
+			var hitsCount = Physics.CapsuleCastNonAlloc(p1, p2, Radius, (endPos-startPos).normalized,
+				_triggersCastResults, castDistance,
+				_triggersLayerMask, QueryTriggerInteraction.Collide);
+
+			for(var i = 0; i < hitsCount; i++)
+			{
+				if(_triggersCastResults[i].collider.TryGetComponent<TriggerEventsListener>(out var listener))
+				{
+					listener.TriggerManualColliderEnter(gameObject);
+				}
+			}
+		}
+
 
 		private void OnDrawGizmos()
 		{
-			if(!_drawDebug)
+			if(!_drawDebug || !enabled)
 			{
 				return;
 			}

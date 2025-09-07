@@ -220,7 +220,7 @@ namespace game.gameplay_core.characters.ai
 		}
 #endif
 
-		private void HandleAggroTriggerEnter(Collider enteredObject)
+		private void HandleAggroTriggerEnter(GameObject enteredObject)
 		{
 			if(HasTarget)
 			{

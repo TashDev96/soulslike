@@ -1,4 +1,6 @@
+using dream_lib.src.extensions;
 using dream_lib.src.utils.components;
+using game.gameplay_core.characters.player;
 using UnityEngine;
 
 namespace game.gameplay_core.location.view
@@ -15,10 +17,27 @@ namespace game.gameplay_core.location.view
 
 		private void Awake()
 		{
-			_trigger.IsTriggered.OnChanged += HandleTrigger;
+			_trigger.OnTriggerEnterEvent += HandleTriggerEnter;
+			_trigger.OnTriggerExitEvent += HandleTriggerExit;
 		}
 
-		private void HandleTrigger(bool isTriggered)
+		private void HandleTriggerExit(GameObject obj)
+		{
+			if(obj.HasComponent<PlayerFlagComponent>())
+			{
+				SwitchTrigger(false);
+			}
+		}
+
+		private void HandleTriggerEnter(GameObject obj)
+		{
+			if(obj.HasComponent<PlayerFlagComponent>())
+			{
+				SwitchTrigger(true);
+			}
+		}
+
+		private void SwitchTrigger(bool isTriggered)
 		{
 			if(_normalState != null)
 			{

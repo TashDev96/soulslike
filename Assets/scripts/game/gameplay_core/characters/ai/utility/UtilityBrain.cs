@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.utils.components;
 using game.gameplay_core.characters.ai.navigation;
 using game.gameplay_core.characters.ai.utility.blackbox;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
@@ -20,7 +21,8 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private UtilityBrainContext _context;
 
-		private bool HasTarget => _context.Target != null;
+		[ShowInInspector]
+		private bool HasTarget => _context?.Target != null;
 
 		public void Initialize(CharacterContext context)
 		{
@@ -60,8 +62,11 @@ namespace game.gameplay_core.characters.ai.utility
 			return $"brain: {_subUtilities[0].DebugString}\n";
 		}
 
-		private void HandleAggroTriggerEnter(Collider enteredObject)
+		private void HandleAggroTriggerEnter(GameObject enteredObject)
 		{
+			
+			Debug.LogError(enteredObject);
+			
 			if(HasTarget)
 			{
 				return;
