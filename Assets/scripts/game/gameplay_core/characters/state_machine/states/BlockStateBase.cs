@@ -5,6 +5,9 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class BlockStateBase : CharacterStateBase
 	{
+		private const string StaminaRegenKey = nameof(BlockStateBase);
+		
+		
 		private const string HitReactReason = "BlockHitReactReason";
 		protected bool _isBlocking;
 		protected AnimancerState _receiveHitAnimation;
@@ -21,6 +24,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 
+			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
+			
+			
 			_isBlocking = true;
 
 			BlockingWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
@@ -43,6 +49,8 @@ namespace game.gameplay_core.characters.state_machine.states
 				BlockingWeapon.SetBlockColliderActive(false);
 			}
 
+			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
+			
 			_context.BlockLogic.OnBlockTriggered.OnExecute -= HandleBlockTriggered;
 
 			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);

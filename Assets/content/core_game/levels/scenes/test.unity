@@ -43421,8 +43421,8 @@ MonoBehaviour:
     - rid: 8163169418539171995
     - rid: 8163169418539172010
     <DebugColor>k__BackingField: {r: 0.84000015, g: 0.19999999, b: 1, a: 1}
-  DebugString: "\ngoal:Attack -1.5 \nHeal -1 \nGet Into Attack Distance 0.5048827
-    \nKeep Safe Distance 1.198286 \nWaitBlock 0.3401457 \n"
+  DebugString: "\ngoal:Attack -1 \nHeal -1 \nGet Into Attack Distance 1 \nKeep Safe
+    Distance 0.86478 \nWaitBlock 0.2146273 \n"
   _noAttackWeight:
     _octaves:
     - Disabled: 0
@@ -43497,7 +43497,7 @@ MonoBehaviour:
     - rid: 8163169196350374003
       type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
-        _multiplier: 2.77
+        _multiplier: 2
     - rid: 8163169196350374004
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
@@ -43542,7 +43542,7 @@ MonoBehaviour:
       data:
         _compareType: 1
         _value: 1.1
-        _metWeight: 1
+        _metWeight: 0.9
         _notMetWeight: -1
     - rid: 8163169418539171928
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}

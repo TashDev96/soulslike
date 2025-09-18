@@ -16,15 +16,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_time = 0;
 			base.OnEnter();
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
 		}
-
-		public override void OnExit()
-		{
-			base.OnExit();
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
-		}
-
+ 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
 			switch(nextCommand)

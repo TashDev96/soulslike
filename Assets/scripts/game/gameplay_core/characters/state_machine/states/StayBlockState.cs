@@ -4,7 +4,6 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class StayBlockState : BlockStateBase
 	{
-		private const string StaminaRegenKey = nameof(StayBlockState);
 
 		public StayBlockState(CharacterContext context) : base(context)
 		{
@@ -35,18 +34,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 
-		public override void OnEnter()
-		{
-			base.OnEnter();
-			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
-		}
-
-		public override void OnExit()
-		{
-			base.OnExit();
-			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
-		}
-
+	 
 		protected override void PlayBlockAnimation()
 		{
 			_context.Animator.Play(BlockingWeapon.Config.BlockStayAnimation, 0.2f);

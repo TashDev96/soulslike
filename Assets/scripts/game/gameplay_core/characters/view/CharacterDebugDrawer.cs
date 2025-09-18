@@ -8,13 +8,14 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.damage_system;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view
 {
 	[Serializable]
-	public class CharacterDebugDrawer
+	public class CharacterDebugDrawer:MonoBehaviour
 	{
 		public bool DrawStateMachineInfo;
 		public bool DrawBrainInfo;
@@ -29,7 +30,10 @@ namespace game.gameplay_core.characters.view
 		private GizmoGraphDrawer _graphDrawer;
 		private int _attackIndex;
 		private bool _comboTriggered;
+		
+	 
 
+		private StringBuilder _debugStringBuilder = new StringBuilder();
 		private float AttackGraphY => _attackIndex / 10f;
 
 		[Conditional("UNITY_EDITOR")]
@@ -52,6 +56,21 @@ namespace game.gameplay_core.characters.view
 
 #if UNITY_EDITOR
 
+		[OnInspectorGUI]
+		private void DrawGui()
+		{
+			if(!Application.isPlaying)
+			{
+				return;
+			}
+			_debugStringBuilder.Clear();
+			_debugStringBuilder.AppendLine($"stamina: {_context.CharacterStats.Stamina.Value.CeilFormat(1)}");
+			_debugStringBuilder.AppendLine($"stamina: {_context.StaminaLogic.GetDebugString()}");
+			
+			EditorGUILayout.LabelField(_debugStringBuilder.ToString(), EditorStyles.wordWrappedLabel);
+			
+		}
+		
 		public void OnDrawGizmos()
 		{
 			if(!_initialized)

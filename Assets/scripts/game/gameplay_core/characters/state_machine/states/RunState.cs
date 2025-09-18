@@ -23,6 +23,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 			_context.Animator.Play(_context.Config.RunAnimation, 0.3f);
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey,true);
+			_context.LockOnLogic.LockOnTarget.Value = null;
 		}
 
 		public override void OnExit()

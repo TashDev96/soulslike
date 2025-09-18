@@ -337,7 +337,7 @@ MonoBehaviour:
       <StaminaRegenDisabledTime>k__BackingField: {x: 0.28571427, y: 0.58928573}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
       <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
-      <EnterComboTime>k__BackingField: 0.2857143
+      <EnterComboTime>k__BackingField: 0.16964285
       <EnterFromRollTime>k__BackingField: 0.30357143
       <StartHandleObstacleCastTime>k__BackingField: 0.22321428
       <ForwardMovement>k__BackingField:
@@ -422,7 +422,7 @@ MonoBehaviour:
       <RotationDisabledTime>k__BackingField: {x: 0.1851852, y: 0.87037045}
       <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0.70370376}
       <LockedStateTime>k__BackingField: {x: 0, y: 0.72222227}
-      <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
+      <ExitToComboTime>k__BackingField: {x: 0.46296299, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
       <StartHandleObstacleCastTime>k__BackingField: 0

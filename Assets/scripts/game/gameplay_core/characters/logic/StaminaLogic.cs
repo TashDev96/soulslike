@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.damage_system;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -90,6 +92,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void SpendStamina(float amount)
 		{
+			Debug.LogError(amount.RoundFormat(10));
 			_context.Stamina.Value -= amount;
 		}
 
@@ -97,6 +100,23 @@ namespace game.gameplay_core.characters.logic
 		{
 			hadEnough = _context.Stamina.Value >= blockStaminaCost;
 			SpendStamina(blockStaminaCost);
+		}
+
+		public string GetDebugString()
+		{
+			var result = "";
+			foreach(var regenLockReason in _regenLockReasons)
+			{
+				result += regenLockReason + "\n";
+			}
+
+			foreach(var regenMultiplierReason in _regenMultiplierReasons)
+			{
+				result += regenMultiplierReason.Key + " " + regenMultiplierReason.Value + "\n";
+			}
+
+			return result;
+
 		}
 	}
 }

@@ -116,6 +116,7 @@ namespace game.gameplay_core.characters.logic
 					);
 
 					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
+					var staminaDamage = damagePercentage * _context.CharacterStats.StaminaMax.Value;
 
 					var damageInfo = new DamageInfo
 					{
@@ -128,7 +129,7 @@ namespace game.gameplay_core.characters.logic
 
 					_context.ApplyDamage.Execute(damageInfo);
 					_context.BodyAttackView.CastFallAttack(fallDistance);
-					_context.StaminaLogic.SpendStamina(damage);
+					_context.StaminaLogic.SpendStamina(staminaDamage);
 
 					if(fallDistance > _context.StaggerThreshold)
 					{
