@@ -77,6 +77,13 @@ namespace game.gameplay_core.characters.ai.navigation
 				iLength += Path.Distances[i];
 			}
 
+			if(Path.Positions.Count == 0)
+			{
+				position = Vector3.zero;
+				direction = Vector3.forward;
+				return;
+			}
+			
 			position = Path.Positions[^1];
 			direction = Path.Directions[^1];
 		}

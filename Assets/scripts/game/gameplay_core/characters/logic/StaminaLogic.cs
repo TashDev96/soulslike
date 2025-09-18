@@ -92,7 +92,6 @@ namespace game.gameplay_core.characters.logic
 
 		public void SpendStamina(float amount)
 		{
-			Debug.LogError(amount.RoundFormat(10));
 			_context.Stamina.Value -= amount;
 		}
 
