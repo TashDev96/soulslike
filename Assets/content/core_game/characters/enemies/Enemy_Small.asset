@@ -94,6 +94,6 @@ MonoBehaviour:
       m_RotationOrder: 4
   <BaseStats>k__BackingField:
     HpMax: 100
-    StaminaMax: 200
+    StaminaMax: 60
     PoiseMax: 0
     PoiseRestoreTimerMax: 5

@@ -9,20 +9,36 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.state_machine.states;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
 {
+	public class WeightUpdateEventArgs : EventArgs
+	{
+		public List<UtilityAction> Actions { get; }
+		public float DeltaTime { get; }
+
+		public WeightUpdateEventArgs(List<UtilityAction> actions, float deltaTime)
+		{
+			Actions = actions;
+			DeltaTime = deltaTime;
+		}
+	}
+
 	public class SubUtilityBase : MonoBehaviour, ISerializationCallbackReceiver
 	{
+		[SerializeField]
+		private float _noGoalsWeight = 5f;
 		[ValidateInput(nameof(ValidateGoals))]
 		public List<GoalsChain> GoalChains;
 		[ValidateInput(nameof(ValidateActions))]
 		public List<UtilityAction> Actions;
 
-		public string DebugString;
+		[HideInInspector]
+		public string DebugString = "asdasd\nasdasd";
 
-		private UtilityBrainContext _context;
+		protected UtilityBrainContext _context;
 		private ReadOnlyTransform _transform;
 
 		private bool _hasMovedByPathThisFrame;
@@ -33,6 +49,8 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private CharacterInputData InputData => _context.CharacterContext.InputData;
 
+		public static event EventHandler<WeightUpdateEventArgs> OnWeightUpdate;
+
 		public void Initialize(UtilityBrainContext context)
 		{
 			_context = context;
@@ -40,9 +58,10 @@ namespace game.gameplay_core.characters.ai.utility
 			_context.CharacterContext.OnStateChanged.OnExecute += HandleCharacterStateChanged;
 		}
 
-		public void Think(float deltaTime)
+		public virtual void Think(float deltaTime)
 		{
 			var maxWeight = float.MinValue;
+			var minWeight = float.MaxValue;
 			var selectedAction = Actions[0];
 
 			DebugString = "\ngoal:";
@@ -74,7 +93,16 @@ namespace game.gameplay_core.characters.ai.utility
 					maxWeight = weight;
 					selectedAction = utilityAction;
 				}
+
+				if(weight < minWeight)
+				{
+					minWeight = weight;
+				}
+
+				utilityAction.DebugWeightCache = weight;
 			}
+
+			OnWeightUpdate?.Invoke(this, new WeightUpdateEventArgs(Actions, deltaTime));
 
 			if(_currentGoalChain != null)
 			{
@@ -133,7 +161,7 @@ namespace game.gameplay_core.characters.ai.utility
 				var weight = EvaluateConsiderations(goalChain.Considerations, deltaTime);
 				goalChain.LastWeight = weight;
 
-				if(weight >= maxWeight && weight > currentGoalWeight)
+				if(weight >= maxWeight && weight > currentGoalWeight && weight > _noGoalsWeight)
 				{
 					maxWeight = weight;
 					result = goalChain;
@@ -167,6 +195,8 @@ namespace game.gameplay_core.characters.ai.utility
 				vectorToTarget = _context.TargetTransform.Position - _transform.Position;
 			}
 
+			_context.CharacterContext.LockOnLogic.LockOnTarget.Value = _context.Target;
+
 			switch(action.Type)
 			{
 				case UtilityAction.ActionType.LightAttack:
@@ -190,12 +220,12 @@ namespace game.gameplay_core.characters.ai.utility
 				case UtilityAction.ActionType.KeepSafeDistance:
 					if(vectorToTarget.sqrMagnitude < action.Distance * action.Distance)
 					{
-						InputData.Command = CharacterCommand.Walk;
+						InputData.Command = CharacterCommand.WalkBlock;
 						InputData.DirectionWorld = -vectorToTarget;
 					}
 					else
 					{
-						InputData.Command = CharacterCommand.Walk;
+						InputData.Command = CharacterCommand.WalkBlock;
 						InputData.DirectionWorld = Mathf.Sin(Time.time) > 0 ? _transform.Right : -_transform.Right;
 					}
 					break;
@@ -206,6 +236,9 @@ namespace game.gameplay_core.characters.ai.utility
 					break;
 				case UtilityAction.ActionType.Heal:
 					InputData.Command = CharacterCommand.UseItem;
+					break;
+				case UtilityAction.ActionType.Block:
+					InputData.Command = CharacterCommand.StayBlock;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -235,6 +268,7 @@ namespace game.gameplay_core.characters.ai.utility
 					_context.NavigationModule.DrawDebug(Color.green, 2f);
 					_needRecalculatePath = false;
 				}
+				_context.CharacterContext.LockOnLogic.LockOnTarget.Value = null;
 				InputData.DirectionWorld = _context.NavigationModule.CalculateMoveDirection(_transform.Position);
 				_hasMovedByPathThisFrame = true;
 			}
@@ -261,6 +295,22 @@ namespace game.gameplay_core.characters.ai.utility
 			}
 
 			return true;
+		}
+
+		[Button]
+		private void SetDebugColors()
+		{
+			for (int i = 0; i < Actions.Count; i++)
+			{
+				
+				Actions[i].DebugColor = Color.HSVToRGB((float)i / Actions.Count, 0.8f, 1f);
+			}
+		}
+
+		[OnInspectorGUI]
+		private void DrawGui()
+		{
+			EditorGUILayout.LabelField(DebugString, EditorStyles.wordWrappedLabel);
 		}
 #endif
 	}

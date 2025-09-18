@@ -43359,6 +43359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0dea5e4ca7e4362a46288fe48f47409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _noGoalsWeight: 5
   GoalChains:
   - Id: RollBackAndHeal
     Goals:
@@ -43386,25 +43387,55 @@ MonoBehaviour:
     Distance: 0
     Considerations:
     - rid: 8163169196350373992
+    - rid: 8163169418539172003
+    <DebugColor>k__BackingField: {r: 1, g: 0.19999999, b: 0.19999999, a: 1}
   - Id: Heal
     Type: 8
     Direction: 6
     Distance: 0
     Considerations:
     - rid: 8163169196350373995
-  - Id: MoveForward
+    <DebugColor>k__BackingField: {r: 0.84, g: 1, b: 0.19999999, a: 1}
+  - Id: Get Into Attack Distance
     Type: 6
     Direction: 0
-    Distance: 0
+    Distance: 1
     Considerations:
     - rid: 8163169196350373998
-  - Id: StayBack
+    - rid: 8163169418539171999
+    <DebugColor>k__BackingField: {r: 0.19999999, g: 1, b: 0.52000004, a: 1}
+  - Id: Keep Safe Distance
     Type: 5
     Direction: 0
-    Distance: 6
+    Distance: 5
     Considerations:
     - rid: 8163169196350374001
-  DebugString: 
+    - rid: 8163169418539171929
+    <DebugColor>k__BackingField: {r: 0.19999999, g: 0.51999986, b: 1, a: 1}
+  - Id: WaitBlock
+    Type: 9
+    Direction: 0
+    Distance: 1
+    Considerations:
+    - rid: 8163169418539171992
+    - rid: 8163169418539171995
+    - rid: 8163169418539172010
+    <DebugColor>k__BackingField: {r: 0.84000015, g: 0.19999999, b: 1, a: 1}
+  DebugString: "\ngoal:Attack -1.5 \nHeal -1 \nGet Into Attack Distance 0.5048827
+    \nKeep Safe Distance 1.198286 \nWaitBlock 0.3401457 \n"
+  _noAttackWeight:
+    _octaves:
+    - Disabled: 0
+      TimeOffset: 1
+      TimeScale: 0.21
+      AmplitudeMultiplier: 1
+      AddMode: 0
+    - Disabled: 0
+      TimeOffset: 0
+      TimeScale: 1
+      AmplitudeMultiplier: 0.18
+      AddMode: 1
+    _threshold: 0.52
   references:
     version: 2
     RefIds:
@@ -43416,15 +43447,11 @@ MonoBehaviour:
         ValueSource:
           rid: 8163169196350373993
         Weight:
-          rid: 8163169196350373994
+          rid: 8163169418539171925
     - rid: 8163169196350373993
       type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
         _normalizeToAttackRange: 1
-    - rid: 8163169196350373994
-      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
-      data:
-        _multiplier: 1
     - rid: 8163169196350373995
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
@@ -43453,65 +43480,24 @@ MonoBehaviour:
         ValueSource:
           rid: 8163169196350373999
         Weight:
-          rid: 8163169196350374000
+          rid: 8163169418539171928
     - rid: 8163169196350373999
       type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
         _normalizeToAttackRange: 1
-    - rid: 8163169196350374000
-      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
-      data:
-        _multiplier: 1
     - rid: 8163169196350374001
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
         _commentEnabled: 0
         Comment: 
         ValueSource:
-          rid: 8163169196350374002
+          rid: 8163169418539171969
         Weight:
           rid: 8163169196350374003
-    - rid: 8163169196350374002
-      type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
-      data:
-        _randomValuesOverTime:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 0.19999695
-            value: 0.57009125
-            inSlope: 2
-            outSlope: 2
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1.0166667
-            value: 0.014018692
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        _timeOffset: 0
     - rid: 8163169196350374003
       type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
-        _multiplier: 1
+        _multiplier: 2.77
     - rid: 8163169196350374004
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
@@ -43545,11 +43531,153 @@ MonoBehaviour:
       type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
         _randomValuesOverTime:
+          _octaves: []
+          _threshold: 0.5
+    - rid: 8163169196350374020
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _multiplier: 2
+    - rid: 8163169418539171925
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 1.1
+        _metWeight: 1
+        _notMetWeight: -1
+    - rid: 8163169418539171928
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _compareType: 2
+        _value: 1
+        _metWeight: 1
+        _notMetWeight: 0
+    - rid: 8163169418539171929
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539171930
+        Weight:
+          rid: 8163169418539171931
+    - rid: 8163169418539171930
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 1
+    - rid: 8163169418539171931
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _compareType: 4
+        _value: 10
+        _metWeight: -1
+        _notMetWeight: 0
+    - rid: 8163169418539171969
+      type: {class: ValueSourceEnum, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _valueKey: 1
+        _multiplier: 1
+    - rid: 8163169418539171992
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539171993
+        Weight:
+          rid: 8163169418539171994
+    - rid: 8163169418539171993
+      type: {class: ValueSourceEnum, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _valueKey: 1
+        _multiplier: 1
+    - rid: 8163169418539171994
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _multiplier: 1
+    - rid: 8163169418539171995
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539171996
+        Weight:
+          rid: 8163169418539171997
+    - rid: 8163169418539171996
+      type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _randomValuesOverTime:
+          _octaves:
+          - Disabled: 0
+            TimeOffset: 0
+            TimeScale: 0.48
+            AmplitudeMultiplier: 1
+            AddMode: 0
+          _threshold: 0.5
+    - rid: 8163169418539171997
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _multiplier: 1.12
+    - rid: 8163169418539171999
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539172002
+        Weight:
+          rid: 8163169418539172014
+    - rid: 8163169418539172002
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        Stat: 1
+    - rid: 8163169418539172003
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539172004
+        Weight:
+          rid: 8163169418539172005
+    - rid: 8163169418539172004
+      type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        Stat: 1
+    - rid: 8163169418539172005
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _compareType: 1
+        _value: 20
+        _metWeight: -0.5
+        _notMetWeight: 0
+    - rid: 8163169418539172010
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539172013
+        Weight:
+          rid: 8163169418539172012
+    - rid: 8163169418539172012
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _multiplier: -0.1
+    - rid: 8163169418539172013
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 1
+    - rid: 8163169418539172014
+      type: {class: UtilityWeightCurve, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        Multiplier: 1
+        Curve:
           serializedVersion: 2
           m_Curve:
           - serializedVersion: 3
-            time: 0.06666667
-            value: 0.19158879
+            time: 0
+            value: -0.5
             inSlope: 0
             outSlope: 0
             tangentMode: 136
@@ -43557,107 +43685,8 @@ MonoBehaviour:
             inWeight: 0.33333334
             outWeight: 0.33333334
           - serializedVersion: 3
-            time: 0.475
-            value: 0.40654206
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 0.53333336
-            value: 0.13084112
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 0.9375
-            value: 0.5233645
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1.1125
-            value: 0.21495327
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1.4833333
-            value: 0.71028036
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 1.6916666
-            value: 0.20093457
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2.3374987
-            value: 0.36448598
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2.4791653
-            value: 0.11682243
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2.5333319
-            value: 0.71028036
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 2.7791674
-            value: 0.3224299
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 3.3416677
-            value: 0.5981308
-            inSlope: 0
-            outSlope: 0
-            tangentMode: 136
-            weightedMode: 0
-            inWeight: 0.33333334
-            outWeight: 0.33333334
-          - serializedVersion: 3
-            time: 3.4791677
-            value: 0.22897196
+            time: 30
+            value: 0
             inSlope: 0
             outSlope: 0
             tangentMode: 136
@@ -43667,11 +43696,6 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        _timeOffset: 0
-    - rid: 8163169196350374020
-      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
-      data:
-        _multiplier: 2
 --- !u!1 &1644955430
 GameObject:
   m_ObjectHideFlags: 0

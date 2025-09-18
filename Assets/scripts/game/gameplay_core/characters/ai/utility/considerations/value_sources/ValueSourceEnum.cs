@@ -1,21 +1,26 @@
 using System;
 using game.gameplay_core.characters.ai.utility.blackbox;
-using game.gameplay_core.characters.ai.utility.considerations.utils;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 {
+	public enum BlackboardValues
+	{
+		StupidityWeight,
+		NoAttacksWeight
+	}
+
 	[Serializable]
-	public class ValueSourceRandom : ValueSourceBase
+	public class ValueSourceEnum : ValueSourceBase
 	{
 		[SerializeField]
-		private PerlinConfig _randomValuesOverTime = new();
-		 
- 
-
+		private BlackboardValues _valueKey;
+		[SerializeField]
+		private float _multiplier = 1;
+		
 		public override float GetValue(UtilityBrainContext context)
 		{
-			return _randomValuesOverTime.Evaluate(context.BrainTime);
+			return context.BlackboardValues[_valueKey] * _multiplier;
 		}
 	}
 }

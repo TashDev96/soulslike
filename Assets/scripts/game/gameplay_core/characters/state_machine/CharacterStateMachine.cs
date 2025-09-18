@@ -375,6 +375,11 @@ namespace game.gameplay_core.characters.state_machine
 					continue;
 				}
 
+				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
+				{
+					continue;
+				}
+
 				var targetPosition = character.ExternalData.Transform.Position;
 				var distance = (targetPosition - selfPosition).magnitude;
 
@@ -406,6 +411,11 @@ namespace game.gameplay_core.characters.state_machine
 			foreach(var character in _context.LockOnLogic.AllCharacters)
 			{
 				if(character == _context.SelfLink || character.ExternalData.IsDead)
+				{
+					continue;
+				}
+				
+				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
 				{
 					continue;
 				}

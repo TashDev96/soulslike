@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.utils.components;
 using game.gameplay_core.characters.ai.navigation;
 using game.gameplay_core.characters.ai.utility.blackbox;
+using game.gameplay_core.characters.ai.utility.considerations.value_sources;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace game.gameplay_core.characters.ai.utility
 		[SerializeField]
 		private List<SubUtilityBase> _subUtilities;
 
+		
 		[SerializeField]
 		private TriggerEventsListener[] _aggroZones;
 		[SerializeField]
@@ -30,9 +32,14 @@ namespace game.gameplay_core.characters.ai.utility
 			{
 				CharacterContext = context,
 				PerformedActionsHistory = new List<ActionHistoryNode>(),
-				NavigationModule = new AiNavigationModule(context.Transform)
+				NavigationModule = new AiNavigationModule(context.Transform),
+				BlackboardValues = new Dictionary<BlackboardValues, float>(),
 			};
-
+			
+			foreach(BlackboardValues enumKey in System.Enum.GetValues(typeof(BlackboardValues)))
+			{
+				_context.BlackboardValues.Add(enumKey, 0f);
+			}
 			foreach(var subUtility in _subUtilities)
 			{
 				subUtility.Initialize(_context);
@@ -51,6 +58,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 		public void Think(float deltaTime)
 		{
+			_context.BrainTime += deltaTime;
 			if(_context.Target != null)
 			{
 				_subUtilities[0].Think(deltaTime);
@@ -64,8 +72,6 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private void HandleAggroTriggerEnter(GameObject enteredObject)
 		{
-			
-			Debug.LogError(enteredObject);
 			
 			if(HasTarget)
 			{

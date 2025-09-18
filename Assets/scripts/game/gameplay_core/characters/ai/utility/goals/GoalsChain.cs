@@ -7,6 +7,7 @@ using UnityEngine;
 namespace game.gameplay_core.characters.ai.utility.goals
 {
 	[Serializable]
+	
 	public class GoalsChain
 	{
 		public string Id;

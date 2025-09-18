@@ -20,7 +20,8 @@ namespace game.gameplay_core.characters.ai.utility
 			KeepSafeDistance,
 			GetIntoAttackDistance,
 			Strafe,
-			Heal
+			Heal,
+			Block
 		}
 
 		public string Id;
@@ -30,5 +31,13 @@ namespace game.gameplay_core.characters.ai.utility
 
 		[SerializeReference] [HideReferenceObjectPicker]
 		public List<Consideration> Considerations = new();
+
+		[ShowIf("@UtilityAiEditorHelper.DebugEnabled")]
+		[ShowInInspector]
+		[GUIColor("DebugColor")]
+
+		public float DebugWeightCache { get; set; }
+		[field: SerializeField]
+		public Color DebugColor { get; set; }
 	}
 }

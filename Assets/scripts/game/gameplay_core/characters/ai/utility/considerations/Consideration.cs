@@ -51,17 +51,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations
 			_commentEnabled = !_commentEnabled;
 		}
 
-	[OnInspectorGUI]
-	private void DrawCurveRandom()
-	{
-		if(ValueSource is ValueSourceRandom source)
-		{
-			if(Weight is UtilityWeightCompare weightCompare)
-			{
-				UtilityAiEditorDrawHelpers.DrawUtilityWeightCompareVisualization(source, weightCompare);
-			}
-		}
-	}
+ 
 
 	
 	}
