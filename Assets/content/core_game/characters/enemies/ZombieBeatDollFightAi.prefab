@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5311238642735619617}
   - component: {fileID: 4120595640315197004}
   m_Layer: 8
-  m_Name: ZombieFightAi
+  m_Name: ZombieBeatDollFightAi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0dea5e4ca7e4362a46288fe48f47409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _noGoalsWeight: 5
+  _noGoalsWeight: 5.16
   GoalChains:
   - Id: RollBackAndHeal
     Goals:
@@ -56,7 +56,7 @@ MonoBehaviour:
       Duration: 3
     Considerations:
     - rid: 8163169196350374004
-    <InertiaWeight>k__BackingField: 10
+    <InertiaWeight>k__BackingField: 10.11
   - Id: St
     Goals:
     - WeightAdd: 55
@@ -226,8 +226,8 @@ MonoBehaviour:
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         _compareType: 1
-        _value: 1.03
-        _metWeight: 0.9
+        _value: 1.1
+        _metWeight: 0
         _notMetWeight: -1
     - rid: 8163169418539171928
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
