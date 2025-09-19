@@ -23,14 +23,6 @@ namespace game.gameplay_core.characters.ai.utility.goals
 		[field: SerializeField]
 		public float InertiaWeight { get; private set; }
 
-#if UNITY_EDITOR
-		public void PropagateEditorData(SubUtilityBase data)
-		{
-			foreach(var goal in Goals)
-			{
-				goal.PropagateEditorData(data);
-			}
-		}
-#endif
+
 	}
 }

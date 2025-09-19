@@ -26,7 +26,7 @@ namespace game.gameplay_core.characters.ai.utility
 		}
 	}
 
-	public class SubUtilityBase : MonoBehaviour, ISerializationCallbackReceiver
+	public class SubUtilityBase : MonoBehaviour
 	{
 		[SerializeField]
 		private float _noGoalsWeight = 5f;
@@ -126,19 +126,8 @@ namespace game.gameplay_core.characters.ai.utility
 			PerformAction(selectedAction);
 		}
 
-		public void OnBeforeSerialize()
-		{
-#if UNITY_EDITOR
-			foreach(var goalChain in GoalChains)
-			{
-				goalChain.PropagateEditorData(this);
-			}
-#endif
-		}
 
-		public void OnAfterDeserialize()
-		{
-		}
+	 
 
 		private void HandleCharacterStateChanged(CharacterStateBase oldState, CharacterStateBase newState)
 		{

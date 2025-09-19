@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using UnityEditor;
 
 namespace game.gameplay_core.characters.ai.utility.goals
 {
@@ -16,16 +17,20 @@ namespace game.gameplay_core.characters.ai.utility.goals
 
 #if UNITY_EDITOR
 
-		private SubUtilityBase _editorData;
 
-		public void PropagateEditorData(SubUtilityBase data)
-		{
-			_editorData = data;
-		}
+		
 
 		private List<string> GetActionsDropDown()
 		{
-			return _editorData.Actions.Select(a => a.Id).ToList();
+			if(Selection.activeGameObject != null)
+			{
+				var selectedTarget = Selection.activeGameObject.GetComponent<SubUtilityBase>();
+				if(selectedTarget != null)
+				{
+					return selectedTarget.Actions.Select(a => a.Id).ToList();
+				}
+			}
+			return new List<string>(){"Error"};
 		}
 
 #endif
