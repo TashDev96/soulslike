@@ -125,51 +125,7 @@ namespace game.gameplay_core.characters.logic
 			_context.CharacterTransform.rotation *= rotationStep;
 		}
 
-		public bool CheckGroundBelow(float maxDistance, out float distanceToGround)
-		{
-			var charController = CharacterCollider;
-			var radius = charController.Radius;
-
-			var offset = radius + charController.SkinWidth;
-
-			var origin = _context.CharacterTransform.position + Vector3.up * offset;
-
-			var hitResults = new RaycastHit[10];
-			var hitCount = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, hitResults, maxDistance + offset, CharacterCollider.CollisionMask);
-
-			if(hitCount > 0)
-			{
-				distanceToGround = maxDistance + radius;
-
-				for(var i = 0; i < hitCount; i++)
-				{
-					var hitDistance = hitResults[i].distance;
-					if(hitDistance < distanceToGround)
-					{
-						distanceToGround = hitDistance;
-					}
-				}
-
-				if(_drawDebug)
-				{
-					//DebugDrawUtils.DrawHandlesSphere(origin, radius / 2, new Color(1, 0, 1, 0.3f));
-					//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * distanceToGround, radius, Color.green, 0.3f);
-
-					//DebugDrawUtils.DrawText(distanceToGround.RoundFormat(), origin + Vector3.down * (distanceToGround / 2), 10f);
-				}
-
-				return true;
-			}
-
-			if(_drawDebug)
-			{
-				//DebugDrawUtils.DrawHandlesSphere(origin, radius / 2, new Color(1, 0, 1, 0.3f));
-				//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * maxDistance, radius, Color.red, 0.3f);
-			}
-
-			distanceToGround = 0f;
-			return false;
-		}
+	
 
 		public void GetDebugString(StringBuilder sb)
 		{
@@ -217,7 +173,7 @@ namespace game.gameplay_core.characters.logic
 
 				if(!CharacterCollider.IsGrounded)
 				{
-					if(!_context.IsFalling.Value && CheckGroundBelow(CharacterCollider.StepOffset, out var distanceToGround))
+					if(!_context.IsFalling.Value && CharacterCollider.SampleGroundBelow(CharacterCollider.StepOffset, out var distanceToGround))
 					{
 						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
 					}

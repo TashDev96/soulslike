@@ -52,6 +52,7 @@ namespace game.gameplay_core.characters.view
 				alignment = TextAnchor.LowerLeft
 			};
 			_graphDrawer = new GizmoGraphDrawer();
+			
 		}
 
 #if UNITY_EDITOR
@@ -59,7 +60,7 @@ namespace game.gameplay_core.characters.view
 		[OnInspectorGUI]
 		private void DrawGui()
 		{
-			if(!Application.isPlaying)
+			if(!_initialized)
 			{
 				return;
 			}
