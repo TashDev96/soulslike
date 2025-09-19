@@ -4,6 +4,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations;
+using game.gameplay_core.characters.ai.utility.considerations.value_sources;
 using game.gameplay_core.characters.ai.utility.goals;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
@@ -46,6 +47,7 @@ namespace game.gameplay_core.characters.ai.utility
 		private GoalsChain _currentGoalChain;
 		private int _currentGoalIndex;
 		private float _currentGoalExecutionTime;
+		private UtilityAction _lastAction;
 
 		private CharacterInputData InputData => _context.CharacterContext.InputData;
 
@@ -63,6 +65,8 @@ namespace game.gameplay_core.characters.ai.utility
 			var maxWeight = float.MinValue;
 			var minWeight = float.MaxValue;
 			var selectedAction = Actions[0];
+
+			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.RightWeapon.Value.Config.RegularAttacks[0].Range;
 
 			DebugString = "\ngoal:";
 
@@ -84,6 +88,12 @@ namespace game.gameplay_core.characters.ai.utility
 					{
 						weight += currentGoalElement.WeightAdd;
 					}
+				}
+
+				if(utilityAction.HasInertia && utilityAction.InertiaTimer > 0)
+				{
+					weight += utilityAction.InertiaCurve.Evaluate(1 - utilityAction.InertiaTimer / utilityAction.InertiaDuration);
+					utilityAction.InertiaTimer -= deltaTime;
 				}
 
 				DebugString += $"{utilityAction.Id} {weight} \n";
@@ -125,9 +135,6 @@ namespace game.gameplay_core.characters.ai.utility
 
 			PerformAction(selectedAction);
 		}
-
-
-	 
 
 		private void HandleCharacterStateChanged(CharacterStateBase oldState, CharacterStateBase newState)
 		{
@@ -178,7 +185,15 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 			_hasMovedByPathThisFrame = false;
 
+			if(_lastAction != action)
+			{
+				action.InertiaTimer = action.InertiaDuration;
+				_lastAction = action;
+			}
+
 			var vectorToTarget = _transform.Forward;
+			var mainAttackDistance = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
+
 			if(_context.TargetTransform != null)
 			{
 				vectorToTarget = _context.TargetTransform.Position - _transform.Position;
@@ -219,7 +234,7 @@ namespace game.gameplay_core.characters.ai.utility
 					}
 					break;
 				case UtilityAction.ActionType.GetIntoAttackDistance:
-					MoveTo(_context.TargetTransform.Position);
+					MoveTo(_context.TargetTransform.Position - vectorToTarget.normalized * mainAttackDistance);
 					break;
 				case UtilityAction.ActionType.Strafe:
 					break;
@@ -247,6 +262,10 @@ namespace game.gameplay_core.characters.ai.utility
 			if(moveVector.sqrMagnitude < navMeshDistance * navMeshDistance)
 			{
 				InputData.DirectionWorld = moveVector;
+				if(moveVector.sqrMagnitude < 0.03f)
+				{
+					InputData.Command = CharacterCommand.None;
+				}
 			}
 			else
 			{
@@ -289,9 +308,8 @@ namespace game.gameplay_core.characters.ai.utility
 		[Button]
 		private void SetDebugColors()
 		{
-			for (int i = 0; i < Actions.Count; i++)
+			for(var i = 0; i < Actions.Count; i++)
 			{
-				
 				Actions[i].DebugColor = Color.HSVToRGB((float)i / Actions.Count, 0.8f, 1f);
 			}
 		}

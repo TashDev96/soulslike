@@ -8,10 +8,9 @@ namespace game.gameplay_core.characters.ai.utility
 	[OdinDontRegister]
 	public class SubUtilityFight : SubUtilityBase
 	{
-
 		[SerializeField]
 		private PerlinConfig _noAttackWeight;
-		
+
 		//chain of goals
 		//chain examples:
 		//multiple attacks
@@ -34,6 +33,5 @@ namespace game.gameplay_core.characters.ai.utility
 			_context.BlackboardValues[BlackboardValues.NoAttacksWeight] = _noAttackWeight.Evaluate(_context.BrainTime);
 			base.Think(deltaTime);
 		}
-
 	}
 }

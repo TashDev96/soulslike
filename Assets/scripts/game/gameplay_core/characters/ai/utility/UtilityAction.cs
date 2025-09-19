@@ -32,12 +32,18 @@ namespace game.gameplay_core.characters.ai.utility
 		[SerializeReference] [HideReferenceObjectPicker]
 		public List<Consideration> Considerations = new();
 
+		public bool HasInertia;
+		[ShowIf("HasInertia")]
+		public float InertiaDuration;
+		[ShowIf("HasInertia")]
+		public AnimationCurve InertiaCurve;
+
 		[ShowIf("@UtilityAiEditorHelper.DebugEnabled")]
 		[ShowInInspector]
 		[GUIColor("DebugColor")]
-
 		public float DebugWeightCache { get; set; }
 		[field: SerializeField]
 		public Color DebugColor { get; set; }
+		public float InertiaTimer { get; set; }
 	}
 }

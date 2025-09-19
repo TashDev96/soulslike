@@ -7,7 +7,8 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 	public enum BlackboardValues
 	{
 		StupidityWeight,
-		NoAttacksWeight
+		NoAttacksWeight,
+		BasicAttackRange,
 	}
 
 	[Serializable]

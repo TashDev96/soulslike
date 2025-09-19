@@ -13,7 +13,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 			var dist = Vector3.Distance(context.TargetTransform.Position, context.CharacterContext.Transform.Position);
 			if(_normalizeToAttackRange)
 			{
-				return dist / context.CharacterContext.RightWeapon.Value.Config.RegularAttacks[0].Range;
+				return dist / context.BlackboardValues[BlackboardValues.BasicAttackRange];
 			}
 			return dist;
 		}
