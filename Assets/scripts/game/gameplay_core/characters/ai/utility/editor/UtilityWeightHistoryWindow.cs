@@ -104,7 +104,7 @@ namespace game.gameplay_core.characters.ai.utility.editor
 
 			if(_autoScroll)
 			{
-				//Repaint();
+				Repaint();
 			}
 		}
 

@@ -165,6 +165,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				return false;
 			}
 
+			if(_context.CharacterStats.Stamina.Value < 1)
+			{
+				return false;
+			}
+
 			_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
 
 			if(_currentAttackConfig.ExitToComboTime.Contains(NormalizedTime))
