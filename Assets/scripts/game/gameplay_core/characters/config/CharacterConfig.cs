@@ -8,6 +8,7 @@ namespace game.gameplay_core.characters.config
 	{
 		[field: SerializeField]
 		public CharacterConfig ParentConfig { get; private set; }
+		
 
 		[field: SerializeField]
 		public RollConfig Roll;
@@ -38,5 +39,8 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public BaseStats BaseStats { get; private set; }
+		
+		[field: SerializeField]
+		public bool CanDoBackstabs { get; private set; }
 	}
 }

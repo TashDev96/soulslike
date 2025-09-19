@@ -225,7 +225,7 @@ namespace game.gameplay_core.characters.state_machine
 						{
 							SetState(new RiposteAttackState(_context, riposteableEnemy));
 						}
-						else if(backstabbableEnemy != null)
+						else if(_context.Config.CanDoBackstabs && backstabbableEnemy != null)
 						{
 							SetState(new BackstabAttackState(_context, backstabbableEnemy));
 						}

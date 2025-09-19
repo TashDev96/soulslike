@@ -97,3 +97,4 @@ MonoBehaviour:
     StaminaMax: 50
     PoiseMax: 0
     PoiseRestoreTimerMax: 5
+  <CanDoBackstabs>k__BackingField: 1
