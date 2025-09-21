@@ -93,7 +93,8 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   <BaseStats>k__BackingField:
-    HpMax: 100
+    HpMax: 4
     StaminaMax: 60
     PoiseMax: 0
     PoiseRestoreTimerMax: 5
+  <CanDoBackstabs>k__BackingField: 0

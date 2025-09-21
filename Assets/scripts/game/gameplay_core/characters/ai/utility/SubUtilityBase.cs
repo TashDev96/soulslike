@@ -66,7 +66,7 @@ namespace game.gameplay_core.characters.ai.utility
 			var minWeight = float.MaxValue;
 			var selectedAction = Actions[0];
 
-			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.RightWeapon.Value.Config.RegularAttacks[0].Range;
+			UpdateBlackboardValues();
 
 			DebugString = "\ngoal:";
 
@@ -134,6 +134,20 @@ namespace game.gameplay_core.characters.ai.utility
 			}
 
 			PerformAction(selectedAction);
+		}
+
+		private void UpdateBlackboardValues()
+		{
+			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.RightWeapon.Value.Config.RegularAttacks[0].Range;
+			var leftWeapon = _context.CharacterContext.LeftWeapon.Value;
+			if(leftWeapon && leftWeapon.Config.BlockDeflectionRating > 0)
+			{
+				_context.BlackboardValues[BlackboardValues.HasShield] = 1;
+			}
+			else
+			{
+				_context.BlackboardValues[BlackboardValues.HasShield] = 0;
+			}
 		}
 
 		private void HandleCharacterStateChanged(CharacterStateBase oldState, CharacterStateBase newState)
@@ -222,14 +236,15 @@ namespace game.gameplay_core.characters.ai.utility
 				case UtilityAction.ActionType.WalkToTransform:
 					break;
 				case UtilityAction.ActionType.KeepSafeDistance:
+
+					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.WalkBlock : CharacterCommand.Walk;
+
 					if(vectorToTarget.sqrMagnitude < action.Distance * action.Distance)
 					{
-						InputData.Command = CharacterCommand.WalkBlock;
 						InputData.DirectionWorld = -vectorToTarget;
 					}
 					else
 					{
-						InputData.Command = CharacterCommand.WalkBlock;
 						InputData.DirectionWorld = Mathf.Sin(Time.time) > 0 ? _transform.Right : -_transform.Right;
 					}
 					break;
@@ -242,7 +257,8 @@ namespace game.gameplay_core.characters.ai.utility
 					InputData.Command = CharacterCommand.UseItem;
 					break;
 				case UtilityAction.ActionType.Block:
-					InputData.Command = CharacterCommand.StayBlock;
+					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.StayBlock : CharacterCommand.None;
+
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

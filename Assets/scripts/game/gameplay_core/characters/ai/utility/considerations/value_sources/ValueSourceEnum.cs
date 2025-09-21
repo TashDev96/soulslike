@@ -9,6 +9,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 		StupidityWeight,
 		NoAttacksWeight,
 		BasicAttackRange,
+		HasShield
 	}
 
 	[Serializable]
