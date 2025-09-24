@@ -132,9 +132,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 			const float step = 0.016f;
 			var samples = (int)(_previewDuration / step);
 			const float graphHeight = 100f;
-			
-			var availableRect = GUILayoutUtility.GetRect(0, 0, GUILayout.ExpandWidth(true));
-			var graphWidth = Mathf.Max(200f, availableRect.width - 20f);
+			var graphWidth = EditorGUIUtility.currentViewWidth - 240f;
 
 			var rect = GUILayoutUtility.GetRect(graphWidth, graphHeight);
 			EditorGUI.DrawRect(rect, Color.black);

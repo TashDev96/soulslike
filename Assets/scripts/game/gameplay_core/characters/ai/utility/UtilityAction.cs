@@ -43,6 +43,7 @@ namespace game.gameplay_core.characters.ai.utility
 		[GUIColor("DebugColor")]
 		public float DebugWeightCache { get; set; }
 		[field: SerializeField]
+		[field:PropertyOrder(-1)]
 		public Color DebugColor { get; set; }
 		public float InertiaTimer { get; set; }
 	}

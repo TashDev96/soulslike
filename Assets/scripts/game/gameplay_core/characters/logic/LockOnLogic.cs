@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.runtime_data.bindings;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -13,6 +14,7 @@ namespace game.gameplay_core.characters.logic
 			public CharacterDomain Self;
 			public List<CharacterDomain> AllCharacters { get; set; }
 			public MovementLogic MovementLogic { get; set; }
+			public IsDead IsDead { get; set; }
 		}
 
 		private readonly Context _context;
@@ -40,7 +42,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			if(!LockOnTarget.HasValue)
+			if(!LockOnTarget.HasValue || _context.IsDead.Value)
 			{
 				return;
 			}

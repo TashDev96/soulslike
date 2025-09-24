@@ -61215,6 +61215,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
+      propertyPath: managedReferences[8163169196350373997]._metWeight
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
       propertyPath: managedReferences[8163169418539171925]._metWeight
       value: 0.27
       objectReference: {fileID: 0}
@@ -61253,6 +61257,22 @@ PrefabInstance:
     - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
       propertyPath: managedReferences[8163169418539172153].ValueSource
       value: 8163169418539172154
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
+      propertyPath: Actions.Array.data[1].<DebugColor>k__BackingField.b
+      value: 0.52156866
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
+      propertyPath: Actions.Array.data[1].<DebugColor>k__BackingField.r
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
+      propertyPath: Actions.Array.data[2].<DebugColor>k__BackingField.b
+      value: 0.19999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
+      propertyPath: Actions.Array.data[2].<DebugColor>k__BackingField.r
+      value: 0.9745225
       objectReference: {fileID: 0}
     - target: {fileID: 4120595640315197004, guid: 498d882efdd814dc99f1269733b6f30c, type: 3}
       propertyPath: managedReferences[8163169418539172155]._compareType

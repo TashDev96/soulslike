@@ -78,13 +78,15 @@ namespace game.gameplay_core.characters
 			var isPlayer = UniqueId == "Player";
 
 			_transform = new ReadOnlyTransform(transform);
+			var isDead = new IsDead();
 
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
 				CharacterTransform = _transform,
 				AllCharacters = locationContext.Characters,
 				Self = this,
-				MovementLogic = _movementLogic
+				MovementLogic = _movementLogic,
+				IsDead = isDead,
 			});
 
 			_blockLogic = new BlockLogic();
@@ -140,7 +142,7 @@ namespace game.gameplay_core.characters
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				ApplyDamage = new ApplyDamageCommand(),
-				IsDead = new IsDead(),
+				IsDead = isDead,
 				TriggerStagger = new ReactiveCommand<StaggerReason>(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
