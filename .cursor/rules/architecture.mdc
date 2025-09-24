@@ -1,9 +1,6 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+alwaysApply: false
 ---
-
 architecture framework description
 architecture is Domain-context based.
 objects are initialized in tree-way, each object recieving context. Is two child objects need a link to same property, it will be propagated through contexts.
