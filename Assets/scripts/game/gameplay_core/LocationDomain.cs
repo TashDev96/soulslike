@@ -4,12 +4,14 @@ using Cysharp.Threading.Tasks;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
-using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.location_save_system;
 using game.ui;
 using UnityEngine;
+#if UNITY_EDITOR
+using dream_lib.src.utils.editor;
+#endif
 
 namespace game.gameplay_core
 {
@@ -61,8 +63,9 @@ namespace game.gameplay_core
 				Player = _player.Value,
 				LocationUiUpdate = _locationContext.LocationUiUpdate
 			});
-
+#if UNITY_EDITOR
 			RegisterCheats();
+#endif
 		}
 
 		private void HandleUpdate()
@@ -166,10 +169,12 @@ namespace game.gameplay_core
 				_locationContext.SpawnedObjects.Add(spawnedObjectController);
 			}
 		}
+#if UNITY_EDITOR
 
 		private void RegisterCheats()
 		{
 			EditorComfortWindow.RegisterCheatButton("Return to Spawn", () => { _player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos); });
 		}
+#endif
 	}
 }

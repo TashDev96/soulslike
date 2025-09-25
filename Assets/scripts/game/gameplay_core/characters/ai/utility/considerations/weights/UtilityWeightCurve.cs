@@ -1,12 +1,10 @@
 using System;
 using Sirenix.OdinInspector;
-using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility.considerations.weights
 {
 	[Serializable]
-	[OdinDontRegister]
 	[HideReferenceObjectPicker]
 	public class UtilityWeightCurve : UtilityWeightBase
 	{

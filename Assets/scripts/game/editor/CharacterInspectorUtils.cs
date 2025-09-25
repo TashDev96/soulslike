@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using dream_lib.src.extensions;
 using dream_lib.src.utils.editor;
 using Sirenix.Utilities.Editor;
@@ -42,3 +43,4 @@ namespace game.editor
 		}
 	}
 }
+#endif

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Animancer;
-using game.editor;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
+using game.editor;
 using dream_lib.src.utils.editor;
 using Sirenix.Utilities.Editor;
 using UnityEditor;

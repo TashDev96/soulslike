@@ -1,9 +1,11 @@
 using System;
 using Animancer;
+#if UNITY_EDITOR
 using dream_lib.src.utils.editor;
 using game.editor;
-using Sirenix.OdinInspector;
 using UnityEditor;
+#endif
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.inventory.item_configs

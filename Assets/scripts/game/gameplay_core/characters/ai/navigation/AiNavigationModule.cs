@@ -24,7 +24,8 @@ namespace game.gameplay_core.characters.ai.navigation
 
 		public void BuildPath(Vector3 targetPosition)
 		{
-			TargetPosition = targetPosition;
+			NavMesh.SamplePosition(targetPosition, out var hit, 3f, NavMesh.AllAreas);
+			TargetPosition = hit.position;
 			NavMesh.CalculatePath(_characterTransform.Position, targetPosition, NavMesh.AllAreas, _navMeshPath);
 			if(_navMeshPath.status != NavMeshPathStatus.PathInvalid)
 			{
