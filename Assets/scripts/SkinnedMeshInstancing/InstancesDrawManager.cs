@@ -7,7 +7,7 @@ namespace SkinnedMeshInstancing
 	public class InstancesDrawManager : MonoBehaviour
 	{
 		[SerializeField]
-		private int _maxInstancesPerBatch = 1023;
+		private int _maxInstancesPerBatch = 128;
 		[SerializeField]
 		private bool _enableFrustumCulling = true;
 		[SerializeField]
@@ -105,7 +105,7 @@ namespace SkinnedMeshInstancing
 		private void Update()
 		{
 			UpdateInstances();
-			//DrawInstances();
+			DrawInstances();
 		}
 
 		private void UpdateInstances()

@@ -3,7 +3,9 @@
     "rootNamespace": "",
     "references": [
         "Unity.Mathematics",
-        "RVO2"
+        "RVO2",
+        "DreamLibAssembly",
+        "GameAssembly"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

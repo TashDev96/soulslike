@@ -12,50 +12,51 @@ namespace RVO
 		private const float PathRecalculationInterval = 1f;
 		private const float StoppingDistance = 4f;
 
-		private Vector3 position;
-		private Vector3 targetPosition;
-		private readonly float gravityForce = 9.81f;
-		private readonly float groundCheckDistance = 2f;
-		private readonly float groundCheckOffset = 0.1f;
-		private readonly LayerMask groundLayerMask = -1;
-		private readonly float capsuleHeight = 2f;
-		private readonly float radius = 0.33f;
-		private readonly float maxSpeed = 0.7f;
-		private readonly float scale;
+		private Vector3 _position;
+		private Vector3 _targetPosition;
+		private readonly float _gravityForce = 9.81f;
+		private readonly float _groundCheckDistance = 2f;
+		private readonly float _groundCheckOffset = 0.1f;
+		private readonly LayerMask _groundLayerMask = -1;
+		private readonly float _capsuleHeight = 2f;
+		private readonly float _radius = 0.43f;
+		private readonly float _maxSpeed = 2.5f;
+		private float _scale;
 
-		private AiNavigationModule navigationModule;
-		private float pathRecalculationTimer;
-		private readonly Vector3 initialPosition;
-		private float verticalVelocity;
-		private bool isGrounded;
-		private bool isVisible = true;
+		private AiNavigationModule _navigationModule;
+		private float _pathRecalculationTimer;
+		private readonly Vector3 _initialPosition;
+		private float _verticalVelocity;
+		private bool _isGrounded;
+		private bool _isVisible = true;
 
-		private readonly BakedMeshSequence meshSequence;
-		private readonly Material material;
-		private readonly int layer;
-		private readonly string currentAnimationClip = "Walk";
-		private float animationTime;
-		private float movementSpeed;
-		private bool isMoving;
-		private Quaternion rotation = Quaternion.identity;
+		private readonly BakedMeshSequence _meshSequence;
+		private readonly Material _material;
+		private readonly int _layer;
+		private readonly string _currentAnimationClip = "Walk";
+		private float _animationTime;
+		private float _movementSpeed;
+		private bool _isMoving;
+		private Quaternion _rotation = Quaternion.identity;
 
-		public Vector3 Position => position;
+		public Vector3 Position => _position;
 		public int AgentId { get; private set; } = -1;
 
 		public bool IsInitialized => AgentId != -1;
 
-		public RVOAgent(Vector3 startPosition, BakedMeshSequence meshSequence, Material material, int layer = 0, float scale = 1f)
+		public RVOAgent(Vector3 startPosition, BakedMeshSequence meshSequence, Material material, int layer = 0)
 		{
-			position = startPosition;
-			initialPosition = startPosition;
-			this.meshSequence = meshSequence;
-			this.material = material;
-			this.layer = layer;
-			this.scale = scale;
-			targetPosition = Vector3.zero;
-			animationTime = Random.value * meshSequence.GetClipDuration(currentAnimationClip);
-			movementSpeed = 0f;
-			isMoving = false;
+			_position = startPosition;
+			_initialPosition = startPosition;
+			this._meshSequence = meshSequence;
+			this._material = material;
+			this._layer = layer;
+			_scale = _scale;
+			_targetPosition = Vector3.zero;
+			_animationTime = Random.value * meshSequence.GetClipDuration(_currentAnimationClip);
+			_movementSpeed = 0f;
+			SetRandomScale();
+			_isMoving = false;
 		}
 
 		public void Initialize(Simulator simulator)
@@ -65,16 +66,16 @@ namespace RVO
 				return;
 			}
 
-			var position2D = new float2(position.x, position.z);
+			var position2D = new float2(_position.x, _position.z);
 			AgentId = simulator.AddAgent(position2D);
 
-			simulator.SetAgentRadius(AgentId, radius * scale);
-			simulator.SetAgentMaxSpeed(AgentId, maxSpeed);
-			simulator.SetAgentTimeHorizonObst(AgentId, 4f);
+			simulator.SetAgentRadius(AgentId, _radius * _scale);
+			simulator.SetAgentMaxSpeed(AgentId, _maxSpeed/_scale);
+			simulator.SetAgentTimeHorizonObst(AgentId, 4f*_scale);
 
-			navigationModule = new AiNavigationModule();
-			pathRecalculationTimer = Random.value;
-			navigationModule.BuildPath(position, targetPosition);
+			_navigationModule = new AiNavigationModule();
+			_pathRecalculationTimer = Random.value;
+			_navigationModule.BuildPath(_position, _targetPosition);
 		}
 
 		public void Cleanup(Simulator simulator)
@@ -90,10 +91,10 @@ namespace RVO
 
 		public void SetTarget(Vector3 target)
 		{
-			targetPosition = target;
-			if(navigationModule != null)
+			_targetPosition = target;
+			if(_navigationModule != null)
 			{
-				navigationModule.BuildPath(position, target);
+				_navigationModule.BuildPath(_position, target);
 			}
 		}
 
@@ -104,150 +105,159 @@ namespace RVO
 				return;
 			}
 
-			pathRecalculationTimer += deltaTime;
+			_pathRecalculationTimer += deltaTime;
 			SetPreferredVelocities(simulator, goal);
 
-			targetPosition = new Vector3(goal.x, 0, goal.y);
+			_targetPosition = new Vector3(goal.x, 0, goal.y);
 			var position2D = simulator.GetAgentPosition(AgentId);
 			var distanceToTarget = math.lengthsq(position2D - goal);
+			
+			var headPos = _position + Vector3.up * _scale;
 
 			var recalculatePathDelay = Mathf.Lerp(0, 5, distanceToTarget / 20f);
 
-			if(pathRecalculationTimer >= PathRecalculationInterval + recalculatePathDelay)
+			if(_pathRecalculationTimer >= PathRecalculationInterval + recalculatePathDelay)
 			{
-				pathRecalculationTimer = 0f;
-				if(targetPosition != Vector3.zero && navigationModule != null)
+				_pathRecalculationTimer = 0f;
+				if(_targetPosition != Vector3.zero && _navigationModule != null)
 				{
 					//navigationModule.BuildPath(position, targetPosition);
 				}
 			}
 
-			if(navigationModule != null && navigationModule.HasPath && isGrounded)
+			if(_navigationModule != null && _navigationModule.HasPath && _isGrounded)
 			{
-				SetPreferredVelocityFromNavMesh(simulator);
+				SetPreferredVelocityFromNavMesh(simulator, out var navmeshVector);
+				Debug.DrawLine(headPos, headPos+navmeshVector);
+				
 			}
 
 			if(distanceToTarget < StoppingDistance * StoppingDistance)
 			{
 				//restart
-				simulator.SetAgentPosition(AgentId, new float2(initialPosition.x, initialPosition.z));
-				position = initialPosition;
-				animationTime = Random.value * meshSequence.GetClipDuration(currentAnimationClip);
+				simulator.SetAgentPosition(AgentId, new float2(_initialPosition.x, _initialPosition.z));
+				_position = _initialPosition;
+				_animationTime = Random.value * _meshSequence.GetClipDuration(_currentAnimationClip);
 
-				if(navigationModule != null)
+				if(_navigationModule != null)
 				{
-					navigationModule.BuildPath(position, targetPosition);
+					_navigationModule.BuildPath(_position, _targetPosition);
 				}
 				return;
 			}
 
-			var prevPosition = position;
-			var wasGrounded = isGrounded;
-			isGrounded = CheckGroundAndGetPosition(out var groundY);
+			var prevPosition = _position;
+			var wasGrounded = _isGrounded;
+			_isGrounded = CheckGroundAndGetPosition(out var groundY);
 
-			if(isGrounded)
+			if(_isGrounded)
 			{
-				if(!wasGrounded && navigationModule != null)
+				if(!wasGrounded && _navigationModule != null)
 				{
-					navigationModule.BuildPath(position, targetPosition);
+					_navigationModule.BuildPath(_position, _targetPosition);
 				}
-				if(position.y > groundY + 0.01f)
+				if(_position.y > groundY + 0.01f)
 				{
-					verticalVelocity -= gravityForce * deltaTime;
+					_verticalVelocity -= _gravityForce * deltaTime;
 				}
 				else
 				{
-					verticalVelocity = 0f;
+					_verticalVelocity = 0f;
 				}
 			}
 			else
 			{
-				verticalVelocity -= gravityForce * deltaTime;
+				_verticalVelocity -= _gravityForce * deltaTime;
 			}
 
-			var newY = prevPosition.y + verticalVelocity * deltaTime;
-			if(isGrounded && newY <= groundY)
+			var newY = prevPosition.y + _verticalVelocity * deltaTime;
+			if(_isGrounded && newY <= groundY)
 			{
 				newY = groundY;
-				verticalVelocity = 0f;
+				_verticalVelocity = 0f;
 			}
 
 			var newPosition = new Vector3(position2D.x, newY, position2D.y);
-			var movementDelta = newPosition - position;
-			movementSpeed = movementDelta.magnitude / deltaTime;
-			isMoving = movementSpeed > 0.1f;
+			var movementDelta = newPosition - _position;
+			_movementSpeed = movementDelta.magnitude / deltaTime;
+			_isMoving = _movementSpeed > 0.1f;
 
-			if(isMoving)
+			if(_isMoving)
 			{
 				var movementDirection = new Vector3(movementDelta.x, 0, movementDelta.z).normalized;
-				rotation = Quaternion.Lerp(rotation, Quaternion.LookRotation(movementDirection, Vector3.up), deltaTime * 10f);
+				_rotation = Quaternion.Lerp(_rotation, Quaternion.LookRotation(movementDirection, Vector3.up), deltaTime * 10f);
 			}
 
-			position = newPosition;
+			_position = newPosition;
+
 			
-			//Debug.DrawLine(position, position+Vector3.up);
 		}
 
 		public Matrix4x4 GetTransformMatrix()
 		{
-			return Matrix4x4.TRS(position, rotation, Vector3.one * scale);
+			return Matrix4x4.TRS(_position+Vector3.up*(_scale-1f), _rotation, Vector3.one * _scale);
 		}
 
 		public Mesh GetCurrentMesh()
 		{
-			if(meshSequence == null)
+			if(_meshSequence == null)
 			{
 				return null;
 			}
 
-			if(isMoving)
+			if(_isMoving)
 			{
-				return meshSequence.GetMeshAtTime(animationTime, currentAnimationClip);
+				return _meshSequence.GetMeshAtTime(_animationTime, _currentAnimationClip);
 			}
-			return meshSequence.GetMeshAtFrame(0);
+			return _meshSequence.GetMeshAtFrame(0);
 		}
 
 		public Material GetMaterial()
 		{
-			return material;
+			return _material;
 		}
 
 		public int GetLayer()
 		{
-			return layer;
+			return _layer;
 		}
 
 		public bool IsVisible()
 		{
-			return isVisible;
+			return _isVisible;
 		}
 
 		public void SetVisible(bool visible)
 		{
-			isVisible = visible;
+			_isVisible = visible;
 		}
 
 		public void UpdateInstance(float deltaTime)
 		{
-			if(isMoving && meshSequence != null)
+			if(_isMoving && _meshSequence != null)
 			{
-				animationTime += deltaTime / scale;
-				var clipDuration = meshSequence.GetClipDuration(currentAnimationClip);
-				if(clipDuration > 0 && animationTime >= clipDuration)
+				_animationTime += deltaTime / _scale;
+				var clipDuration = _meshSequence.GetClipDuration(_currentAnimationClip);
+				if(clipDuration > 0 && _animationTime >= clipDuration)
 				{
-					animationTime = 0f;
+					_animationTime = 0f;
 				}
 			}
 		}
 
+		private void SetRandomScale()
+		{
+			_scale = Random.value > 0.9f ? 2f : 1f;
+		}
+
 		private bool CheckGroundAndGetPosition(out float groundY)
 		{
-			var rayStart = position + Vector3.up * (capsuleHeight * 0.5f + groundCheckOffset);
+			var rayStart = _position + Vector3.up * (_capsuleHeight * 0.5f + _groundCheckOffset);
 			var ray = new Ray(rayStart, Vector3.down);
 
-			if(Physics.Raycast(ray, out var hit, groundCheckDistance + capsuleHeight * 0.5f + groundCheckOffset, groundLayerMask))
+			if(Physics.Raycast(ray, out var hit, _groundCheckDistance + _capsuleHeight * 0.5f + _groundCheckOffset, _groundLayerMask))
 			{
-				groundY = hit.point.y + capsuleHeight * 0.5f;
+				groundY = hit.point.y + _capsuleHeight * 0.5f;
 				return true;
 			}
 
@@ -255,15 +265,15 @@ namespace RVO
 			return false;
 		}
 
-		private void SetPreferredVelocityFromNavMesh(Simulator simulator)
+		private void SetPreferredVelocityFromNavMesh(Simulator simulator, out Vector3 navmeshVector)
 		{
-			var moveDirection = navigationModule.CalculateMoveDirection(position, 1f, 1.5f);
-			var distanceToTarget = Vector3.Distance(position, navigationModule.TargetPosition);
-
+			var moveDirection = _navigationModule.CalculateMoveDirection(_position, 3f, 1.5f);
+			var distanceToTarget = Vector3.Distance(_position, _navigationModule.TargetPosition);
+			navmeshVector = moveDirection;
 			float2 preferredVelocity;
 			if(distanceToTarget > StoppingDistance)
 			{
-				preferredVelocity = new float2(moveDirection.x, moveDirection.z);
+				preferredVelocity = new float2(moveDirection.x, moveDirection.z)*_maxSpeed;
 				preferredVelocity += (float2)Random.insideUnitCircle * 0.00001f;
 			}
 			else

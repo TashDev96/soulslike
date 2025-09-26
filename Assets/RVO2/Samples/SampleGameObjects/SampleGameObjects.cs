@@ -10,7 +10,7 @@ namespace RVO
     using UnityEngine;
     using UnityEngine.Assertions;
 
-    internal class SampleGameObjects : MonoBehaviour
+    public class SampleGameObjects : MonoBehaviour
     {
         private static SampleGameObjects instance;
 
