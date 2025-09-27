@@ -1,4 +1,4 @@
-using Game.Features.MiningPoints.LandCleanup.Harvesters;
+using experiments;
 using SkinnedMeshInstancing;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
 using Unity.Mathematics;
@@ -9,7 +9,6 @@ namespace RVO
 {
 	public class RVOAgent : IMeshInstanceInfo
 	{
-		private const float PathRecalculationInterval = 1f;
 		private const float StoppingDistance = 4f;
 
 		private Vector3 _position;
@@ -23,8 +22,6 @@ namespace RVO
 		private readonly float _maxSpeed = 2.5f;
 		private float _scale;
 
-		private AiNavigationModule _navigationModule;
-		private float _pathRecalculationTimer;
 		private readonly Vector3 _initialPosition;
 		private float _verticalVelocity;
 		private bool _isGrounded;
@@ -51,7 +48,6 @@ namespace RVO
 			this._meshSequence = meshSequence;
 			this._material = material;
 			this._layer = layer;
-			_scale = _scale;
 			_targetPosition = Vector3.zero;
 			_animationTime = Random.value * meshSequence.GetClipDuration(_currentAnimationClip);
 			_movementSpeed = 0f;
@@ -72,10 +68,6 @@ namespace RVO
 			simulator.SetAgentRadius(AgentId, _radius * _scale);
 			simulator.SetAgentMaxSpeed(AgentId, _maxSpeed/_scale);
 			simulator.SetAgentTimeHorizonObst(AgentId, 4f*_scale);
-
-			_navigationModule = new AiNavigationModule();
-			_pathRecalculationTimer = Random.value;
-			_navigationModule.BuildPath(_position, _targetPosition);
 		}
 
 		public void Cleanup(Simulator simulator)
@@ -92,9 +84,9 @@ namespace RVO
 		public void SetTarget(Vector3 target)
 		{
 			_targetPosition = target;
-			if(_navigationModule != null)
+			if(PathFindManager.Instance != null)
 			{
-				_navigationModule.BuildPath(_position, target);
+				PathFindManager.Instance.SetTargetPosition(target);
 			}
 		}
 
@@ -105,44 +97,27 @@ namespace RVO
 				return;
 			}
 
-			_pathRecalculationTimer += deltaTime;
-			SetPreferredVelocities(simulator, goal);
-
 			_targetPosition = new Vector3(goal.x, 0, goal.y);
 			var position2D = simulator.GetAgentPosition(AgentId);
 			var distanceToTarget = math.lengthsq(position2D - goal);
 			
 			var headPos = _position + Vector3.up * _scale;
 
-			var recalculatePathDelay = Mathf.Lerp(0, 5, distanceToTarget / 20f);
-
-			if(_pathRecalculationTimer >= PathRecalculationInterval + recalculatePathDelay)
+			if(PathFindManager.Instance != null && _isGrounded)
 			{
-				_pathRecalculationTimer = 0f;
-				if(_targetPosition != Vector3.zero && _navigationModule != null)
-				{
-					//navigationModule.BuildPath(position, targetPosition);
-				}
+				SetPreferredVelocityFromFlowField(simulator, out var flowVector);
+				Debug.DrawLine(headPos, headPos + flowVector);
 			}
-
-			if(_navigationModule != null && _navigationModule.HasPath && _isGrounded)
+			else
 			{
-				SetPreferredVelocityFromNavMesh(simulator, out var navmeshVector);
-				Debug.DrawLine(headPos, headPos+navmeshVector);
-				
+				SetPreferredVelocities(simulator, goal);
 			}
 
 			if(distanceToTarget < StoppingDistance * StoppingDistance)
 			{
-				//restart
 				simulator.SetAgentPosition(AgentId, new float2(_initialPosition.x, _initialPosition.z));
 				_position = _initialPosition;
 				_animationTime = Random.value * _meshSequence.GetClipDuration(_currentAnimationClip);
-
-				if(_navigationModule != null)
-				{
-					_navigationModule.BuildPath(_position, _targetPosition);
-				}
 				return;
 			}
 
@@ -152,10 +127,6 @@ namespace RVO
 
 			if(_isGrounded)
 			{
-				if(!wasGrounded && _navigationModule != null)
-				{
-					_navigationModule.BuildPath(_position, _targetPosition);
-				}
 				if(_position.y > groundY + 0.01f)
 				{
 					_verticalVelocity -= _gravityForce * deltaTime;
@@ -265,20 +236,22 @@ namespace RVO
 			return false;
 		}
 
-		private void SetPreferredVelocityFromNavMesh(Simulator simulator, out Vector3 navmeshVector)
+		private void SetPreferredVelocityFromFlowField(Simulator simulator, out Vector3 flowVector)
 		{
-			var moveDirection = _navigationModule.CalculateMoveDirection(_position, 3f, 1.5f);
-			var distanceToTarget = Vector3.Distance(_position, _navigationModule.TargetPosition);
-			navmeshVector = moveDirection;
+			var flowDirection = PathFindManager.Instance.SampleFlowDirection(_position);
+			var moveDirection = new Vector3(flowDirection.x, 0, flowDirection.y);
+			var distanceToTarget = Vector3.Distance(_position, _targetPosition);
+			flowVector = moveDirection;
+			
 			float2 preferredVelocity;
-			if(distanceToTarget > StoppingDistance)
+			if(distanceToTarget > StoppingDistance && moveDirection.magnitude > 0.01f)
 			{
-				preferredVelocity = new float2(moveDirection.x, moveDirection.z)*_maxSpeed;
+				preferredVelocity = new float2(moveDirection.x, moveDirection.z) * _maxSpeed;
 				preferredVelocity += (float2)Random.insideUnitCircle * 0.00001f;
 			}
 			else
 			{
-				return;
+				preferredVelocity = float2.zero;
 			}
 
 			simulator.SetAgentPrefVelocity(AgentId, preferredVelocity);
