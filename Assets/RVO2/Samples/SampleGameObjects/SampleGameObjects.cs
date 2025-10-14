@@ -4,136 +4,138 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.Assertions;
+
 namespace RVO
 {
-    using Unity.Mathematics;
-    using UnityEngine;
-    using UnityEngine.Assertions;
+	public class SampleGameObjects : MonoBehaviour
+	{
+		[SerializeField]
+		private Transform goalIndicator;
+		private static SampleGameObjects instance;
 
-    public class SampleGameObjects : MonoBehaviour
-    {
-        private static SampleGameObjects instance;
+		private static bool gameQuiting;
 
-        private static bool gameQuiting = false;
+		private Simulator simulator;
 
-        private Simulator simulator;
+		private Camera mainCamera;
+		private float2 currentGoal;
+		private Plane ground = new(Vector3.up, 0);
 
-        private Camera mainCamera;
-        private float2 currentGoal;
-        private Plane ground = new Plane(Vector3.up, 0);
+		public static SampleGameObjects Instance
+		{
+			get
+			{
+				if(instance == null)
+				{
+					if(gameQuiting)
+					{
+						return null;
+					}
 
-        [SerializeField]
-        private Transform goalIndicator;
+					instance = FindAnyObjectByType<SampleGameObjects>();
+					Assert.IsNotNull(instance);
+				}
 
-        public static SampleGameObjects Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    if (gameQuiting)
-                    {
-                        return null;
-                    }
+				return instance;
+			}
+		}
 
-                    instance = FindAnyObjectByType<SampleGameObjects>();
-                    Assert.IsNotNull(instance);
-                }
+		private void Awake()
+		{
+			SetGoalPosFromIndicator();
+		}
 
-                return instance;
-            }
-        }
+		private void OnEnable()
+		{
+			mainCamera = Camera.main;
+		}
 
-        public static Simulator GetSimulator()
-        {
-            if (gameQuiting)
-            {
-                return null;
-            }
+		public static Simulator GetSimulator()
+		{
+			if(gameQuiting)
+			{
+				return null;
+			}
 
-            if (Instance.simulator == null)
-            {
-                var simulator = new Simulator();
+			if(Instance.simulator == null)
+			{
+				var simulator = new Simulator();
 
-                simulator.SetTimeStep(1 / 60f);
-                simulator.SetAgentDefaults(10f, 10, 4f, 4f, 0.5f, 0.2f, new float2(0f, 0f));
+				simulator.SetTimeStep(1 / 60f);
+				simulator.SetAgentDefaults(10f, 10, 4f, 4f, 0.5f, 0.2f, new float2(0f, 0f));
 
-                Instance.simulator = simulator;
-            }
+				Instance.simulator = simulator;
+			}
 
-            return Instance.simulator;
-        }
+			return Instance.simulator;
+		}
 
-        public static float2 GetGoal()
-        {
-            if (gameQuiting)
-            {
-                return default;
-            }
+		public static float2 GetGoal()
+		{
+			if(gameQuiting)
+			{
+				return default;
+			}
 
-            return instance.currentGoal;
-        }
+			return instance.currentGoal;
+		}
 
-        private void UpdateGoalIndicator()
-        {
-            if (this.goalIndicator == null)
-            {
-                return;
-            }
+	 
 
-            var goalPosition = this.goalIndicator.transform.position;
-            this.goalIndicator.transform.position = new Vector3(this.currentGoal.x, goalPosition.y, this.currentGoal.y);
-        }
+		private void OnDestroy()
+		{
+			simulator.Clear();
 
-        private void OnEnable()
-        {
-            this.mainCamera = Camera.main;
-            this.UpdateGoalIndicator();
-        }
+			simulator.Dispose();
+		}
 
-        private void OnDestroy()
-        {
-            this.simulator.Clear();
+		private void OnGUI()
+		{
+			GUILayout.Label($"Agents:{simulator.GetNumAgents()}");
+			GUILayout.Label($"FPS:{1f / Time.deltaTime}");
+		}
 
-            this.simulator.Dispose();
-        }
+		private void Update()
+		{
+			simulator.SetTimeStep(Time.deltaTime);
+			simulator.DoStep();
 
-        private void OnGUI()
-        {
-            GUILayout.Label($"Agents:{this.simulator.GetNumAgents()}");
-            GUILayout.Label($"FPS:{1f / Time.deltaTime}");
-        }
+			if(Input.GetMouseButton(0))
+			{
+				if(mainCamera == null)
+				{
+					return;
+				}
 
-        private void Update()
-        {
-            this.simulator.DoStep();
+				var position = Input.mousePosition;
+				var ray = mainCamera.ScreenPointToRay(position);
+				if(ground.Raycast(ray, out var enter))
+				{
+					var worldPosition = ray.GetPoint(enter);
+					currentGoal = new float2(worldPosition.x, worldPosition.z);
+					var goalPosition = goalIndicator.transform.position;
+					goalIndicator.transform.position = new Vector3(currentGoal.x, goalPosition.y, currentGoal.y);
+				}
+			}
+		}
 
-            if (Input.GetMouseButton(0))
-            {
-                if (this.mainCamera == null)
-                {
-                    return;
-                }
+		private void SetGoalPosFromIndicator()
+		{
+			currentGoal = new float2(goalIndicator.position.x, goalIndicator.position.z);
+		}
 
-                var position = Input.mousePosition;
-                var ray = this.mainCamera.ScreenPointToRay(position);
-                if (this.ground.Raycast(ray, out var enter))
-                {
-                    Vector3 worldPosition = ray.GetPoint(enter);
-                    this.currentGoal = new float2(worldPosition.x, worldPosition.z);
-                    this.UpdateGoalIndicator();
-                }
-            }
-        }
+		private void LateUpdate()
+		{
+			simulator.EnsureCompleted();
+		}
 
-        private void LateUpdate()
-        {
-            this.simulator.EnsureCompleted();
-        }
-
-        private void OnApplicationQuit()
-        {
-            gameQuiting = true;
-        }
-    }
+		private void OnApplicationQuit()
+		{
+			gameQuiting = true;
+		}
+	}
 }

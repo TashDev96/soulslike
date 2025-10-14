@@ -1,10 +1,10 @@
 using System;
+using dream_lib.src.utils.drawers;
 using FlowField;
 using Sirenix.OdinInspector;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace experiments
 {
@@ -15,6 +15,17 @@ namespace experiments
 		[SerializeField]
 		private int _gridResolution = 50;
 
+		[Header("Walkability settings")]
+		[SerializeField]
+		private float _walkableAltitude;
+		[SerializeField]
+		private float _walkableAltitudeTolerance = 0.1f;
+		[SerializeField]
+		private float _sampleWallsSphereRadius = 3f;
+		[SerializeField]
+		private float _closeToWallsPenalty = 0.5f;
+
+		[Header("Debug settings")]
 		[SerializeField]
 		private bool _showDebugVisualization = true;
 		[SerializeField]
@@ -22,15 +33,28 @@ namespace experiments
 		[SerializeField]
 		private float _debugHeight = 0.1f;
 		[SerializeField]
-		private float _raycastHeight = 10f;
+		private float _raycastHeight = 50f;
 		[SerializeField]
 		private LayerMask _groundLayerMask = -1;
 		private Vector2Int targetPos;
 		private NativeArray<double2> _direction;
 		private NativeArray<double> _gradient;
+		private NativeArray<double2> _secondLayerDirection;
 		private Vector2 _gridCellSize;
 		private Vector2 _gridOrigin;
+
 		public static PathFindManager Instance { get; private set; }
+
+		private void InitializeSecondLayer()
+		{
+			if(_secondLayerDirection.IsCreated)
+			{
+				_secondLayerDirection.Dispose();
+			}
+
+			var totalSize = (_gridResolution + 2) * (_gridResolution + 2);
+			_secondLayerDirection = new NativeArray<double2>(totalSize, Allocator.Persistent);
+		}
 
 		private void Awake()
 		{
@@ -43,6 +67,11 @@ namespace experiments
 			{
 				Destroy(gameObject);
 			}
+		}
+
+		private void Start()
+		{
+			CalculateFlow();
 		}
 
 		public void SetTargetPosition(Vector3 worldPosition)
@@ -71,6 +100,8 @@ namespace experiments
 				_worldBounds.min.z
 			);
 
+			InitializeSecondLayer();
+
 			var speeds = new float[size + 2, size + 2];
 
 			for(var x = 1; x <= size; x++)
@@ -78,9 +109,8 @@ namespace experiments
 				for(var y = 1; y <= size; y++)
 				{
 					var worldPos = GridToWorldPosition(x - 1, y - 1);
-					var hasNavMesh = SampleNavMeshAtPosition(worldPos);
 
-					speeds[x, y] = hasNavMesh ? 1 : -1f;
+					speeds[x, y] = GetCellSpeed(worldPos);
 				}
 			}
 
@@ -116,7 +146,7 @@ namespace experiments
 			return new Vector3(worldX, 0, worldZ);
 		}
 
-		public Vector2 SampleFlowDirection(Vector3 worldPosition)
+		public Vector2 SampleFlowDirection(Vector3 worldPosition, bool includeSecondLayer = false)
 		{
 			if(!_direction.IsCreated)
 			{
@@ -129,7 +159,15 @@ namespace experiments
 			if(index >= 0 && index < _direction.Length)
 			{
 				var direction = _direction[index];
-				return new Vector2((float)direction.x, (float)direction.y);
+				var result = new Vector2((float)direction.x, (float)direction.y);
+
+				if(includeSecondLayer && _secondLayerDirection.IsCreated && index < _secondLayerDirection.Length)
+				{
+					var secondLayerDir = _secondLayerDirection[index];
+					result += new Vector2((float)secondLayerDir.x, (float)secondLayerDir.y);
+				}
+
+				return result;
 			}
 
 			var targetWorldPos = GridToWorldPosition(targetPos.x, targetPos.y);
@@ -170,7 +208,7 @@ namespace experiments
 
 					if(index >= 0 && index < _direction.Length)
 					{
-						var direction = _direction[index];
+						var direction = math.normalize(_direction[index] + _secondLayerDirection[index]);
 						var dir2D = new Vector2((float)direction.x, (float)direction.y);
 
 						if(dir2D.magnitude > 0.01f)
@@ -193,24 +231,136 @@ namespace experiments
 			}
 		}
 
-		private bool SampleNavMeshAtPosition(Vector3 worldPosition)
+		public void SetRadialForce(Vector3 worldPos, float radius, float centerForce, float endForce)
 		{
-			var raycastStart = worldPosition + Vector3.up * _raycastHeight;
-
-			if(Physics.Raycast(raycastStart, Vector3.down, out var groundHit, _raycastHeight * 2f, _groundLayerMask))
+			if(!_secondLayerDirection.IsCreated)
 			{
-				var result = NavMesh.SamplePosition(groundHit.point, out var navHit, 0.2f, NavMesh.AllAreas);
-				Debug.DrawLine(groundHit.point, groundHit.point + Vector3.up, result ? Color.green : Color.red, 5);
-
-				return result;
+				return;
 			}
 
-			return false;
+			var centerGridPos = WorldToGridPosition(worldPos);
+			var radiusInGridCells = Mathf.CeilToInt(radius / Mathf.Min(_gridCellSize.x, _gridCellSize.y));
+
+			for(var x = Mathf.Max(0, centerGridPos.x - radiusInGridCells); x <= Mathf.Min(_gridResolution - 1, centerGridPos.x + radiusInGridCells); x++)
+			{
+				for(var y = Mathf.Max(0, centerGridPos.y - radiusInGridCells); y <= Mathf.Min(_gridResolution - 1, centerGridPos.y + radiusInGridCells); y++)
+				{
+					var cellWorldPos = GridToWorldPosition(x, y);
+					var distance = Vector3.Distance(worldPos, cellWorldPos);
+
+					if(distance <= radius)
+					{
+						var normalizedDistance = distance / radius;
+						var force = Mathf.Lerp(centerForce, endForce, normalizedDistance);
+
+						var direction = (cellWorldPos - worldPos).normalized;
+						var forceVector = new Vector2(direction.x, direction.z) * force;
+
+						var index = (y + 1) * (_gridResolution + 2) + x + 1;
+						if(index >= 0 && index < _secondLayerDirection.Length)
+						{
+							_secondLayerDirection[index] = new double2(forceVector.x, forceVector.y);
+						}
+					}
+				}
+			}
+		}
+
+		public void SetDirectionalForce(Vector3 worldPos, Vector3 direction, float radius, float centerForce, float endForce, float frontAngle = 90f)
+		{
+			if(!_secondLayerDirection.IsCreated)
+			{
+				return;
+			}
+
+			var centerGridPos = WorldToGridPosition(worldPos);
+			var radiusInGridCells = Mathf.CeilToInt(radius / Mathf.Min(_gridCellSize.x, _gridCellSize.y));
+			var normalizedDirection = direction.normalized;
+			var forwardDir2D = new Vector2(normalizedDirection.x, normalizedDirection.z);
+			var rightDir2D = new Vector2(-normalizedDirection.z, normalizedDirection.x);
+
+			for(var x = Mathf.Max(0, centerGridPos.x - radiusInGridCells); x <= Mathf.Min(_gridResolution - 1, centerGridPos.x + radiusInGridCells); x++)
+			{
+				for(var y = Mathf.Max(0, centerGridPos.y - radiusInGridCells); y <= Mathf.Min(_gridResolution - 1, centerGridPos.y + radiusInGridCells); y++)
+				{
+					var cellWorldPos = GridToWorldPosition(x, y);
+					var distance = Vector3.Distance(worldPos, cellWorldPos);
+
+					if(distance <= radius)
+					{
+						var normalizedDistance = distance / radius;
+						var force = Mathf.Lerp(centerForce, endForce, normalizedDistance);
+
+						var toCellDir = (cellWorldPos - worldPos).normalized;
+						var toCellDir2D = new Vector2(toCellDir.x, toCellDir.z);
+
+						var dotProduct = Vector2.Dot(forwardDir2D, toCellDir2D);
+						var angle = Mathf.Acos(Mathf.Clamp(dotProduct, -1f, 1f)) * Mathf.Rad2Deg;
+
+						Vector2 forceVector;
+						if(angle <= frontAngle * 0.5f)
+						{
+							var sideDirection = Vector2.Dot(rightDir2D, toCellDir2D) > 0 ? rightDir2D : -rightDir2D;
+							forceVector = sideDirection * force;
+						}
+						else
+						{
+							forceVector = toCellDir2D * force;
+						}
+
+						var index = (y + 1) * (_gridResolution + 2) + x + 1;
+						if(index >= 0 && index < _secondLayerDirection.Length)
+						{
+							_secondLayerDirection[index] = new double2(forceVector.x, forceVector.y);
+						}
+					}
+				}
+			}
+		}
+
+
+		private float GetCellSpeed(Vector3 worldPosition)
+		{
+			var raycastStart = worldPosition + Vector3.up * _raycastHeight;
+			var radius = Mathf.Max(_worldBounds.extents.x, _worldBounds.extents.z) / _gridResolution * _sampleWallsSphereRadius;
+			if(Physics.SphereCast(raycastStart, radius, Vector3.down, out var groundHit, _raycastHeight * 2f, _groundLayerMask))
+			{
+				var bottomPoint = raycastStart + Vector3.down * groundHit.distance + Vector3.down * radius;
+				var delta = bottomPoint.y - _walkableAltitude;
+				if(delta < 0 || delta > _walkableAltitudeTolerance)
+				{
+					return -1f;
+				}
+				var speed = 1 / (1 + delta * _closeToWallsPenalty);
+				if(speed > 0f && speed < 0.999f)
+				{
+					DebugDrawUtils.DrawWireCapsulePersistent(bottomPoint + Vector3.up * radius, 1f, radius, Color.Lerp(Color.green, Color.red, speed), 5f);
+				}
+				return speed;
+			}
+
+			return -1;
+		}
+
+		public void ClearSecondLayer()
+		{
+			if(_secondLayerDirection.IsCreated)
+			{
+				for(var i = 0; i < _secondLayerDirection.Length; i++)
+				{
+					_secondLayerDirection[i] = new double2(0, 0);
+				}
+			}
 		}
 
 		private void Update()
 		{
 			DrawDebugVisualization();
+		}
+
+		private void OnDrawGizmosSelected()
+		{
+			DebugDrawUtils.DrawBounds(_worldBounds, Color.green);
 		}
 
 		private void OnDestroy()
@@ -222,6 +372,10 @@ namespace experiments
 			if(_gradient.IsCreated)
 			{
 				_gradient.Dispose();
+			}
+			if(_secondLayerDirection.IsCreated)
+			{
+				_secondLayerDirection.Dispose();
 			}
 		}
 	}

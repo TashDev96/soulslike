@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using experiments;
 using SkinnedMeshInstancing;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
 using Unity.Mathematics;
@@ -28,7 +29,7 @@ namespace TowerDefense
         
         [Header("Goal Settings")]
         [SerializeField] private Transform goalTransform;
-        [SerializeField] private Vector3 goalPosition = new Vector3(10f, 0f, 10f);
+        
 
         private List<ZombieUnit> zombies = new List<ZombieUnit>();
         private Simulator simulator;
@@ -97,6 +98,24 @@ namespace TowerDefense
         {
             var deltaTime = Time.deltaTime;
             
+            PathFindManager.Instance.ClearSecondLayer();
+
+            for(int i = zombies.Count - 1; i >= 0; i--)
+            {
+	            var zombie = zombies[i];
+
+	            if(zombie.IsDead)
+	            {
+		            RemoveZombie(i);
+		            continue;
+	            }
+
+	            if(zombie.IsInitialized)
+	            {
+		            zombie.UpdateRadialForce();
+	            }
+            }
+
             for (int i = zombies.Count - 1; i >= 0; i--)
             {
                 var zombie = zombies[i];
@@ -162,7 +181,7 @@ namespace TowerDefense
 
         private float2 GetCurrentGoal()
         {
-            Vector3 goal = goalTransform != null ? goalTransform.position : goalPosition;
+            Vector3 goal = goalTransform.position ;
             return new float2(goal.x, goal.z);
         }
 
@@ -254,11 +273,9 @@ namespace TowerDefense
 
         private void OnDestroy()
         {
-            foreach (var zombie in zombies)
-            {
-                zombie.Cleanup(simulator);
-            }
+             
             zombies.Clear();
+            simulator.Dispose();
         }
 
         private void OnDrawGizmosSelected()
@@ -275,7 +292,7 @@ namespace TowerDefense
                 }
             }
             
-            Vector3 goal = goalTransform != null ? goalTransform.position : goalPosition;
+            Vector3 goal =   goalTransform.position  ;
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(goal, 1f);
         }

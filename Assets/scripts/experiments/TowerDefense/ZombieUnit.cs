@@ -1,3 +1,4 @@
+using experiments;
 using UnityEngine;
 using RVO;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
@@ -48,5 +49,7 @@ namespace TowerDefense
         {
             return MaxHealth > 0 ? CurrentHealth / MaxHealth : 0f;
         }
+
+       
     }
 }

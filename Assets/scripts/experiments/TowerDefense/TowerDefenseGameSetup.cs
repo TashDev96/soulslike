@@ -12,9 +12,7 @@ namespace TowerDefense
         [Header("Prefabs")]
         [SerializeField] private GameObject towerPrefab;
         [SerializeField] private GameObject uiCanvasPrefab;
-        
-        [Header("Spawn Points")]
-        [SerializeField] private Transform goalPosition;
+       
 
         private void Start()
         {
