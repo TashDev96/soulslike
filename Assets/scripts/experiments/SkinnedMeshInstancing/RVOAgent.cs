@@ -90,10 +90,6 @@ namespace RVO
 		public void SetTarget(Vector3 target)
 		{
 			_targetPosition = target;
-			if(PathFindManager.Instance != null)
-			{
-				PathFindManager.Instance.SetTargetPosition(target);
-			}
 		}
 
 		public void UpdateAgent(Simulator simulator, float2 goal, float deltaTime)

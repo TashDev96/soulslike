@@ -67,6 +67,8 @@ namespace experiments
 			{
 				Destroy(gameObject);
 			}
+			SetupGrid(_worldBounds, _gridResolution);
+			
 		}
 
 		private void Start()
@@ -84,12 +86,6 @@ namespace experiments
 		{
 			_worldBounds = worldBounds;
 			_gridResolution = gridResolution;
-		}
-
-		[Button]
-		public void CalculateFlow()
-		{
-			var size = _gridResolution;
 			_gridCellSize = new Vector2(
 				_worldBounds.size.x / _gridResolution,
 				_worldBounds.size.z / _gridResolution
@@ -99,6 +95,14 @@ namespace experiments
 				_worldBounds.min.x,
 				_worldBounds.min.z
 			);
+		}
+
+		[Button]
+		public void CalculateFlow()
+		{
+			var size = _gridResolution;
+			SetupGrid(_worldBounds, _gridResolution);
+			
 
 			InitializeSecondLayer();
 
