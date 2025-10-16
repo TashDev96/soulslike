@@ -103,7 +103,7 @@ namespace RVO
 		{
 			simulator.SetTimeStep(Time.deltaTime);
 			simulator.DoStep();
-
+			return;
 			if(Input.GetMouseButton(0))
 			{
 				if(mainCamera == null)

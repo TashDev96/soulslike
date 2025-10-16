@@ -23,7 +23,6 @@ namespace TowerDefense
 
 		private int currentAmmo;
 		private float lastRefillTime;
-		private Dictionary<Transform, ReloadWorker> reservedPoints;
 
 	public int CurrentAmmo => currentAmmo;
 	public int MaxCapacity => maxCapacity;
@@ -34,7 +33,6 @@ namespace TowerDefense
 		{
 			currentAmmo = maxCapacity;
 			lastRefillTime = Time.time;
-			reservedPoints = new Dictionary<Transform, ReloadWorker>();
 			OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
 		}
 
@@ -93,35 +91,22 @@ namespace TowerDefense
 
 	public Transform TryReserveLoadingPoint(ReloadWorker worker)
 	{
-		if (loadingPointTransforms == null || loadingPointTransforms.Length == 0)
-		{
-			return null;
-		}
-
-		foreach (var pointTransform in loadingPointTransforms)
-		{
-			if (pointTransform != null && !reservedPoints.ContainsKey(pointTransform))
-			{
-				reservedPoints[pointTransform] = worker;
-				return pointTransform;
-			}
-		}
-
-		return null;
+		return ReloadWorkersManager.TryReserveStoragePoint(this, worker);
 	}
 
 		public void ReleaseLoadingPoint(ReloadWorker worker)
 		{
-			var pointToRelease = reservedPoints.FirstOrDefault(kvp => kvp.Value == worker).Key;
-			if (pointToRelease != null)
-			{
-				reservedPoints.Remove(pointToRelease);
-			}
+			ReloadWorkersManager.ReleaseStoragePoint(worker);
 		}
 
 		public bool IsPointReservedBy(Transform pointTransform, ReloadWorker worker)
 		{
-			return reservedPoints.ContainsKey(pointTransform) && reservedPoints[pointTransform] == worker;
+			return ReloadWorkersManager.IsStoragePointReservedBy(pointTransform, worker);
+		}
+
+		public Transform[] GetLoadingPointTransforms()
+		{
+			return loadingPointTransforms;
 		}
 
 		private void OnDrawGizmosSelected()
@@ -132,7 +117,7 @@ namespace TowerDefense
 				{
 					if (pointTransform != null)
 					{
-						bool isReserved = reservedPoints != null && reservedPoints.ContainsKey(pointTransform);
+						bool isReserved = ReloadWorkersManager.IsStoragePointReserved(pointTransform);
 						Gizmos.color = isReserved ? Color.red : Color.cyan;
 						Gizmos.DrawWireSphere(pointTransform.position, 0.5f);
 					}

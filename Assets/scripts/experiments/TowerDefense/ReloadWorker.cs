@@ -1,4 +1,3 @@
-using System.Linq;
 using dream_lib.src.utils.drawers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,14 +7,14 @@ namespace TowerDefense
 {
 	public class ReloadWorker : MonoBehaviour
 	{
-	public enum WorkerState
-	{
-		WaitingAtStorage,
-		MovingToStorage,
-		LoadingAmmo,
-		MovingToTower,
-		ReloadingTower
-	}
+		public enum WorkerState
+		{
+			WaitingAtStorage,
+			MovingToStorage,
+			LoadingAmmo,
+			MovingToTower,
+			ReloadingTower
+		}
 
 		[Header("Worker Configuration")]
 		[SerializeField]
@@ -46,13 +45,13 @@ namespace TowerDefense
 		[ShowInInspector] [ReadOnly]
 		private Transform reservedLoadingPoint;
 
-	[ShowInInspector]
-	private WorkerState currentState = WorkerState.WaitingAtStorage;
+		[ShowInInspector]
+		private WorkerState currentState = WorkerState.WaitingAtStorage;
 
-	private void Start()
-	{
-		ammoStorage = FindFirstObjectByType<AmmoStorage>();
-		gameManager = FindFirstObjectByType<GameManager>();
+		private void Start()
+		{
+			ammoStorage = FindFirstObjectByType<AmmoStorage>();
+			gameManager = FindFirstObjectByType<GameManager>();
 
 			if(navMeshAgent == null)
 			{
@@ -63,20 +62,20 @@ namespace TowerDefense
 				characterController = GetComponent<CharacterController>();
 			}
 
-		if(navMeshAgent != null)
-		{
-			navMeshAgent.speed = moveSpeed;
-			navMeshAgent.stoppingDistance = stoppingDistance;
-		}
-
-		if(ammoStorage != null)
-		{
-			reservedLoadingPoint = ammoStorage.TryReserveLoadingPoint(this);
-			if(reservedLoadingPoint != null)
+			if(navMeshAgent != null)
 			{
-				SetState(WorkerState.MovingToStorage);
+				navMeshAgent.speed = moveSpeed;
+				navMeshAgent.stoppingDistance = stoppingDistance;
 			}
-		}
+
+			if(ammoStorage != null)
+			{
+				reservedLoadingPoint = ReloadWorkersManager.TryReserveStoragePoint(ammoStorage, this);
+				if(reservedLoadingPoint != null)
+				{
+					SetState(WorkerState.MovingToStorage);
+				}
+			}
 		}
 
 		public WorkerState GetCurrentState()
@@ -101,113 +100,94 @@ namespace TowerDefense
 
 		private void Update()
 		{
-		switch(currentState)
-		{
-			case WorkerState.WaitingAtStorage:
-				HandleWaitingAtStorage();
-				break;
-			case WorkerState.MovingToStorage:
-				HandleMovingToStorage();
-				break;
-			case WorkerState.LoadingAmmo:
-				HandleLoadingAmmo();
-				break;
-			case WorkerState.MovingToTower:
-				HandleMovingToTower();
-				break;
-			case WorkerState.ReloadingTower:
-				HandleReloadingTower();
-				break;
-		}
-		}
-
-	private void HandleWaitingAtStorage()
-	{
-		if(reservedLoadingPoint == null)
-		{
-			reservedLoadingPoint = ammoStorage?.TryReserveLoadingPoint(this);
-			if(reservedLoadingPoint != null)
+			switch(currentState)
 			{
-				SetState(WorkerState.MovingToStorage);
-				return;
+				case WorkerState.WaitingAtStorage:
+					HandleWaitingAtStorage();
+					break;
+				case WorkerState.MovingToStorage:
+					HandleMovingToStorage();
+					break;
+				case WorkerState.LoadingAmmo:
+					HandleLoadingAmmo();
+					break;
+				case WorkerState.MovingToTower:
+					HandleMovingToTower();
+					break;
+				case WorkerState.ReloadingTower:
+					HandleReloadingTower();
+					break;
 			}
 		}
 
-		var towerToReload = FindTowerNeedingReload();
-		if(towerToReload != null && ammoStorage != null && !ammoStorage.IsEmpty)
+		private void HandleWaitingAtStorage()
 		{
-			currentTarget = towerToReload;
-			SetState(WorkerState.LoadingAmmo);
-			loadingStartTime = Time.time;
-		}
-		else if(reservedLoadingPoint != null)
-		{
-			MoveTowards(reservedLoadingPoint.position);
-		}
-	}
-
-		private void HandleMovingToStorage()
-		{
-			if(MoveTowards(reservedLoadingPoint.position))
+			var towerToReload = ReloadWorkersManager.FindAvailableTowerNeedingReload(gameManager, this);
+			if(towerToReload != null && ammoStorage != null && !ammoStorage.IsEmpty)
 			{
+				currentTarget = towerToReload;
+				ReloadWorkersManager.ReserveTowerForService(towerToReload, this);
 				SetState(WorkerState.LoadingAmmo);
 				loadingStartTime = Time.time;
 			}
 		}
 
-	private void HandleLoadingAmmo()
-	{
-		if(Time.time >= loadingStartTime + 1f)
+		private void HandleMovingToStorage()
 		{
-			var clipSize = GetClipSizeForTarget();
-			var ammoTaken = ammoStorage.TakeAmmoUpTo(clipSize);
-
-			if(ammoTaken >= clipSize && currentTarget != null)
+			if(MoveTowards(reservedLoadingPoint.position))
 			{
-				SetState(WorkerState.MovingToTower);
-			}
-			else
-			{
-				currentTarget = null;
 				SetState(WorkerState.WaitingAtStorage);
+				loadingStartTime = Time.time;
 			}
 		}
-	}
 
-	private void HandleMovingToTower()
-	{
-		if(currentTarget == null)
+		private void HandleLoadingAmmo()
 		{
-			SetState(WorkerState.WaitingAtStorage);
-			return;
+			if(Time.time >= loadingStartTime + 1f)
+			{
+				var clipSize = GetClipSizeForTarget();
+				var ammoTaken = ammoStorage.TakeAmmoUpTo(clipSize);
+
+				if(currentTarget != null)
+				{
+					SetState(WorkerState.MovingToTower);
+				}
+				else
+				{
+					currentTarget = null;
+					SetState(WorkerState.WaitingAtStorage);
+				}
+			}
 		}
 
-		var targetPos = currentTarget.transform.position;
-		targetPos -= Vector3.right * 2f;
-
-		if(MoveTowards(targetPos))
+		private void HandleMovingToTower()
 		{
-			SetState(WorkerState.ReloadingTower);
-			reloadStartTime = Time.time;
-		}
-	}
+			if(currentTarget == null)
+			{
+				SetState(WorkerState.WaitingAtStorage);
+				return;
+			}
 
-	private void HandleReloadingTower()
-	{
-		if(currentTarget == null)
+			var targetPos = currentTarget.transform.position;
+			targetPos -= Vector3.right * 2f;
+
+			if(MoveTowards(targetPos))
+			{
+				SetState(WorkerState.ReloadingTower);
+				reloadStartTime = Time.time;
+			}
+		}
+
+		private void HandleReloadingTower()
 		{
-			SetState(WorkerState.WaitingAtStorage);
-			return;
+			if(Time.time >= reloadStartTime + currentTarget.GetReloadTime())
+			{
+				ReloadTower();
+				ReloadWorkersManager.ReleaseTowerFromService(currentTarget);
+				currentTarget = null;
+				SetState(WorkerState.MovingToStorage);
+			}
 		}
-
-		if(Time.time >= reloadStartTime + reloadSpeed)
-		{
-			ReloadTower();
-			currentTarget = null;
-			SetState(WorkerState.WaitingAtStorage);
-		}
-	}
-
 
 		private bool MoveTowards(Vector3 targetPosition)
 		{
@@ -232,39 +212,10 @@ namespace TowerDefense
 			return false;
 		}
 
-
 		private void SetState(WorkerState newState)
 		{
 			currentState = newState;
 		}
-
-	private TowerUnit FindTowerNeedingReload()
-	{
-		if(gameManager == null)
-		{
-			return null;
-		}
-
-		var towers = gameManager.GetTowers();
-		var availableTowers = towers.Where(tower =>
-			tower != null &&
-			tower.GetCurrentAmmo() == 0 &&
-			!tower.IsReloading() &&
-			!IsTowerBeingServiced(tower)).ToList();
-
-		return availableTowers.FirstOrDefault();
-	}
-
-	private bool IsTowerBeingServiced(TowerUnit tower)
-	{
-		var allWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
-		return allWorkers.Any(worker => 
-			worker != this && 
-			worker.currentTarget == tower &&
-			(worker.currentState == WorkerState.LoadingAmmo ||
-			 worker.currentState == WorkerState.MovingToTower ||
-			 worker.currentState == WorkerState.ReloadingTower));
-	}
 
 		private int GetClipSizeForTarget()
 		{
@@ -288,23 +239,23 @@ namespace TowerDefense
 
 		private void ReleaseLoadingPoint()
 		{
-			if(ammoStorage != null && reservedLoadingPoint != null)
+			if(reservedLoadingPoint != null)
 			{
-				ammoStorage.ReleaseLoadingPoint(this);
+				ReloadWorkersManager.ReleaseStoragePoint(this);
 				reservedLoadingPoint = null;
 			}
 		}
 
 		private void OnDestroy()
 		{
-			ReleaseLoadingPoint();
+			ReloadWorkersManager.CleanupWorkerReservations(this);
 		}
 
 		private void OnDrawGizmosSelected()
 		{
 			Gizmos.color = Color.blue;
 			Gizmos.DrawWireSphere(transform.position, 1f);
-			
+
 			DebugDrawUtils.DrawText(currentState.ToString(), transform.position + Vector3.up * 1.5f, 0.02f);
 
 			if(currentTarget != null)

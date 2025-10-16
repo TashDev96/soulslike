@@ -18,6 +18,7 @@ namespace TowerDefense
         
         [Header("UI References")]
         [SerializeField] private GameUI gameUI;
+        [SerializeField] private UiManager uiManager;
 
         private int currentMoney;
         private ZombieManager zombieManager;
@@ -43,6 +44,16 @@ namespace TowerDefense
             if (gameUI != null)
             {
                 gameUI.Initialize(this);
+            }
+
+            if (uiManager == null)
+            {
+                uiManager = FindFirstObjectByType<UiManager>();
+                if (uiManager == null)
+                {
+                    var uiManagerGO = new GameObject("UiManager");
+                    uiManager = uiManagerGO.AddComponent<UiManager>();
+                }
             }
             
             SetupEventListeners();
@@ -70,12 +81,30 @@ namespace TowerDefense
                 Vector3 worldPosition;
                 if (GetMouseWorldPosition(out worldPosition))
                 {
-                    if (IsValidTowerPlacement(worldPosition))
+                    if (IsValidTowerPlacement(worldPosition) && !IsClickingOnTower())
                     {
                         PlaceTower(worldPosition);
                     }
                 }
             }
+        }
+
+        private bool IsClickingOnTower()
+        {
+            if (playerCamera == null) return false;
+            
+            LayerMask characterLayer = 1 << LayerMask.NameToLayer("Character");
+            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, characterLayer))
+            {
+                TowerUnit tower = hit.collider.GetComponent<TowerUnit>();
+                if (tower == null)
+                {
+                    tower = hit.collider.GetComponentInParent<TowerUnit>();
+                }
+                return tower != null;
+            }
+            return false;
         }
 
         private bool GetMouseWorldPosition(out Vector3 worldPosition)
@@ -137,12 +166,10 @@ namespace TowerDefense
         private void HandleZombieDied(ZombieUnit zombie)
         {
             AddMoney(zombie.KillBonusValue);
-            Debug.Log($"Zombie killed! Bonus money: {zombie.KillBonusValue}");
         }
 
         private void HandleZombieReachedGoal(ZombieUnit zombie)
         {
-            Debug.Log("Zombie reached the goal! No bonus money.");
         }
 
         public void AddMoney(int amount)

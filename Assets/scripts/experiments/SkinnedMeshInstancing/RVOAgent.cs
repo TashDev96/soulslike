@@ -16,7 +16,7 @@ namespace RVO
 		private readonly float _gravityForce = 9.81f;
 		private readonly float _groundCheckDistance = 2f;
 		private readonly float _groundCheckOffset = 0.1f;
-		private readonly LayerMask _groundLayerMask = -1;
+		private static readonly LayerMask _groundLayerMask = LayerMask.GetMask("LevelGeometry");
 		private readonly float _capsuleHeight = 2f;
 		private readonly float _radius = 0.43f;
 		private readonly float _maxSpeed = 2.5f;
@@ -55,7 +55,6 @@ namespace RVO
 			_animationTime = Random.value * meshSequence.GetClipDuration(_currentAnimationClip);
 			_movementSpeed = 0f;
 
-			SetRandomScale();
 			_isMoving = false;
 		}
 
@@ -104,11 +103,9 @@ namespace RVO
 			var position2D = simulator.GetAgentPosition(AgentId);
 			var distanceToTarget = math.lengthsq(position2D - goal);
 
-
 			if(PathFindManager.Instance != null && _isGrounded)
 			{
 				SetPreferredVelocityFromFlowField(simulator);
-			
 			}
 			else
 			{
@@ -157,8 +154,12 @@ namespace RVO
 
 			if(_isMoving)
 			{
-				var movementDirection = new Vector3(movementDelta.x, 0, movementDelta.z).normalized;
-				_rotation = Quaternion.Lerp(_rotation, Quaternion.LookRotation(movementDirection, Vector3.up), deltaTime * 10f);
+				var movementDirection = new Vector3(movementDelta.x, 0, movementDelta.z);
+				if(movementDirection.sqrMagnitude > 0.001f)
+				{
+					movementDirection = movementDirection.normalized;
+					_rotation = Quaternion.Lerp(_rotation, Quaternion.LookRotation(movementDirection, Vector3.up), deltaTime * 10f);
+				}
 			}
 
 			_position = newPosition;
@@ -232,6 +233,30 @@ namespace RVO
 			}
 		}
 
+		public static float2 MoveTowards(float2 current, float2 target, float maxDistanceDelta)
+		{
+			var toTarget = target - current;
+			var distance = math.length(toTarget);
+
+			if(distance <= maxDistanceDelta)
+			{
+				return target;
+			}
+
+			var direction = toTarget / distance;
+			var step = direction * maxDistanceDelta;
+
+			return current + step;
+		}
+
+		public void UpdateRadialForce()
+		{
+			if(_scale > 1)
+			{
+				PathFindManager.Instance.SetDirectionalForce(Position + _lastDirection * _scale, _lastDirection, _radius * _scale * 2f, 1, 0.8f);
+			}
+		}
+
 		private void SetRandomScale()
 		{
 			_scale = Random.value > 0.9f ? 1.5f : 1f;
@@ -255,42 +280,27 @@ namespace RVO
 		private void SetPreferredVelocityFromFlowField(Simulator simulator)
 		{
 			var flowDirection = PathFindManager.Instance.SampleFlowDirection(_position, _scale <= 1f);
+
+			//var flowDirection = (_targetPosition-_position).normalized;
 			var moveDirection = new Vector3(flowDirection.x, 0, flowDirection.y);
 			var distanceToTarget = Vector3.Distance(_position, _targetPosition);
-			
 
 			float2 preferredVelocity;
 			if(distanceToTarget > StoppingDistance && moveDirection.magnitude > 0.01f)
 			{
-				preferredVelocity = new float2(moveDirection.x, moveDirection.z) * _maxSpeed/_scale;
+				preferredVelocity = new float2(moveDirection.x, moveDirection.z) * _maxSpeed / _scale;
 				preferredVelocity += (float2)Random.insideUnitCircle * 0.00001f;
 			}
 			else
 			{
 				preferredVelocity = float2.zero;
 			}
-			_lastVelocity = MoveTowards(_lastVelocity, math.normalizesafe(preferredVelocity), Time.deltaTime*2f);
+			_lastVelocity = MoveTowards(_lastVelocity, math.normalizesafe(preferredVelocity), Time.deltaTime * 2f);
 			_lastDirection = new Vector3(_lastVelocity.x, 0, _lastVelocity.y);
 			var flowVector = new Vector3(_lastVelocity.x, 0, _lastVelocity.y);
 			var headPos = _position + Vector3.up * _scale;
 			Debug.DrawLine(headPos, headPos + flowVector);
 			simulator.SetAgentPrefVelocity(AgentId, _lastVelocity);
-		}
-		
-		public static float2 MoveTowards(float2 current, float2 target, float maxDistanceDelta)
-		{
-			var toTarget = target - current;
-			float distance = math.length(toTarget); 
-
-			if (distance <= maxDistanceDelta)
-			{
-				return target; 
-			}
-
-			var direction = toTarget / distance; 
-			var step = direction * maxDistanceDelta;
-
-			return current + step;
 		}
 
 		private void SetPreferredVelocities(Simulator simulator, float2 newGoal)
@@ -304,14 +314,6 @@ namespace RVO
 			}
 
 			simulator.SetAgentPrefVelocity(AgentId, goalVector);
-		}
-		
-		public void UpdateRadialForce()
-		{
-			if(_scale > 1)
-			{
-				PathFindManager.Instance.SetDirectionalForce(Position+_lastDirection*_scale, _lastDirection, _radius*_scale*2f, 1,0.8f);
-			}
 		}
 	}
 }

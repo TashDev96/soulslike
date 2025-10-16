@@ -8,6 +8,8 @@ namespace TowerDefense
 	public class TowerConfig
 	{
 		[SerializeField]
+		private string _towerName = "Tower";
+		[SerializeField]
 		private AttackType _attackType = AttackType.Single;
 		[SerializeField]
 		private int _clipSize = 5;
@@ -30,6 +32,7 @@ namespace TowerDefense
 		[SerializeField]
 		private float _damageDelay = 0.05f;
 
+		public string TowerName => _towerName;
 		public AttackType AttackType => _attackType;
 		public int ClipSize => _clipSize;
 		public int BulletsPerShot => _bulletsPerShot;

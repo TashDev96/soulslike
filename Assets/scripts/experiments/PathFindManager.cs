@@ -327,7 +327,7 @@ namespace experiments
 		{
 			var raycastStart = worldPosition + Vector3.up * _raycastHeight;
 			var radius = Mathf.Max(_worldBounds.extents.x, _worldBounds.extents.z) / _gridResolution * _sampleWallsSphereRadius;
-			if(Physics.SphereCast(raycastStart, radius, Vector3.down, out var groundHit, _raycastHeight * 2f, _groundLayerMask))
+			if(Physics.SphereCast(raycastStart, radius, Vector3.down, out var groundHit, _raycastHeight * 2f, _groundLayerMask, QueryTriggerInteraction.Ignore))
 			{
 				var bottomPoint = raycastStart + Vector3.down * groundHit.distance + Vector3.down * radius;
 				var delta = bottomPoint.y - _walkableAltitude;

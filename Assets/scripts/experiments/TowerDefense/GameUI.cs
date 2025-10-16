@@ -62,7 +62,6 @@ namespace TowerDefense
             {
                 if (waveText != null)
                 {
-                    waveText.text = $"Wave: {zombieManager.GetCurrentWave()}";
                 }
                 
                 if (zombieCountText != null)

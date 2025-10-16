@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using experiments;
+using game.gameplay_core.characters.ai.utility.considerations.utils;
 using RVO;
 using SkinnedMeshInstancing;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
@@ -11,35 +12,42 @@ using Random = UnityEngine.Random;
 
 namespace TowerDefense
 {
+	[System.Serializable]
+	public class ZombieConfig
+	{
+		[Header("Zombie Rendering")]
+		public BakedMeshSequence zombieMeshSequence;
+		public Material zombieMaterial;
+		public int renderLayer;
+
+		[Header("Zombie Stats")]
+		public float zombieHealth = 100f;
+		public int zombieHitValue = 10;
+		public int zombieKillValue = 50;
+	}
+
 	public class ZombieManager : MonoBehaviour
 	{
-		[Header("Zombie Configuration")]
 		[SerializeField]
-		private int maxZombies = 100;
-		[SerializeField]
-		private BakedMeshSequence zombieMeshSequence;
-		[SerializeField]
-		private Material zombieMaterial;
-		[SerializeField]
-		private int renderLayer;
+		private ZombieConfig config;
 
 		[Header("Spawn Settings")]
 		[SerializeField]
-		private List<Transform> spawnPoints = new();
+		private int maxZombies = 100;
+		[SerializeField]
+		private Collider spawnBoundingBox;
 		[SerializeField]
 		private float spawnInterval = 2f;
-
-		[Header("Zombie Stats")]
 		[SerializeField]
-		private float zombieHealth = 100f;
+		private int spawnGridSize = 10;
 		[SerializeField]
-		private int zombieHitValue = 10;
-		[SerializeField]
-		private int zombieKillValue = 50;
+		private float respawnDelay = 3f;
 
 		[Header("Goal Settings")]
 		[SerializeField]
 		private Transform goalTransform;
+
+		public PerlinConfig ZombieDensityOverTime;
 
 		public Action<ZombieUnit> OnZombieDied;
 		public Action<ZombieUnit> OnZombieReachedGoal;
@@ -48,9 +56,9 @@ namespace TowerDefense
 		private Simulator simulator;
 		private IMeshInstanceRenderer meshRenderer;
 		private float2 _goalPos;
-		private float lastSpawnTime;
-		private readonly int currentWave = 1;
-		private int zombiesSpawnedThisWave;
+		private float nextSpawnTime;
+		private int currentSpawnIndex;
+		private List<int> shuffledSpawnIndices;
 
 		private void InitializeSimulator()
 		{
@@ -72,30 +80,50 @@ namespace TowerDefense
 			}
 		}
 
+		private void InitializeSpawnOrder()
+		{
+			var totalPositions = spawnGridSize * spawnGridSize;
+			shuffledSpawnIndices = new List<int>();
+
+			for(var i = 0; i < totalPositions; i++)
+			{
+				shuffledSpawnIndices.Add(i);
+			}
+
+			for(var i = 0; i < shuffledSpawnIndices.Count; i++)
+			{
+				var temp = shuffledSpawnIndices[i];
+				var randomIndex = Random.Range(i, shuffledSpawnIndices.Count);
+				shuffledSpawnIndices[i] = shuffledSpawnIndices[randomIndex];
+				shuffledSpawnIndices[randomIndex] = temp;
+			}
+		}
+
 		private void Start()
 		{
 			InitializeSimulator();
 			InitializeMeshRenderer();
+			InitializeSpawnOrder();
 			UpdateGoal();
 		}
 
 		public void SpawnZombie()
 		{
-			if(simulator == null || zombieMeshSequence == null || zombieMaterial == null)
+			if(simulator == null || config.zombieMeshSequence == null || config.zombieMaterial == null)
 			{
 				Debug.LogError("ZombieManager: Missing required components for spawning zombies.");
 				return;
 			}
 
-			if(spawnPoints == null || spawnPoints.Count == 0)
+			if(spawnBoundingBox == null)
 			{
-				Debug.LogError("ZombieManager: No spawn points defined. Please assign spawn point transforms.");
+				Debug.LogError("ZombieManager: No spawn bounding box defined. Please assign a trigger collider.");
 				return;
 			}
 
-			var spawnPosition = GetRandomSpawnPosition();
-			var zombie = new ZombieUnit(spawnPosition, zombieMeshSequence, zombieMaterial,
-				zombieHealth, zombieHitValue, zombieKillValue, renderLayer);
+			var spawnPosition = GetNextSpawnPosition();
+			var zombie = new ZombieUnit(spawnPosition, config.zombieMeshSequence, config.zombieMaterial,
+				config.zombieHealth, config.zombieHitValue, config.zombieKillValue, config.renderLayer);
 
 			zombie.Initialize(simulator);
 			zombie.SetTarget(new Vector3(_goalPos.x, 0, _goalPos.y));
@@ -123,11 +151,6 @@ namespace TowerDefense
 		public int GetAliveZombieCount()
 		{
 			return zombies.Count(z => !z.IsDead);
-		}
-
-		public int GetCurrentWave()
-		{
-			return currentWave;
 		}
 
 		private void Update()
@@ -216,11 +239,12 @@ namespace TowerDefense
 
 		private void HandleSpawning()
 		{
-			if(Time.time >= lastSpawnTime + spawnInterval && zombies.Count < maxZombies)
+			
+
+			if(Time.time >= nextSpawnTime && zombies.Count < maxZombies)
 			{
 				SpawnZombie();
-				lastSpawnTime = Time.time;
-				zombiesSpawnedThisWave++;
+				nextSpawnTime = Time.time + spawnInterval * ZombieDensityOverTime.Evaluate(Time.time);
 			}
 		}
 
@@ -256,23 +280,35 @@ namespace TowerDefense
 			}
 		}
 
-		private Vector3 GetRandomSpawnPosition()
+		private Vector3 GetNextSpawnPosition()
 		{
-			if(spawnPoints == null || spawnPoints.Count == 0)
+			if(spawnBoundingBox == null || shuffledSpawnIndices == null || shuffledSpawnIndices.Count == 0)
 			{
 				return Vector3.zero;
 			}
 
-			var randomIndex = Random.Range(0, spawnPoints.Count);
-			var spawnPoint = spawnPoints[randomIndex];
+			var bounds = spawnBoundingBox.bounds;
+			var totalPositions = spawnGridSize * spawnGridSize;
 
-			if(spawnPoint == null)
+			var shuffledIndex = shuffledSpawnIndices[currentSpawnIndex];
+			var gridX = shuffledIndex % spawnGridSize;
+			var gridZ = shuffledIndex / spawnGridSize;
+
+			var normalizedX = (float)gridX / (spawnGridSize - 1);
+			var normalizedZ = (float)gridZ / (spawnGridSize - 1);
+
+			var worldX = bounds.min.x + normalizedX * bounds.size.x;
+			var worldZ = bounds.min.z + normalizedZ * bounds.size.z;
+			var worldY = bounds.center.y;
+
+			currentSpawnIndex = (currentSpawnIndex + 1) % totalPositions;
+
+			if(currentSpawnIndex == 0)
 			{
-				Debug.LogWarning($"ZombieManager: Spawn point at index {randomIndex} is null.");
-				return Vector3.zero;
+				InitializeSpawnOrder();
 			}
 
-			return spawnPoint.position;
+			return new Vector3(worldX, worldY, worldZ);
 		}
 
 		private void OnDestroy()
@@ -283,21 +319,35 @@ namespace TowerDefense
 
 		private void OnDrawGizmosSelected()
 		{
-			if(spawnPoints != null)
+			if(spawnBoundingBox != null)
 			{
 				Gizmos.color = Color.blue;
-				foreach(var spawnPoint in spawnPoints)
+				Gizmos.DrawWireCube(spawnBoundingBox.bounds.center, spawnBoundingBox.bounds.size);
+
+				Gizmos.color = Color.cyan;
+				var bounds = spawnBoundingBox.bounds;
+				for(var x = 0; x < spawnGridSize; x++)
 				{
-					if(spawnPoint != null)
+					for(var z = 0; z < spawnGridSize; z++)
 					{
-						Gizmos.DrawWireSphere(spawnPoint.position, 0.5f);
+						var normalizedX = (float)x / (spawnGridSize - 1);
+						var normalizedZ = (float)z / (spawnGridSize - 1);
+
+						var worldX = bounds.min.x + normalizedX * bounds.size.x;
+						var worldZ = bounds.min.z + normalizedZ * bounds.size.z;
+						var worldY = bounds.center.y;
+
+						Gizmos.DrawWireSphere(new Vector3(worldX, worldY, worldZ), 0.2f);
 					}
 				}
 			}
 
-			var goal = goalTransform.position;
-			Gizmos.color = Color.red;
-			Gizmos.DrawWireSphere(goal, 1f);
+			if(goalTransform != null)
+			{
+				var goal = goalTransform.position;
+				Gizmos.color = Color.red;
+				Gizmos.DrawWireSphere(goal, 1f);
+			}
 		}
 	}
 }

@@ -329,43 +329,45 @@ namespace TowerDefense
 
 			TargetingManager.TempShotgunTargets.Sort((a, b) => a.distanceSq.CompareTo(b.distanceSq));
 
-			var bulletsToFire = Mathf.Min(config.BulletsPerShot, TargetingManager.TempShotgunTargets.Count);
-			var selectedTargets = new List<ZombieUnit>();
-
-			for(var i = 0; i < bulletsToFire; i++)
+			var availableTargets = new List<ZombieUnit>();
+			for(var i = 0; i < TargetingManager.TempShotgunTargets.Count; i++)
 			{
-				selectedTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
-			}
-
-			var bulletDistribution = new int[selectedTargets.Count];
-			for(var i = 0; i < config.BulletsPerShot; i++)
-			{
-				if(selectedTargets.Count > 0)
-				{
-					var randomIndex = Random.Range(0, selectedTargets.Count);
-					bulletDistribution[randomIndex]++;
-				}
+				availableTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
 			}
 
 			var hitTargetPositions = new List<Vector3>();
 
-			for(var i = 0; i < selectedTargets.Count; i++)
+			for(var bulletIndex = 0; bulletIndex < config.BulletsPerShot; bulletIndex++)
 			{
-				var zombie = selectedTargets[i];
-				var bulletsHit = bulletDistribution[i];
-
-				if(bulletsHit > 0)
+				var validTargets = new List<ZombieUnit>();
+				for(var i = 0; i < availableTargets.Count; i++)
 				{
-					var totalDamage = damage * bulletsHit;
-					zombie.TakeDamage(totalDamage, config.DamageDelay, this);
-					OnAttackHit?.Invoke(this, zombie, totalDamage);
-
-					if(_gameManager != null)
+					var zombie = availableTargets[i];
+					if(!zombie.WouldDieFromDelayedDamage())
 					{
-						_gameManager.OnZombieHit(zombie, totalDamage);
+						validTargets.Add(zombie);
 					}
+				}
 
-					hitTargetPositions.Add(zombie.Position);
+				if(validTargets.Count == 0)
+				{
+					break;
+				}
+
+				var randomIndex = Random.Range(0, validTargets.Count);
+				var targetZombie = validTargets[randomIndex];
+
+				targetZombie.TakeDamage(damage, config.DamageDelay, this);
+				OnAttackHit?.Invoke(this, targetZombie, damage);
+
+				if(_gameManager != null)
+				{
+					_gameManager.OnZombieHit(targetZombie, damage);
+				}
+
+				if(!hitTargetPositions.Contains(targetZombie.Position))
+				{
+					hitTargetPositions.Add(targetZombie.Position);
 				}
 			}
 
