@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TowerDefense
 {
@@ -12,12 +13,17 @@ namespace TowerDefense
         [Header("Tower Prefab")]
         [SerializeField] private GameObject towerPrefab;
         
+        [Header("Ammo System")]
+        [SerializeField] private AmmoStorage existingAmmoStorage;
+        
         [Header("UI References")]
         [SerializeField] private GameUI gameUI;
 
         private int currentMoney;
         private ZombieManager zombieManager;
         private List<TowerUnit> towers = new List<TowerUnit>();
+        private List<ReloadWorker> reloadWorkers = new List<ReloadWorker>();
+        private AmmoStorage ammoStorage;
         private Camera playerCamera;
 
         public System.Action<int> OnMoneyChanged;
@@ -26,7 +32,13 @@ namespace TowerDefense
         {
             currentMoney = startingMoney;
             zombieManager = FindFirstObjectByType<ZombieManager>();
+            towers = GameObject.FindObjectsByType<TowerUnit>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID).ToList();
+           Debug.LogError(towers.Count);
             playerCamera = Camera.main;
+            
+            TargetingManager.Initialize(zombieManager);
+            
+            InitializeAmmoSystem();
             
             if (gameUI != null)
             {
@@ -167,7 +179,59 @@ namespace TowerDefense
 
         public List<TowerUnit> GetTowers()
         {
-            return new List<TowerUnit>(towers);
+	        return towers;
+        }
+
+        public AmmoStorage GetAmmoStorage()
+        {
+            return ammoStorage;
+        }
+
+        public List<ReloadWorker> GetReloadWorkers()
+        {
+            return new List<ReloadWorker>(reloadWorkers);
+        }
+
+        private void InitializeAmmoSystem()
+        {
+            if (existingAmmoStorage != null)
+            {
+                ammoStorage = existingAmmoStorage;
+            }
+            else
+            {
+                ammoStorage = FindFirstObjectByType<AmmoStorage>();
+                if (ammoStorage == null)
+                {
+                    Debug.LogWarning("GameManager: No AmmoStorage found in scene and none assigned!");
+                }
+            }
+
+            var existingReloadWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
+            if (existingReloadWorkers != null && existingReloadWorkers.Length > 0)
+            {
+                reloadWorkers.Clear();
+                foreach (var worker in existingReloadWorkers)
+                {
+                    if (worker != null)
+                    {
+                        reloadWorkers.Add(worker);
+                    }
+                }
+            }
+            else
+            {
+                var foundWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
+                reloadWorkers.Clear();
+                reloadWorkers.AddRange(foundWorkers);
+                
+                if (reloadWorkers.Count == 0)
+                {
+                    Debug.LogWarning("GameManager: No ReloadWorkers found in scene and none assigned!");
+                }
+            }
+            
+            Debug.Log($"GameManager: Initialized ammo system with {reloadWorkers.Count} workers and {(ammoStorage != null ? "1" : "0")} storage");
         }
 
         private void OnDestroy()

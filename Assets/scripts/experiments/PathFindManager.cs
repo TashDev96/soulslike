@@ -336,7 +336,7 @@ namespace experiments
 					return -1f;
 				}
 				var speed = 1 / (1 + delta * _closeToWallsPenalty);
-				if(speed > 0f && speed < 0.999f)
+				if(_showDebugVisualization && speed > 0f && speed < 0.999f)
 				{
 					DebugDrawUtils.DrawWireCapsulePersistent(bottomPoint + Vector3.up * radius, 1f, radius, Color.Lerp(Color.green, Color.red, speed), 5f);
 				}

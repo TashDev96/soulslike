@@ -28,8 +28,6 @@ namespace TowerDefense
 		private List<Transform> spawnPoints = new();
 		[SerializeField]
 		private float spawnInterval = 2f;
-		[SerializeField]
-		private int zombiesPerWave = 10;
 
 		[Header("Zombie Stats")]
 		[SerializeField]
@@ -51,7 +49,7 @@ namespace TowerDefense
 		private IMeshInstanceRenderer meshRenderer;
 		private float2 _goalPos;
 		private float lastSpawnTime;
-		private int currentWave = 1;
+		private readonly int currentWave = 1;
 		private int zombiesSpawnedThisWave;
 
 		private void InitializeSimulator()
@@ -177,6 +175,8 @@ namespace TowerDefense
 			{
 				var zombie = zombies[i];
 
+				zombie.UpdateDelayedDamage();
+
 				if(zombie.IsDead)
 				{
 					RemoveZombie(i);
@@ -216,31 +216,12 @@ namespace TowerDefense
 
 		private void HandleSpawning()
 		{
-			if(Time.time >= lastSpawnTime + spawnInterval &&
-			   zombiesSpawnedThisWave < zombiesPerWave &&
-			   zombies.Count < maxZombies)
+			if(Time.time >= lastSpawnTime + spawnInterval && zombies.Count < maxZombies)
 			{
 				SpawnZombie();
 				lastSpawnTime = Time.time;
 				zombiesSpawnedThisWave++;
-
-				if(zombiesSpawnedThisWave >= zombiesPerWave)
-				{
-					StartNextWave();
-				}
 			}
-		}
-
-		private void StartNextWave()
-		{
-			currentWave++;
-			zombiesSpawnedThisWave = 0;
-
-			zombieHealth += 20f;
-			zombieHitValue += 2;
-			zombieKillValue += 10;
-
-			Debug.Log($"Wave {currentWave} started! Zombie health: {zombieHealth}");
 		}
 
 		private void RenderZombies()
@@ -260,6 +241,7 @@ namespace TowerDefense
 
 		private void HandleZombieDeath(ZombieUnit zombie)
 		{
+			TargetingManager.OnZombieDied(zombie);
 			OnZombieDied?.Invoke(zombie);
 		}
 
