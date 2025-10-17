@@ -76,32 +76,7 @@ namespace TowerDefense
 			_currentUpgradeLevel = level;
 		}
 
-	private void CreateShotgunLineRenderers()
-	{
-		if(config == null || attackLineRenderer == null)
-		{
-			return;
-		}
-
-		if(config.AttackType == AttackType.Shotgun)
-		{
-			var bulletsPerShot = config.BulletsPerShot;
-			shotgunLineRenderers = new LineRenderer[bulletsPerShot];
-
-			for(var i = 0; i < bulletsPerShot; i++)
-			{
-				var clonedGameObject = Instantiate(attackLineRenderer.gameObject, attackLineRenderer.transform.parent);
-				clonedGameObject.name = $"ShotgunLineRenderer_{i}";
-				
-				var clonedLineRenderer = clonedGameObject.GetComponent<LineRenderer>();
-				clonedLineRenderer.enabled = false;
-				
-				shotgunLineRenderers[i] = clonedLineRenderer;
-			}
-		}
-	}
-
-	public float GetAttackRange()
+		public float GetAttackRange()
 		{
 			return config?.AttackRange ?? 5f;
 		}
@@ -168,7 +143,6 @@ namespace TowerDefense
 			return totalDamage;
 		}
 
-
 		public int GetCurrentUpgradeLevel()
 		{
 			return _currentUpgradeLevel;
@@ -179,26 +153,50 @@ namespace TowerDefense
 			return config;
 		}
 
-	private void Update()
-	{
-		if(_currentAmmo <= 0 && _currentTarget != null)
+		private void CreateShotgunLineRenderers()
 		{
-			TargetingManager.ClearTowerTarget(this);
-			_currentTarget = null;
-		}
-
-		if(CanAttack() && _currentAmmo > 0)
-		{
-			var target = FindNearestZombie();
-
-			if(target != null)
+			if(config == null || attackLineRenderer == null)
 			{
-				_currentTarget = target;
-				AttackTarget(target);
+				return;
+			}
+
+			if(config.AttackType == AttackType.Shotgun)
+			{
+				var bulletsPerShot = config.BulletsPerShot;
+				shotgunLineRenderers = new LineRenderer[bulletsPerShot];
+
+				for(var i = 0; i < bulletsPerShot; i++)
+				{
+					var clonedGameObject = Instantiate(attackLineRenderer.gameObject, attackLineRenderer.transform.parent);
+					clonedGameObject.name = $"ShotgunLineRenderer_{i}";
+
+					var clonedLineRenderer = clonedGameObject.GetComponent<LineRenderer>();
+					clonedLineRenderer.enabled = false;
+
+					shotgunLineRenderers[i] = clonedLineRenderer;
+				}
 			}
 		}
-		
-	}
+
+		private void Update()
+		{
+			if(_currentAmmo <= 0 && _currentTarget != null)
+			{
+				TargetingManager.ClearTowerTarget(this);
+				_currentTarget = null;
+			}
+
+			if(CanAttack() && _currentAmmo > 0)
+			{
+				var target = FindNearestZombie();
+
+				if(target != null)
+				{
+					_currentTarget = target;
+					AttackTarget(target);
+				}
+			}
+		}
 
 		private bool CanAttack()
 		{
@@ -222,17 +220,17 @@ namespace TowerDefense
 			return _currentAmmo <= 0;
 		}
 
-	private void StartReload()
-	{
-		_isReloading = true;
-		_lastReloadTime = Time.time;
-		
-		if(_currentTarget != null)
+		private void StartReload()
 		{
-			TargetingManager.ClearTowerTarget(this);
-			_currentTarget = null;
+			_isReloading = true;
+			_lastReloadTime = Time.time;
+
+			if(_currentTarget != null)
+			{
+				TargetingManager.ClearTowerTarget(this);
+				_currentTarget = null;
+			}
 		}
-	}
 
 		private ZombieUnit FindNearestZombie()
 		{
@@ -282,98 +280,98 @@ namespace TowerDefense
 			ShowAttackLine(target.Position);
 		}
 
-	private void AttackShotgun(ZombieUnit primaryTarget, float damage)
-	{
-		var zombies = TargetingManager.GetAliveZombies();
-		var towerPos = transform.position;
-		var extendedRange = config.AttackRange + 2f;
-		var extendedRangeSq = extendedRange * extendedRange;
-		var directionToPrimary = (primaryTarget.Position - towerPos).normalized;
-		var shotgunAngle = config.ShotgunAngle;
-
-		var damagePerBullet = damage / config.BulletsPerShot;
-
-		TargetingManager.TempShotgunTargets.Clear();
-
-		for(var i = 0; i < zombies.Count; i++)
+		private void AttackShotgun(ZombieUnit primaryTarget, float damage)
 		{
-			var zombie = zombies[i];
+			var zombies = TargetingManager.GetAliveZombies();
+			var towerPos = transform.position;
+			var extendedRange = config.AttackRange + 2f;
+			var extendedRangeSq = extendedRange * extendedRange;
+			var directionToPrimary = (primaryTarget.Position - towerPos).normalized;
+			var shotgunAngle = config.ShotgunAngle;
 
-			if(zombie.WouldDieFromDelayedDamage())
+			var damagePerBullet = damage / config.BulletsPerShot;
+
+			TargetingManager.TempShotgunTargets.Clear();
+
+			for(var i = 0; i < zombies.Count; i++)
 			{
-				continue;
-			}
+				var zombie = zombies[i];
 
-			var zombiePos = zombie.Position;
-
-			if(Mathf.Abs(zombiePos.x - towerPos.x) > extendedRange)
-			{
-				continue;
-			}
-
-			var towerToZombie = zombiePos - towerPos;
-			var distanceSq = towerToZombie.sqrMagnitude;
-
-			if(distanceSq > extendedRangeSq)
-			{
-				continue;
-			}
-
-			var directionToZombie = towerToZombie.normalized;
-			var angle = Vector3.Angle(directionToPrimary, directionToZombie);
-
-			if(angle <= shotgunAngle * 0.5f)
-			{
-				TargetingManager.TempShotgunTargets.Add((zombie, distanceSq));
-			}
-		}
-
-		TargetingManager.TempShotgunTargets.Sort((a, b) => a.distanceSq.CompareTo(b.distanceSq));
-
-		var availableTargets = new List<ZombieUnit>();
-		for(var i = 0; i < TargetingManager.TempShotgunTargets.Count; i++)
-		{
-			availableTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
-		}
-
-		var hitTargetPositions = new List<Vector3>();
-
-		for(var bulletIndex = 0; bulletIndex < config.BulletsPerShot; bulletIndex++)
-		{
-			var validTargets = new List<ZombieUnit>();
-			for(var i = 0; i < availableTargets.Count; i++)
-			{
-				var zombie = availableTargets[i];
-				if(!zombie.WouldDieFromDelayedDamage())
+				if(zombie.WouldDieFromDelayedDamage())
 				{
-					validTargets.Add(zombie);
+					continue;
+				}
+
+				var zombiePos = zombie.Position;
+
+				if(Mathf.Abs(zombiePos.x - towerPos.x) > extendedRange)
+				{
+					continue;
+				}
+
+				var towerToZombie = zombiePos - towerPos;
+				var distanceSq = towerToZombie.sqrMagnitude;
+
+				if(distanceSq > extendedRangeSq)
+				{
+					continue;
+				}
+
+				var directionToZombie = towerToZombie.normalized;
+				var angle = Vector3.Angle(directionToPrimary, directionToZombie);
+
+				if(angle <= shotgunAngle * 0.5f)
+				{
+					TargetingManager.TempShotgunTargets.Add((zombie, distanceSq));
 				}
 			}
 
-			if(validTargets.Count == 0)
+			TargetingManager.TempShotgunTargets.Sort((a, b) => a.distanceSq.CompareTo(b.distanceSq));
+
+			var availableTargets = new List<ZombieUnit>();
+			for(var i = 0; i < TargetingManager.TempShotgunTargets.Count; i++)
 			{
-				break;
+				availableTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
 			}
 
-			var randomIndex = Random.Range(0, validTargets.Count);
-			var targetZombie = validTargets[randomIndex];
+			var hitTargetPositions = new List<Vector3>();
 
-			targetZombie.TakeDamage(damagePerBullet, config.DamageDelay, this);
-			OnAttackHit?.Invoke(this, targetZombie, damagePerBullet);
-
-			if(_gameManager != null)
+			for(var bulletIndex = 0; bulletIndex < config.BulletsPerShot; bulletIndex++)
 			{
-				_gameManager.OnZombieHit(targetZombie, damagePerBullet);
+				var validTargets = new List<ZombieUnit>();
+				for(var i = 0; i < availableTargets.Count; i++)
+				{
+					var zombie = availableTargets[i];
+					if(!zombie.WouldDieFromDelayedDamage())
+					{
+						validTargets.Add(zombie);
+					}
+				}
+
+				if(validTargets.Count == 0)
+				{
+					break;
+				}
+
+				var randomIndex = Random.Range(0, validTargets.Count);
+				var targetZombie = validTargets[randomIndex];
+
+				targetZombie.TakeDamage(damagePerBullet, config.DamageDelay, this);
+				OnAttackHit?.Invoke(this, targetZombie, damagePerBullet);
+
+				if(_gameManager != null)
+				{
+					_gameManager.OnZombieHit(targetZombie, damagePerBullet);
+				}
+
+				if(!hitTargetPositions.Contains(targetZombie.Position))
+				{
+					hitTargetPositions.Add(targetZombie.Position);
+				}
 			}
 
-			if(!hitTargetPositions.Contains(targetZombie.Position))
-			{
-				hitTargetPositions.Add(targetZombie.Position);
-			}
+			ShowShotgunAttackLines(hitTargetPositions);
 		}
-
-		ShowShotgunAttackLines(hitTargetPositions);
-	}
 
 		private void ShowAttackLine(Vector3 targetPosition)
 		{
@@ -437,28 +435,28 @@ namespace TowerDefense
 			TowersManager.UnregisterTower(this);
 		}
 
-	private void OnDrawGizmosSelected()
-	{
-		if(config != null)
+		private void OnDrawGizmosSelected()
 		{
-			Gizmos.color = Color.red;
-			Gizmos.DrawWireSphere(transform.position, config.AttackRange);
-
-			if(config.AttackType == AttackType.Shotgun)
+			if(config != null)
 			{
-				Gizmos.color = Color.yellow;
-				var halfAngle = config.ShotgunAngle * 0.5f;
-				var range = config.AttackRange;
-				var center = transform.position;
-				
-				var rightDirection = Quaternion.AngleAxis(halfAngle, Vector3.up) * Vector3.right;
-				var leftDirection = Quaternion.AngleAxis(-halfAngle, Vector3.up) * Vector3.right;
-				
-				Gizmos.DrawLine(center, center + rightDirection * range);
-				Gizmos.DrawLine(center, center + leftDirection * range);
-				Gizmos.DrawLine(center, center + Vector3.right * range);
+				Gizmos.color = Color.red;
+				Gizmos.DrawWireSphere(transform.position, config.AttackRange);
+
+				if(config.AttackType == AttackType.Shotgun)
+				{
+					Gizmos.color = Color.yellow;
+					var halfAngle = config.ShotgunAngle * 0.5f;
+					var range = config.AttackRange;
+					var center = transform.position;
+
+					var rightDirection = Quaternion.AngleAxis(halfAngle, Vector3.up) * Vector3.right;
+					var leftDirection = Quaternion.AngleAxis(-halfAngle, Vector3.up) * Vector3.right;
+
+					Gizmos.DrawLine(center, center + rightDirection * range);
+					Gizmos.DrawLine(center, center + leftDirection * range);
+					Gizmos.DrawLine(center, center + Vector3.right * range);
+				}
 			}
 		}
-	}
 	}
 }
