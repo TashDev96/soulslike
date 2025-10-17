@@ -69,26 +69,6 @@ namespace TowerDefense
             }
         }
 
-        private void Update()
-        {
-            HandleTowerPlacement();
-        }
-
-        private void HandleTowerPlacement()
-        {
-            if (Input.GetMouseButtonDown(0) && CanAffordTower())
-            {
-                Vector3 worldPosition;
-                if (GetMouseWorldPosition(out worldPosition))
-                {
-                    if (IsValidTowerPlacement(worldPosition) && !IsClickingOnTower())
-                    {
-                        PlaceTower(worldPosition);
-                    }
-                }
-            }
-        }
-
         private bool IsClickingOnTower()
         {
             if (playerCamera == null) return false;

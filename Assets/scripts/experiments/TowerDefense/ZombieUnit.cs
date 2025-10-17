@@ -22,7 +22,6 @@ namespace TowerDefense
 
 	public class ZombieUnit : RVOAgent
 	{
-		public Action<ZombieUnit> OnDeath;
 		public Action<ZombieUnit, float> OnTakeDamage;
 
 		private readonly List<PendingDamage> _pendingDamages = new();
@@ -120,11 +119,6 @@ namespace TowerDefense
 
 			CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
 			OnTakeDamage?.Invoke(this, damage);
-
-			if(IsDead)
-			{
-				OnDeath?.Invoke(this);
-			}
 		}
 	}
 }

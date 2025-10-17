@@ -119,11 +119,7 @@ namespace TowerDefense
             EditorGUILayout.LabelField("Towers Being Serviced", EditorStyles.boldLabel);
             
             var allWorkers = Object.FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
-            var servicedTowers = allWorkers
-                .Where(w => w != null && w.GetCurrentTarget() != null)
-                .Select(w => w.GetCurrentTarget())
-                .Distinct()
-                .ToList();
+            var servicedTowers = ReloadWorkersManager.towersBeingServiced;
             
             if (servicedTowers.Count == 0)
             {

@@ -45,29 +45,36 @@ namespace TowerDefense
 		private bool _isReloading;
 		private ZombieUnit _currentTarget;
 
-		private void Start()
+		public void Initialize(TowerConfig towerConfig)
 		{
+			config = towerConfig;
 			_gameManager = FindFirstObjectByType<GameManager>();
 
 			TargetingManager.RegisterTower(this);
+			TowersManager.RegisterTower(this);
 
 			if(config != null)
 			{
 				_currentAmmo = config.ClipSize;
 			}
 
-		if(attackLineRenderer != null)
-		{
-			attackLineRenderer.enabled = false;
-			attackLineRenderer.startWidth = 0.1f;
-			attackLineRenderer.endWidth = 0.05f;
-			attackLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-			attackLineRenderer.startColor = Color.red;
-			attackLineRenderer.endColor = Color.red;
+			if(attackLineRenderer != null)
+			{
+				attackLineRenderer.enabled = false;
+				attackLineRenderer.startWidth = 0.1f;
+				attackLineRenderer.endWidth = 0.05f;
+				attackLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+				attackLineRenderer.startColor = Color.red;
+				attackLineRenderer.endColor = Color.red;
+			}
+
+			CreateShotgunLineRenderers();
 		}
 
-		CreateShotgunLineRenderers();
-	}
+		public void SetUpgradeLevel(int level)
+		{
+			_currentUpgradeLevel = level;
+		}
 
 	private void CreateShotgunLineRenderers()
 	{
@@ -153,7 +160,7 @@ namespace TowerDefense
 				{
 					if(i < config.UpgradeLevels.Count)
 					{
-						totalDamage += config.UpgradeLevels[i].DamageBonus;
+						totalDamage = config.UpgradeLevels[i].BaseDamage;
 					}
 				}
 			}
@@ -161,27 +168,6 @@ namespace TowerDefense
 			return totalDamage;
 		}
 
-		public bool CanUpgrade()
-		{
-			return config != null && config.UpgradeLevels != null && _currentUpgradeLevel < config.UpgradeLevels.Count;
-		}
-
-		public int GetUpgradePrice()
-		{
-			if(!CanUpgrade())
-			{
-				return 0;
-			}
-			return config.UpgradeLevels[_currentUpgradeLevel].LevelUpPrice;
-		}
-
-		public void UpgradeLevel()
-		{
-			if(CanUpgrade())
-			{
-				_currentUpgradeLevel++;
-			}
-		}
 
 		public int GetCurrentUpgradeLevel()
 		{
@@ -193,19 +179,26 @@ namespace TowerDefense
 			return config;
 		}
 
-		private void Update()
+	private void Update()
+	{
+		if(_currentAmmo <= 0 && _currentTarget != null)
 		{
-			if(CanAttack())
-			{
-				var target = FindNearestZombie();
+			TargetingManager.ClearTowerTarget(this);
+			_currentTarget = null;
+		}
 
-				if(target != null)
-				{
-					_currentTarget = target;
-					AttackTarget(target);
-				}
+		if(CanAttack() && _currentAmmo > 0)
+		{
+			var target = FindNearestZombie();
+
+			if(target != null)
+			{
+				_currentTarget = target;
+				AttackTarget(target);
 			}
 		}
+		
+	}
 
 		private bool CanAttack()
 		{
@@ -229,11 +222,17 @@ namespace TowerDefense
 			return _currentAmmo <= 0;
 		}
 
-		private void StartReload()
+	private void StartReload()
+	{
+		_isReloading = true;
+		_lastReloadTime = Time.time;
+		
+		if(_currentTarget != null)
 		{
-			_isReloading = true;
-			_lastReloadTime = Time.time;
+			TargetingManager.ClearTowerTarget(this);
+			_currentTarget = null;
 		}
+	}
 
 		private ZombieUnit FindNearestZombie()
 		{
@@ -283,96 +282,98 @@ namespace TowerDefense
 			ShowAttackLine(target.Position);
 		}
 
-		private void AttackShotgun(ZombieUnit primaryTarget, float damage)
+	private void AttackShotgun(ZombieUnit primaryTarget, float damage)
+	{
+		var zombies = TargetingManager.GetAliveZombies();
+		var towerPos = transform.position;
+		var extendedRange = config.AttackRange + 2f;
+		var extendedRangeSq = extendedRange * extendedRange;
+		var directionToPrimary = (primaryTarget.Position - towerPos).normalized;
+		var shotgunAngle = config.ShotgunAngle;
+
+		var damagePerBullet = damage / config.BulletsPerShot;
+
+		TargetingManager.TempShotgunTargets.Clear();
+
+		for(var i = 0; i < zombies.Count; i++)
 		{
-			var zombies = TargetingManager.GetAliveZombies();
-			var towerPos = transform.position;
-			var extendedRange = config.AttackRange + 2f;
-			var extendedRangeSq = extendedRange * extendedRange;
-			var directionToPrimary = (primaryTarget.Position - towerPos).normalized;
-			var shotgunAngle = config.ShotgunAngle;
+			var zombie = zombies[i];
 
-			TargetingManager.TempShotgunTargets.Clear();
-
-			for(var i = 0; i < zombies.Count; i++)
+			if(zombie.WouldDieFromDelayedDamage())
 			{
-				var zombie = zombies[i];
-
-				if(zombie.WouldDieFromDelayedDamage())
-				{
-					continue;
-				}
-
-				var zombiePos = zombie.Position;
-
-				if(Mathf.Abs(zombiePos.x - towerPos.x) > extendedRange)
-				{
-					continue;
-				}
-
-				var towerToZombie = zombiePos - towerPos;
-				var distanceSq = towerToZombie.sqrMagnitude;
-
-				if(distanceSq > extendedRangeSq)
-				{
-					continue;
-				}
-
-				var directionToZombie = towerToZombie.normalized;
-				var angle = Vector3.Angle(directionToPrimary, directionToZombie);
-
-				if(angle <= shotgunAngle * 0.5f)
-				{
-					TargetingManager.TempShotgunTargets.Add((zombie, distanceSq));
-				}
+				continue;
 			}
 
-			TargetingManager.TempShotgunTargets.Sort((a, b) => a.distanceSq.CompareTo(b.distanceSq));
+			var zombiePos = zombie.Position;
 
-			var availableTargets = new List<ZombieUnit>();
-			for(var i = 0; i < TargetingManager.TempShotgunTargets.Count; i++)
+			if(Mathf.Abs(zombiePos.x - towerPos.x) > extendedRange)
 			{
-				availableTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
+				continue;
 			}
 
-			var hitTargetPositions = new List<Vector3>();
+			var towerToZombie = zombiePos - towerPos;
+			var distanceSq = towerToZombie.sqrMagnitude;
 
-			for(var bulletIndex = 0; bulletIndex < config.BulletsPerShot; bulletIndex++)
+			if(distanceSq > extendedRangeSq)
 			{
-				var validTargets = new List<ZombieUnit>();
-				for(var i = 0; i < availableTargets.Count; i++)
-				{
-					var zombie = availableTargets[i];
-					if(!zombie.WouldDieFromDelayedDamage())
-					{
-						validTargets.Add(zombie);
-					}
-				}
-
-				if(validTargets.Count == 0)
-				{
-					break;
-				}
-
-				var randomIndex = Random.Range(0, validTargets.Count);
-				var targetZombie = validTargets[randomIndex];
-
-				targetZombie.TakeDamage(damage, config.DamageDelay, this);
-				OnAttackHit?.Invoke(this, targetZombie, damage);
-
-				if(_gameManager != null)
-				{
-					_gameManager.OnZombieHit(targetZombie, damage);
-				}
-
-				if(!hitTargetPositions.Contains(targetZombie.Position))
-				{
-					hitTargetPositions.Add(targetZombie.Position);
-				}
+				continue;
 			}
 
-			ShowShotgunAttackLines(hitTargetPositions);
+			var directionToZombie = towerToZombie.normalized;
+			var angle = Vector3.Angle(directionToPrimary, directionToZombie);
+
+			if(angle <= shotgunAngle * 0.5f)
+			{
+				TargetingManager.TempShotgunTargets.Add((zombie, distanceSq));
+			}
 		}
+
+		TargetingManager.TempShotgunTargets.Sort((a, b) => a.distanceSq.CompareTo(b.distanceSq));
+
+		var availableTargets = new List<ZombieUnit>();
+		for(var i = 0; i < TargetingManager.TempShotgunTargets.Count; i++)
+		{
+			availableTargets.Add(TargetingManager.TempShotgunTargets[i].zombie);
+		}
+
+		var hitTargetPositions = new List<Vector3>();
+
+		for(var bulletIndex = 0; bulletIndex < config.BulletsPerShot; bulletIndex++)
+		{
+			var validTargets = new List<ZombieUnit>();
+			for(var i = 0; i < availableTargets.Count; i++)
+			{
+				var zombie = availableTargets[i];
+				if(!zombie.WouldDieFromDelayedDamage())
+				{
+					validTargets.Add(zombie);
+				}
+			}
+
+			if(validTargets.Count == 0)
+			{
+				break;
+			}
+
+			var randomIndex = Random.Range(0, validTargets.Count);
+			var targetZombie = validTargets[randomIndex];
+
+			targetZombie.TakeDamage(damagePerBullet, config.DamageDelay, this);
+			OnAttackHit?.Invoke(this, targetZombie, damagePerBullet);
+
+			if(_gameManager != null)
+			{
+				_gameManager.OnZombieHit(targetZombie, damagePerBullet);
+			}
+
+			if(!hitTargetPositions.Contains(targetZombie.Position))
+			{
+				hitTargetPositions.Add(targetZombie.Position);
+			}
+		}
+
+		ShowShotgunAttackLines(hitTargetPositions);
+	}
 
 		private void ShowAttackLine(Vector3 targetPosition)
 		{
@@ -433,6 +434,7 @@ namespace TowerDefense
 		private void OnDestroy()
 		{
 			TargetingManager.UnregisterTower(this);
+			TowersManager.UnregisterTower(this);
 		}
 
 	private void OnDrawGizmosSelected()

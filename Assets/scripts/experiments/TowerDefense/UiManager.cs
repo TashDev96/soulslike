@@ -10,7 +10,8 @@ namespace TowerDefense
 		[SerializeField] private GameObject towerUIPrefab;
 
 		[Header("Settings")]
-		[SerializeField] private LayerMask towerLayerMask = 1 << LayerMask.NameToLayer("Character");
+		[SerializeField]
+		private LayerMask towerLayerMask;
 
 		[Header("UI Elements")]
 		[SerializeField] private TextMeshProUGUI moneyText;
@@ -50,7 +51,7 @@ namespace TowerDefense
 
 		private void HandleTowerSelection()
 		{
-			if (Input.GetMouseButtonDown(1))
+			if (Input.GetMouseButtonDown(0))
 			{
 				TrySelectTower();
 			}
@@ -58,18 +59,15 @@ namespace TowerDefense
 
 		private void TrySelectTower()
 		{
-			if (playerCamera == null)
-			{
-				return;
-			}
+			 
 
 			Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, towerLayerMask))
 			{
-				TowerUnit tower = hit.collider.GetComponent<TowerUnit>();
+				TowerGroup tower = hit.collider.GetComponent<TowerGroup>();
 				if (tower == null)
 				{
-					tower = hit.collider.GetComponentInParent<TowerUnit>();
+					tower = hit.collider.GetComponentInParent<TowerGroup>();
 				}
 
 				if (tower != null)
@@ -79,14 +77,14 @@ namespace TowerDefense
 			}
 		}
 
-		private void OpenTowerUI(TowerUnit tower)
+		private void OpenTowerUI(TowerGroup tower)
 		{
 			if (towerUIPrefab == null || uiCanvas == null)
 			{
 				return;
 			}
 
-			CloseTowerUI(tower);
+			CloseAllTowerUIs();
 
 			GameObject uiInstance = Instantiate(towerUIPrefab, uiCanvas.transform);
 			TowerUI towerUI = uiInstance.GetComponent<TowerUI>();
@@ -104,7 +102,7 @@ namespace TowerDefense
 			}
 		}
 
-		private void CloseTowerUI(TowerUnit tower)
+		private void CloseTowerUI(TowerGroup tower)
 		{
 			for (int i = activeTowerUIs.Count - 1; i >= 0; i--)
 			{

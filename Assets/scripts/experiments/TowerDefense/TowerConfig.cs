@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace TowerDefense
 {
@@ -44,5 +46,87 @@ namespace TowerDefense
 		public List<UpgradeLevelConfig> UpgradeLevels => _upgradeLevels;
 		public float VfxDuration => _vfxDuration;
 		public float DamageDelay => _damageDelay;
+
+		[Button("Paste Level Up Prices")]
+		private void PasteLevelUpPrices()
+		{
+			string clipboardText = GUIUtility.systemCopyBuffer;
+			if (string.IsNullOrEmpty(clipboardText))
+			{
+				Debug.LogWarning("Clipboard is empty");
+				return;
+			}
+
+			string[] lines = clipboardText.Split('\n');
+			EnsureUpgradeLevelsExist(lines.Length - 1);
+
+			for (int i = 1; i < lines.Length; i++)
+			{
+				if (int.TryParse(lines[i].Trim(), out int price))
+				{
+					_upgradeLevels[i - 1].LevelUpPrice = price;
+				}
+			}
+			Debug.Log($"Pasted {lines.Length - 1} level up prices");
+		}
+
+		[Button("Paste Damage Bonuses")]
+		private void PasteDamageBonuses()
+		{
+			string clipboardText = GUIUtility.systemCopyBuffer;
+			if (string.IsNullOrEmpty(clipboardText))
+			{
+				Debug.LogWarning("Clipboard is empty");
+				return;
+			}
+
+			string[] lines = clipboardText.Split('\n');
+			EnsureUpgradeLevelsExist(lines.Length - 1);
+
+			for (int i = 1; i < lines.Length; i++)
+			{
+				if (float.TryParse(lines[i].Trim(), out float bonus))
+				{
+					_upgradeLevels[i - 1].BaseDamage = bonus;
+				}
+			}
+			Debug.Log($"Pasted {lines.Length - 1} damage bonuses");
+		}
+
+		[Button("Paste Towers Count")]
+		private void PasteTowersCount()
+		{
+			string clipboardText = GUIUtility.systemCopyBuffer;
+			if (string.IsNullOrEmpty(clipboardText))
+			{
+				Debug.LogWarning("Clipboard is empty");
+				return;
+			}
+
+			string[] lines = clipboardText.Split('\n');
+			EnsureUpgradeLevelsExist(lines.Length - 1);
+
+			for (int i = 1; i < lines.Length; i++)
+			{
+				if (int.TryParse(lines[i].Trim(), out int count))
+				{
+					_upgradeLevels[i - 1].TowersCount = count;
+				}
+			}
+			Debug.Log($"Pasted {lines.Length - 1} towers count values");
+		}
+
+		private void EnsureUpgradeLevelsExist(int requiredCount = 25)
+		{
+			if (_upgradeLevels == null)
+			{
+				_upgradeLevels = new List<UpgradeLevelConfig>();
+			}
+
+			while (_upgradeLevels.Count < requiredCount)
+			{
+				_upgradeLevels.Add(new UpgradeLevelConfig());
+			}
+		}
 	}
 }

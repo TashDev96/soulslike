@@ -6,8 +6,8 @@ namespace TowerDefense
 {
 	public static class ReloadWorkersManager
 	{
-		private static Dictionary<Transform, ReloadWorker> reservedStoragePoints = new Dictionary<Transform, ReloadWorker>();
-		private static HashSet<TowerUnit> towersBeingServiced = new HashSet<TowerUnit>();
+		public static Dictionary<Transform, ReloadWorker> reservedStoragePoints = new Dictionary<Transform, ReloadWorker>();
+		public static HashSet<TowerUnit> towersBeingServiced = new HashSet<TowerUnit>();
 
 		public static Transform TryReserveStoragePoint(AmmoStorage storage, ReloadWorker worker)
 		{
@@ -53,22 +53,22 @@ namespace TowerDefense
 			return reservedStoragePoints.ContainsKey(pointTransform);
 		}
 
-		public static TowerUnit FindAvailableTowerNeedingReload(GameManager gameManager, ReloadWorker requestingWorker)
+	public static TowerUnit FindAvailableTowerNeedingReload(GameManager gameManager, ReloadWorker requestingWorker)
+	{
+		var towersManager = TowersManager.Instance;
+		if (towersManager == null)
 		{
-			if (gameManager == null)
-			{
-				return null;
-			}
-
-			var towers = gameManager.GetTowers();
-			var availableTowers = towers.Where(tower =>
-				tower != null &&
-				tower.GetCurrentAmmo() == 0 &&
-				!tower.IsReloading() &&
-				!IsTowerBeingServiced(tower)).ToList();
-
-			return availableTowers.FirstOrDefault();
+			return null;
 		}
+
+		var towers = towersManager.GetAllTowers();
+		var availableTowers = towers.Where(tower =>
+			tower != null &&
+			tower.GetCurrentAmmo() == 0 &&
+			!IsTowerBeingServiced(tower)).ToList();
+
+		return availableTowers.FirstOrDefault();
+	}
 
 		public static bool IsTowerBeingServiced(TowerUnit tower)
 		{

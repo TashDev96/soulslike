@@ -127,6 +127,7 @@ namespace TowerDefense
 			{
 				currentTarget = towerToReload;
 				ReloadWorkersManager.ReserveTowerForService(towerToReload, this);
+				currentTarget.ForceReload();
 				SetState(WorkerState.LoadingAmmo);
 				loadingStartTime = Time.time;
 			}
@@ -253,6 +254,10 @@ namespace TowerDefense
 
 		private void OnDrawGizmosSelected()
 		{
+			if(!Application.isPlaying)
+			{
+				return;
+			}
 			Gizmos.color = Color.blue;
 			Gizmos.DrawWireSphere(transform.position, 1f);
 

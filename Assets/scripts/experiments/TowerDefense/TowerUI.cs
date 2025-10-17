@@ -17,8 +17,8 @@ namespace TowerDefense
 		[Header("Settings")]
 		[SerializeField] private float followSpeed = 5f;
 
-		private TowerUnit targetTower;
-	public TowerUnit TargetTower => targetTower;
+		private TowerGroup targetTower;
+	public TowerGroup TargetTower => targetTower;
 		private Camera playerCamera;
 		private Canvas parentCanvas;
 		private GameManager gameManager;
@@ -44,7 +44,7 @@ namespace TowerDefense
 			}
 		}
 
-		public void Initialize(TowerUnit tower)
+		public void Initialize(TowerGroup tower)
 		{
 			targetTower = tower;
 			UpdateUI();

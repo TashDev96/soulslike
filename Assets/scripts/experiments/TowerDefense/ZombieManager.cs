@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using dream_lib.src.extensions;
 using experiments;
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using RVO;
@@ -12,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace TowerDefense
 {
-	[System.Serializable]
+	[Serializable]
 	public class ZombieConfig
 	{
 		[Header("Zombie Rendering")]
@@ -29,7 +30,7 @@ namespace TowerDefense
 	public class ZombieManager : MonoBehaviour
 	{
 		[SerializeField]
-		private ZombieConfig config;
+		public ZombieConfig config;
 
 		[Header("Spawn Settings")]
 		[SerializeField]
@@ -37,11 +38,21 @@ namespace TowerDefense
 		[SerializeField]
 		private Collider spawnBoundingBox;
 		[SerializeField]
-		private float spawnInterval = 2f;
+		private float baseSpawnInterval = 2f;
 		[SerializeField]
 		private int spawnGridSize = 10;
 		[SerializeField]
 		private float respawnDelay = 3f;
+
+		[Header("Adaptive Spawn Settings")]
+		[SerializeField]
+		private float spawnRateBalanceFactor = 1.0f;
+		[SerializeField]
+		private float minSpawnInterval = 0.1f;
+		[SerializeField]
+		private float maxSpawnInterval = 10f;
+		[SerializeField]
+		private float noTowerSpawnInterval = 1f;
 
 		[Header("Goal Settings")]
 		[SerializeField]
@@ -120,6 +131,8 @@ namespace TowerDefense
 				Debug.LogError("ZombieManager: No spawn bounding box defined. Please assign a trigger collider.");
 				return;
 			}
+			
+			Debug.LogError($"{Time.realtimeSinceStartup.RoundFormat()} spawn");
 
 			var spawnPosition = GetNextSpawnPosition();
 			var zombie = new ZombieUnit(spawnPosition, config.zombieMeshSequence, config.zombieMaterial,
@@ -127,8 +140,6 @@ namespace TowerDefense
 
 			zombie.Initialize(simulator);
 			zombie.SetTarget(new Vector3(_goalPos.x, 0, _goalPos.y));
-
-			zombie.OnDeath += HandleZombieDeath;
 
 			zombies.Add(zombie);
 		}
@@ -202,6 +213,7 @@ namespace TowerDefense
 
 				if(zombie.IsDead)
 				{
+					HandleZombieDeath(zombie);
 					RemoveZombie(i);
 					continue;
 				}
@@ -239,13 +251,35 @@ namespace TowerDefense
 
 		private void HandleSpawning()
 		{
-			
-
 			if(Time.time >= nextSpawnTime && zombies.Count < maxZombies)
 			{
 				SpawnZombie();
-				nextSpawnTime = Time.time + spawnInterval * ZombieDensityOverTime.Evaluate(Time.time);
+				var adaptiveInterval = CalculateAdaptiveSpawnInterval();
+				nextSpawnTime = Time.time + adaptiveInterval;
 			}
+		}
+
+		private float CalculateAdaptiveSpawnInterval()
+		{
+			var towersManager = TowersManager.Instance;
+			if(towersManager == null)
+			{
+				return noTowerSpawnInterval;
+			}
+
+			var correctedTotalDPS = towersManager.GetCorrectedTotalDPS();
+
+			if(correctedTotalDPS <= 0f)
+			{
+				return noTowerSpawnInterval;
+			}
+
+			var zombieHealth = config.zombieHealth;
+			var zombiesKilledPerSecond = correctedTotalDPS / zombieHealth;
+
+			var targetSpawnInterval = spawnRateBalanceFactor / zombiesKilledPerSecond;
+
+			return Mathf.Clamp(targetSpawnInterval, minSpawnInterval, maxSpawnInterval);
 		}
 
 		private void RenderZombies()
@@ -275,7 +309,6 @@ namespace TowerDefense
 			{
 				var zombie = zombies[index];
 				zombie.Cleanup(simulator);
-				zombie.OnDeath -= HandleZombieDeath;
 				zombies.RemoveAt(index);
 			}
 		}
