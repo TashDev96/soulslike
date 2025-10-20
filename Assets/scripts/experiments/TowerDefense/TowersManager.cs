@@ -29,7 +29,6 @@ namespace TowerDefense
 			if (_instance == null)
 			{
 				_instance = this;
-				DontDestroyOnLoad(gameObject);
 			}
 			else
 			{
@@ -46,13 +45,19 @@ namespace TowerDefense
 			}
 		}
 
-		public static void RegisterTower(TowerUnit tower)
+	public static void RegisterTower(TowerUnit tower)
+	{
+		if (Instance != null && tower != null)
 		{
-			if (Instance != null && tower != null)
+			Instance._registeredTowers.Add(tower);
+			
+			var zombieManager = FindFirstObjectByType<ZombieManager>();
+			if(zombieManager != null)
 			{
-				Instance._registeredTowers.Add(tower);
+				zombieManager.OnTowerBuilt();
 			}
 		}
+	}
 
 		public static void UnregisterTower(TowerUnit tower)
 		{
@@ -65,6 +70,20 @@ namespace TowerDefense
 		public int GetTowerCount()
 		{
 			return _registeredTowers.Count;
+		}
+
+		public int GetTowerGroupsWithTowersCount()
+		{
+			var towerGroups = FindObjectsByType<TowerGroup>(FindObjectsSortMode.None);
+			var count = 0;
+			foreach(var group in towerGroups)
+			{
+				if(group.HasAnyTowers())
+				{
+					count++;
+				}
+			}
+			return count;
 		}
 
 		public float GetTotalDPS()
@@ -102,64 +121,61 @@ namespace TowerDefense
 			}
 		}
 
-		private float CalculateTowerDPS(TowerUnit tower)
+	private float CalculateTowerDPS(TowerUnit tower)
+	{
+		if (tower == null || tower.GetConfig() == null)
+			return 0f;
+
+		var config = tower.GetConfig();
+		var totalClipDamage = tower.GetTotalClipDamage();
+		var attackCooldown = config.AttackCooldown;
+		var clipSize = config.ClipSize;
+		var reloadTime = config.ReloadTime;
+
+		var timeToEmptyClip = clipSize * attackCooldown;
+		var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
+
+		var dps = totalClipDamage / totalCycleTime;
+		return dps;
+	}
+
+	private float CalculateCorrectedTowerDPS(TowerUnit tower, float averageZombieHealth)
+	{
+		if (tower == null || tower.GetConfig() == null || averageZombieHealth <= 0f)
+			return 0f;
+
+		var config = tower.GetConfig();
+		var damagePerShot = tower.GetDamagePerShot();
+		var attackCooldown = config.AttackCooldown;
+		var clipSize = config.ClipSize;
+		var reloadTime = config.ReloadTime;
+
+		var timeToEmptyClip = clipSize * attackCooldown;
+		var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
+
+		float effectiveDamagePerClip;
+
+		if (config.AttackType == AttackType.Single)
 		{
-			if (tower == null || tower.GetConfig() == null)
-				return 0f;
-
-			var config = tower.GetConfig();
-			var damage = tower.GetCurrentDamage();
-			var attackCooldown = config.AttackCooldown;
-			var clipSize = config.ClipSize;
-			var reloadTime = config.ReloadTime;
-
-			var timeToEmptyClip = clipSize * attackCooldown;
-			var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
-			var damagePerClip = damage * clipSize;
-
-
-			var dps = damagePerClip / totalCycleTime;
-			return dps;
+			var effectiveDamagePerShot = Mathf.Min(damagePerShot, averageZombieHealth);
+			effectiveDamagePerClip = effectiveDamagePerShot * clipSize;
+		}
+		else
+		{
+			var effectiveDamagePerBullet = Mathf.Min(damagePerShot, averageZombieHealth);
+			effectiveDamagePerClip = effectiveDamagePerBullet * config.BulletsPerShot * clipSize;
 		}
 
-		private float CalculateCorrectedTowerDPS(TowerUnit tower, float averageZombieHealth)
-		{
-			if (tower == null || tower.GetConfig() == null || averageZombieHealth <= 0f)
-				return 0f;
-
-			var config = tower.GetConfig();
-			var damage = tower.GetCurrentDamage();
-			var attackCooldown = config.AttackCooldown;
-			var clipSize = config.ClipSize;
-			var reloadTime = config.ReloadTime;
-
-			var timeToEmptyClip = clipSize * attackCooldown;
-			var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
-
-			float effectiveDamagePerClip;
-
-			if (config.AttackType == AttackType.Single)
-			{
-				var effectiveDamagePerShot = Mathf.Min(damage, averageZombieHealth);
-				effectiveDamagePerClip = effectiveDamagePerShot * clipSize;
-			}
-			else // Shotgun
-			{
-				var damagePerBullet = damage / config.BulletsPerShot;
-				var effectiveDamagePerBullet = Mathf.Min(damagePerBullet, averageZombieHealth);
-				effectiveDamagePerClip = effectiveDamagePerBullet * config.BulletsPerShot * clipSize;
-			}
-
-			var correctedDPS = effectiveDamagePerClip / totalCycleTime;
-			return correctedDPS;
-		}
+		var correctedDPS = effectiveDamagePerClip / totalCycleTime;
+		return correctedDPS;
+	}
 
 		private float GetAverageZombieHealth(ZombieManager zombieManager)
 		{
 			if (zombieManager == null)
 				return 100f;
 
-			return zombieManager.config.zombieHealth;
+			return zombieManager.GetCurrentInterpolatedHealth();
 		}
 
 		[Button("Recalculate DPS")]
@@ -189,11 +205,11 @@ namespace TowerDefense
 					var attackType = config != null ? config.AttackType.ToString() : "Unknown";
 					var bulletsPerShot = config?.BulletsPerShot ?? 1;
 
-					Debug.Log($"Tower {tower.name} ({attackType}): DPS = {towerDPS:F2}, Corrected DPS = {correctedTowerDPS:F2}, " +
-					         $"Damage = {tower.GetCurrentDamage()}, Bullets/Shot = {bulletsPerShot}, " +
-					         $"Cooldown = {tower.GetAttackCooldown()}, Clip = {tower.GetClipSize()}, " +
-					         $"Reload = {tower.GetReloadTime()}, Ammo = {tower.GetCurrentAmmo()}, " +
-					         $"Reloading = {tower.IsReloading()}");
+				Debug.Log($"Tower {tower.name} ({attackType}): DPS = {towerDPS:F2}, Corrected DPS = {correctedTowerDPS:F2}, " +
+				         $"Total Clip Damage = {tower.GetTotalClipDamage()}, Damage/Shot = {tower.GetDamagePerShot()}, Bullets/Shot = {bulletsPerShot}, " +
+				         $"Cooldown = {tower.GetAttackCooldown()}, Clip = {tower.GetClipSize()}, " +
+				         $"Reload = {tower.GetReloadTime()}, Ammo = {tower.GetCurrentAmmo()}, " +
+				         $"Reloading = {tower.IsReloading()}");
 				}
 			}
 		}

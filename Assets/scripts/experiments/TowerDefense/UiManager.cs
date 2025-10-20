@@ -6,39 +6,48 @@ namespace TowerDefense
 {
 	public class UiManager : MonoBehaviour
 	{
-		[Header("UI Prefabs")]
-		[SerializeField] private GameObject towerUIPrefab;
+	[Header("UI Prefabs")]
+	[SerializeField] private GameObject towerUIPrefab;
+	[SerializeField] private GameObject buildButtonPrefab;
 
-		[Header("Settings")]
-		[SerializeField]
-		private LayerMask towerLayerMask;
+	[Header("Settings")]
+	[SerializeField]
+	private LayerMask towerLayerMask;
 
-		[Header("UI Elements")]
-		[SerializeField] private TextMeshProUGUI moneyText;
+	[Header("UI Elements")]
+	[SerializeField] private TextMeshProUGUI moneyText;
 
-		private Camera playerCamera;
-		private Canvas uiCanvas;
-		private List<TowerUI> activeTowerUIs = new List<TowerUI>();
-		private GameManager gameManager;
+	private Camera playerCamera;
+	private Canvas uiCanvas;
+	private List<TowerUI> activeTowerUIs = new List<TowerUI>();
+	private List<BuildButton> activeBuildButtons = new List<BuildButton>();
+	private GameManager gameManager;
 
-		private void Start()
+	private void Start()
+	{
+		playerCamera = Camera.main;
+		uiCanvas = FindFirstObjectByType<Canvas>();
+		gameManager = FindFirstObjectByType<GameManager>();
+
+		gameManager.OnMoneyChanged+=OnMoneyChanged;
+
+		if (uiCanvas == null)
 		{
-			playerCamera = Camera.main;
-			uiCanvas = FindFirstObjectByType<Canvas>();
-			gameManager = FindFirstObjectByType<GameManager>();
-
-			gameManager.OnMoneyChanged+=OnMoneyChanged;
-
-			if (uiCanvas == null)
-			{
-				Debug.LogError("UiManager: No Canvas found in scene!");
-			}
-
-			if (towerUIPrefab == null)
-			{
-				Debug.LogError("UiManager: Tower UI Prefab is not assigned!");
-			}
+			Debug.LogError("UiManager: No Canvas found in scene!");
 		}
+
+		if (towerUIPrefab == null)
+		{
+			Debug.LogError("UiManager: Tower UI Prefab is not assigned!");
+		}
+
+		if (buildButtonPrefab == null)
+		{
+			Debug.LogError("UiManager: Build Button Prefab is not assigned!");
+		}
+
+		ShowBuildButtonsForEmptyGroups();
+	}
 
 		private void OnMoneyChanged(int money){
 			moneyText.text = money.ToString();
@@ -57,25 +66,26 @@ namespace TowerDefense
 			}
 		}
 
-		private void TrySelectTower()
+	private void TrySelectTower()
+	{
+		Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, towerLayerMask))
 		{
-			 
-
-			Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, towerLayerMask))
+			TowerGroup tower = hit.collider.GetComponent<TowerGroup>();
+			if (tower == null)
 			{
-				TowerGroup tower = hit.collider.GetComponent<TowerGroup>();
-				if (tower == null)
-				{
-					tower = hit.collider.GetComponentInParent<TowerGroup>();
-				}
+				tower = hit.collider.GetComponentInParent<TowerGroup>();
+			}
 
-				if (tower != null)
+			if (tower != null)
+			{
+				if(tower.HasAnyTowers())
 				{
 					OpenTowerUI(tower);
 				}
 			}
 		}
+	}
 
 		private void OpenTowerUI(TowerGroup tower)
 		{
@@ -117,29 +127,97 @@ namespace TowerDefense
 			}
 		}
 
-		public void CloseAllTowerUIs()
+	public void CloseAllTowerUIs()
+	{
+		for (int i = activeTowerUIs.Count - 1; i >= 0; i--)
 		{
-			for (int i = activeTowerUIs.Count - 1; i >= 0; i--)
+			if (activeTowerUIs[i] != null)
 			{
-				if (activeTowerUIs[i] != null)
-				{
-					activeTowerUIs[i].Close();
-				}
-			}
-			activeTowerUIs.Clear();
-		}
-
-		private void OnTowerUIClosed(TowerUI towerUI)
-		{
-			if (activeTowerUIs.Contains(towerUI))
-			{
-				activeTowerUIs.Remove(towerUI);
+				activeTowerUIs[i].Close();
 			}
 		}
+		activeTowerUIs.Clear();
+	}
 
-		private void OnDestroy()
+	private void OnTowerUIClosed(TowerUI towerUI)
+	{
+		if (activeTowerUIs.Contains(towerUI))
 		{
-			CloseAllTowerUIs();
+			activeTowerUIs.Remove(towerUI);
 		}
+	}
+
+	private void ShowBuildButtonsForEmptyGroups()
+	{
+		CloseAllBuildButtons();
+
+		TowerGroup[] allTowerGroups = FindObjectsByType<TowerGroup>(FindObjectsSortMode.None);
+
+		List<TowerGroup> emptyGroups = new List<TowerGroup>();
+		foreach(var group in allTowerGroups)
+		{
+			if(!group.HasAnyTowers())
+			{
+				emptyGroups.Add(group);
+			}
+		}
+
+		if(emptyGroups.Count > 0)
+		{
+			emptyGroups.Sort((a, b) => a.GetBuildPrice().CompareTo(b.GetBuildPrice()));
+			OpenBuildButton(emptyGroups[0]);
+		}
+	}
+
+	private void OpenBuildButton(TowerGroup towerGroup)
+	{
+		if(buildButtonPrefab == null || uiCanvas == null)
+		{
+			return;
+		}
+
+		GameObject buttonInstance = Instantiate(buildButtonPrefab, uiCanvas.transform);
+		BuildButton buildButton = buttonInstance.GetComponent<BuildButton>();
+
+		if(buildButton != null)
+		{
+			buildButton.Initialize(towerGroup);
+			buildButton.OnClosed += OnBuildButtonClosed;
+			activeBuildButtons.Add(buildButton);
+		}
+		else
+		{
+			Debug.LogError("UiManager: Build Button Prefab does not have BuildButton component!");
+			Destroy(buttonInstance);
+		}
+	}
+
+	private void OnBuildButtonClosed(BuildButton buildButton)
+	{
+		if(activeBuildButtons.Contains(buildButton))
+		{
+			activeBuildButtons.Remove(buildButton);
+		}
+
+		ShowBuildButtonsForEmptyGroups();
+	}
+
+	private void CloseAllBuildButtons()
+	{
+		for(int i = activeBuildButtons.Count - 1; i >= 0; i--)
+		{
+			if(activeBuildButtons[i] != null)
+			{
+				activeBuildButtons[i].Close();
+			}
+		}
+		activeBuildButtons.Clear();
+	}
+
+	private void OnDestroy()
+	{
+		CloseAllTowerUIs();
+		CloseAllBuildButtons();
+	}
 	}
 }

@@ -20,7 +20,7 @@ namespace RVO
 		private readonly float _capsuleHeight = 2f;
 		private readonly float _radius = 0.43f;
 		private readonly float _maxSpeed = 2.5f;
-		private float _scale = 1f;
+		protected float _scale = 1f;
 
 		private readonly Vector3 _initialPosition;
 		private float _verticalVelocity;
@@ -39,24 +39,26 @@ namespace RVO
 		private float2 _lastVelocity;
 		private Vector3 _lastDirection;
 
-		public Vector3 Position => _position;
-		public int AgentId { get; private set; } = -1;
+	public Vector3 Position => _position;
+	public int AgentId { get; private set; } = -1;
+	public float Scale => _scale;
 
-		public bool IsInitialized => AgentId != -1;
+	public bool IsInitialized => AgentId != -1;
 
-		public RVOAgent(Vector3 startPosition, BakedMeshSequence meshSequence, Material material, int layer = 0)
-		{
-			_position = startPosition;
-			_initialPosition = startPosition;
-			_meshSequence = meshSequence;
-			_material = material;
-			_layer = layer;
-			_targetPosition = Vector3.zero;
-			_animationTime = Random.value * meshSequence.GetClipDuration(_currentAnimationClip);
-			_movementSpeed = 0f;
+	public RVOAgent(Vector3 startPosition, BakedMeshSequence meshSequence, Material material, int layer = 0, float scale = 1f)
+	{
+		_position = startPosition;
+		_initialPosition = startPosition;
+		_meshSequence = meshSequence;
+		_material = material;
+		_layer = layer;
+		_scale = scale;
+		_targetPosition = Vector3.zero;
+		_animationTime = Random.value * meshSequence.GetClipDuration(_currentAnimationClip);
+		_movementSpeed = 0f;
 
-			_isMoving = false;
-		}
+		_isMoving = false;
+	}
 
 		public void Initialize(Simulator simulator)
 		{
@@ -91,7 +93,7 @@ namespace RVO
 			_targetPosition = target;
 		}
 
-		public void UpdateAgent(Simulator simulator, float2 goal, float deltaTime)
+		public virtual void UpdateAgent(Simulator simulator, float2 goal, float deltaTime)
 		{
 			if(AgentId == -1)
 			{
@@ -180,6 +182,8 @@ namespace RVO
 			// 	simulator.SetAgentMaxSpeed(AgentId, _maxSpeed/_scale + _speedBouns);
 			// }
 		}
+
+		protected virtual float ZSpeedMult => 1f;
 
 		public Matrix4x4 GetTransformMatrix()
 		{
@@ -299,6 +303,7 @@ namespace RVO
 			_lastDirection = new Vector3(_lastVelocity.x, 0, _lastVelocity.y);
 			var flowVector = new Vector3(_lastVelocity.x, 0, _lastVelocity.y);
 			var headPos = _position + Vector3.up * _scale;
+			flowVector.z *= ZSpeedMult;
 			Debug.DrawLine(headPos, headPos + flowVector);
 			simulator.SetAgentPrefVelocity(AgentId, _lastVelocity);
 		}

@@ -7,12 +7,13 @@ namespace TowerDefense
 {
 	public class TowerUI : MonoBehaviour
 	{
-		[Header("UI Elements")]
-		[SerializeField] private TextMeshProUGUI towerNameText;
-		[SerializeField] private TextMeshProUGUI towerLevelText;
-		[SerializeField] private Button upgradeButton;
-		[SerializeField] private TextMeshProUGUI upgradePriceText;
-		[SerializeField] private Button closeButton;
+	[Header("UI Elements")]
+	[SerializeField] private TextMeshProUGUI towerNameText;
+	[SerializeField] private TextMeshProUGUI towerLevelText;
+	[SerializeField] private TextMeshProUGUI damagePerShotText;
+	[SerializeField] private Button upgradeButton;
+	[SerializeField] private TextMeshProUGUI upgradePriceText;
+	[SerializeField] private Button closeButton;
 
 		[Header("Settings")]
 		[SerializeField] private float followSpeed = 5f;
@@ -99,13 +100,19 @@ namespace TowerDefense
 				towerNameText.text = config.TowerName;
 			}
 
-			if (towerLevelText != null)
-			{
-				int currentLevel = targetTower.GetCurrentUpgradeLevel();
-				towerLevelText.text = $"Level {currentLevel + 1}";
-			}
+		if (towerLevelText != null)
+		{
+			int currentLevel = targetTower.GetCurrentUpgradeLevel();
+			towerLevelText.text = $"Level {currentLevel + 1}";
+		}
 
-			if (upgradeButton != null && upgradePriceText != null)
+		if (damagePerShotText != null)
+		{
+			float damagePerShot = targetTower.GetDamagePerShot();
+			damagePerShotText.text = $"Damage: {damagePerShot:F2}";
+		}
+
+		if (upgradeButton != null && upgradePriceText != null)
 			{
 				bool canUpgrade = targetTower.CanUpgrade();
 				upgradeButton.interactable = canUpgrade && gameManager != null && gameManager.GetCurrentMoney() >= targetTower.GetUpgradePrice();

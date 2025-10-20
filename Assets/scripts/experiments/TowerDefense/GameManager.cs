@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +21,11 @@ namespace TowerDefense
         [Header("UI References")]
         [SerializeField] private GameUI gameUI;
         [SerializeField] private UiManager uiManager;
+        
+        [Header("Next Scene")]
+        [SerializeField] private string _nextScene;
+        [SerializeField] private float timeToUnlockNextScene = 30f;
+        [SerializeField] private GameObject button;
 
         private int currentMoney;
         private ZombieManager zombieManager;
@@ -58,6 +65,48 @@ namespace TowerDefense
             
             SetupEventListeners();
             OnMoneyChanged?.Invoke(currentMoney);
+            
+            if (!string.IsNullOrEmpty(_nextScene) && button != null)
+            {
+                button.SetActive(false);
+                
+                var buttonComponent = button.GetComponent<Button>();
+                if (buttonComponent != null)
+                {
+                    buttonComponent.onClick.AddListener(LoadNextScene);
+                }
+                
+                Invoke(nameof(UnlockNextSceneButton), timeToUnlockNextScene);
+            }
+        }
+        
+        private void UnlockNextSceneButton()
+        {
+            if (button != null)
+            {
+                button.SetActive(true);
+            }
+        }
+        
+        public void LoadNextScene()
+        {
+            if (!string.IsNullOrEmpty(_nextScene))
+            {
+                CleanupStaticVariables();
+                SceneManager.LoadScene(_nextScene);
+            }
+        }
+        
+        private void CleanupStaticVariables()
+        {
+            TargetingManager.ClearAllTargets();
+            ReloadWorkersManager.ClearAllReservations();
+            
+            var simulator = RVO.SampleGameObjects.GetSimulator();
+            if (simulator != null)
+            {
+                simulator.Clear();
+            }
         }
 
         private void SetupEventListeners()
@@ -140,12 +189,11 @@ namespace TowerDefense
 
         public void OnZombieHit(ZombieUnit zombie, float damage)
         {
-            AddMoney(zombie.MoneyValue);
+            AddMoney(Mathf.RoundToInt(damage));
         }
 
         private void HandleZombieDied(ZombieUnit zombie)
         {
-            AddMoney(zombie.KillBonusValue);
         }
 
         private void HandleZombieReachedGoal(ZombieUnit zombie)
@@ -247,6 +295,15 @@ namespace TowerDefense
             {
                 zombieManager.OnZombieDied -= HandleZombieDied;
                 zombieManager.OnZombieReachedGoal -= HandleZombieReachedGoal;
+            }
+            
+            if (!string.IsNullOrEmpty(_nextScene) && button != null)
+            {
+                var buttonComponent = button.GetComponent<Button>();
+                if (buttonComponent != null)
+                {
+                    buttonComponent.onClick.RemoveListener(LoadNextScene);
+                }
             }
         }
     }

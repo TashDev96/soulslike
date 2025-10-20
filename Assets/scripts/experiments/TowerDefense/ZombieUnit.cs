@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using RVO;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace TowerDefense
@@ -28,20 +29,16 @@ namespace TowerDefense
 		public float MaxHealth { get; }
 		public float CurrentHealth { get; private set; }
 		public bool IsDead => CurrentHealth <= 0f;
-		public int MoneyValue { get; private set; }
-		public int KillBonusValue { get; private set; }
 
-		public bool HasPendingDamage => _pendingDamages.Count > 0;
+	public bool HasPendingDamage => _pendingDamages.Count > 0;
 
-		public ZombieUnit(Vector3 startPosition, BakedMeshSequence meshSequence, Material material,
-			float health = 100f, int moneyValue = 10, int killBonus = 50, int layer = 0)
-			: base(startPosition, meshSequence, material, layer)
-		{
-			MaxHealth = health;
-			CurrentHealth = health;
-			MoneyValue = moneyValue;
-			KillBonusValue = killBonus;
-		}
+	public ZombieUnit(Vector3 startPosition, BakedMeshSequence meshSequence, Material material,
+		float health = 100f, int layer = 0, float scale = 1f)
+		: base(startPosition, meshSequence, material, layer, scale)
+	{
+		MaxHealth = health;
+		CurrentHealth = health;
+	}
 
 		public void TakeDamage(float damage, float delay = 0f, TowerUnit damageDealer = null)
 		{
@@ -72,6 +69,14 @@ namespace TowerDefense
 					ApplyDamage(pendingDamage.damage);
 				}
 			}
+		}
+
+		public bool IsNearTheWall => Position.x < -0.5f;
+		protected override float ZSpeedMult => IsNearTheWall ? 0.05f : 1f;
+
+		public override void UpdateAgent(Simulator simulator, float2 goal, float deltaTime)
+		{
+			base.UpdateAgent(simulator, goal, deltaTime);
 		}
 
 		public bool HasPendingDamageFrom(TowerUnit tower)
@@ -110,15 +115,15 @@ namespace TowerDefense
 			return CurrentHealth <= totalPendingDamage;
 		}
 
-		private void ApplyDamage(float damage)
+	private void ApplyDamage(float damage)
+	{
+		if(IsDead)
 		{
-			if(IsDead)
-			{
-				return;
-			}
-
-			CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
-			OnTakeDamage?.Invoke(this, damage);
+			return;
 		}
+
+		CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
+		OnTakeDamage?.Invoke(this, damage);
+	}
 	}
 }

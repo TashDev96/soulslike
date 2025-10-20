@@ -5,6 +5,7 @@ using dream_lib.src.extensions;
 using experiments;
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using RVO;
+using Sirenix.OdinInspector;
 using SkinnedMeshInstancing;
 using SkinnedMeshInstancing.AnimationBaker.AnimationData;
 using Unity.Mathematics;
@@ -18,13 +19,13 @@ namespace TowerDefense
 	{
 		[Header("Zombie Rendering")]
 		public BakedMeshSequence zombieMeshSequence;
-		public Material zombieMaterial;
+		public List<Material> zombieGradeMaterials = new();
 		public int renderLayer;
 
 		[Header("Zombie Stats")]
-		public float zombieHealth = 100f;
-		public int zombieHitValue = 10;
-		public int zombieKillValue = 50;
+		public float baseHealth = 0f;
+		public float baseHealthPerTower = 10f;
+		public float zombieScale = 1f;
 	}
 
 	public class ZombieManager : MonoBehaviour
@@ -37,22 +38,33 @@ namespace TowerDefense
 		private int maxZombies = 100;
 		[SerializeField]
 		private Collider spawnBoundingBox;
-		[SerializeField]
-		private float baseSpawnInterval = 2f;
+
 		[SerializeField]
 		private int spawnGridSize = 10;
-		[SerializeField]
-		private float respawnDelay = 3f;
 
-		[Header("Adaptive Spawn Settings")]
+	[Header("Adaptive Spawn Settings")]
+	[SerializeField]
+	private float spawnRateBalanceFactor = 1.0f;
+	[SerializeField]
+	private float minSpawnInterval = 0.1f;
+	[SerializeField]
+	private float maxSpawnInterval = 10f;
+	[SerializeField]
+	private float noTowerSpawnInterval = 1f;
+
+	[Header("Spawn Cooling Settings")]
+	[SerializeField]
+	private int zombiesNearWallThreshold = 5;
+	[SerializeField]
+	private float spawnCoolingMultiplier = 3f;
+	[SerializeField]
+	private float coolingTransitionDuration = 2f;
+	[SerializeField]
+	private float zeroZombiesRequiredDuration = 10f;
+
+		[Header("Grade Transition")]
 		[SerializeField]
-		private float spawnRateBalanceFactor = 1.0f;
-		[SerializeField]
-		private float minSpawnInterval = 0.1f;
-		[SerializeField]
-		private float maxSpawnInterval = 10f;
-		[SerializeField]
-		private float noTowerSpawnInterval = 1f;
+		private float gradeTransitionDuration = 30f;
 
 		[Header("Goal Settings")]
 		[SerializeField]
@@ -70,6 +82,21 @@ namespace TowerDefense
 		private float nextSpawnTime;
 		private int currentSpawnIndex;
 		private List<int> shuffledSpawnIndices;
+
+		[SerializeField]
+	private int _currentGrade;
+	private int _previousGrade;
+	private float _gradeTransitionStartTime;
+	private bool _isTransitioning;
+	private float _previousGradeHealth;
+	private float _currentGradeHealth;
+
+	private bool _isSpawnCooling;
+	private float _currentCoolingFactor = 1f;
+	private float _coolingTransitionStartTime;
+	private float _coolingTransitionTarget = 1f;
+	private float _zeroZombiesStartTime;
+	private bool _hasZeroZombiesNearWall;
 
 		private void InitializeSimulator()
 		{
@@ -110,17 +137,49 @@ namespace TowerDefense
 			}
 		}
 
-		private void Start()
+	private void Start()
+	{
+		InitializeSimulator();
+		InitializeMeshRenderer();
+		InitializeSpawnOrder();
+		UpdateGoal();
+
+		var towerCount = GetCurrentTowerCount();
+		_currentGrade = Mathf.Max(0, towerCount - 1);
+		_previousGrade = _currentGrade;
+		_currentGradeHealth = CalculateHealthForTowerCount(towerCount);
+		_previousGradeHealth = _currentGradeHealth;
+		_isTransitioning = false;
+		
+		ResetSpawnTiming();
+	}
+	
+	public void ResetSpawnTiming()
+	{
+		nextSpawnTime = Time.time;
+		_gradeTransitionStartTime = Time.time;
+		_coolingTransitionStartTime = Time.time;
+		_zeroZombiesStartTime = Time.time;
+		_isSpawnCooling = false;
+		_currentCoolingFactor = 1f;
+		_coolingTransitionTarget = 1f;
+		_hasZeroZombiesNearWall = false;
+	}
+
+		public void OnTowerBuilt()
 		{
-			InitializeSimulator();
-			InitializeMeshRenderer();
-			InitializeSpawnOrder();
-			UpdateGoal();
+			var towerCount = GetCurrentTowerCount();
+			_previousGrade = _currentGrade;
+			_currentGrade = Mathf.Max( towerCount - 1,0);
+			_previousGradeHealth = _currentGradeHealth;
+			_currentGradeHealth = CalculateHealthForTowerCount(towerCount);
+			_gradeTransitionStartTime = Time.time;
+			_isTransitioning = true;
 		}
 
 		public void SpawnZombie()
 		{
-			if(simulator == null || config.zombieMeshSequence == null || config.zombieMaterial == null)
+			if(simulator == null || config.zombieMeshSequence == null)
 			{
 				Debug.LogError("ZombieManager: Missing required components for spawning zombies.");
 				return;
@@ -131,15 +190,19 @@ namespace TowerDefense
 				Debug.LogError("ZombieManager: No spawn bounding box defined. Please assign a trigger collider.");
 				return;
 			}
-			
-			Debug.LogError($"{Time.realtimeSinceStartup.RoundFormat()} spawn");
+
+
+			var grade = GetGradeForNewZombie();
+			var material = GetMaterialForGrade(grade);
+			var health = CalculateHealthForTowerCount(grade + 1);
 
 			var spawnPosition = GetNextSpawnPosition();
-			var zombie = new ZombieUnit(spawnPosition, config.zombieMeshSequence, config.zombieMaterial,
-				config.zombieHealth, config.zombieHitValue, config.zombieKillValue, config.renderLayer);
+			var zombie = new ZombieUnit(spawnPosition, config.zombieMeshSequence, material,
+				health, config.renderLayer, config.zombieScale);
 
 			zombie.Initialize(simulator);
 			zombie.SetTarget(new Vector3(_goalPos.x, 0, _goalPos.y));
+			zombie.OnTakeDamage += OnZombieTookDamage;
 
 			zombies.Add(zombie);
 		}
@@ -164,18 +227,99 @@ namespace TowerDefense
 			return zombies.Count(z => !z.IsDead);
 		}
 
-		private void Update()
+		[Button("Set Zombie Scale")]
+		public void SetZombieScale(float scale)
 		{
-			if(simulator == null)
+			scale = Mathf.Max(0.1f, scale);
+			var healthMultiplier = scale * scale;
+			config.zombieScale = scale;
+			config.baseHealthPerTower = 10f * healthMultiplier;
+		}
+
+	private int GetCurrentTowerCount()
+	{
+		var towersManager = TowersManager.Instance;
+		return towersManager != null ? towersManager.GetTowerGroupsWithTowersCount() : 1;
+	}
+
+	private float CalculateHealthForTowerCount(int towerCount)
+	{
+		var result = config.baseHealth + (config.baseHealthPerTower * Mathf.Max(1, towerCount));
+		if(result <= 0)
+		{
+			result = 1;
+		}
+		return result;
+	}
+
+	private Material GetMaterialForGrade(int grade)
+	{
+		if(config.zombieGradeMaterials == null || config.zombieGradeMaterials.Count == 0)
+		{
+			return null;
+		}
+		try
+		{
+			return config.zombieGradeMaterials[grade % config.zombieGradeMaterials.Count];
+		}
+		catch(Exception)
+		{
+			Debug.LogError(grade);
+			throw;
+		}
+	}
+
+		public float GetCurrentInterpolatedHealth()
+		{
+			if(!_isTransitioning)
 			{
-				return;
+				return _currentGradeHealth;
 			}
 
-			UpdateGoal();
-			UpdateZombies();
-			HandleSpawning();
-			RenderZombies();
+			var elapsed = Time.time - _gradeTransitionStartTime;
+			var t = Mathf.Clamp01(elapsed / gradeTransitionDuration);
+
+			if(t >= 1f)
+			{
+				_isTransitioning = false;
+				return _currentGradeHealth;
+			}
+
+			return Mathf.Lerp(_previousGradeHealth, _currentGradeHealth, t);
 		}
+
+		private int GetGradeForNewZombie()
+		{
+			if(!_isTransitioning)
+			{
+				return _currentGrade;
+			}
+
+			var elapsed = Time.time - _gradeTransitionStartTime;
+			var t = Mathf.Clamp01(elapsed / gradeTransitionDuration);
+
+			if(t >= 1f)
+			{
+				_isTransitioning = false;
+				return _currentGrade;
+			}
+
+			return Random.value < t ? _currentGrade : _previousGrade;
+		}
+
+	private void Update()
+	{
+		if(simulator == null || goalTransform == null)
+		{
+			return;
+		}
+
+		UpdateGoal();
+		UpdateZombies();
+		UpdateSpawnCooling();
+		HandleSpawning();
+		RenderZombies();
+	}
 
 		private void UpdateGoal()
 		{
@@ -251,36 +395,94 @@ namespace TowerDefense
 
 		private void HandleSpawning()
 		{
-			if(Time.time >= nextSpawnTime && zombies.Count < maxZombies)
+			while(Time.time >= nextSpawnTime && zombies.Count < maxZombies)
 			{
 				SpawnZombie();
 				var adaptiveInterval = CalculateAdaptiveSpawnInterval();
-				nextSpawnTime = Time.time + adaptiveInterval;
+				nextSpawnTime += adaptiveInterval;
 			}
 		}
 
-		private float CalculateAdaptiveSpawnInterval()
+	private void UpdateSpawnCooling()
+	{
+		var zombiesNearWallCount = GetZombiesNearWallCount();
+
+		if(zombiesNearWallCount > zombiesNearWallThreshold)
 		{
-			var towersManager = TowersManager.Instance;
-			if(towersManager == null)
+			if(!_isSpawnCooling)
 			{
-				return noTowerSpawnInterval;
+				_isSpawnCooling = true;
+				_coolingTransitionStartTime = Time.time;
+				_coolingTransitionTarget = spawnCoolingMultiplier;
 			}
-
-			var correctedTotalDPS = towersManager.GetCorrectedTotalDPS();
-
-			if(correctedTotalDPS <= 0f)
-			{
-				return noTowerSpawnInterval;
-			}
-
-			var zombieHealth = config.zombieHealth;
-			var zombiesKilledPerSecond = correctedTotalDPS / zombieHealth;
-
-			var targetSpawnInterval = spawnRateBalanceFactor / zombiesKilledPerSecond;
-
-			return Mathf.Clamp(targetSpawnInterval, minSpawnInterval, maxSpawnInterval);
+			_hasZeroZombiesNearWall = false;
 		}
+
+		if(_isSpawnCooling)
+		{
+			if(zombiesNearWallCount == 0)
+			{
+				if(!_hasZeroZombiesNearWall)
+				{
+					_hasZeroZombiesNearWall = true;
+					_zeroZombiesStartTime = Time.time;
+				}
+				else if(Time.time - _zeroZombiesStartTime >= zeroZombiesRequiredDuration)
+				{
+					_isSpawnCooling = false;
+					_hasZeroZombiesNearWall = false;
+					_coolingTransitionStartTime = Time.time;
+					_coolingTransitionTarget = 1f;
+				}
+			}
+			else
+			{
+				_hasZeroZombiesNearWall = false;
+			}
+		}
+
+		var elapsed = Time.time - _coolingTransitionStartTime;
+		var t = Mathf.Clamp01(elapsed / coolingTransitionDuration);
+		var startValue = _currentCoolingFactor;
+		_currentCoolingFactor = Mathf.Lerp(startValue, _coolingTransitionTarget, t);
+	}
+
+	private int GetZombiesNearWallCount()
+	{
+		var count = 0;
+		for(var i = 0; i < zombies.Count; i++)
+		{
+			if(!zombies[i].IsDead && zombies[i].IsNearTheWall)
+			{
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private float CalculateAdaptiveSpawnInterval()
+	{
+		var towersManager = TowersManager.Instance;
+		if(towersManager == null)
+		{
+			return noTowerSpawnInterval * _currentCoolingFactor;
+		}
+
+		var correctedTotalDPS = towersManager.GetCorrectedTotalDPS();
+
+		if(correctedTotalDPS <= 0f)
+		{
+			return noTowerSpawnInterval * _currentCoolingFactor;
+		}
+
+		var zombieHealth = GetCurrentInterpolatedHealth();
+		var zombiesKilledPerSecond = correctedTotalDPS / zombieHealth;
+
+		var targetSpawnInterval = spawnRateBalanceFactor / zombiesKilledPerSecond;
+
+		var baseInterval = Mathf.Clamp(targetSpawnInterval, minSpawnInterval, maxSpawnInterval);
+		return baseInterval * _currentCoolingFactor;
+	}
 
 		private void RenderZombies()
 		{
@@ -291,10 +493,22 @@ namespace TowerDefense
 			}
 		}
 
-		private float2 GetCurrentGoal()
+	private float2 GetCurrentGoal()
+	{
+		if(goalTransform == null)
 		{
-			var goal = goalTransform.position;
-			return new float2(goal.x, goal.z);
+			return _goalPos;
+		}
+		var goal = goalTransform.position;
+		return new float2(goal.x, goal.z);
+	}
+
+		private void OnZombieTookDamage(ZombieUnit zombie, float damage)
+		{
+			if(HpBarManager.Instance != null && !zombie.IsDead)
+			{
+				HpBarManager.Instance.ShowHpBar(zombie);
+			}
 		}
 
 		private void HandleZombieDeath(ZombieUnit zombie)
@@ -308,6 +522,7 @@ namespace TowerDefense
 			if(index >= 0 && index < zombies.Count)
 			{
 				var zombie = zombies[index];
+				zombie.OnTakeDamage -= OnZombieTookDamage;
 				zombie.Cleanup(simulator);
 				zombies.RemoveAt(index);
 			}
@@ -347,7 +562,7 @@ namespace TowerDefense
 		private void OnDestroy()
 		{
 			zombies.Clear();
-			simulator.Dispose();
+			simulator?.Dispose();
 		}
 
 		private void OnDrawGizmosSelected()

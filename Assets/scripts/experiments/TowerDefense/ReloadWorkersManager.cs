@@ -56,7 +56,7 @@ namespace TowerDefense
 	public static TowerUnit FindAvailableTowerNeedingReload(GameManager gameManager, ReloadWorker requestingWorker)
 	{
 		var towersManager = TowersManager.Instance;
-		if (towersManager == null)
+		if (towersManager == null || requestingWorker == null)
 		{
 			return null;
 		}
@@ -67,7 +67,63 @@ namespace TowerDefense
 			tower.GetCurrentAmmo() == 0 &&
 			!IsTowerBeingServiced(tower)).ToList();
 
-		return availableTowers.FirstOrDefault();
+		if (availableTowers.Count == 0)
+		{
+			return null;
+		}
+
+		var allWorkers = Object.FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
+		var waitingWorkers = allWorkers.Where(w => 
+			w != null && 
+			w.GetCurrentState() == ReloadWorker.WorkerState.WaitingAtStorage).ToList();
+
+		if (waitingWorkers.Count == 0)
+		{
+			return null;
+		}
+
+		TowerUnit bestTowerForThisWorker = null;
+		float bestScore = float.MaxValue;
+
+		foreach (var tower in availableTowers)
+		{
+			var closestWorkerToTower = GetClosestWorkerToTower(tower, waitingWorkers);
+			
+			if (closestWorkerToTower == requestingWorker)
+			{
+				var distance = Vector3.Distance(requestingWorker.transform.position, tower.transform.position);
+				if (distance < bestScore)
+				{
+					bestScore = distance;
+					bestTowerForThisWorker = tower;
+				}
+			}
+		}
+
+		return bestTowerForThisWorker;
+	}
+
+	private static ReloadWorker GetClosestWorkerToTower(TowerUnit tower, List<ReloadWorker> workers)
+	{
+		if (tower == null || workers == null || workers.Count == 0)
+		{
+			return null;
+		}
+
+		ReloadWorker closestWorker = null;
+		float closestDistance = float.MaxValue;
+
+		foreach (var worker in workers)
+		{
+			var distance = Vector3.Distance(worker.transform.position, tower.transform.position);
+			if (distance < closestDistance)
+			{
+				closestDistance = distance;
+				closestWorker = worker;
+			}
+		}
+
+		return closestWorker;
 	}
 
 		public static bool IsTowerBeingServiced(TowerUnit tower)

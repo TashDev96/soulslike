@@ -347,39 +347,41 @@ namespace RVO
 		///     Performs a simulation step and updates the two-dimensional
 		///     position and two-dimensional velocity of each agent.
 		/// </summary>
-		public void DoStep()
-		{
-			EnsureCompleted();
+	public void DoStep()
+	{
+		EnsureCompleted();
 
-			EnsureObstacleTree();
+		EnsureObstacleTree();
 
-			var arrayLength = agents.Length;
+		var arrayLength = agents.Length;
 
-			EnsureTreeCapacity(ref kdTree, arrayLength);
+		EnsureTreeCapacity(ref kdTree, arrayLength);
 
-			// job0
-			var buildJob = new BuildJob(kdTree, agents.AsParallelReader());
-			var jobHandle0 = buildJob.Schedule();
+		var effectiveTimeStep = timeStep * Time.timeScale;
 
-			// job1
-			var innerLoop = Mathf.Max(arrayLength / Mathf.Max(numWorkers, 1), 1);
-			var agentResult = new NativeArray<float2>(agents.Length, Allocator.TempJob);
-			var computeJob = new ComputeJob(
-				agents.AsParallelReader(),
-				obstacles.AsParallelReader(),
-				kdTree.AsParallelReader(),
-				timeStep,
-				agentResult);
-			var jobHandle1 = computeJob.Schedule(arrayLength, innerLoop, jobHandle0);
+		// job0
+		var buildJob = new BuildJob(kdTree, agents.AsParallelReader());
+		var jobHandle0 = buildJob.Schedule();
 
-			// job2
-			var updateJob = new UpdateJob(agents, timeStep, agentResult);
-			var jobHandle2 = updateJob.Schedule(arrayLength, innerLoop, jobHandle1);
-			agentResult.Dispose(jobHandle2);
+		// job1
+		var innerLoop = Mathf.Max(arrayLength / Mathf.Max(numWorkers, 1), 1);
+		var agentResult = new NativeArray<float2>(agents.Length, Allocator.TempJob);
+		var computeJob = new ComputeJob(
+			agents.AsParallelReader(),
+			obstacles.AsParallelReader(),
+			kdTree.AsParallelReader(),
+			effectiveTimeStep,
+			agentResult);
+		var jobHandle1 = computeJob.Schedule(arrayLength, innerLoop, jobHandle0);
 
-			jobHandle = jobHandle2;
-			globalTime += timeStep;
-		}
+		// job2
+		var updateJob = new UpdateJob(agents, effectiveTimeStep, agentResult);
+		var jobHandle2 = updateJob.Schedule(arrayLength, innerLoop, jobHandle1);
+		agentResult.Dispose(jobHandle2);
+
+		jobHandle = jobHandle2;
+		globalTime += effectiveTimeStep;
+	}
 
 		/// <summary>
 		///     Returns the specified agent neighbor of the specified agent.

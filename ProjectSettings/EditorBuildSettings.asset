@@ -8,9 +8,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/content/core_game/levels/scenes/test.unity
     guid: 2da935d8e95c7034c8e13ab6c8407547
-  - enabled: 1
+  - enabled: 0
     path: Assets/RVO2/Samples/SampleGameObjects/SampleGameObjects.unity
     guid: fb1e93b1f59a5d7429d8393b1fce70de
+  - enabled: 1
+    path: Assets/experiments/td/Lvl1.unity
+    guid: a6910f94f9fd64af2b6848378807c44d
+  - enabled: 1
+    path: Assets/experiments/td/Lvl2.unity
+    guid: bc5ca241df8ff466090788a4a1cf5098
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 1f61458a9f87c1048948d9f8ac744bbe, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 614b1531b33794f11b675266a0afc980, type: 2}

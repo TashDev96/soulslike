@@ -10,22 +10,26 @@ namespace TowerDefense
 		private int _levelUpPrice;
 		[SerializeField]
 		private float _baseDamage;
-		[SerializeField]
-		private int _towersCount;
+	[SerializeField]
+	private int _towersToAdd;
+	[SerializeField]
+	private float _damageMultiplier;
 
-		public UpgradeLevelConfig()
-		{
-			_levelUpPrice = 0;
-			_baseDamage = 0f;
-			_towersCount = 1;
-		}
+	public UpgradeLevelConfig()
+	{
+		_levelUpPrice = 0;
+		_baseDamage = 0f;
+		_towersToAdd = 0;
+		_damageMultiplier = 0f;
+	}
 
-		public UpgradeLevelConfig(int levelUpPrice, float baseDamage, int towersCount)
-		{
-			_levelUpPrice = levelUpPrice;
-			_baseDamage = baseDamage;
-			_towersCount = towersCount;
-		}
+	public UpgradeLevelConfig(int levelUpPrice, float baseDamage, int towersToAdd, float damageMultiplier = 0f)
+	{
+		_levelUpPrice = levelUpPrice;
+		_baseDamage = baseDamage;
+		_towersToAdd = towersToAdd;
+		_damageMultiplier = damageMultiplier;
+	}
 
 		public int LevelUpPrice 
 		{ 
@@ -37,10 +41,15 @@ namespace TowerDefense
 			get => _baseDamage; 
 			set => _baseDamage = value; 
 		}
-		public int TowersCount 
+	public int TowersToAdd 
+	{ 
+		get => _towersToAdd; 
+		set => _towersToAdd = value; 
+	}
+		public float DamageMultiplier 
 		{ 
-			get => _towersCount; 
-			set => _towersCount = value; 
+			get => _damageMultiplier; 
+			set => _damageMultiplier = value; 
 		}
 	}
 }

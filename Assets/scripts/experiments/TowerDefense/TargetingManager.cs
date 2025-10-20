@@ -341,7 +341,7 @@ public static class TargetingManager
 			return false;
 		}
 
-		if(IsZombieTargeted(zombie))
+		if(zombieTargeters.TryGetValue(zombie, out var currentTargeter) && currentTargeter != tower)
 		{
 			return false;
 		}
