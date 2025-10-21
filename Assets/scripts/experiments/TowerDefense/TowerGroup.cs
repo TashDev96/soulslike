@@ -15,39 +15,39 @@ namespace TowerDefense
 		private readonly List<TowerUnit> _towerUnits = new();
 		private int _currentUpgradeLevel;
 
-	private void Start()
-	{
-	}
-
-	public bool HasAnyTowers()
-	{
-		return _towerUnits.Count > 0;
-	}
-
-	public int GetBuildPrice()
-	{
-		if(config?.UpgradeLevels == null || config.UpgradeLevels.Count == 0)
+		private void Start()
 		{
-			return 100;
-		}
-		return config.UpgradeLevels[0].LevelUpPrice;
-	}
-
-	public void BuildFirstTower()
-	{
-		if(_towerUnits.Count > 0)
-		{
-			return;
 		}
 
-		SpawnTowers(1);
-		_currentUpgradeLevel = 0;
-	}
+		public bool HasAnyTowers()
+		{
+			return _towerUnits.Count > 0;
+		}
 
-	public bool CanUpgrade()
-	{
-		return config != null && config.UpgradeLevels != null && _currentUpgradeLevel + 1 < config.UpgradeLevels.Count;
-	}
+		public int GetBuildPrice()
+		{
+			if(config?.UpgradeLevels == null || config.UpgradeLevels.Count == 0)
+			{
+				return 100;
+			}
+			return config.UpgradeLevels[0].LevelUpPrice;
+		}
+
+		public void BuildFirstTower()
+		{
+			if(_towerUnits.Count > 0)
+			{
+				return;
+			}
+
+			SpawnTowers(1);
+			_currentUpgradeLevel = 0;
+		}
+
+		public bool CanUpgrade()
+		{
+			return config != null && config.UpgradeLevels != null && _currentUpgradeLevel + 1 < config.UpgradeLevels.Count;
+		}
 
 		public int GetUpgradePrice()
 		{
@@ -58,33 +58,33 @@ namespace TowerDefense
 			return config.UpgradeLevels[_currentUpgradeLevel + 1].LevelUpPrice;
 		}
 
-	public void UpgradeLevel()
-	{
-		if(!CanUpgrade())
+		public void UpgradeLevel()
 		{
-			return;
-		}
+			if(!CanUpgrade())
+			{
+				return;
+			}
 
-		var previousTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
-		_currentUpgradeLevel++;
-		var newTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
+			var previousTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
+			_currentUpgradeLevel++;
+			var newTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
 
-		if(newTowerCount > previousTowerCount)
-		{
-			SpawnTowers(newTowerCount);
-		}
+			if(newTowerCount > previousTowerCount)
+			{
+				SpawnTowers(newTowerCount);
+			}
 
-		foreach(var tower in _towerUnits)
-		{
-			tower.SetUpgradeLevel(_currentUpgradeLevel);
-		}
+			foreach(var tower in _towerUnits)
+			{
+				tower.SetUpgradeLevel(_currentUpgradeLevel);
+			}
 
-		var zombieManager = FindFirstObjectByType<ZombieManager>();
-		if(zombieManager != null)
-		{
-			zombieManager.OnTowerUpgraded();
+			var zombieManager = FindFirstObjectByType<ZombieManager>();
+			if(zombieManager != null)
+			{
+				zombieManager.OnTowerUpgraded();
+			}
 		}
-	}
 
 		public int GetCurrentUpgradeLevel()
 		{

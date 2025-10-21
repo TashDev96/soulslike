@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace TowerDefense
 {
@@ -15,50 +15,62 @@ namespace TowerDefense
 		[Button("Paste From Google Sheets")]
 		private void PasteFromGoogleSheets()
 		{
-			string clipboardText = GUIUtility.systemCopyBuffer;
-			if (string.IsNullOrEmpty(clipboardText))
+			var clipboardText = GUIUtility.systemCopyBuffer;
+			if(string.IsNullOrEmpty(clipboardText))
 			{
 				Debug.LogWarning("Clipboard is empty");
 				return;
 			}
 
-			string[] lines = clipboardText.Split('\n');
-			int validLines = 0;
-			
+			var lines = clipboardText.Split('\n');
+			var validLines = 0;
+
 			EnsureUpgradeLevelsExist(lines.Length);
 
-			for (int i = 0; i < lines.Length; i++)
+			for(var i = 0; i < lines.Length; i++)
 			{
-				string line = lines[i].Trim();
-				if (string.IsNullOrEmpty(line))
+				var line = lines[i].Trim();
+				if(string.IsNullOrEmpty(line))
+				{
 					continue;
+				}
 
-				string[] columns = line.Split('\t');
-				if (columns.Length < 2)
+				var columns = line.Split('\t');
+				if(columns.Length < 2)
+				{
 					continue;
+				}
 
-				int price = 0;
-				float damage = 0f;
-				float damageMultiplier = 0f;
-				int towersToAdd = 0;
+				var price = 0;
+				var damage = 0f;
+				var damageMultiplier = 0f;
+				var towersToAdd = 0;
 
-				if (columns.Length > 0 && !string.IsNullOrWhiteSpace(columns[0]))
+				if(columns.Length > 0 && !string.IsNullOrWhiteSpace(columns[0]))
+				{
 					int.TryParse(columns[0].Trim(), out price);
+				}
 
-				if (columns.Length > 1 && !string.IsNullOrWhiteSpace(columns[1]))
+				if(columns.Length > 1 && !string.IsNullOrWhiteSpace(columns[1]))
+				{
 					float.TryParse(columns[1].Trim(), out damage);
+				}
 
-				if (columns.Length > 2 && !string.IsNullOrWhiteSpace(columns[2]))
+				if(columns.Length > 2 && !string.IsNullOrWhiteSpace(columns[2]))
+				{
 					float.TryParse(columns[2].Trim(), out damageMultiplier);
+				}
 
-				if (columns.Length > 3 && !string.IsNullOrWhiteSpace(columns[3]))
+				if(columns.Length > 3 && !string.IsNullOrWhiteSpace(columns[3]))
+				{
 					int.TryParse(columns[3].Trim(), out towersToAdd);
+				}
 
 				_upgradeLevels[validLines].LevelUpPrice = price;
 				_upgradeLevels[validLines].BaseDamage = damage;
 				_upgradeLevels[validLines].DamageMultiplier = damageMultiplier;
 				_upgradeLevels[validLines].TowersToAdd = towersToAdd;
-				
+
 				validLines++;
 			}
 
@@ -67,16 +79,15 @@ namespace TowerDefense
 
 		private void EnsureUpgradeLevelsExist(int requiredCount = 25)
 		{
-			if (_upgradeLevels == null)
+			if(_upgradeLevels == null)
 			{
 				_upgradeLevels = new List<UpgradeLevelConfig>();
 			}
 
-			while (_upgradeLevels.Count < requiredCount)
+			while(_upgradeLevels.Count < requiredCount)
 			{
 				_upgradeLevels.Add(new UpgradeLevelConfig());
 			}
 		}
 	}
 }
-

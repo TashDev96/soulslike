@@ -1,311 +1,328 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using RVO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TowerDefense
 {
-    public class GameManager : MonoBehaviour
-    {
-        [Header("Game Settings")]
-        [SerializeField] private int startingMoney = 500;
-        [SerializeField] private int towerCost = 100;
-        
-        [Header("Tower Prefab")]
-        [SerializeField] private GameObject towerPrefab;
-        
-        [Header("Ammo System")]
-        [SerializeField] private AmmoStorage existingAmmoStorage;
-        
-        [Header("UI References")]
-        [SerializeField] private GameUI gameUI;
-        [SerializeField] private UiManager uiManager;
-        
-        [Header("Next Scene")]
-        [SerializeField] private string _nextScene;
-        [SerializeField] private float timeToUnlockNextScene = 30f;
-        [SerializeField] private GameObject button;
+	public class GameManager : MonoBehaviour
+	{
+		[Header("Game Settings")]
+		[SerializeField]
+		private int startingMoney = 500;
+		[SerializeField]
+		private int towerCost = 100;
 
-        private int currentMoney;
-        private ZombieManager zombieManager;
-        private List<TowerUnit> towers = new List<TowerUnit>();
-        private List<ReloadWorker> reloadWorkers = new List<ReloadWorker>();
-        private AmmoStorage ammoStorage;
-        private Camera playerCamera;
+		[Header("Tower Prefab")]
+		[SerializeField]
+		private GameObject towerPrefab;
 
-        public System.Action<int> OnMoneyChanged;
+		[Header("Ammo System")]
+		[SerializeField]
+		private AmmoStorage existingAmmoStorage;
 
-        private void Start()
-        {
-            Time.timeScale=1.2f;
-            currentMoney = startingMoney;
-            zombieManager = FindFirstObjectByType<ZombieManager>();
-            towers = GameObject.FindObjectsByType<TowerUnit>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID).ToList();
-           Debug.LogError(towers.Count);
-            playerCamera = Camera.main;
-            
-            TargetingManager.Initialize(zombieManager);
-            
-            InitializeAmmoSystem();
-            
-            if (gameUI != null)
-            {
-                gameUI.Initialize(this);
-            }
+		[Header("UI References")]
+		[SerializeField]
+		private GameUI gameUI;
+		[SerializeField]
+		private UiManager uiManager;
 
-            if (uiManager == null)
-            {
-                uiManager = FindFirstObjectByType<UiManager>();
-                if (uiManager == null)
-                {
-                    var uiManagerGO = new GameObject("UiManager");
-                    uiManager = uiManagerGO.AddComponent<UiManager>();
-                }
-            }
-            
-            SetupEventListeners();
-            OnMoneyChanged?.Invoke(currentMoney);
-            
-            if (!string.IsNullOrEmpty(_nextScene) && button != null)
-            {
-                button.SetActive(false);
-                
-                var buttonComponent = button.GetComponent<Button>();
-                if (buttonComponent != null)
-                {
-                    buttonComponent.onClick.AddListener(LoadNextScene);
-                }
-                
-                Invoke(nameof(UnlockNextSceneButton), timeToUnlockNextScene);
-            }
-        }
-        
-        private void UnlockNextSceneButton()
-        {
-            if (button != null)
-            {
-                button.SetActive(true);
-            }
-        }
-        
-        public void LoadNextScene()
-        {
-            if (!string.IsNullOrEmpty(_nextScene))
-            {
-                CleanupStaticVariables();
-                SceneManager.LoadScene(_nextScene);
-            }
-        }
-        
-        private void CleanupStaticVariables()
-        {
-            TargetingManager.ClearAllTargets();
-            ReloadWorkersManager.ClearAllReservations();
-            
-            var simulator = RVO.SampleGameObjects.GetSimulator();
-            if (simulator != null)
-            {
-                simulator.Clear();
-            }
-        }
+		[Header("Next Scene")]
+		[SerializeField]
+		private string _nextScene;
+		[SerializeField]
+		private float timeToUnlockNextScene = 30f;
+		[SerializeField]
+		private GameObject button;
 
-        private void SetupEventListeners()
-        {
-            if (zombieManager != null)
-            {
-                zombieManager.OnZombieDied += HandleZombieDied;
-                zombieManager.OnZombieReachedGoal += HandleZombieReachedGoal;
-            }
-        }
+		public Action<int> OnMoneyChanged;
 
-        private bool IsClickingOnTower()
-        {
-            if (playerCamera == null) return false;
-            
-            LayerMask characterLayer = 1 << LayerMask.NameToLayer("Character");
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, characterLayer))
-            {
-                TowerUnit tower = hit.collider.GetComponent<TowerUnit>();
-                if (tower == null)
-                {
-                    tower = hit.collider.GetComponentInParent<TowerUnit>();
-                }
-                return tower != null;
-            }
-            return false;
-        }
+		private int currentMoney;
+		private ZombieManager zombieManager;
+		private List<TowerUnit> towers = new();
+		private readonly List<ReloadWorker> reloadWorkers = new();
+		private AmmoStorage ammoStorage;
+		private Camera playerCamera;
 
-        private bool GetMouseWorldPosition(out Vector3 worldPosition)
-        {
-            worldPosition = Vector3.zero;
-            
-            if (playerCamera == null) return false;
-            
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                worldPosition = hit.point;
-                return true;
-            }
-            
-            return false;
-        }
+		private void InitializeAmmoSystem()
+		{
+			if(existingAmmoStorage != null)
+			{
+				ammoStorage = existingAmmoStorage;
+			}
+			else
+			{
+				ammoStorage = FindFirstObjectByType<AmmoStorage>();
+				if(ammoStorage == null)
+				{
+					Debug.LogWarning("GameManager: No AmmoStorage found in scene and none assigned!");
+				}
+			}
 
-        private bool IsValidTowerPlacement(Vector3 position)
-        {
-            float minDistance = 3f;
-            foreach (var tower in towers)
-            {
-                if (tower != null && Vector3.Distance(position, tower.transform.position) < minDistance)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+			var existingReloadWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
+			if(existingReloadWorkers != null && existingReloadWorkers.Length > 0)
+			{
+				reloadWorkers.Clear();
+				foreach(var worker in existingReloadWorkers)
+				{
+					if(worker != null)
+					{
+						reloadWorkers.Add(worker);
+					}
+				}
+			}
+			else
+			{
+				var foundWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
+				reloadWorkers.Clear();
+				reloadWorkers.AddRange(foundWorkers);
 
-        private void PlaceTower(Vector3 position)
-        {
-            if (towerPrefab == null)
-            {
-                Debug.LogError("GameManager: Tower prefab is not assigned!");
-                return;
-            }
+				if(reloadWorkers.Count == 0)
+				{
+					Debug.LogWarning("GameManager: No ReloadWorkers found in scene and none assigned!");
+				}
+			}
 
-            var towerGO = Instantiate(towerPrefab, position, Quaternion.identity);
-            var towerUnit = towerGO.GetComponent<TowerUnit>();
-            
-            if (towerUnit == null)
-            {
-                towerUnit = towerGO.AddComponent<TowerUnit>();
-            }
-            
-            towers.Add(towerUnit);
-            SpendMoney(towerCost);
-            
-            Debug.Log($"Tower placed at {position}. Money remaining: {currentMoney}");
-        }
+			Debug.Log($"GameManager: Initialized ammo system with {reloadWorkers.Count} workers and {(ammoStorage != null ? "1" : "0")} storage");
+		}
 
-        public void OnZombieHit(ZombieUnit zombie, float damage)
-        {
-            AddMoney(Mathf.RoundToInt(damage));
-        }
+		private void Start()
+		{
+			Time.timeScale = 1.2f;
+			currentMoney = startingMoney;
+			zombieManager = FindFirstObjectByType<ZombieManager>();
+			towers = FindObjectsByType<TowerUnit>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID).ToList();
+			Debug.LogError(towers.Count);
+			playerCamera = Camera.main;
 
-        private void HandleZombieDied(ZombieUnit zombie)
-        {
-        }
+			TargetingManager.Initialize(zombieManager);
 
-        private void HandleZombieReachedGoal(ZombieUnit zombie)
-        {
-        }
+			InitializeAmmoSystem();
 
-        public void AddMoney(int amount)
-        {
-            currentMoney += amount;
-            OnMoneyChanged?.Invoke(currentMoney);
-        }
+			if(gameUI != null)
+			{
+				gameUI.Initialize(this);
+			}
 
-        public void SpendMoney(int amount)
-        {
-            currentMoney = Mathf.Max(0, currentMoney - amount);
-            OnMoneyChanged?.Invoke(currentMoney);
-        }
+			if(uiManager == null)
+			{
+				uiManager = FindFirstObjectByType<UiManager>();
+				if(uiManager == null)
+				{
+					var uiManagerGO = new GameObject("UiManager");
+					uiManager = uiManagerGO.AddComponent<UiManager>();
+				}
+			}
 
-        public bool CanAffordTower()
-        {
-            return currentMoney >= towerCost;
-        }
+			SetupEventListeners();
+			OnMoneyChanged?.Invoke(currentMoney);
 
-        public int GetCurrentMoney()
-        {
-            return currentMoney;
-        }
+			if(!string.IsNullOrEmpty(_nextScene) && button != null)
+			{
+				button.SetActive(false);
 
-        public int GetTowerCost()
-        {
-            return towerCost;
-        }
+				var buttonComponent = button.GetComponent<Button>();
+				if(buttonComponent != null)
+				{
+					buttonComponent.onClick.AddListener(LoadNextScene);
+				}
 
-        public int GetTowerCount()
-        {
-            return towers.Count;
-        }
+				Invoke(nameof(UnlockNextSceneButton), timeToUnlockNextScene);
+			}
+		}
 
-        public List<TowerUnit> GetTowers()
-        {
-	        return towers;
-        }
+		public void LoadNextScene()
+		{
+			if(!string.IsNullOrEmpty(_nextScene))
+			{
+				CleanupStaticVariables();
+				SceneManager.LoadScene(_nextScene);
+			}
+		}
 
-        public AmmoStorage GetAmmoStorage()
-        {
-            return ammoStorage;
-        }
+		public void OnZombieHit(ZombieUnit zombie, float damage)
+		{
+			AddMoney(Mathf.RoundToInt(damage));
+		}
 
-        public List<ReloadWorker> GetReloadWorkers()
-        {
-            return new List<ReloadWorker>(reloadWorkers);
-        }
+		public void AddMoney(int amount)
+		{
+			currentMoney += amount;
+			OnMoneyChanged?.Invoke(currentMoney);
+		}
 
-        private void InitializeAmmoSystem()
-        {
-            if (existingAmmoStorage != null)
-            {
-                ammoStorage = existingAmmoStorage;
-            }
-            else
-            {
-                ammoStorage = FindFirstObjectByType<AmmoStorage>();
-                if (ammoStorage == null)
-                {
-                    Debug.LogWarning("GameManager: No AmmoStorage found in scene and none assigned!");
-                }
-            }
+		public void SpendMoney(int amount)
+		{
+			currentMoney = Mathf.Max(0, currentMoney - amount);
+			OnMoneyChanged?.Invoke(currentMoney);
+		}
 
-            var existingReloadWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
-            if (existingReloadWorkers != null && existingReloadWorkers.Length > 0)
-            {
-                reloadWorkers.Clear();
-                foreach (var worker in existingReloadWorkers)
-                {
-                    if (worker != null)
-                    {
-                        reloadWorkers.Add(worker);
-                    }
-                }
-            }
-            else
-            {
-                var foundWorkers = FindObjectsByType<ReloadWorker>(FindObjectsSortMode.None);
-                reloadWorkers.Clear();
-                reloadWorkers.AddRange(foundWorkers);
-                
-                if (reloadWorkers.Count == 0)
-                {
-                    Debug.LogWarning("GameManager: No ReloadWorkers found in scene and none assigned!");
-                }
-            }
-            
-            Debug.Log($"GameManager: Initialized ammo system with {reloadWorkers.Count} workers and {(ammoStorage != null ? "1" : "0")} storage");
-        }
+		public bool CanAffordTower()
+		{
+			return currentMoney >= towerCost;
+		}
 
-        private void OnDestroy()
-        {
-            if (zombieManager != null)
-            {
-                zombieManager.OnZombieDied -= HandleZombieDied;
-                zombieManager.OnZombieReachedGoal -= HandleZombieReachedGoal;
-            }
-            
-            if (!string.IsNullOrEmpty(_nextScene) && button != null)
-            {
-                var buttonComponent = button.GetComponent<Button>();
-                if (buttonComponent != null)
-                {
-                    buttonComponent.onClick.RemoveListener(LoadNextScene);
-                }
-            }
-        }
-    }
+		public int GetCurrentMoney()
+		{
+			return currentMoney;
+		}
+
+		public int GetTowerCost()
+		{
+			return towerCost;
+		}
+
+		public int GetTowerCount()
+		{
+			return towers.Count;
+		}
+
+		public List<TowerUnit> GetTowers()
+		{
+			return towers;
+		}
+
+		public AmmoStorage GetAmmoStorage()
+		{
+			return ammoStorage;
+		}
+
+		public List<ReloadWorker> GetReloadWorkers()
+		{
+			return new List<ReloadWorker>(reloadWorkers);
+		}
+
+		private void UnlockNextSceneButton()
+		{
+			if(button != null)
+			{
+				button.SetActive(true);
+			}
+		}
+
+		private void CleanupStaticVariables()
+		{
+			TargetingManager.ClearAllTargets();
+			ReloadWorkersManager.ClearAllReservations();
+
+			var simulator = SampleGameObjects.GetSimulator();
+			if(simulator != null)
+			{
+				simulator.Clear();
+			}
+		}
+
+		private void SetupEventListeners()
+		{
+			if(zombieManager != null)
+			{
+				zombieManager.OnZombieDied += HandleZombieDied;
+				zombieManager.OnZombieReachedGoal += HandleZombieReachedGoal;
+			}
+		}
+
+		private bool IsClickingOnTower()
+		{
+			if(playerCamera == null)
+			{
+				return false;
+			}
+
+			LayerMask characterLayer = 1 << LayerMask.NameToLayer("Character");
+			var ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+			if(Physics.Raycast(ray, out var hit, Mathf.Infinity, characterLayer))
+			{
+				var tower = hit.collider.GetComponent<TowerUnit>();
+				if(tower == null)
+				{
+					tower = hit.collider.GetComponentInParent<TowerUnit>();
+				}
+				return tower != null;
+			}
+			return false;
+		}
+
+		private bool GetMouseWorldPosition(out Vector3 worldPosition)
+		{
+			worldPosition = Vector3.zero;
+
+			if(playerCamera == null)
+			{
+				return false;
+			}
+
+			var ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+			if(Physics.Raycast(ray, out var hit))
+			{
+				worldPosition = hit.point;
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool IsValidTowerPlacement(Vector3 position)
+		{
+			var minDistance = 3f;
+			foreach(var tower in towers)
+			{
+				if(tower != null && Vector3.Distance(position, tower.transform.position) < minDistance)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private void PlaceTower(Vector3 position)
+		{
+			if(towerPrefab == null)
+			{
+				Debug.LogError("GameManager: Tower prefab is not assigned!");
+				return;
+			}
+
+			var towerGO = Instantiate(towerPrefab, position, Quaternion.identity);
+			var towerUnit = towerGO.GetComponent<TowerUnit>();
+
+			if(towerUnit == null)
+			{
+				towerUnit = towerGO.AddComponent<TowerUnit>();
+			}
+
+			towers.Add(towerUnit);
+			SpendMoney(towerCost);
+
+			Debug.Log($"Tower placed at {position}. Money remaining: {currentMoney}");
+		}
+
+		private void HandleZombieDied(ZombieUnit zombie)
+		{
+		}
+
+		private void HandleZombieReachedGoal(ZombieUnit zombie)
+		{
+		}
+
+		private void OnDestroy()
+		{
+			if(zombieManager != null)
+			{
+				zombieManager.OnZombieDied -= HandleZombieDied;
+				zombieManager.OnZombieReachedGoal -= HandleZombieReachedGoal;
+			}
+
+			if(!string.IsNullOrEmpty(_nextScene) && button != null)
+			{
+				var buttonComponent = button.GetComponent<Button>();
+				if(buttonComponent != null)
+				{
+					buttonComponent.onClick.RemoveListener(LoadNextScene);
+				}
+			}
+		}
+	}
 }

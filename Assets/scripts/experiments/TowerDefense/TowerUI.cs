@@ -1,31 +1,43 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 namespace TowerDefense
 {
 	public class TowerUI : MonoBehaviour
 	{
-	[Header("UI Elements")]
-	[SerializeField] private TextMeshProUGUI towerNameText;
-	[SerializeField] private TextMeshProUGUI towerLevelText;
-	[SerializeField] private TextMeshProUGUI damagePerShotText;
-	[SerializeField] private Button upgradeButton;
-	[SerializeField] private TextMeshProUGUI upgradePriceText;
-	[SerializeField] private Button closeButton;
+		[Header("UI Elements")]
+		[SerializeField]
+		private TextMeshProUGUI towerNameText;
+		[SerializeField]
+		private TextMeshProUGUI towerLevelText;
+		[SerializeField]
+		private TextMeshProUGUI damagePerShotText;
+		[SerializeField]
+		private Button upgradeButton;
+		[SerializeField]
+		private TextMeshProUGUI upgradePriceText;
+		[SerializeField]
+		private Button closeButton;
 
 		[Header("Settings")]
-		[SerializeField] private float followSpeed = 5f;
+		[SerializeField]
+		private float followSpeed = 5f;
 
-		private TowerGroup targetTower;
-	public TowerGroup TargetTower => targetTower;
+		public Action<TowerUI> OnClosed;
+
 		private Camera playerCamera;
 		private Canvas parentCanvas;
 		private GameManager gameManager;
 		private RectTransform rectTransform;
+		public TowerGroup TargetTower { get; private set; }
 
-		public Action<TowerUI> OnClosed;
+		public void Initialize(TowerGroup tower)
+		{
+			TargetTower = tower;
+			UpdateUI();
+		}
 
 		private void Awake()
 		{
@@ -34,26 +46,26 @@ namespace TowerDefense
 			parentCanvas = GetComponentInParent<Canvas>();
 			gameManager = FindFirstObjectByType<GameManager>();
 
-			if (upgradeButton != null)
+			if(upgradeButton != null)
 			{
 				upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
 			}
 
-			if (closeButton != null)
+			if(closeButton != null)
 			{
 				closeButton.onClick.AddListener(OnCloseButtonClicked);
 			}
 		}
 
-		public void Initialize(TowerGroup tower)
+		public void Close()
 		{
-			targetTower = tower;
-			UpdateUI();
+			OnClosed?.Invoke(this);
+			Destroy(gameObject);
 		}
 
 		private void Update()
 		{
-			if (targetTower != null)
+			if(TargetTower != null)
 			{
 				UpdatePosition();
 				UpdateUI();
@@ -62,64 +74,64 @@ namespace TowerDefense
 
 		private void UpdatePosition()
 		{
-			if (targetTower == null || playerCamera == null || parentCanvas == null)
+			if(TargetTower == null || playerCamera == null || parentCanvas == null)
 			{
 				return;
 			}
 
-			Vector3 worldPosition = targetTower.transform.position + Vector3.up * 2f;
-			Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(playerCamera, worldPosition);
+			var worldPosition = TargetTower.transform.position + Vector3.up * 2f;
+			var screenPosition = RectTransformUtility.WorldToScreenPoint(playerCamera, worldPosition);
 
 			Vector2 localPoint;
-			if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				parentCanvas.transform as RectTransform, 
-				screenPosition, 
-				parentCanvas.worldCamera, 
-				out localPoint))
+			if(RectTransformUtility.ScreenPointToLocalPointInRectangle(
+				   parentCanvas.transform as RectTransform,
+				   screenPosition,
+				   parentCanvas.worldCamera,
+				   out localPoint))
 			{
-				Vector2 targetPosition = localPoint;
+				var targetPosition = localPoint;
 				rectTransform.localPosition = Vector2.Lerp(rectTransform.localPosition, targetPosition, followSpeed * Time.deltaTime);
 			}
 		}
 
 		private void UpdateUI()
 		{
-			if (targetTower == null)
+			if(TargetTower == null)
 			{
 				return;
 			}
 
-			var config = targetTower.GetConfig();
-			if (config == null)
+			var config = TargetTower.GetConfig();
+			if(config == null)
 			{
 				return;
 			}
 
-			if (towerNameText != null)
+			if(towerNameText != null)
 			{
 				towerNameText.text = config.TowerName;
 			}
 
-		if (towerLevelText != null)
-		{
-			int currentLevel = targetTower.GetCurrentUpgradeLevel();
-			towerLevelText.text = $"Level {currentLevel + 1}";
-		}
-
-		if (damagePerShotText != null)
-		{
-			float damagePerShot = targetTower.GetDamagePerShot();
-			damagePerShotText.text = $"Damage: {damagePerShot:F2}";
-		}
-
-		if (upgradeButton != null && upgradePriceText != null)
+			if(towerLevelText != null)
 			{
-				bool canUpgrade = targetTower.CanUpgrade();
-				upgradeButton.interactable = canUpgrade && gameManager != null && gameManager.GetCurrentMoney() >= targetTower.GetUpgradePrice();
+				var currentLevel = TargetTower.GetCurrentUpgradeLevel();
+				towerLevelText.text = $"Level {currentLevel + 1}";
+			}
 
-				if (canUpgrade)
+			if(damagePerShotText != null)
+			{
+				var damagePerShot = TargetTower.GetDamagePerShot();
+				damagePerShotText.text = $"Damage: {damagePerShot:F2}";
+			}
+
+			if(upgradeButton != null && upgradePriceText != null)
+			{
+				var canUpgrade = TargetTower.CanUpgrade();
+				upgradeButton.interactable = canUpgrade && gameManager != null && gameManager.GetCurrentMoney() >= TargetTower.GetUpgradePrice();
+
+				if(canUpgrade)
 				{
-					upgradePriceText.text = $"Upgrade: ${targetTower.GetUpgradePrice()}";
+					upgradePriceText.text = $"Upgrade: ${TargetTower.GetUpgradePrice()}";
 				}
 				else
 				{
@@ -131,13 +143,13 @@ namespace TowerDefense
 
 		private void OnUpgradeButtonClicked()
 		{
-			if (targetTower != null && targetTower.CanUpgrade() && gameManager != null)
+			if(TargetTower != null && TargetTower.CanUpgrade() && gameManager != null)
 			{
-				int upgradePrice = targetTower.GetUpgradePrice();
-				if (gameManager.GetCurrentMoney() >= upgradePrice)
+				var upgradePrice = TargetTower.GetUpgradePrice();
+				if(gameManager.GetCurrentMoney() >= upgradePrice)
 				{
 					gameManager.SpendMoney(upgradePrice);
-					targetTower.UpgradeLevel();
+					TargetTower.UpgradeLevel();
 					UpdateUI();
 				}
 			}
@@ -148,20 +160,14 @@ namespace TowerDefense
 			Close();
 		}
 
-		public void Close()
-		{
-			OnClosed?.Invoke(this);
-			Destroy(gameObject);
-		}
-
 		private void OnDestroy()
 		{
-			if (upgradeButton != null)
+			if(upgradeButton != null)
 			{
 				upgradeButton.onClick.RemoveListener(OnUpgradeButtonClicked);
 			}
 
-			if (closeButton != null)
+			if(closeButton != null)
 			{
 				closeButton.onClick.RemoveListener(OnCloseButtonClicked);
 			}

@@ -1,69 +1,45 @@
-using UnityEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace TowerDefense
 {
 	public class AmmoStorage : MonoBehaviour
 	{
-	[Header("Storage Configuration")]
-	[SerializeField]
-	private int maxCapacity = 100;
-	[SerializeField]
-	private float refillRate = 1f;
-	[SerializeField]
-	private float refillInterval = 2f;
-	
-	[Header("Loading Points")]
-	[SerializeField]
-	private Transform[] loadingPointTransforms;
+		[Header("Storage Configuration")]
+		[SerializeField]
+		private int maxCapacity = 100;
+		[SerializeField]
+		private float refillRate = 1f;
+		[SerializeField]
+		private float refillInterval = 2f;
+
+		[Header("Loading Points")]
+		[SerializeField]
+		private Transform[] loadingPointTransforms;
 
 		public Action<int, int> OnAmmoChanged;
 
-		private int currentAmmo;
 		private float lastRefillTime;
 
-	public int CurrentAmmo => currentAmmo;
-	public int MaxCapacity => maxCapacity;
-	public bool IsFull => currentAmmo >= maxCapacity;
-	public bool IsEmpty => currentAmmo <= 0;
+		public int CurrentAmmo { get; private set; }
+
+		public int MaxCapacity => maxCapacity;
+		public bool IsFull => CurrentAmmo >= maxCapacity;
+		public bool IsEmpty => CurrentAmmo <= 0;
 
 		private void Start()
 		{
-			currentAmmo = maxCapacity;
+			CurrentAmmo = maxCapacity;
 			lastRefillTime = Time.time;
-			OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
-		}
-
-		private void Update()
-		{
-			if (!IsFull && Time.time >= lastRefillTime + refillInterval)
-			{
-				RefillAmmo();
-			}
-		}
-
-		private void RefillAmmo()
-		{
-			int ammoToAdd = Mathf.FloorToInt(refillRate);
-			int previousAmmo = currentAmmo;
-			
-			currentAmmo = Mathf.Min(currentAmmo + ammoToAdd, maxCapacity);
-			lastRefillTime = Time.time;
-
-			if (currentAmmo != previousAmmo)
-			{
-				OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
-			}
+			OnAmmoChanged?.Invoke(CurrentAmmo, maxCapacity);
 		}
 
 		public bool TryTakeAmmo(int amount)
 		{
-			if (currentAmmo >= amount)
+			if(CurrentAmmo >= amount)
 			{
-				currentAmmo -= amount;
-				OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
+				CurrentAmmo -= amount;
+				OnAmmoChanged?.Invoke(CurrentAmmo, maxCapacity);
 				return true;
 			}
 			return false;
@@ -71,28 +47,31 @@ namespace TowerDefense
 
 		public int TakeAmmoUpTo(int maxAmount)
 		{
-			int ammoTaken = Mathf.Min(currentAmmo, maxAmount);
-			currentAmmo -= ammoTaken;
-			OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
+			var ammoTaken = Mathf.Min(CurrentAmmo, maxAmount);
+			CurrentAmmo -= ammoTaken;
+			OnAmmoChanged?.Invoke(CurrentAmmo, maxCapacity);
 			return ammoTaken;
 		}
 
 		public void AddAmmo(int amount)
 		{
-			currentAmmo = Mathf.Min(currentAmmo + amount, maxCapacity);
-			OnAmmoChanged?.Invoke(currentAmmo, maxCapacity);
+			CurrentAmmo = Mathf.Min(CurrentAmmo + amount, maxCapacity);
+			OnAmmoChanged?.Invoke(CurrentAmmo, maxCapacity);
 		}
 
 		public float GetRefillProgress()
 		{
-			if (IsFull) return 1f;
+			if(IsFull)
+			{
+				return 1f;
+			}
 			return (Time.time - lastRefillTime) / refillInterval;
 		}
 
-	public Transform TryReserveLoadingPoint(ReloadWorker worker)
-	{
-		return ReloadWorkersManager.TryReserveStoragePoint(this, worker);
-	}
+		public Transform TryReserveLoadingPoint(ReloadWorker worker)
+		{
+			return ReloadWorkersManager.TryReserveStoragePoint(this, worker);
+		}
 
 		public void ReleaseLoadingPoint(ReloadWorker worker)
 		{
@@ -109,15 +88,37 @@ namespace TowerDefense
 			return loadingPointTransforms;
 		}
 
+		private void Update()
+		{
+			if(!IsFull && Time.time >= lastRefillTime + refillInterval)
+			{
+				RefillAmmo();
+			}
+		}
+
+		private void RefillAmmo()
+		{
+			var ammoToAdd = Mathf.FloorToInt(refillRate);
+			var previousAmmo = CurrentAmmo;
+
+			CurrentAmmo = Mathf.Min(CurrentAmmo + ammoToAdd, maxCapacity);
+			lastRefillTime = Time.time;
+
+			if(CurrentAmmo != previousAmmo)
+			{
+				OnAmmoChanged?.Invoke(CurrentAmmo, maxCapacity);
+			}
+		}
+
 		private void OnDrawGizmosSelected()
 		{
-			if (loadingPointTransforms != null)
+			if(loadingPointTransforms != null)
 			{
-				foreach (var pointTransform in loadingPointTransforms)
+				foreach(var pointTransform in loadingPointTransforms)
 				{
-					if (pointTransform != null)
+					if(pointTransform != null)
 					{
-						bool isReserved = ReloadWorkersManager.IsStoragePointReserved(pointTransform);
+						var isReserved = ReloadWorkersManager.IsStoragePointReserved(pointTransform);
 						Gizmos.color = isReserved ? Color.red : Color.cyan;
 						Gizmos.DrawWireSphere(pointTransform.position, 0.5f);
 					}

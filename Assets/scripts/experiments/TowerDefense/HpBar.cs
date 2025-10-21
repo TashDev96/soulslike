@@ -5,12 +5,13 @@ namespace TowerDefense
 {
 	public class HpBar : MonoBehaviour
 	{
-		[SerializeField] private Image fillImage;
+		[SerializeField]
+		private Image fillImage;
 
 		private ZombieUnit trackedZombie;
 		private Camera playerCamera;
 		private Canvas canvas;
-		private Vector3 worldOffset = new Vector3(0, 2f, 0);
+		private readonly Vector3 worldOffset = new(0, 2f, 0);
 
 		public bool IsActive { get; private set; }
 
@@ -42,7 +43,7 @@ namespace TowerDefense
 
 		private void LateUpdate()
 		{
-			if (!IsActive || trackedZombie == null || trackedZombie.IsDead)
+			if(!IsActive || trackedZombie == null || trackedZombie.IsDead)
 			{
 				return;
 			}
@@ -53,21 +54,21 @@ namespace TowerDefense
 
 		private void UpdateHpBar()
 		{
-			if (fillImage != null && trackedZombie != null)
+			if(fillImage != null && trackedZombie != null)
 			{
-				float healthPercentage = trackedZombie.GetHealthPercentage();
+				var healthPercentage = trackedZombie.GetHealthPercentage();
 				fillImage.transform.localScale = new Vector3(healthPercentage, 1f, 1f);
 			}
 		}
 
 		private void UpdatePosition()
 		{
-			if (trackedZombie != null && playerCamera != null)
+			if(trackedZombie != null && playerCamera != null)
 			{
-				Vector3 worldPosition = trackedZombie.Position + worldOffset;
-				Vector3 screenPosition = playerCamera.WorldToScreenPoint(worldPosition);
+				var worldPosition = trackedZombie.Position + worldOffset;
+				var screenPosition = playerCamera.WorldToScreenPoint(worldPosition);
 
-				if (screenPosition.z > 0)
+				if(screenPosition.z > 0)
 				{
 					transform.position = screenPosition;
 				}
@@ -75,4 +76,3 @@ namespace TowerDefense
 		}
 	}
 }
-

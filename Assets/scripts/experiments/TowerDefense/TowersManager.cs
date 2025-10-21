@@ -1,34 +1,32 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace TowerDefense
 {
 	public class TowersManager : MonoBehaviour
 	{
-		private static TowersManager _instance;
-		public static TowersManager Instance => _instance;
-
-		[ShowInInspector] [ReadOnly]
-		private readonly HashSet<TowerUnit> _registeredTowers = new HashSet<TowerUnit>();
-
-		[ShowInInspector] [ReadOnly]
-		private float _cachedTotalDPS = 0f;
-
-		[ShowInInspector] [ReadOnly]
-		private float _cachedCorrectedTotalDPS = 0f;
-
-		[ShowInInspector] [ReadOnly]
-		private float _lastDPSCalculationTime = 0f;
-
 		private const float DPS_CALCULATION_INTERVAL = 1f;
 		public float RELOAD_WORKER_TRAVEL_TIME = 6f;
 
+		[ShowInInspector] [ReadOnly]
+		private readonly HashSet<TowerUnit> _registeredTowers = new();
+
+		[ShowInInspector] [ReadOnly]
+		private float _cachedTotalDPS;
+
+		[ShowInInspector] [ReadOnly]
+		private float _cachedCorrectedTotalDPS;
+
+		[ShowInInspector] [ReadOnly]
+		private float _lastDPSCalculationTime;
+		public static TowersManager Instance { get; private set; }
+
 		private void Awake()
 		{
-			if (_instance == null)
+			if(Instance == null)
 			{
-				_instance = this;
+				Instance = this;
 			}
 			else
 			{
@@ -36,32 +34,23 @@ namespace TowerDefense
 			}
 		}
 
-		private void Update()
+		public static void RegisterTower(TowerUnit tower)
 		{
-			if (Time.time >= _lastDPSCalculationTime + DPS_CALCULATION_INTERVAL)
+			if(Instance != null && tower != null)
 			{
-				CalculateTotalDPS();
-				_lastDPSCalculationTime = Time.time;
-			}
-		}
+				Instance._registeredTowers.Add(tower);
 
-	public static void RegisterTower(TowerUnit tower)
-	{
-		if (Instance != null && tower != null)
-		{
-			Instance._registeredTowers.Add(tower);
-			
-			var zombieManager = FindFirstObjectByType<ZombieManager>();
-			if(zombieManager != null)
-			{
-				zombieManager.OnTowerBuilt();
+				var zombieManager = FindFirstObjectByType<ZombieManager>();
+				if(zombieManager != null)
+				{
+					zombieManager.OnTowerBuilt();
+				}
 			}
 		}
-	}
 
 		public static void UnregisterTower(TowerUnit tower)
 		{
-			if (Instance != null && tower != null)
+			if(Instance != null && tower != null)
 			{
 				Instance._registeredTowers.Remove(tower);
 			}
@@ -101,6 +90,15 @@ namespace TowerDefense
 			return new List<TowerUnit>(_registeredTowers);
 		}
 
+		private void Update()
+		{
+			if(Time.time >= _lastDPSCalculationTime + DPS_CALCULATION_INTERVAL)
+			{
+				CalculateTotalDPS();
+				_lastDPSCalculationTime = Time.time;
+			}
+		}
+
 		private void CalculateTotalDPS()
 		{
 			_cachedTotalDPS = 0f;
@@ -109,10 +107,12 @@ namespace TowerDefense
 			var zombieManager = FindFirstObjectByType<ZombieManager>();
 			var averageZombieHealth = GetAverageZombieHealth(zombieManager);
 
-			foreach (var tower in _registeredTowers)
+			foreach(var tower in _registeredTowers)
 			{
-				if (tower == null)
+				if(tower == null)
+				{
 					continue;
+				}
 
 				var towerDPS = CalculateTowerDPS(tower);
 				var correctedTowerDPS = CalculateCorrectedTowerDPS(tower, averageZombieHealth);
@@ -121,59 +121,65 @@ namespace TowerDefense
 			}
 		}
 
-	private float CalculateTowerDPS(TowerUnit tower)
-	{
-		if (tower == null || tower.GetConfig() == null)
-			return 0f;
-
-		var config = tower.GetConfig();
-		var totalClipDamage = tower.GetTotalClipDamage();
-		var attackCooldown = config.AttackCooldown;
-		var clipSize = config.ClipSize;
-		var reloadTime = config.ReloadTime;
-
-		var timeToEmptyClip = clipSize * attackCooldown;
-		var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
-
-		var dps = totalClipDamage / totalCycleTime;
-		return dps;
-	}
-
-	private float CalculateCorrectedTowerDPS(TowerUnit tower, float averageZombieHealth)
-	{
-		if (tower == null || tower.GetConfig() == null || averageZombieHealth <= 0f)
-			return 0f;
-
-		var config = tower.GetConfig();
-		var damagePerShot = tower.GetDamagePerShot();
-		var attackCooldown = config.AttackCooldown;
-		var clipSize = config.ClipSize;
-		var reloadTime = config.ReloadTime;
-
-		var timeToEmptyClip = clipSize * attackCooldown;
-		var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
-
-		float effectiveDamagePerClip;
-
-		if (config.AttackType == AttackType.Single)
+		private float CalculateTowerDPS(TowerUnit tower)
 		{
-			var effectiveDamagePerShot = Mathf.Min(damagePerShot, averageZombieHealth);
-			effectiveDamagePerClip = effectiveDamagePerShot * clipSize;
-		}
-		else
-		{
-			var effectiveDamagePerBullet = Mathf.Min(damagePerShot, averageZombieHealth);
-			effectiveDamagePerClip = effectiveDamagePerBullet * config.BulletsPerShot * clipSize;
+			if(tower == null || tower.GetConfig() == null)
+			{
+				return 0f;
+			}
+
+			var config = tower.GetConfig();
+			var totalClipDamage = tower.GetTotalClipDamage();
+			var attackCooldown = config.AttackCooldown;
+			var clipSize = config.ClipSize;
+			var reloadTime = config.ReloadTime;
+
+			var timeToEmptyClip = clipSize * attackCooldown;
+			var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
+
+			var dps = totalClipDamage / totalCycleTime;
+			return dps;
 		}
 
-		var correctedDPS = effectiveDamagePerClip / totalCycleTime;
-		return correctedDPS;
-	}
+		private float CalculateCorrectedTowerDPS(TowerUnit tower, float averageZombieHealth)
+		{
+			if(tower == null || tower.GetConfig() == null || averageZombieHealth <= 0f)
+			{
+				return 0f;
+			}
+
+			var config = tower.GetConfig();
+			var damagePerShot = tower.GetDamagePerShot();
+			var attackCooldown = config.AttackCooldown;
+			var clipSize = config.ClipSize;
+			var reloadTime = config.ReloadTime;
+
+			var timeToEmptyClip = clipSize * attackCooldown;
+			var totalCycleTime = timeToEmptyClip + reloadTime + RELOAD_WORKER_TRAVEL_TIME;
+
+			float effectiveDamagePerClip;
+
+			if(config.AttackType == AttackType.Single)
+			{
+				var effectiveDamagePerShot = Mathf.Min(damagePerShot, averageZombieHealth);
+				effectiveDamagePerClip = effectiveDamagePerShot * clipSize;
+			}
+			else
+			{
+				var effectiveDamagePerBullet = Mathf.Min(damagePerShot, averageZombieHealth);
+				effectiveDamagePerClip = effectiveDamagePerBullet * config.BulletsPerShot * clipSize;
+			}
+
+			var correctedDPS = effectiveDamagePerClip / totalCycleTime;
+			return correctedDPS;
+		}
 
 		private float GetAverageZombieHealth(ZombieManager zombieManager)
 		{
-			if (zombieManager == null)
+			if(zombieManager == null)
+			{
 				return 100f;
+			}
 
 			return zombieManager.GetCurrentInterpolatedHealth();
 		}
@@ -195,9 +201,9 @@ namespace TowerDefense
 			Debug.Log($"Corrected Total DPS: {GetCorrectedTotalDPS():F2}");
 			Debug.Log($"Average Zombie Health: {averageZombieHealth:F1}");
 
-			foreach (var tower in _registeredTowers)
+			foreach(var tower in _registeredTowers)
 			{
-				if (tower != null)
+				if(tower != null)
 				{
 					var towerDPS = CalculateTowerDPS(tower);
 					var correctedTowerDPS = CalculateCorrectedTowerDPS(tower, averageZombieHealth);
@@ -205,20 +211,20 @@ namespace TowerDefense
 					var attackType = config != null ? config.AttackType.ToString() : "Unknown";
 					var bulletsPerShot = config?.BulletsPerShot ?? 1;
 
-				Debug.Log($"Tower {tower.name} ({attackType}): DPS = {towerDPS:F2}, Corrected DPS = {correctedTowerDPS:F2}, " +
-				         $"Total Clip Damage = {tower.GetTotalClipDamage()}, Damage/Shot = {tower.GetDamagePerShot()}, Bullets/Shot = {bulletsPerShot}, " +
-				         $"Cooldown = {tower.GetAttackCooldown()}, Clip = {tower.GetClipSize()}, " +
-				         $"Reload = {tower.GetReloadTime()}, Ammo = {tower.GetCurrentAmmo()}, " +
-				         $"Reloading = {tower.IsReloading()}");
+					Debug.Log($"Tower {tower.name} ({attackType}): DPS = {towerDPS:F2}, Corrected DPS = {correctedTowerDPS:F2}, " +
+					          $"Total Clip Damage = {tower.GetTotalClipDamage()}, Damage/Shot = {tower.GetDamagePerShot()}, Bullets/Shot = {bulletsPerShot}, " +
+					          $"Cooldown = {tower.GetAttackCooldown()}, Clip = {tower.GetClipSize()}, " +
+					          $"Reload = {tower.GetReloadTime()}, Ammo = {tower.GetCurrentAmmo()}, " +
+					          $"Reloading = {tower.IsReloading()}");
 				}
 			}
 		}
 
 		private void OnDestroy()
 		{
-			if (_instance == this)
+			if(Instance == this)
 			{
-				_instance = null;
+				Instance = null;
 			}
 		}
 	}

@@ -5,19 +5,28 @@ namespace TowerDefense
 {
 	public class HpBarManager : MonoBehaviour
 	{
-		public static HpBarManager Instance { get; private set; }
-
-		[SerializeField] private GameObject hpBarPrefab;
-		[SerializeField] private int poolSize = 50;
+		[SerializeField]
+		private GameObject hpBarPrefab;
+		[SerializeField]
+		private int poolSize = 50;
 
 		private Camera playerCamera;
 		private Canvas uiCanvas;
-		private List<HpBar> hpBarPool = new List<HpBar>();
-		private Dictionary<ZombieUnit, HpBar> activeHpBars = new Dictionary<ZombieUnit, HpBar>();
+		private readonly List<HpBar> hpBarPool = new();
+		private readonly Dictionary<ZombieUnit, HpBar> activeHpBars = new();
+		public static HpBarManager Instance { get; private set; }
+
+		private void InitializePool()
+		{
+			for(var i = 0; i < poolSize; i++)
+			{
+				CreateHpBar();
+			}
+		}
 
 		private void Awake()
 		{
-			if (Instance != null && Instance != this)
+			if(Instance != null && Instance != this)
 			{
 				Destroy(gameObject);
 				return;
@@ -30,13 +39,13 @@ namespace TowerDefense
 			playerCamera = Camera.main;
 			uiCanvas = FindFirstObjectByType<Canvas>();
 
-			if (uiCanvas == null)
+			if(uiCanvas == null)
 			{
 				Debug.LogError("HpBarManager: No Canvas found in scene!");
 				return;
 			}
 
-			if (hpBarPrefab == null)
+			if(hpBarPrefab == null)
 			{
 				Debug.LogError("HpBarManager: HP Bar Prefab is not assigned!");
 				return;
@@ -45,20 +54,44 @@ namespace TowerDefense
 			InitializePool();
 		}
 
-		private void InitializePool()
+		public void ShowHpBar(ZombieUnit zombie)
 		{
-			for (int i = 0; i < poolSize; i++)
+			if(zombie == null || zombie.IsDead)
 			{
-				CreateHpBar();
+				return;
 			}
+
+			if(activeHpBars.ContainsKey(zombie))
+			{
+				return;
+			}
+
+			var hpBar = GetAvailableHpBar();
+			if(hpBar != null)
+			{
+				hpBar.AttachToZombie(zombie);
+				activeHpBars[zombie] = hpBar;
+			}
+		}
+
+		public void HideHpBar(ZombieUnit zombie)
+		{
+			if(zombie == null || !activeHpBars.ContainsKey(zombie))
+			{
+				return;
+			}
+
+			var hpBar = activeHpBars[zombie];
+			hpBar.Detach();
+			activeHpBars.Remove(zombie);
 		}
 
 		private HpBar CreateHpBar()
 		{
-			GameObject hpBarObject = Instantiate(hpBarPrefab, uiCanvas.transform);
-			HpBar hpBar = hpBarObject.GetComponent<HpBar>();
+			var hpBarObject = Instantiate(hpBarPrefab, uiCanvas.transform);
+			var hpBar = hpBarObject.GetComponent<HpBar>();
 
-			if (hpBar == null)
+			if(hpBar == null)
 			{
 				Debug.LogError("HpBarManager: HP Bar Prefab does not have HpBar component!");
 				Destroy(hpBarObject);
@@ -72,43 +105,11 @@ namespace TowerDefense
 			return hpBar;
 		}
 
-		public void ShowHpBar(ZombieUnit zombie)
-		{
-			if (zombie == null || zombie.IsDead)
-			{
-				return;
-			}
-
-			if (activeHpBars.ContainsKey(zombie))
-			{
-				return;
-			}
-
-			HpBar hpBar = GetAvailableHpBar();
-			if (hpBar != null)
-			{
-				hpBar.AttachToZombie(zombie);
-				activeHpBars[zombie] = hpBar;
-			}
-		}
-
-		public void HideHpBar(ZombieUnit zombie)
-		{
-			if (zombie == null || !activeHpBars.ContainsKey(zombie))
-			{
-				return;
-			}
-
-			HpBar hpBar = activeHpBars[zombie];
-			hpBar.Detach();
-			activeHpBars.Remove(zombie);
-		}
-
 		private HpBar GetAvailableHpBar()
 		{
-			foreach (var hpBar in hpBarPool)
+			foreach(var hpBar in hpBarPool)
 			{
-				if (!hpBar.IsActive)
+				if(!hpBar.IsActive)
 				{
 					return hpBar;
 				}
@@ -119,37 +120,36 @@ namespace TowerDefense
 
 		private void LateUpdate()
 		{
-			List<ZombieUnit> zombiesToRemove = new List<ZombieUnit>();
+			var zombiesToRemove = new List<ZombieUnit>();
 
-			foreach (var kvp in activeHpBars)
+			foreach(var kvp in activeHpBars)
 			{
-				ZombieUnit zombie = kvp.Key;
-				if (zombie == null || zombie.IsDead)
+				var zombie = kvp.Key;
+				if(zombie == null || zombie.IsDead)
 				{
 					zombiesToRemove.Add(zombie);
 				}
-				else if (zombie.GetHealthPercentage() >= 1f)
+				else if(zombie.GetHealthPercentage() >= 1f)
 				{
 					zombiesToRemove.Add(zombie);
 				}
 			}
 
-			foreach (var zombie in zombiesToRemove)
+			foreach(var zombie in zombiesToRemove)
 			{
 				HideHpBar(zombie);
 			}
 		}
 
-	private void OnDestroy()
-	{
-		if (Instance == this)
+		private void OnDestroy()
 		{
-			Instance = null;
-		}
+			if(Instance == this)
+			{
+				Instance = null;
+			}
 
-		activeHpBars.Clear();
-		hpBarPool.Clear();
-	}
+			activeHpBars.Clear();
+			hpBarPool.Clear();
+		}
 	}
 }
-

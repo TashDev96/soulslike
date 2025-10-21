@@ -30,15 +30,18 @@ namespace TowerDefense
 		public float CurrentHealth { get; private set; }
 		public bool IsDead => CurrentHealth <= 0f;
 
-	public bool HasPendingDamage => _pendingDamages.Count > 0;
+		public bool HasPendingDamage => _pendingDamages.Count > 0;
 
-	public ZombieUnit(Vector3 startPosition, BakedMeshSequence meshSequence, Material material,
-		float health = 100f, int layer = 0, float scale = 1f)
-		: base(startPosition, meshSequence, material, layer, scale)
-	{
-		MaxHealth = health;
-		CurrentHealth = health;
-	}
+		public bool IsNearTheWall => Position.x < -0.5f;
+		protected override float ZSpeedMult => IsNearTheWall ? 0.05f : 1f;
+
+		public ZombieUnit(Vector3 startPosition, BakedMeshSequence meshSequence, Material material,
+			float health = 100f, int layer = 0, float scale = 1f)
+			: base(startPosition, meshSequence, material, layer, scale)
+		{
+			MaxHealth = health;
+			CurrentHealth = health;
+		}
 
 		public void TakeDamage(float damage, float delay = 0f, TowerUnit damageDealer = null)
 		{
@@ -70,9 +73,6 @@ namespace TowerDefense
 				}
 			}
 		}
-
-		public bool IsNearTheWall => Position.x < -0.5f;
-		protected override float ZSpeedMult => IsNearTheWall ? 0.05f : 1f;
 
 		public override void UpdateAgent(Simulator simulator, float2 goal, float deltaTime)
 		{
@@ -115,15 +115,15 @@ namespace TowerDefense
 			return CurrentHealth <= totalPendingDamage;
 		}
 
-	private void ApplyDamage(float damage)
-	{
-		if(IsDead)
+		private void ApplyDamage(float damage)
 		{
-			return;
-		}
+			if(IsDead)
+			{
+				return;
+			}
 
-		CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
-		OnTakeDamage?.Invoke(this, damage);
-	}
+			CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
+			OnTakeDamage?.Invoke(this, damage);
+		}
 	}
 }

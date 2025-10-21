@@ -1,18 +1,23 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 namespace TowerDefense
 {
 	public class BuildButton : MonoBehaviour
 	{
 		[Header("UI Elements")]
-		[SerializeField] private Button buildButton;
-		[SerializeField] private TextMeshProUGUI buildPriceText;
+		[SerializeField]
+		private Button buildButton;
+		[SerializeField]
+		private TextMeshProUGUI buildPriceText;
 
 		[Header("Settings")]
-		[SerializeField] private float followSpeed = 5f;
+		[SerializeField]
+		private float followSpeed = 5f;
+
+		public Action<BuildButton> OnClosed;
 
 		private TowerGroup targetTowerGroup;
 		private Camera playerCamera;
@@ -20,7 +25,11 @@ namespace TowerDefense
 		private GameManager gameManager;
 		private RectTransform rectTransform;
 
-		public Action<BuildButton> OnClosed;
+		public void Initialize(TowerGroup towerGroup)
+		{
+			targetTowerGroup = towerGroup;
+			UpdateUI();
+		}
 
 		private void Awake()
 		{
@@ -35,10 +44,10 @@ namespace TowerDefense
 			}
 		}
 
-		public void Initialize(TowerGroup towerGroup)
+		public void Close()
 		{
-			targetTowerGroup = towerGroup;
-			UpdateUI();
+			OnClosed?.Invoke(this);
+			Destroy(gameObject);
 		}
 
 		private void Update()
@@ -57,17 +66,17 @@ namespace TowerDefense
 				return;
 			}
 
-			Vector3 worldPosition = targetTowerGroup.transform.position + Vector3.up * 2f;
-			Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(playerCamera, worldPosition);
+			var worldPosition = targetTowerGroup.transform.position + Vector3.up * 2f;
+			var screenPosition = RectTransformUtility.WorldToScreenPoint(playerCamera, worldPosition);
 
 			Vector2 localPoint;
 			if(RectTransformUtility.ScreenPointToLocalPointInRectangle(
-				parentCanvas.transform as RectTransform,
-				screenPosition,
-				parentCanvas.worldCamera,
-				out localPoint))
+				   parentCanvas.transform as RectTransform,
+				   screenPosition,
+				   parentCanvas.worldCamera,
+				   out localPoint))
 			{
-				Vector2 targetPosition = localPoint;
+				var targetPosition = localPoint;
 				rectTransform.localPosition = Vector2.Lerp(rectTransform.localPosition, targetPosition, followSpeed * Time.deltaTime);
 			}
 		}
@@ -78,7 +87,7 @@ namespace TowerDefense
 			{
 				if(buildButton != null && buildPriceText != null)
 				{
-					int buildPrice = targetTowerGroup?.GetBuildPrice() ?? 0;
+					var buildPrice = targetTowerGroup?.GetBuildPrice() ?? 0;
 					buildButton.interactable = gameManager != null && gameManager.GetCurrentMoney() >= buildPrice;
 					buildPriceText.text = $"Build: ${buildPrice}";
 				}
@@ -93,7 +102,7 @@ namespace TowerDefense
 		{
 			if(targetTowerGroup != null && !targetTowerGroup.HasAnyTowers() && gameManager != null)
 			{
-				int buildPrice = targetTowerGroup.GetBuildPrice();
+				var buildPrice = targetTowerGroup.GetBuildPrice();
 				if(gameManager.GetCurrentMoney() >= buildPrice)
 				{
 					gameManager.SpendMoney(buildPrice);
@@ -101,12 +110,6 @@ namespace TowerDefense
 					Close();
 				}
 			}
-		}
-
-		public void Close()
-		{
-			OnClosed?.Invoke(this);
-			Destroy(gameObject);
 		}
 
 		private void OnDestroy()
@@ -118,4 +121,3 @@ namespace TowerDefense
 		}
 	}
 }
-

@@ -19,29 +19,29 @@ namespace TowerDefense
 		[SerializeField]
 		private TowerConfig config;
 
-	[Header("Visual")]
-	[SerializeField]
-	private Transform rotationPivot;
-	[SerializeField]
-	private LineRenderer attackLineRenderer;
-	[SerializeField]
-	private LineRenderer[] shotgunLineRenderers;
-	[SerializeField]
-	private float attackLineDisplayTime = 0.5f;
-	
-	public Action<TowerUnit, ZombieUnit, float> OnAttackHit;
+		[Header("Visual")]
+		[SerializeField]
+		private Transform rotationPivot;
+		[SerializeField]
+		private LineRenderer attackLineRenderer;
+		[SerializeField]
+		private LineRenderer[] shotgunLineRenderers;
+		[SerializeField]
+		private float attackLineDisplayTime = 0.5f;
 
-	private float _lastAttackTime;
-	private float _lastReloadTime;
-	private GameManager _gameManager;
-	private int _currentUpgradeLevel;
-	[ShowInInspector]
-	private int _currentAmmo;
-	[ShowInInspector]
-	private bool _isReloading;
-	private ZombieUnit _currentTarget;
-	private List<LineRenderer> _pooledLineRenderers = new List<LineRenderer>();
-	private int _activeLineCoroutines = 0;
+		public Action<TowerUnit, ZombieUnit, float> OnAttackHit;
+
+		private float _lastAttackTime;
+		private float _lastReloadTime;
+		private GameManager _gameManager;
+		private int _currentUpgradeLevel;
+		[ShowInInspector]
+		private int _currentAmmo;
+		[ShowInInspector]
+		private bool _isReloading;
+		private ZombieUnit _currentTarget;
+		private readonly List<LineRenderer> _pooledLineRenderers = new();
+		private int _activeLineCoroutines;
 
 		public void Initialize(TowerConfig towerConfig)
 		{
@@ -118,45 +118,45 @@ namespace TowerDefense
 			_isReloading = false;
 		}
 
-	public float GetTotalClipDamage()
-	{
-		if(config == null)
+		public float GetTotalClipDamage()
 		{
-			return 25f;
-		}
-
-		var totalDamage = 1f;
-
-		if(config.UpgradeLevels != null && _currentUpgradeLevel < config.UpgradeLevels.Count)
-		{
-			totalDamage = config.UpgradeLevels[_currentUpgradeLevel].BaseDamage;
-		}
-
-		var damageMultiplier = config.DamageMultiplier;
-		if(config.UpgradeLevels != null && _currentUpgradeLevel < config.UpgradeLevels.Count)
-		{
-			var multiplier = config.UpgradeLevels[_currentUpgradeLevel].DamageMultiplier;
-			if(multiplier > 0)
+			if(config == null)
 			{
-				damageMultiplier += multiplier;
+				return 25f;
 			}
+
+			var totalDamage = 1f;
+
+			if(config.UpgradeLevels != null && _currentUpgradeLevel < config.UpgradeLevels.Count)
+			{
+				totalDamage = config.UpgradeLevels[_currentUpgradeLevel].BaseDamage;
+			}
+
+			var damageMultiplier = config.DamageMultiplier;
+			if(config.UpgradeLevels != null && _currentUpgradeLevel < config.UpgradeLevels.Count)
+			{
+				var multiplier = config.UpgradeLevels[_currentUpgradeLevel].DamageMultiplier;
+				if(multiplier > 0)
+				{
+					damageMultiplier += multiplier;
+				}
+			}
+
+			return totalDamage * damageMultiplier;
 		}
 
-		return totalDamage * damageMultiplier;
-	}
-
-	public float GetDamagePerShot()
-	{
-		var totalClipDamage = GetTotalClipDamage();
-		var clipSize = GetClipSize();
-		
-		if(config.AttackType == AttackType.Shotgun)
+		public float GetDamagePerShot()
 		{
-			return totalClipDamage / (clipSize * config.BulletsPerShot);
+			var totalClipDamage = GetTotalClipDamage();
+			var clipSize = GetClipSize();
+
+			if(config.AttackType == AttackType.Shotgun)
+			{
+				return totalClipDamage / (clipSize * config.BulletsPerShot);
+			}
+
+			return totalClipDamage / clipSize;
 		}
-		
-		return totalClipDamage / clipSize;
-	}
 
 		public int GetCurrentUpgradeLevel()
 		{
@@ -386,100 +386,100 @@ namespace TowerDefense
 			ShowShotgunAttackLines(hitTargetPositions);
 		}
 
-	private void ShowAttackLine(Vector3 targetPosition)
-	{
-		if(attackLineRenderer != null)
+		private void ShowAttackLine(Vector3 targetPosition)
 		{
-			LineRenderer lineToUse;
-			
-			if(_activeLineCoroutines > 0)
+			if(attackLineRenderer != null)
 			{
-				lineToUse = GetOrCreatePooledLineRenderer();
-			}
-			else
-			{
-				lineToUse = attackLineRenderer;
-			}
-			
-			StartCoroutine(DisplayAttackLine(targetPosition, lineToUse));
-		}
-	}
+				LineRenderer lineToUse;
 
-	private LineRenderer GetOrCreatePooledLineRenderer()
-	{
-		foreach(var pooledLine in _pooledLineRenderers)
-		{
-			if(pooledLine != null && !pooledLine.enabled)
-			{
-				return pooledLine;
-			}
-		}
-		
-		var newLine = Instantiate(attackLineRenderer.gameObject, attackLineRenderer.transform.parent).GetComponent<LineRenderer>();
-		newLine.name = $"PooledAttackLine_{_pooledLineRenderers.Count}";
-		newLine.enabled = false;
-		_pooledLineRenderers.Add(newLine);
-		
-		return newLine;
-	}
+				if(_activeLineCoroutines > 0)
+				{
+					lineToUse = GetOrCreatePooledLineRenderer();
+				}
+				else
+				{
+					lineToUse = attackLineRenderer;
+				}
 
-	private void ShowShotgunAttackLines(List<Vector3> targetPositions)
-	{
-		if(shotgunLineRenderers != null && targetPositions.Count > 0)
-		{
-			StartCoroutine(DisplayShotgunAttackLines(targetPositions));
-		}
-		else if(attackLineRenderer != null && targetPositions.Count > 0)
-		{
-			ShowAttackLine(targetPositions[0]);
-		}
-	}
-
-	private IEnumerator DisplayAttackLine(Vector3 targetPosition, LineRenderer lineRenderer)
-	{
-		_activeLineCoroutines++;
-		
-		lineRenderer.enabled = true;
-		lineRenderer.SetPosition(0, transform.position + Vector3.up);
-		
-		var spread = Random.insideUnitCircle * 0.3f;
-		var endPosition = targetPosition + Vector3.up + new Vector3(spread.x, 0f, spread.y);
-		lineRenderer.SetPosition(1, endPosition);
-
-		yield return new WaitForSeconds(config.VfxDuration);
-
-		lineRenderer.enabled = false;
-		
-		_activeLineCoroutines--;
-	}
-
-	private IEnumerator DisplayShotgunAttackLines(List<Vector3> targetPositions)
-	{
-		var linesToShow = Mathf.Min(targetPositions.Count, shotgunLineRenderers.Length);
-
-		for(var i = 0; i < linesToShow; i++)
-		{
-			if(shotgunLineRenderers[i] != null)
-			{
-				shotgunLineRenderers[i].enabled = true;
-				shotgunLineRenderers[i].SetPosition(0, transform.position + Vector3.up);
-				
-				var spread = Random.insideUnitCircle * 0.3f;
-				var endPosition = targetPositions[i] + Vector3.up + new Vector3(spread.x, 0f, spread.y);
-				shotgunLineRenderers[i].SetPosition(1, endPosition);
+				StartCoroutine(DisplayAttackLine(targetPosition, lineToUse));
 			}
 		}
 
-		yield return new WaitForSeconds(attackLineDisplayTime);
-
-		for(var i = 0; i < linesToShow; i++)
+		private LineRenderer GetOrCreatePooledLineRenderer()
 		{
-			if(shotgunLineRenderers[i] != null)
+			foreach(var pooledLine in _pooledLineRenderers)
 			{
-				shotgunLineRenderers[i].enabled = false;
+				if(pooledLine != null && !pooledLine.enabled)
+				{
+					return pooledLine;
+				}
+			}
+
+			var newLine = Instantiate(attackLineRenderer.gameObject, attackLineRenderer.transform.parent).GetComponent<LineRenderer>();
+			newLine.name = $"PooledAttackLine_{_pooledLineRenderers.Count}";
+			newLine.enabled = false;
+			_pooledLineRenderers.Add(newLine);
+
+			return newLine;
+		}
+
+		private void ShowShotgunAttackLines(List<Vector3> targetPositions)
+		{
+			if(shotgunLineRenderers != null && targetPositions.Count > 0)
+			{
+				StartCoroutine(DisplayShotgunAttackLines(targetPositions));
+			}
+			else if(attackLineRenderer != null && targetPositions.Count > 0)
+			{
+				ShowAttackLine(targetPositions[0]);
 			}
 		}
-	}
+
+		private IEnumerator DisplayAttackLine(Vector3 targetPosition, LineRenderer lineRenderer)
+		{
+			_activeLineCoroutines++;
+
+			lineRenderer.enabled = true;
+			lineRenderer.SetPosition(0, transform.position + Vector3.up);
+
+			var spread = Random.insideUnitCircle * 0.3f;
+			var endPosition = targetPosition + Vector3.up + new Vector3(spread.x, 0f, spread.y);
+			lineRenderer.SetPosition(1, endPosition);
+
+			yield return new WaitForSeconds(config.VfxDuration);
+
+			lineRenderer.enabled = false;
+
+			_activeLineCoroutines--;
+		}
+
+		private IEnumerator DisplayShotgunAttackLines(List<Vector3> targetPositions)
+		{
+			var linesToShow = Mathf.Min(targetPositions.Count, shotgunLineRenderers.Length);
+
+			for(var i = 0; i < linesToShow; i++)
+			{
+				if(shotgunLineRenderers[i] != null)
+				{
+					shotgunLineRenderers[i].enabled = true;
+					shotgunLineRenderers[i].SetPosition(0, transform.position + Vector3.up);
+
+					var spread = Random.insideUnitCircle * 0.3f;
+					var endPosition = targetPositions[i] + Vector3.up + new Vector3(spread.x, 0f, spread.y);
+					shotgunLineRenderers[i].SetPosition(1, endPosition);
+				}
+			}
+
+			yield return new WaitForSeconds(attackLineDisplayTime);
+
+			for(var i = 0; i < linesToShow; i++)
+			{
+				if(shotgunLineRenderers[i] != null)
+				{
+					shotgunLineRenderers[i].enabled = false;
+				}
+			}
+		}
 
 		private void OnDestroy()
 		{
