@@ -38,6 +38,7 @@ namespace TowerDefense
 
         private void Start()
         {
+            Time.timeScale=1.2f;
             currentMoney = startingMoney;
             zombieManager = FindFirstObjectByType<ZombieManager>();
             towers = GameObject.FindObjectsByType<TowerUnit>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID).ToList();

@@ -15,6 +15,13 @@ using Random = UnityEngine.Random;
 namespace TowerDefense
 {
 	[Serializable]
+	public struct ZombiesGrade
+	{
+		public int health;
+		public int triggerDamage;
+	}
+
+	[Serializable]
 	public class ZombieConfig
 	{
 		[Header("Zombie Rendering")]
@@ -23,8 +30,7 @@ namespace TowerDefense
 		public int renderLayer;
 
 		[Header("Zombie Stats")]
-		public float baseHealth = 0f;
-		public float baseHealthPerTower = 10f;
+		public List<ZombiesGrade> grades = new();
 		public float zombieScale = 1f;
 	}
 
@@ -144,10 +150,9 @@ namespace TowerDefense
 		InitializeSpawnOrder();
 		UpdateGoal();
 
-		var towerCount = GetCurrentTowerCount();
-		_currentGrade = Mathf.Max(0, towerCount - 1);
-		_previousGrade = _currentGrade;
-		_currentGradeHealth = CalculateHealthForTowerCount(towerCount);
+		_currentGrade = 0;
+		_previousGrade = 0;
+		_currentGradeHealth = GetHealthForGrade(0);
 		_previousGradeHealth = _currentGradeHealth;
 		_isTransitioning = false;
 		
@@ -166,16 +171,15 @@ namespace TowerDefense
 		_hasZeroZombiesNearWall = false;
 	}
 
-		public void OnTowerBuilt()
-		{
-			var towerCount = GetCurrentTowerCount();
-			_previousGrade = _currentGrade;
-			_currentGrade = Mathf.Max( towerCount - 1,0);
-			_previousGradeHealth = _currentGradeHealth;
-			_currentGradeHealth = CalculateHealthForTowerCount(towerCount);
-			_gradeTransitionStartTime = Time.time;
-			_isTransitioning = true;
-		}
+	public void OnTowerBuilt()
+	{
+		UpdateGradeBasedOnMaxDamage();
+	}
+
+	public void OnTowerUpgraded()
+	{
+		UpdateGradeBasedOnMaxDamage();
+	}
 
 		public void SpawnZombie()
 		{
@@ -194,7 +198,7 @@ namespace TowerDefense
 
 			var grade = GetGradeForNewZombie();
 			var material = GetMaterialForGrade(grade);
-			var health = CalculateHealthForTowerCount(grade + 1);
+			var health = GetHealthForGrade(grade);
 
 			var spawnPosition = GetNextSpawnPosition();
 			var zombie = new ZombieUnit(spawnPosition, config.zombieMeshSequence, material,
@@ -227,29 +231,103 @@ namespace TowerDefense
 			return zombies.Count(z => !z.IsDead);
 		}
 
-		[Button("Set Zombie Scale")]
-		public void SetZombieScale(float scale)
-		{
-			scale = Mathf.Max(0.1f, scale);
-			var healthMultiplier = scale * scale;
-			config.zombieScale = scale;
-			config.baseHealthPerTower = 10f * healthMultiplier;
-		}
-
-	private int GetCurrentTowerCount()
+	[Button("Set Zombie Scale")]
+	public void SetZombieScale(float scale)
 	{
-		var towersManager = TowersManager.Instance;
-		return towersManager != null ? towersManager.GetTowerGroupsWithTowersCount() : 1;
+		scale = Mathf.Max(0.1f, scale);
+		var healthMultiplier = scale * scale;
+		config.zombieScale = scale;
+		
+		for(var i = 0; i < config.grades.Count; i++)
+		{
+			var grade = config.grades[i];
+			grade.health = Mathf.RoundToInt(grade.health * healthMultiplier);
+			config.grades[i] = grade;
+		}
 	}
 
-	private float CalculateHealthForTowerCount(int towerCount)
+	private float GetMaxTowerShotDamage()
 	{
-		var result = config.baseHealth + (config.baseHealthPerTower * Mathf.Max(1, towerCount));
-		if(result <= 0)
+		var towersManager = TowersManager.Instance;
+		if(towersManager == null)
 		{
-			result = 1;
+			return 0f;
 		}
-		return result;
+
+		var towers = towersManager.GetAllTowers();
+		var maxDamage = 0f;
+
+		foreach(var tower in towers)
+		{
+			if(tower == null)
+			{
+				continue;
+			}
+
+			var config = tower.GetConfig();
+			if(config == null)
+			{
+				continue;
+			}
+
+			var damagePerShot = tower.GetDamagePerShot();
+
+			if(config.AttackType == AttackType.Single)
+			{
+				maxDamage = Mathf.Max(maxDamage, damagePerShot);
+			}
+			else if(config.AttackType == AttackType.Shotgun)
+			{
+				maxDamage = Mathf.Max(maxDamage, damagePerShot * config.BulletsPerShot);
+			}
+		}
+
+		return maxDamage;
+	}
+
+	private void UpdateGradeBasedOnMaxDamage()
+	{
+		var maxDamage = GetMaxTowerShotDamage();
+		var newGrade = GetGradeIndexForDamage(maxDamage);
+
+		if(newGrade != _currentGrade)
+		{
+			_previousGrade = _currentGrade;
+			_currentGrade = newGrade;
+			_previousGradeHealth = _currentGradeHealth;
+			_currentGradeHealth = GetHealthForGrade(_currentGrade);
+			_gradeTransitionStartTime = Time.time;
+			_isTransitioning = true;
+		}
+	}
+
+	private int GetGradeIndexForDamage(float damage)
+	{
+		if(config.grades == null || config.grades.Count == 0)
+		{
+			return 0;
+		}
+
+		for(var i = config.grades.Count - 1; i >= 0; i--)
+		{
+			if(damage >= config.grades[i].triggerDamage)
+			{
+				return i;
+			}
+		}
+
+		return 0;
+	}
+
+	private float GetHealthForGrade(int grade)
+	{
+		if(config.grades == null || config.grades.Count == 0)
+		{
+			return 100f;
+		}
+
+		grade = Mathf.Clamp(grade, 0, config.grades.Count - 1);
+		return config.grades[grade].health;
 	}
 
 	private Material GetMaterialForGrade(int grade)

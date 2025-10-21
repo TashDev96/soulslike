@@ -58,27 +58,33 @@ namespace TowerDefense
 			return config.UpgradeLevels[_currentUpgradeLevel + 1].LevelUpPrice;
 		}
 
-		public void UpgradeLevel()
+	public void UpgradeLevel()
+	{
+		if(!CanUpgrade())
 		{
-			if(!CanUpgrade())
-			{
-				return;
-			}
-
-			var previousTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
-			_currentUpgradeLevel++;
-			var newTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
-
-			if(newTowerCount > previousTowerCount)
-			{
-				SpawnTowers(newTowerCount);
-			}
-
-			foreach(var tower in _towerUnits)
-			{
-				tower.SetUpgradeLevel(_currentUpgradeLevel);
-			}
+			return;
 		}
+
+		var previousTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
+		_currentUpgradeLevel++;
+		var newTowerCount = GetTowerCountForLevel(_currentUpgradeLevel);
+
+		if(newTowerCount > previousTowerCount)
+		{
+			SpawnTowers(newTowerCount);
+		}
+
+		foreach(var tower in _towerUnits)
+		{
+			tower.SetUpgradeLevel(_currentUpgradeLevel);
+		}
+
+		var zombieManager = FindFirstObjectByType<ZombieManager>();
+		if(zombieManager != null)
+		{
+			zombieManager.OnTowerUpgraded();
+		}
+	}
 
 		public int GetCurrentUpgradeLevel()
 		{

@@ -1,0 +1,97 @@
+<linker>
+  <assembly fullname="Animancer, Version=7.4.2.25, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Animancer.AnimancerComponent" preserve="all" />
+    <type fullname="Animancer.AnimancerEvent/Sequence/Serializable" preserve="nothing" serialized="true" />
+    <type fullname="Animancer.ClipTransition" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="DreamLibAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="dream_lib.src.ui.UiBar" preserve="all" />
+    <type fullname="dream_lib.src.utils.data_types.SerializableDictionary`2" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="GameAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="game.gameplay_core.characters.CharacterDomain" preserve="all" />
+    <type fullname="game.gameplay_core.characters.config.CharacterConfig" preserve="all" />
+    <type fullname="game.gameplay_core.characters.logic.CapsuleCharacterCollider" preserve="all" />
+    <type fullname="game.gameplay_core.characters.player.PlayerFlagComponent" preserve="all" />
+    <type fullname="game.gameplay_core.characters.view.CharacterDebugDrawer" preserve="all" />
+    <type fullname="game.gameplay_core.characters.view.ui.CharacterWorldSpaceUi" preserve="all" />
+    <type fullname="game.gameplay_core.damage_system.BlockReceiver" preserve="all" />
+    <type fullname="game.gameplay_core.damage_system.BodyAttackView" preserve="all" />
+    <type fullname="game.gameplay_core.damage_system.DamageReceiver" preserve="all" />
+    <type fullname="game.gameplay_core.damage_system.ParryReceiver" preserve="all" />
+    <type fullname="game.gameplay_core.damage_system.WeaponView" preserve="all" />
+    <type fullname="game.gameplay_core.inventory.item_configs.MainHealingItemConfig" preserve="all" />
+    <type fullname="game.gameplay_core.inventory.item_configs.WeaponItemConfig" preserve="all" />
+    <type fullname="game.gameplay_core.utils.CapsuleCaster" preserve="all" />
+    <type fullname="game.ui.MainCanvasInstaller" preserve="all" />
+    <type fullname="game.ui.UiLocationHUD" preserve="all" />
+    <type fullname="game.gameplay_core.characters.config.LocomotionConfig" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.characters.config.RollConfig" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.characters.logic.MovementLogic" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.characters.runtime_data.BaseStats" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.characters.runtime_data.RotationSpeedData" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.damage_system.AttackConfig" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.damage_system.HitConfig" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.damage_system.WeaponConfig" preserve="nothing" serialized="true" />
+    <type fullname="game.gameplay_core.inventory.item_configs.ItemAnimationConfig" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.InputSystem, Version=1.14.2.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.InputSystem.InputActionAsset" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputActionReference" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.UI.InputSystemUIInputModule" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputAction" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputActionMap" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputBinding" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputControlScheme" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputControlScheme/DeviceRequirement" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Rendering.Universal.DecalProjector" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AnimationClip" preserve="all" />
+    <type fullname="UnityEngine.Animator" preserve="all" />
+    <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Mesh" preserve="all" />
+    <type fullname="UnityEngine.MeshFilter" preserve="all" />
+    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.RenderingLayerMask" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+    <type fullname="UnityEngine.SphereCollider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.EventSystems.EventSystem" preserve="all" />
+    <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
+    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.MaskableGraphic/CullStateChangedEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Canvas" preserve="all" />
+    <type fullname="UnityEngine.CanvasGroup" preserve="all" />
+    <type fullname="UnityEngine.CanvasRenderer" preserve="all" />
+  </assembly>
+</linker>
