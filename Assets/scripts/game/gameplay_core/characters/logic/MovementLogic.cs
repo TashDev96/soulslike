@@ -49,6 +49,8 @@ namespace game.gameplay_core.characters.logic
 
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
+		private Vector3 _acceleratedMovement;
+		private bool _hadAcceleratedMovement;
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
@@ -84,6 +86,36 @@ namespace game.gameplay_core.characters.logic
 
 			_lastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
 			_prevPos = CurrentPosition;
+			if(_hadAcceleratedMovement)
+			{
+				_hadAcceleratedMovement = false;
+			}
+			else
+			{
+				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.LocomotionConfig.WalkDeceleration);
+			}
+		}
+
+		public void MoveWithAcceleration(Vector3 vector, float deltaTime)
+		{
+			_hadAcceleratedMovement = true;
+			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
+
+			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.LocomotionConfig.WalkAcceleration);
+			var resultMovement = _acceleratedMovement;
+			
+			if(_isGroundedCache)
+			{
+				if(CharacterCollider.HasStableGround)
+				{
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
+				}
+				else
+				{
+					resultMovement -= Vector3.Project(resultMovement, _slidingVelocity.normalized);
+				}
+			}
+			MoveAndStoreFrameData(resultMovement);
 		}
 
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
@@ -95,11 +127,6 @@ namespace game.gameplay_core.characters.logic
 				if(CharacterCollider.HasStableGround)
 				{
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
-
-					if(projectedMovement.magnitude > 0.01f)
-					{
-						//TryStepUpStairs(projectedMovement);
-					}
 				}
 				else
 				{

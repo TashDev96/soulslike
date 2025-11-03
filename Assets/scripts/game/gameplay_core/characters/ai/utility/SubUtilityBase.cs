@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
+using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
@@ -272,7 +273,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private void MoveTo(Vector3 worldPos)
 		{
-			const float navMeshDistance = 2f;
+			const float navMeshDistance = 4f;
 			var moveVector = worldPos - _transform.Position;
 			InputData.Command = CharacterCommand.Walk;
 			if(moveVector.sqrMagnitude < navMeshDistance * navMeshDistance)

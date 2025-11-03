@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
 			var velocity = inputWorld * (directionMultiplier * _context.RunSpeed.Value * acceleration);
 
-			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
+			_context.MovementLogic.MoveWithAcceleration(velocity * deltaTime, deltaTime);
 			const float staminaCostPerSecond = 2f;
 			_context.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
 			

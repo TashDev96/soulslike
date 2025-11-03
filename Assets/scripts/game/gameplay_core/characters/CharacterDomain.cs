@@ -164,7 +164,7 @@ namespace game.gameplay_core.characters
 				IsDead = _context.IsDead,
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
-				LocomotionConfig = _config.Locomotion
+				LocomotionConfig = _config.Locomotion,
 			});
 
 			_blockLogic.SetContext(new BlockLogic.Context
