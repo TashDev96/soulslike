@@ -1,6 +1,7 @@
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.location.view;
 using game.gameplay_core.utils;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace game.gameplay_core.damage_system
 		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
 		private static readonly int LayerMaskWalls = LayerMask.GetMask("Default");
 		private static readonly Collider[] Results = new Collider[40];
-
+		
 		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
@@ -25,8 +26,12 @@ namespace game.gameplay_core.damage_system
 			if(checkWalls)
 			{
 				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskWalls);
-				if(count > 0)
+				for(var j = 0; j < count; j++)
 				{
+					if(Results[j].TryGetComponent<SurfacePropertiesView>(out var surfaceProperties) && !surfaceProperties.StopWeapons)
+					{
+						continue;
+					}
 					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
 					return true;
 				}
@@ -38,8 +43,7 @@ namespace game.gameplay_core.damage_system
 
 				for(var j = 0; j < count; j++)
 				{
-					var blockReceiver = Results[j].GetComponent<BlockReceiver>();
-					if(blockReceiver)
+					if(Results[j].TryGetComponent<BlockReceiver>(out _))
 					{
 						if(drawDebug)
 						{
@@ -73,8 +77,7 @@ namespace game.gameplay_core.damage_system
 					continue;
 				}
 
-				var parryReceiver = Results[j].GetComponent<ParryReceiver>();
-				if(parryReceiver)
+				if(Results[j].TryGetComponent<ParryReceiver>(out var parryReceiver))
 				{
 					if(parryReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
 					{
@@ -95,8 +98,7 @@ namespace game.gameplay_core.damage_system
 					}
 				}
 
-				var blockReceiver = Results[j].GetComponent<BlockReceiver>();
-				if(blockReceiver)
+				if(Results[j].TryGetComponent<BlockReceiver>(out var blockReceiver))
 				{
 					if(blockReceiver.OwnerTeam == casterContext.Team.Value && !hitData.Config.FriendlyFire)
 					{
@@ -141,9 +143,7 @@ namespace game.gameplay_core.damage_system
 				}
 
 				hitData.ImpactedTargets.Add(Results[j]);
-				var damageReceiver = Results[j].GetComponent<DamageReceiver>();
-
-				if(!damageReceiver)
+				if(!Results[j].TryGetComponent<DamageReceiver>(out var damageReceiver))
 				{
 					continue;
 				}
