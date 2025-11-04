@@ -20,8 +20,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b551e0f896764e53aba62994f85e01a
+    m_Address: EmptyHand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 473e31eb31c15495eae3d76fbd5b22ca
     m_Address: DebugWeaponConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5561504db27593842943b63d78e2b20a
+    m_Address: DebugWeapon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -35,13 +45,28 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c04a84dfc838c45fb91189be6f890b47
+    m_Address: SimpleSword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c110b6beada2a4e4790f5ff4d00ae551
     m_Address: MainHealingItemConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d94508fe4800c4384a6bd43cbc4cb8d3
+    m_Address: ZombieSword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de32b7b91d5785f429f704b49cd19da7
     m_Address: CharacterUi
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dec5f6e7cfad5498aad311f74b0fda4d
+    m_Address: DebugShield
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

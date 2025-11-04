@@ -1,6 +1,7 @@
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.logic;
+using game.gameplay_core.inventory.item_configs;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
@@ -11,7 +12,7 @@ namespace game.gameplay_core.damage_system
 		{
 			public IReadOnlyReactiveProperty<Team> Team { get; set; }
 			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public WeaponConfig WeaponConfig { get; set; }
+			public WeaponItemConfig WeaponConfig { get; set; }
 			public BlockLogic BlockLogic { get; set; }
 		}
 

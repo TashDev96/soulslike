@@ -1,28 +1,32 @@
 using System;
 using System.Collections.Generic;
 using dream_lib.src.utils.data_types;
+using game.enums;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.utils;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
 {
+	[AddressableAssetTag(nameof(AddressableCollections.WeaponNames))]
 	public class WeaponView : MonoBehaviour
 	{
 		[SerializeField]
 		private CapsuleCaster[] _hitColliders;
-		
+
 		[SerializeField]
 		private CapsuleCaster[] _preciseHitColliders;
-		
+
 		[SerializeField]
 		private CapsuleCaster[] _handleColliders;
-		
+
 		[SerializeField]
 		private BlockReceiver[] _blockColliders;
-		
-		public WeaponConfig Config;
+
+		[NonSerialized]
+		public WeaponItemConfig Config;
 
 		private readonly List<TransformCache> _previousCollidersPositions = new();
 
@@ -32,15 +36,15 @@ namespace game.gameplay_core.damage_system
 		{
 			_context = characterContext;
 			SetBlockColliderActive(false);
-			
+
 			foreach(var blockReceiver in _blockColliders)
 			{
-				blockReceiver.Initialize(new BlockReceiver.Context()
+				blockReceiver.Initialize(new BlockReceiver.Context
 				{
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
 					WeaponConfig = Config,
-					BlockLogic = _context.BlockLogic,
+					BlockLogic = _context.BlockLogic
 				});
 			}
 		}
@@ -119,8 +123,9 @@ namespace game.gameplay_core.damage_system
 			}
 		}
 	}
-	
-	public enum WeaponColliderType {
+
+	public enum WeaponColliderType
+	{
 		Attack,
 		PreciseContact,
 		Handle,

@@ -2,6 +2,7 @@ using game.gameplay_core.damage_system;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters;
+using game.gameplay_core.inventory.item_configs;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -31,7 +32,7 @@ namespace game.gameplay_core.characters.logic
 			_context = context;
 		}
 
-		public void ResolveBlock(DamageInfo damageInfo, WeaponConfig blockingWeapon, out bool deflectAttack)
+		public void ResolveBlock(DamageInfo damageInfo, WeaponItemConfig blockingWeapon, out bool deflectAttack)
 		{
 			var blockStaminaCost = damageInfo.DamageAmount * (1 - blockingWeapon.BlockStability / 100f);
 			_context.StaminaLogic.SpendStaminaForBlock(blockStaminaCost, out var hadEnoughStamina);

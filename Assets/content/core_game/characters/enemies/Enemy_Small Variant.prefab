@@ -13,6 +13,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 01f2b10a98d114b82b5c6e115c8bbac7, type: 2}
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: <DebugWeaponConfig>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 1cc72ed40ea14401d9bdc3bc4992c15a, type: 2}
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _rotationSpeed._halfTurnDurationSeconds
       value: 1.5
       objectReference: {fileID: 0}

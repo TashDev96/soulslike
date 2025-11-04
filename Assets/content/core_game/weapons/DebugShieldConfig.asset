@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
-  m_Name: DebugWeaponConfig
+  m_Name: DebugShieldConfig
   m_EditorClassIdentifier: 
-  <WeaponPrefabName>k__BackingField: DebugWeapon
+  <WeaponPrefabName>k__BackingField: DebugShield
   <RegularAttacks>k__BackingField:
   - <Animation>k__BackingField:
       _FadeDuration: 0.25
@@ -23,16 +23,16 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
-    <BaseDamage>k__BackingField: 1
+    <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
     <StaminaRegenDisabledTime>k__BackingField: {x: 0.28571427, y: 0.58928573}
     <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
     <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
-    <EnterComboTime>k__BackingField: 0.16964285
-    <EnterFromRollTime>k__BackingField: 0.30357143
-    <StartHandleObstacleCastTime>k__BackingField: 0.30357143
+    <EnterComboTime>k__BackingField: 0.2857143
+    <EnterFromRollTime>k__BackingField: 0
+    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -93,10 +93,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 2
+    <Range>k__BackingField: 1
     <HitConfigs>k__BackingField:
     - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.3125, y: 0.32589287}
+      <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
       <FriendlyFire>k__BackingField: 0
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
@@ -109,16 +109,16 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: e8f71e52c23a3a94facf4b2923df9262, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
-    <BaseDamage>k__BackingField: 1
+    <BaseDamage>k__BackingField: 10
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <RotationDisabledTime>k__BackingField: {x: 0.1851852, y: 0.87037045}
     <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0.70370376}
     <LockedStateTime>k__BackingField: {x: 0, y: 0.72222227}
-    <ExitToComboTime>k__BackingField: {x: 0.46296299, y: 1}
+    <ExitToComboTime>k__BackingField: {x: 0.4259259, y: 1}
     <EnterComboTime>k__BackingField: 0
     <EnterFromRollTime>k__BackingField: 0
-    <StartHandleObstacleCastTime>k__BackingField: 0.2777778
+    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -176,9 +176,9 @@ MonoBehaviour:
         _Callbacks: []
         _Names: []
       _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
-      _Speed: 1
+      _Speed: NaN
       _NormalizedStartTime: NaN
-    <BaseDamage>k__BackingField: 2
+    <BaseDamage>k__BackingField: 20
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <RotationDisabledTime>k__BackingField: {x: 0.30434784, y: 0.5507247}
@@ -187,7 +187,7 @@ MonoBehaviour:
     <ExitToComboTime>k__BackingField: {x: 0.47826087, y: 0.65217394}
     <EnterComboTime>k__BackingField: 0.18115942
     <EnterFromRollTime>k__BackingField: 0
-    <StartHandleObstacleCastTime>k__BackingField: 0.31159422
+    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -248,7 +248,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 2
+    <Range>k__BackingField: 1
     <HitConfigs>k__BackingField:
     - <InvolvedColliders>k__BackingField: 010000
       <Timing>k__BackingField: {x: 0.32608697, y: 0.35507247}
@@ -273,7 +273,7 @@ MonoBehaviour:
     <LockedStateTime>k__BackingField: {x: 0, y: 0.7321428}
     <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
     <EnterComboTime>k__BackingField: 0
-    <EnterFromRollTime>k__BackingField: 0.30434784
+    <EnterFromRollTime>k__BackingField: 0
     <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
@@ -306,7 +306,7 @@ MonoBehaviour:
     <LockedStateTime>k__BackingField: {x: 0, y: 0.73913044}
     <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
     <EnterComboTime>k__BackingField: 0
-    <EnterFromRollTime>k__BackingField: 0.2826087
+    <EnterFromRollTime>k__BackingField: 0
     <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
@@ -441,18 +441,18 @@ MonoBehaviour:
       <FriendlyFire>k__BackingField: 0
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
-  <BlockStability>k__BackingField: 15.8
-  <DamageReduction>k__BackingField: 0.609
+  <BlockStability>k__BackingField: 72.5
+  <DamageReduction>k__BackingField: 0.764
   <BlockStaminaCost>k__BackingField: 5
-  <BlockDeflectionRating>k__BackingField: 2
-  <AttackDeflectionRating>k__BackingField: 3
+  <BlockDeflectionRating>k__BackingField: 5
+  <AttackDeflectionRating>k__BackingField: 0
   <BlockStayAnimation>k__BackingField:
     _FadeDuration: 0.25
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 3b9dfb1920d5b4d229ad61c5e4947e39, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockWalkAnimation>k__BackingField:
@@ -461,7 +461,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 6b812dd11bfb74f42b2b85c349424d28, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockBreakAnimation>k__BackingField:
@@ -470,7 +470,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 80833d67cd02645f78aafe38288b02d9, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockHitAnimation>k__BackingField:
@@ -479,11 +479,44 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 8d2edfc86392c402a93b7f93cb6730ee, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
-  <CanParry>k__BackingField: 0
+  <CanParry>k__BackingField: 1
   <Parry>k__BackingField:
+    <Animation>k__BackingField:
+      _FadeDuration: 0.25
+      _Events:
+        _NormalizedTimes: []
+        _Callbacks: []
+        _Names: []
+      _Clip: {fileID: 7400000, guid: 5a745aebe98c24d1faa796b4c4bb8bc3, type: 2}
+      _Speed: 1
+      _NormalizedStartTime: NaN
+    <BaseDamage>k__BackingField: 0
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <RotationDisabledTime>k__BackingField: {x: 0.035714284, y: 0.8928572}
+    <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 1}
+    <LockedStateTime>k__BackingField: {x: 0, y: 0.8928572}
+    <ExitToComboTime>k__BackingField: {x: 0, y: 1}
+    <EnterComboTime>k__BackingField: 0
+    <EnterFromRollTime>k__BackingField: 0
+    <StartHandleObstacleCastTime>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <Range>k__BackingField: 1
+    <HitConfigs>k__BackingField:
+    - <InvolvedColliders>k__BackingField: 010000
+      <Timing>k__BackingField: {x: 0.25, y: 0.4285714}
+      <FriendlyFire>k__BackingField: 0
+      <DamageMultiplier>k__BackingField: 1
+      <PoiseDamage>k__BackingField: 1
+  <RiposteAttack>k__BackingField:
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -511,58 +544,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     <Range>k__BackingField: 1
     <HitConfigs>k__BackingField: []
-  <RiposteAttack>k__BackingField:
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
-    <BaseDamage>k__BackingField: 9.84
-    <StaminaCost>k__BackingField: 10
-    <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
-    <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}
-    <EnterComboTime>k__BackingField: 0.28515625
-    <EnterFromRollTime>k__BackingField: 0.30468747
-    <StartHandleObstacleCastTime>k__BackingField: 0.22265624
-    <ForwardMovement>k__BackingField:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.22851561, y: 0.23046874}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
-  <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+  <BackstabbedEnemyAnimation>k__BackingField: {fileID: 0}
   <BackstabAttack>k__BackingField:
     <Animation>k__BackingField:
       _FadeDuration: 0.25
@@ -570,50 +552,27 @@ MonoBehaviour:
         _NormalizedTimes: []
         _Callbacks: []
         _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
+      _Clip: {fileID: 0}
       _Speed: 1
       _NormalizedStartTime: NaN
-    <BaseDamage>k__BackingField: 9.84
+    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
-    <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}
-    <EnterComboTime>k__BackingField: 0.28515625
-    <EnterFromRollTime>k__BackingField: 0.30468747
-    <StartHandleObstacleCastTime>k__BackingField: 0.22265624
+    <RotationDisabledTime>k__BackingField: {x: 0, y: 0}
+    <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0}
+    <LockedStateTime>k__BackingField: {x: 0, y: 1}
+    <ExitToComboTime>k__BackingField: {x: 0, y: 1}
+    <EnterComboTime>k__BackingField: 0
+    <EnterFromRollTime>k__BackingField: 0
+    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.22851561, y: 0.23046874}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
+    <HitConfigs>k__BackingField: []
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0

@@ -17,6 +17,7 @@ using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory;
+using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
 using Sirenix.OdinInspector;
@@ -61,13 +62,21 @@ namespace game.gameplay_core.characters
 		[ShowInInspector]
 		private CharacterStats _characterStats;
 
+		private WeaponView _rightWeaponView;
+		private WeaponView _leftWeaponView;
+
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
 		[field: SerializeField]
-		private WeaponView DebugWeapon { get; set; }
+		private WeaponItemConfig DebugWeaponConfig { get; set; }
 		[field: SerializeField]
-		private WeaponView DebugWeaponLeft { get; set; }
+		private WeaponItemConfig DebugWeaponLeftConfig { get; set; }
+
+		[field: SerializeField]
+		private Transform RightHandSocket { get; set; }
+		[field: SerializeField]
+		private Transform LeftHandSocket { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
@@ -87,7 +96,7 @@ namespace game.gameplay_core.characters
 				AllCharacters = locationContext.Characters,
 				Self = this,
 				MovementLogic = _movementLogic,
-				IsDead = isDead,
+				IsDead = isDead
 			});
 
 			_blockLogic = new BlockLogic();
@@ -128,8 +137,8 @@ namespace game.gameplay_core.characters
 				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
 				InputData = new CharacterInputData(),
 
-				RightWeapon = new ReactiveProperty<WeaponView>(DebugWeapon),
-				LeftWeapon = new ReactiveProperty<WeaponView>(DebugWeaponLeft),
+				RightWeapon = new ReactiveProperty<WeaponView>(),
+				LeftWeapon = new ReactiveProperty<WeaponView>(),
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
@@ -153,7 +162,6 @@ namespace game.gameplay_core.characters
 				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
 
-
 			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
@@ -166,7 +174,7 @@ namespace game.gameplay_core.characters
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
 				LocomotionConfig = _config.Locomotion,
-				LockOnLogic = _context.LockOnLogic,
+				LockOnLogic = _context.LockOnLogic
 			});
 
 			_blockLogic.SetContext(new BlockLogic.Context
@@ -210,8 +218,14 @@ namespace game.gameplay_core.characters
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
 
-			_context.RightWeapon.Value.Initialize(_context);
-			_context.LeftWeapon.Value?.Initialize(_context);
+			if(DebugWeaponConfig != null)
+			{
+				SetWeapon(DebugWeaponConfig, true);
+			}
+			if(DebugWeaponLeftConfig != null)
+			{
+				SetWeapon(DebugWeaponLeftConfig, false);
+			}
 			_context.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
@@ -226,7 +240,6 @@ namespace game.gameplay_core.characters
 				});
 			}
 
-		 
 			if(_context.ParryReceiver != null)
 			{
 				_context.ParryReceiver.Initialize(new ParryReceiver.Context
@@ -289,18 +302,13 @@ namespace game.gameplay_core.characters
 			}
 		}
 
-		private void HandleDeath(bool isDead)
-		{
-			gameObject.GetComponent<CapsuleCollider>().enabled = !isDead;
-		}
-
 		private void InitializeInventory()
 		{
 			List<InventoryItemSaveData> saveData;
-			
+
 			if(_context.IsPlayer.Value)
 			{
-				saveData = GameStaticContext.Instance.InventoryDomain.InventoryItemsData;	
+				saveData = GameStaticContext.Instance.InventoryDomain.InventoryItemsData;
 			}
 			else
 			{
@@ -314,14 +322,78 @@ namespace game.gameplay_core.characters
 					saveData = new List<InventoryItemSaveData>();
 				}
 			}
-			
-			_inventoryLogic.Initialize(_context, saveData );
+
+			_inventoryLogic.Initialize(_context, saveData);
 		}
 
 		[Button]
 		public void GenerateUniqueId()
 		{
 			UniqueId = name + Random.value;
+		}
+
+		public void SetWeapon(WeaponItemConfig config, bool isRight)
+		{
+			if(config == null)
+			{
+				if(isRight)
+				{
+					if(_rightWeaponView != null)
+					{
+						Destroy(_rightWeaponView.gameObject);
+						_rightWeaponView = null;
+					}
+					_context.RightWeapon.Value = null;
+				}
+				else
+				{
+					if(_leftWeaponView != null)
+					{
+						Destroy(_leftWeaponView.gameObject);
+						_leftWeaponView = null;
+					}
+					_context.LeftWeapon.Value = null;
+				}
+				return;
+			}
+
+			var socket = isRight ? RightHandSocket : LeftHandSocket;
+			if(socket == null)
+			{
+				Debug.LogError($"{(isRight ? "Right" : "Left")} hand socket is not assigned!");
+				return;
+			}
+
+			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(config.WeaponPrefabName, AssetOwner.Game);
+			var weaponInstance = Instantiate(prefab, socket);
+			weaponInstance.transform.ResetLocal();
+			var weaponView = weaponInstance.GetComponent<WeaponView>();
+			weaponView.Config = config;
+			weaponView.Initialize(_context);
+
+			if(isRight)
+			{
+				if(_rightWeaponView != null)
+				{
+					Destroy(_rightWeaponView.gameObject);
+				}
+				_rightWeaponView = weaponView;
+				_context.RightWeapon.Value = weaponView;
+			}
+			else
+			{
+				if(_leftWeaponView != null)
+				{
+					Destroy(_leftWeaponView.gameObject);
+				}
+				_leftWeaponView = weaponView;
+				_context.LeftWeapon.Value = weaponView;
+			}
+		}
+
+		private void HandleDeath(bool isDead)
+		{
+			gameObject.GetComponent<CapsuleCollider>().enabled = !isDead;
 		}
 
 		private void CustomUpdate(float deltaTime)

@@ -7,6 +7,7 @@ using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.utils;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
@@ -170,7 +171,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				return false;
 			}
 
-			_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
+			//_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
 
 			if(_currentAttackConfig.ExitToComboTime.Contains(NormalizedTime))
 			{
@@ -242,7 +243,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 			}
 
-			_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
+			//_context.DebugDrawer.Value.AddAttackGraph(_currentAttackConfig);
 
 			IsComplete = false;
 

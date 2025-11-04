@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
-  m_Name: DebugWeaponConfig
+  m_Name: SimpleSwordConfig
   m_EditorClassIdentifier: 
-  <WeaponPrefabName>k__BackingField: DebugWeapon
+  <WeaponPrefabName>k__BackingField: SimpleSword
   <RegularAttacks>k__BackingField:
   - <Animation>k__BackingField:
       _FadeDuration: 0.25
