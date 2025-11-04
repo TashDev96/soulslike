@@ -278,7 +278,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						newAttackIndex = 0;
 					}
 
-					attackConfig = attacksList[_currentAttackIndex];
+					attackConfig = attacksList[newAttackIndex];
 					return;
 				case AttackType.RollAttackRegular:
 					newAttackIndex = 0;
