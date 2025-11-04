@@ -165,6 +165,7 @@ namespace game.gameplay_core.characters
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
 				LocomotionConfig = _config.Locomotion,
+				LockOnLogic = _context.LockOnLogic,
 			});
 
 			_blockLogic.SetContext(new BlockLogic.Context

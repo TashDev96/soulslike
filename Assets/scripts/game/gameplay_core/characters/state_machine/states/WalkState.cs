@@ -5,7 +5,6 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class WalkState : CharacterStateBase
 	{
-		private float _acceleration;
 		private float _time;
 
 		public WalkState(CharacterContext context) : base(context)
@@ -36,22 +35,10 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_time += deltaTime;
 			var inputWorld = _context.InputData.DirectionWorld.normalized;
-
-			if(!_context.LockOnLogic.LockOnTarget.HasValue)
-			{
-				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
-			}
-
-			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.Forward, inputWorld));
-			if(_context.LockOnLogic.LockOnTarget.HasValue)
-			{
-				directionMultiplier = 1;
-			}
-
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
-			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * acceleration);
+			var speed = _context.WalkSpeed.Value * acceleration;
 
-			_context.MovementLogic.MoveWithAcceleration(velocity * deltaTime, deltaTime);
+			_context.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
 
 			IsComplete = true;
 		}

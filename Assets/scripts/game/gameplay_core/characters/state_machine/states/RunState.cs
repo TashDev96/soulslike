@@ -6,7 +6,6 @@ namespace game.gameplay_core.characters.state_machine.states
 	public class RunState : CharacterStateBase
 	{
 		private const string StaminaRegenLockKey = "RunState";
-		private float _acceleration;
 		private float _time;
 
 		public override float RequiredStaminaOffset => _context.CharacterStats.StaminaMax.Value * 0.2f;
@@ -48,27 +47,14 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_time += deltaTime;
 			var inputWorld = _context.InputData.DirectionWorld.normalized;
-
-			if(!_context.LockOnLogic.LockOnTarget.HasValue)
-			{
-				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
-			}
-
-			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.Forward, inputWorld));
-			if(_context.LockOnLogic.LockOnTarget.HasValue)
-			{
-				directionMultiplier = 1;
-			}
-
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
-			var velocity = inputWorld * (directionMultiplier * _context.RunSpeed.Value * acceleration);
+			var speed = _context.RunSpeed.Value * acceleration;
 
-			_context.MovementLogic.MoveWithAcceleration(velocity * deltaTime, deltaTime);
+			_context.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
+			
 			const float staminaCostPerSecond = 2f;
 			_context.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
-			
 
-			//TODO wait for slow down
 			IsComplete = true;
 		}
 

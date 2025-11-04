@@ -21,6 +21,7 @@ namespace game.gameplay_core.characters.logic
 			public IsDead IsDead { get; set; }
 			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
 			public ReactiveProperty<bool> IsFalling { get; set; }
+			public LockOnLogic LockOnLogic { get; set; }
 		}
 
 		[SerializeField]
@@ -51,6 +52,7 @@ namespace game.gameplay_core.characters.logic
 		private CollisionFlags _debugFlags;
 		private Vector3 _acceleratedMovement;
 		private bool _hadAcceleratedMovement;
+		private Vector3 _virtualForward;
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
@@ -61,6 +63,7 @@ namespace game.gameplay_core.characters.logic
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
 			_prevPos = CurrentPosition;
+			_virtualForward = _context.CharacterTransform.forward;
 		}
 
 		public void Update(float deltaTime)
@@ -150,9 +153,38 @@ namespace game.gameplay_core.characters.logic
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
 			_context.CharacterTransform.rotation *= rotationStep;
+			if(!_context.LockOnLogic.LockOnTarget.HasValue) {
+			_virtualForward = _context.CharacterTransform.forward;
+			}
 		}
 
-	
+		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
+		{
+			var hasLockOnTarget = _context.LockOnLogic.LockOnTarget.HasValue;
+			
+			if(!hasLockOnTarget)
+			{
+				RotateCharacter(inputDirection, deltaTime);
+			}
+			else
+			{
+				if(inputDirection.sqrMagnitude > 0.001f)
+				{
+					var targetForward = inputDirection.normalized;
+					targetForward.y = 0;
+					targetForward = targetForward.normalized;
+					var degreesPerSecond = 180f / _context.LocomotionConfig.HalfTurnDurationSeconds;
+					var angleDifference = Vector3.SignedAngle(_virtualForward, targetForward, Vector3.up);
+					var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
+					var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
+					_virtualForward = (rotationStep * _virtualForward).normalized;
+				}
+			}
+
+			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_virtualForward, inputDirection));
+			var velocity = inputDirection * (directionMultiplier * speed);
+			ApplyLocomotion(velocity * deltaTime, deltaTime);
+		}
 
 		public void GetDebugString(StringBuilder sb)
 		{
