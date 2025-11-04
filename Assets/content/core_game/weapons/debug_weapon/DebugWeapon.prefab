@@ -339,7 +339,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
       <EnterComboTime>k__BackingField: 0.16964285
       <EnterFromRollTime>k__BackingField: 0.30357143
-      <StartHandleObstacleCastTime>k__BackingField: 0.22321428
+      <StartHandleObstacleCastTime>k__BackingField: 0.30357143
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -425,7 +425,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.46296299, y: 1}
       <EnterComboTime>k__BackingField: 0
       <EnterFromRollTime>k__BackingField: 0
-      <StartHandleObstacleCastTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0.2777778
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:
@@ -494,7 +494,7 @@ MonoBehaviour:
       <ExitToComboTime>k__BackingField: {x: 0.47826087, y: 0.65217394}
       <EnterComboTime>k__BackingField: 0.18115942
       <EnterFromRollTime>k__BackingField: 0
-      <StartHandleObstacleCastTime>k__BackingField: 0
+      <StartHandleObstacleCastTime>k__BackingField: 0.31159422
       <ForwardMovement>k__BackingField:
         serializedVersion: 2
         m_Curve:

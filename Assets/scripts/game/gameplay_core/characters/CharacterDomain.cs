@@ -79,6 +79,7 @@ namespace game.gameplay_core.characters
 
 			_transform = new ReadOnlyTransform(transform);
 			var isDead = new IsDead();
+			isDead.OnChanged += HandleDeath;
 
 			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
 			{
@@ -286,6 +287,11 @@ namespace game.gameplay_core.characters
 					LocationUiUpdate = locationContext.LocationUiUpdate
 				});
 			}
+		}
+
+		private void HandleDeath(bool isDead)
+		{
+			gameObject.GetComponent<CapsuleCollider>().enabled = !isDead;
 		}
 
 		private void InitializeInventory()
