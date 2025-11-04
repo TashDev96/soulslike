@@ -32,9 +32,8 @@ namespace game.gameplay_core.characters.ai
 
 		public void Think(float deltaTime)
 		{
-			
 			_timer -= deltaTime;
-			
+
 			if(_forceCommand)
 			{
 				if(_timer <= 0)
@@ -45,7 +44,6 @@ namespace game.gameplay_core.characters.ai
 				}
 			}
 
-			
 			if(_timer <= 0)
 			{
 				switch(Random.value)

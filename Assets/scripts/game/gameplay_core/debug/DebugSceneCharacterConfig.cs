@@ -6,7 +6,7 @@ namespace game.gameplay_core.debug
 {
 	public class DebugSceneCharacterConfig : MonoBehaviour
 	{
-		[field:SerializeField]
+		[field: SerializeField]
 		public List<InventoryItemSaveData> InventoryData { get; set; }
 	}
 }

@@ -2,7 +2,6 @@ using Animancer;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -46,7 +45,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.Update(deltaTime);
 			_logic.HandleAnimationProgress(NormalizedTime);
-			 
+
 			if(NormalizedTime > 0 && !CheckTiming(_animationConfig.LockedStateTime))
 			{
 				IsComplete = true;

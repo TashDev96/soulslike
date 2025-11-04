@@ -79,7 +79,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				return;
 			}
 
-			if(AttackHelpers.CastAttackObstacles(caster, true,true))
+			if(AttackHelpers.CastAttackObstacles(caster, true, true))
 			{
 				_waitAfterHitTimer = 1 / 120f;
 				TriggerReverse();

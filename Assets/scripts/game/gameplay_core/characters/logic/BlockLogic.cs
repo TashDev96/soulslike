@@ -1,7 +1,6 @@
-using game.gameplay_core.damage_system;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters;
+using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory.item_configs;
 
 namespace game.gameplay_core.characters.logic
@@ -18,14 +17,13 @@ namespace game.gameplay_core.characters.logic
 			public PoiseLogic PoiseLogic { get; set; }
 		}
 
-		
-		private readonly ReactiveCommand _onBlockTriggered = new ReactiveCommand();
-		private readonly ReactiveCommand _onParryFail = new ReactiveCommand();
-		
+		private readonly ReactiveCommand _onBlockTriggered = new();
+		private readonly ReactiveCommand _onParryFail = new();
+
+		private Context _context;
+
 		public IReadOnlyReactiveCommand OnBlockTriggered => _onBlockTriggered;
 		public IReadOnlyReactiveCommand OnParryFail => _onParryFail;
-		
-		private Context _context;
 
 		public void SetContext(Context context)
 		{
@@ -41,7 +39,6 @@ namespace game.gameplay_core.characters.logic
 
 			if(hadEnoughStamina)
 			{
-
 				deflectAttack = blockingWeapon.BlockDeflectionRating >= damageInfo.DeflectionRating;
 
 				damageInfo.DamageAmount *= blockingWeapon.DamageReduction;
@@ -61,6 +58,5 @@ namespace game.gameplay_core.characters.logic
 			_context.ApplyDamage.Execute(damageInfo);
 			_onBlockTriggered.Execute();
 		}
-		
 	}
 }

@@ -1,8 +1,8 @@
 using System;
 using Animancer;
 using dream_lib.src.utils.data_types;
-using game.gameplay_core.damage_system;
 using game.gameplay_core.characters.state_machine.states.attack;
+using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -76,7 +76,7 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: FoldoutGroup("Riposte")]
 		[field: SerializeField]
 		public AttackConfig RiposteAttack { get; private set; }
-		
+
 		[field: FoldoutGroup("BackStab")]
 		[field: SerializeField]
 		public AnimationClip BackstabbedEnemyAnimation { get; set; }

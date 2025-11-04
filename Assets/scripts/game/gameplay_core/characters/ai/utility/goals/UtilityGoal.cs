@@ -17,9 +17,6 @@ namespace game.gameplay_core.characters.ai.utility.goals
 
 #if UNITY_EDITOR
 
-
-		
-
 		private List<string> GetActionsDropDown()
 		{
 			if(Selection.activeGameObject != null)
@@ -30,7 +27,7 @@ namespace game.gameplay_core.characters.ai.utility.goals
 					return selectedTarget.Actions.Select(a => a.Id).ToList();
 				}
 			}
-			return new List<string>(){"Error"};
+			return new List<string> { "Error" };
 		}
 
 #endif

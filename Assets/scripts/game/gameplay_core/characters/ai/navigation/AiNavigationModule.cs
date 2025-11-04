@@ -83,7 +83,7 @@ namespace game.gameplay_core.characters.ai.navigation
 				direction = Vector3.forward;
 				return;
 			}
-			
+
 			position = Path.Positions[^1];
 			direction = Path.Directions[^1];
 		}

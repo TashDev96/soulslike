@@ -10,8 +10,6 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 	{
 		[SerializeField]
 		private PerlinConfig _randomValuesOverTime = new();
-		 
- 
 
 		public override float GetValue(UtilityBrainContext context)
 		{

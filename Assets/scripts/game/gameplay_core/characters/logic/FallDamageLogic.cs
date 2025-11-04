@@ -1,7 +1,6 @@
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -19,7 +18,7 @@ namespace game.gameplay_core.characters.logic
 			public ReactiveProperty<bool> IsFalling;
 			public InvulnerabilityLogic InvulnerabilityLogic;
 			public ReactiveCommand<StaggerReason> TriggerStagger;
-			
+
 			public BodyAttackView BodyAttackView;
 			public StaminaLogic StaminaLogic;
 
@@ -31,10 +30,8 @@ namespace game.gameplay_core.characters.logic
 		private const float PROTECTION_COOLDOWN = 0.5f;
 		private const float PROTECTION_DURATION = 1.5f;
 
-		[SerializeField]
 		private readonly float _minFallDamagePercent = 0.1f;
 
-		[SerializeField]
 		private readonly float _maxFallDamagePercent = 1.0f;
 
 		private Context _context;

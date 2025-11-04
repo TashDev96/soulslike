@@ -2,9 +2,7 @@ using System;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
 using game.gameplay_core.characters.ai.utility.considerations.weights;
-using game.gameplay_core.characters.ai.utility.editor;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility.considerations
@@ -50,9 +48,5 @@ namespace game.gameplay_core.characters.ai.utility.considerations
 		{
 			_commentEnabled = !_commentEnabled;
 		}
-
- 
-
-	
 	}
 }

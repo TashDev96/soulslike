@@ -12,6 +12,8 @@ namespace game.gameplay_core.inventory.items_logic
 		public bool HasInfiniteCharges => _config.HasInfiniteCharges;
 		public int ChargesLeft { get; protected set; }
 
+		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
+
 		public BaseConsumableItemLogic(BaseConsumableItemConfig config)
 		{
 			_config = config;
@@ -42,7 +44,6 @@ namespace game.gameplay_core.inventory.items_logic
 			return HasInfiniteCharges || ChargesLeft > 0;
 		}
 
-		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 		public void HandleAnimationBegin()
 		{
 			_effectApplied = false;
@@ -50,7 +51,7 @@ namespace game.gameplay_core.inventory.items_logic
 
 		public void HandleAnimationProgress(float normalizedTime)
 		{
-			if(!_effectApplied && _config.AnimationConfig.ApplyEffectTiming>= normalizedTime)
+			if(!_effectApplied && _config.AnimationConfig.ApplyEffectTiming >= normalizedTime)
 			{
 				_effectApplied = true;
 			}

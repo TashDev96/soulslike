@@ -6,7 +6,7 @@ namespace game.gameplay_core.inventory
 {
 	public class NpcInventoryConfigView : MonoBehaviour
 	{
-		[field:SerializeField]
+		[field: SerializeField]
 		public List<InventoryItemSaveData> Items { get; private set; }
 	}
 }

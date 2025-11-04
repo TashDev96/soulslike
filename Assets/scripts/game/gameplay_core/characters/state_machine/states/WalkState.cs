@@ -1,5 +1,4 @@
 using game.gameplay_core.characters.commands;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {

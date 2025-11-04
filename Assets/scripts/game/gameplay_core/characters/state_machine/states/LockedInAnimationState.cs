@@ -30,7 +30,6 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_animation = _context.Animator.Play(_animationClip, 0.1f, FadeMode.FromStart);
 			Duration = _animationDuration;
-			
 		}
 
 		public override void Update(float deltaTime)

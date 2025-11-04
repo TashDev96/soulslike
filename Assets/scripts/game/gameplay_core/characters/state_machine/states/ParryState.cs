@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Animancer;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -34,7 +33,6 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_parryWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
 			_parryConfig = _parryWeapon?.Config.Parry;
-			
 
 			if(_parryConfig != null && _parryWeapon.Config.CanParry)
 			{

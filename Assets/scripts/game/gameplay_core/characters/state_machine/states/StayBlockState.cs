@@ -4,7 +4,6 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class StayBlockState : BlockStateBase
 	{
-
 		public StayBlockState(CharacterContext context) : base(context)
 		{
 		}
@@ -34,7 +33,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			return base.CheckIsReadyToChangeState(nextCommand);
 		}
 
-	 
 		protected override void PlayBlockAnimation()
 		{
 			_context.Animator.Play(BlockingWeapon.Config.BlockStayAnimation, 0.2f);

@@ -12,7 +12,7 @@ namespace game.gameplay_core.damage_system
 		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
 		private static readonly int LayerMaskWalls = LayerMask.GetMask("Default");
 		private static readonly Collider[] Results = new Collider[40];
-		
+
 		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;

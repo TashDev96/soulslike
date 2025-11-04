@@ -7,7 +7,6 @@ using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.utils;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {

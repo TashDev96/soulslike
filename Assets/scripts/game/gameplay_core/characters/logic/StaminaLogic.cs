@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -80,16 +78,6 @@ namespace game.gameplay_core.characters.logic
 			_regenMultiplierReasons.Remove(reason);
 		}
 
-		private float CalculateTotalRegenMultiplier()
-		{
-			var totalMultiplier = 1f;
-			foreach(var multiplier in _regenMultiplierReasons.Values)
-			{
-				totalMultiplier *= multiplier;
-			}
-			return totalMultiplier;
-		}
-
 		public void SpendStamina(float amount)
 		{
 			_context.Stamina.Value -= amount;
@@ -115,7 +103,16 @@ namespace game.gameplay_core.characters.logic
 			}
 
 			return result;
+		}
 
+		private float CalculateTotalRegenMultiplier()
+		{
+			var totalMultiplier = 1f;
+			foreach(var multiplier in _regenMultiplierReasons.Values)
+			{
+				totalMultiplier *= multiplier;
+			}
+			return totalMultiplier;
 		}
 	}
 }

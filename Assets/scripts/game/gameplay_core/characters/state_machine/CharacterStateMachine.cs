@@ -100,8 +100,6 @@ namespace game.gameplay_core.characters.state_machine
 			return str;
 		}
 
-		
-
 		private void HandleParryFail()
 		{
 			if(_currentState.Value is ParryState parryState)
@@ -252,7 +250,7 @@ namespace game.gameplay_core.characters.state_machine
 						}
 						break;
 					case CharacterCommand.UseItem:
-						
+
 						if(_context.CurrentConsumableItem.HasValue && _context.CurrentConsumableItem.Value.CheckCanStartConsumption())
 						{
 							SetState(new ConsumeState(_context, _context.CurrentConsumableItem.Value));
@@ -414,7 +412,7 @@ namespace game.gameplay_core.characters.state_machine
 				{
 					continue;
 				}
-				
+
 				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
 				{
 					continue;
@@ -431,7 +429,8 @@ namespace game.gameplay_core.characters.state_machine
 
 				if(distance > maxRiposteDistance)
 				{
-					Debug.DrawLine(_context.Transform.Position, targetPosition, Color.red, 1f);;
+					Debug.DrawLine(_context.Transform.Position, targetPosition, Color.red, 1f);
+					;
 					continue;
 				}
 
@@ -457,7 +456,7 @@ namespace game.gameplay_core.characters.state_machine
 			var attackerInsideCone = attackerLookingAtVictimAngle <= attackerBehindVictimMaxAngle;
 			var victimLookingAway = victimLookingAwayFromAttackerAngle <= attackerBehindVictimMaxAngle;
 
-			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, -victimToAttacker, 
+			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, -victimToAttacker,
 				attackerBehindVictimMaxAngle, attackerBehindVictimMaxAngle, attackerInsideCone && victimLookingAway, Color.blue);
 
 			return attackerInsideCone && victimLookingAway;
@@ -474,7 +473,7 @@ namespace game.gameplay_core.characters.state_machine
 			var attackerInsideCone = attackerLookingAtVictimAngle <= attackerLookingAtVictimMaxAngle;
 			var victimInsideCone = victimLookingAtAttackerAngle <= victimLookingAtAttackerMaxAngle;
 
-			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, victimToAttacker, 
+			DrawAngleDebugLines(attackerPos, attackerForward, attackerToVictim, victimPos, victimForward, victimToAttacker,
 				attackerLookingAtVictimMaxAngle, victimLookingAtAttackerMaxAngle, attackerInsideCone && victimInsideCone, Color.yellow);
 
 			return attackerInsideCone && victimInsideCone;
@@ -487,7 +486,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			Debug.DrawLine(attackerPos, attackerPos + attackerForward * debugDistance, debugColor, debugDuration);
 			Debug.DrawLine(attackerPos, attackerPos + attackerToVictim * debugDistance, success ? Color.green : Color.red, debugDuration);
-			
+
 			var attackerConeLeft = Quaternion.AngleAxis(-attackerMaxAngle, Vector3.up) * attackerForward;
 			var attackerConeRight = Quaternion.AngleAxis(attackerMaxAngle, Vector3.up) * attackerForward;
 			Debug.DrawLine(attackerPos, attackerPos + attackerConeLeft * debugDistance, debugColor, debugDuration);
@@ -495,7 +494,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			Debug.DrawLine(victimPos, victimPos + victimForward * debugDistance, debugColor, debugDuration);
 			Debug.DrawLine(victimPos, victimPos + victimToAttacker * debugDistance, success ? Color.green : Color.red, debugDuration);
-			
+
 			var victimConeLeft = Quaternion.AngleAxis(-victimMaxAngle, Vector3.up) * victimForward;
 			var victimConeRight = Quaternion.AngleAxis(victimMaxAngle, Vector3.up) * victimForward;
 			Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, debugColor, debugDuration);

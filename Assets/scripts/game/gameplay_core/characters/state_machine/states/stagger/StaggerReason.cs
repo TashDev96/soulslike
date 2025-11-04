@@ -5,6 +5,6 @@ namespace game.gameplay_core.characters.state_machine.states.stagger
 		Poise,
 		BlockBreak,
 		Fall,
-		ParryStun,
+		ParryStun
 	}
 }

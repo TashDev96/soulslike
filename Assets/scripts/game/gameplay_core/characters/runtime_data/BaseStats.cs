@@ -15,4 +15,4 @@ namespace game.gameplay_core.characters.runtime_data
 		[SerializeField]
 		public float PoiseRestoreTimerMax;
 	}
-} 
+}

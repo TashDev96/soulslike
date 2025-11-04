@@ -15,16 +15,16 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 		[SerializeField]
 		private Octave[] _octaves;
 
+		[SerializeField] [Range(0f, 1f)]
+		private float _threshold = 0.5f;
+
 		[Range(0f, 60f)]
-		private float _previewStartTime = 0f;
+		private float _previewStartTime;
 		private float _previewDuration = 10f;
 
-		[SerializeField, Range(0f, 1f)]
-		private float _threshold = 0.5f;
-		
-		public float Threshold => _threshold;
-
 		private string _simulationResults = "";
+
+		public float Threshold => _threshold;
 
 		public float Evaluate(float time)
 		{
@@ -101,7 +101,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 				aboveLineDurations.Add(currentAboveDuration);
 			}
 
-			var percentageAbove = (totalTimeAbove / simulationDuration) * 100f;
+			var percentageAbove = totalTimeAbove / simulationDuration * 100f;
 			var maxDuration = aboveLineDurations.Count > 0 ? aboveLineDurations.Max() : 0f;
 			var medianDuration = 0f;
 
@@ -114,18 +114,17 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 					: sortedDurations[middleIndex];
 			}
 
-			_simulationResults = $"1 Hour Simulation Results:\n" +
-			                    $"Time above line: {percentageAbove:F1}%\n" +
-			                    $"Max duration above: {maxDuration:F1}s\n" +
-			                    $"Median duration above: {medianDuration:F1}s\n" +
-			                    $"Episodes above line: {aboveLineDurations.Count}";
+			_simulationResults = "1 Hour Simulation Results:\n" +
+			                     $"Time above line: {percentageAbove:F1}%\n" +
+			                     $"Max duration above: {maxDuration:F1}s\n" +
+			                     $"Median duration above: {medianDuration:F1}s\n" +
+			                     $"Episodes above line: {aboveLineDurations.Count}";
 		}
 
 		[OnInspectorGUI]
 		private void DrawPerlinPreview()
 		{
 #if UNITY_EDITOR
-			
 
 			GUILayout.Space(5);
 
@@ -178,7 +177,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 			Handles.EndGUI();
 
 			GUILayout.Space(10);
-			
+
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Start Time:", GUILayout.Width(80));
 			_previewStartTime = EditorGUILayout.Slider(_previewStartTime, 0f, 60f);
@@ -201,7 +200,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 				};
 				GUILayout.Label(_simulationResults, style);
 			}
-			
+
 #endif
 		}
 

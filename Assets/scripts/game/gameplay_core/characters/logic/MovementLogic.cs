@@ -106,7 +106,7 @@ namespace game.gameplay_core.characters.logic
 
 			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.LocomotionConfig.WalkAcceleration);
 			var resultMovement = _acceleratedMovement;
-			
+
 			if(_isGroundedCache)
 			{
 				if(CharacterCollider.HasStableGround)
@@ -153,15 +153,16 @@ namespace game.gameplay_core.characters.logic
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
 			_context.CharacterTransform.rotation *= rotationStep;
-			if(!_context.LockOnLogic.LockOnTarget.HasValue) {
-			_virtualForward = _context.CharacterTransform.forward;
+			if(!_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				_virtualForward = _context.CharacterTransform.forward;
 			}
 		}
 
 		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
 		{
 			var hasLockOnTarget = _context.LockOnLogic.LockOnTarget.HasValue;
-			
+
 			if(!hasLockOnTarget)
 			{
 				RotateCharacter(inputDirection, deltaTime);

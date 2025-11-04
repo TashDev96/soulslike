@@ -29,7 +29,7 @@ namespace game.gameplay_core.characters.view.ui
 			{
 				Current = context.CharacterStats.Hp,
 				Max = context.CharacterStats.HpMax,
-				CustomUpdate = context.LocationUiUpdate,
+				CustomUpdate = context.LocationUiUpdate
 			});
 
 			context.LocationUiUpdate.OnExecute += CustomUpdate;

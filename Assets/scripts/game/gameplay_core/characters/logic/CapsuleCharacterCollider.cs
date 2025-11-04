@@ -13,6 +13,11 @@ namespace game.gameplay_core.characters.logic
 		[SerializeField]
 		private float _characterToCharacterOffset = 0.5f;
 
+		[SerializeField]
+		private LayerMask _collisionMask = ~0;
+		[SerializeField]
+		private LayerMask _charactersCollisionMask = ~0;
+
 		public float SkinWidth = 0.05f;
 		public float SlopeLimit = 30f;
 		public float StepOffset = 0.55f;
@@ -20,11 +25,6 @@ namespace game.gameplay_core.characters.logic
 
 		[NonSerialized]
 		public bool HasStableGround;
-
-		[SerializeField]
-		private LayerMask _collisionMask = ~0;
-		[SerializeField]
-		private LayerMask _charactersCollisionMask = ~0;
 
 		private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
 

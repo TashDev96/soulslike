@@ -1,5 +1,4 @@
 using dream_lib.src.reactive;
-using game.gameplay_core.characters;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.inventory.item_configs;
 using UnityEngine;
@@ -31,7 +30,5 @@ namespace game.gameplay_core.damage_system
 		{
 			_context.BlockLogic.ResolveBlock(damageInfo, _context.WeaponConfig, out deflectAttack);
 		}
-
-
 	}
 }

@@ -7,7 +7,6 @@ using UnityEngine;
 namespace game.gameplay_core.characters.ai.utility.goals
 {
 	[Serializable]
-	
 	public class GoalsChain
 	{
 		public string Id;
@@ -22,7 +21,5 @@ namespace game.gameplay_core.characters.ai.utility.goals
 		public float LastWeight;
 		[field: SerializeField]
 		public float InertiaWeight { get; private set; }
-
-
 	}
 }

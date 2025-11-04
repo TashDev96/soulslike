@@ -9,7 +9,7 @@ namespace game.gameplay_core.inventory
 	public class InventoryDomain
 	{
 		private bool _sceneDebugMode;
-		
+
 		public List<InventoryItemSaveData> InventoryItemsData { get; private set; }
 
 		public async UniTask Initialize(bool sceneDebugMode)
@@ -22,6 +22,7 @@ namespace game.gameplay_core.inventory
 				LoadTestInventory();
 			}
 #endif
+
 			//TODOload inventory save data
 		}
 
@@ -29,13 +30,10 @@ namespace game.gameplay_core.inventory
 		{
 			if(_sceneDebugMode)
 			{
-				return;
 			}
-			
+
 			//todo save inventory to file
 		}
-
- 
 
 		private void LoadTestInventory()
 		{

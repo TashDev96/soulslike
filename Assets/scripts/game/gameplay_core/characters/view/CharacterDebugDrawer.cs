@@ -15,7 +15,7 @@ using UnityEngine;
 namespace game.gameplay_core.characters.view
 {
 	[Serializable]
-	public class CharacterDebugDrawer:MonoBehaviour
+	public class CharacterDebugDrawer : MonoBehaviour
 	{
 		public bool DrawStateMachineInfo;
 		public bool DrawBrainInfo;
@@ -30,10 +30,8 @@ namespace game.gameplay_core.characters.view
 		private GizmoGraphDrawer _graphDrawer;
 		private int _attackIndex;
 		private bool _comboTriggered;
-		
-	 
 
-		private StringBuilder _debugStringBuilder = new StringBuilder();
+		private StringBuilder _debugStringBuilder = new();
 		private float AttackGraphY => _attackIndex / 10f;
 
 		[Conditional("UNITY_EDITOR")]
@@ -52,7 +50,38 @@ namespace game.gameplay_core.characters.view
 				alignment = TextAnchor.LowerLeft
 			};
 			_graphDrawer = new GizmoGraphDrawer();
-			
+		}
+
+		[Conditional("UNITY_EDITOR")]
+		public void AddAttackGraph(AttackConfig currentAttackConfig)
+		{
+			_attackIndex++;
+			_comboTriggered = false;
+			var line = _graphDrawer.AddLine(_attackIndex.ToString());
+			line.AddRange(new[]
+			{
+				new GraphPoint(0, AttackGraphY),
+				new GraphPoint(currentAttackConfig.ExitToComboTime.x * currentAttackConfig.Duration, AttackGraphY)
+				{
+					Color = Color.green
+				},
+				new GraphPoint(currentAttackConfig.ExitToComboTime.y * currentAttackConfig.Duration, AttackGraphY),
+				new GraphPoint(currentAttackConfig.Duration, AttackGraphY)
+			});
+		}
+
+		[Conditional("UNITY_EDITOR")]
+		public void AddAttackComboAttempt(float time)
+		{
+			if(!_comboTriggered)
+			{
+				_comboTriggered = true;
+				_graphDrawer.FreePoints.Add(new GraphPoint(time, AttackGraphY)
+				{
+					Color = Color.red,
+					Size = 0.05f
+				});
+			}
 		}
 
 #if UNITY_EDITOR
@@ -67,11 +96,10 @@ namespace game.gameplay_core.characters.view
 			_debugStringBuilder.Clear();
 			_debugStringBuilder.AppendLine($"stamina: {_context.CharacterStats.Stamina.Value.CeilFormat(1)}");
 			_debugStringBuilder.AppendLine($"stamina: {_context.StaminaLogic.GetDebugString()}");
-			
+
 			EditorGUILayout.LabelField(_debugStringBuilder.ToString(), EditorStyles.wordWrappedLabel);
-			
 		}
-		
+
 		public void OnDrawGizmos()
 		{
 			if(!_initialized)
@@ -114,37 +142,5 @@ namespace game.gameplay_core.characters.view
 		}
 
 #endif
-
-		[Conditional("UNITY_EDITOR")]
-		public void AddAttackGraph(AttackConfig currentAttackConfig)
-		{
-			_attackIndex++;
-			_comboTriggered = false;
-			var line = _graphDrawer.AddLine(_attackIndex.ToString());
-			line.AddRange(new[]
-			{
-				new GraphPoint(0, AttackGraphY),
-				new GraphPoint(currentAttackConfig.ExitToComboTime.x * currentAttackConfig.Duration, AttackGraphY)
-				{
-					Color = Color.green
-				},
-				new GraphPoint(currentAttackConfig.ExitToComboTime.y * currentAttackConfig.Duration, AttackGraphY),
-				new GraphPoint(currentAttackConfig.Duration, AttackGraphY)
-			});
-		}
-
-		[Conditional("UNITY_EDITOR")]
-		public void AddAttackComboAttempt(float time)
-		{
-			if(!_comboTriggered)
-			{
-				_comboTriggered = true;
-				_graphDrawer.FreePoints.Add(new GraphPoint(time, AttackGraphY)
-				{
-					Color = Color.red,
-					Size = 0.05f
-				});
-			}
-		}
 	}
 }

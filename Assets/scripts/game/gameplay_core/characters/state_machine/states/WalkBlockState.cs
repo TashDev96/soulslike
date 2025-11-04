@@ -17,7 +17,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_time = 0;
 			base.OnEnter();
 		}
- 
+
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
 		{
 			switch(nextCommand)

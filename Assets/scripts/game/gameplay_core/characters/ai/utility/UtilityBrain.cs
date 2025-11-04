@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using dream_lib.src.utils.components;
 using game.gameplay_core.characters.ai.navigation;
@@ -13,7 +14,6 @@ namespace game.gameplay_core.characters.ai.utility
 		[SerializeField]
 		private List<SubUtilityBase> _subUtilities;
 
-		
 		[SerializeField]
 		private TriggerEventsListener[] _aggroZones;
 		[SerializeField]
@@ -33,10 +33,10 @@ namespace game.gameplay_core.characters.ai.utility
 				CharacterContext = context,
 				PerformedActionsHistory = new List<ActionHistoryNode>(),
 				NavigationModule = new AiNavigationModule(context.Transform),
-				BlackboardValues = new Dictionary<BlackboardValues, float>(),
+				BlackboardValues = new Dictionary<BlackboardValues, float>()
 			};
-			
-			foreach(BlackboardValues enumKey in System.Enum.GetValues(typeof(BlackboardValues)))
+
+			foreach(BlackboardValues enumKey in Enum.GetValues(typeof(BlackboardValues)))
 			{
 				_context.BlackboardValues.Add(enumKey, 0f);
 			}
@@ -72,7 +72,6 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private void HandleAggroTriggerEnter(GameObject enteredObject)
 		{
-			
 			if(HasTarget)
 			{
 				return;

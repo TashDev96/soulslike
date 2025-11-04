@@ -26,7 +26,7 @@ namespace game.ui
 				Max = context.Player.ExternalData.Stats.HpMax,
 				CustomUpdate = context.LocationUiUpdate
 			});
-			
+
 			_staminaBar.SetContext(new UiBar.Context
 			{
 				Current = context.Player.ExternalData.Stats.Stamina,

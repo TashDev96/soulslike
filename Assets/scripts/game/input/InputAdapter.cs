@@ -18,7 +18,7 @@ namespace game.input
 		{
 			return CF2Input.GetButtonDown(axis.ToString());
 		}
-		
+
 		public static bool GetButtonUp(InputAxesNames axis)
 		{
 			return CF2Input.GetButtonUp(axis.ToString());

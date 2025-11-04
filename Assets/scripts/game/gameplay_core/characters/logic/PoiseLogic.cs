@@ -2,7 +2,6 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
-using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 
@@ -41,6 +40,11 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
+		public void TriggerStaggerFromBlockWithNoStamina()
+		{
+			ApplyStagger(StaggerReason.BlockBreak);
+		}
+
 		private void ApplyDamage(DamageInfo damageInfo)
 		{
 			Poise.Value -= damageInfo.PoiseDamageAmount;
@@ -50,11 +54,6 @@ namespace game.gameplay_core.characters.logic
 			}
 
 			PoiseRestoreTimer.Value = _context.Stats.PoiseRestoreTimerMax.Value;
-		}
-
-		public void TriggerStaggerFromBlockWithNoStamina()
-		{
-			ApplyStagger(StaggerReason.BlockBreak);
 		}
 
 		private void ApplyStagger(StaggerReason reason)

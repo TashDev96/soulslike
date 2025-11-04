@@ -40,9 +40,8 @@ namespace game.gameplay_core.utils
 		public Vector3 Center = Vector3.zero;
 		public Direction CapsuleDirection = Direction.YAxis;
 
-		
 		private readonly RaycastHit[] _triggersCastResults = new RaycastHit[20];
-		
+
 		private Transform _transform;
 		private int _triggersLayerMask;
 
@@ -88,6 +87,25 @@ namespace game.gameplay_core.utils
 
 			p1 = position + direction * half + rotation * scaledCenter;
 			p2 = position - direction * half + rotation * scaledCenter;
+		}
+
+		public void TriggerTriggers(Vector3 startPos, Vector3 endPos)
+		{
+			GetCapsulePoints(startPos, out var p1, out var p2);
+
+			var castDistance = (endPos - startPos).magnitude;
+
+			var hitsCount = Physics.CapsuleCastNonAlloc(p1, p2, Radius, (endPos - startPos).normalized,
+				_triggersCastResults, castDistance,
+				_triggersLayerMask, QueryTriggerInteraction.Collide);
+
+			for(var i = 0; i < hitsCount; i++)
+			{
+				if(_triggersCastResults[i].collider.TryGetComponent<TriggerEventsListener>(out var listener))
+				{
+					listener.TriggerManualColliderEnter(gameObject);
+				}
+			}
 		}
 
 		protected Vector3 GetDirectionVector()
@@ -179,26 +197,6 @@ namespace game.gameplay_core.utils
 			GetCapsulePoints(out var p1, out var p2);
 			DebugDrawUtils.DrawWireCapsule(p1, p2, GetScaledRadius(), Color.white);
 		}
-		
-		public void TriggerTriggers(Vector3 startPos, Vector3 endPos)
-		{
-			GetCapsulePoints(startPos, out var p1, out var p2);
-
-			var castDistance = (endPos-startPos).magnitude;
-			
-			var hitsCount = Physics.CapsuleCastNonAlloc(p1, p2, Radius, (endPos-startPos).normalized,
-				_triggersCastResults, castDistance,
-				_triggersLayerMask, QueryTriggerInteraction.Collide);
-
-			for(var i = 0; i < hitsCount; i++)
-			{
-				if(_triggersCastResults[i].collider.TryGetComponent<TriggerEventsListener>(out var listener))
-				{
-					listener.TriggerManualColliderEnter(gameObject);
-				}
-			}
-		}
-
 
 		private void OnDrawGizmos()
 		{

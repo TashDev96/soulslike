@@ -8,8 +8,8 @@ namespace game.gameplay_core.inventory.item_configs
 		public bool HasInfiniteCharges { get; private set; }
 		[field: SerializeField]
 		public int ChargesCount { get; private set; }
-		
-		[field:SerializeField]
+
+		[field: SerializeField]
 		public ItemAnimationConfig AnimationConfig { get; private set; }
 	}
 }

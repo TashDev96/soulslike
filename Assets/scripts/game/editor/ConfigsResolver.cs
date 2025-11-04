@@ -9,7 +9,7 @@ namespace game.editor
 		{
 			var guids = AssetDatabase.FindAssets($"t:{nameof(BaseItemConfig)}");
 			var paths = new string[guids.Length];
-			for (var i = 0; i < guids.Length; i++)
+			for(var i = 0; i < guids.Length; i++)
 			{
 				paths[i] = AssetDatabase.LoadAssetAtPath<BaseItemConfig>(AssetDatabase.GUIDToAssetPath(guids[i])).name;
 			}

@@ -7,11 +7,9 @@ namespace game.gameplay_core.characters.config
 	public class CharacterConfig : ScriptableObject
 	{
 		[field: SerializeField]
-		public CharacterConfig ParentConfig { get; private set; }
-		
-
-		[field: SerializeField]
 		public RollConfig Roll;
+		[field: SerializeField]
+		public CharacterConfig ParentConfig { get; private set; }
 		[field: SerializeField]
 		public AnimationClip IdleAnimation { get; private set; }
 		[field: SerializeField]
@@ -29,8 +27,6 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public AnimationClip RunAnimation { get; set; }
 
-		
-		
 		[field: SerializeField]
 		public LocomotionConfig Locomotion { get; private set; }
 
@@ -39,7 +35,7 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public BaseStats BaseStats { get; private set; }
-		
+
 		[field: SerializeField]
 		public bool CanDoBackstabs { get; private set; }
 	}

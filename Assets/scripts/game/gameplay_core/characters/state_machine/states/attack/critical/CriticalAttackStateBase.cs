@@ -11,11 +11,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 	public class CriticalAttackStateBase : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "CriticalAttackState";
+		protected readonly CharacterDomain _target;
 
 		private bool _staminaSpent;
 		private bool _staminaRegenDisabled;
 		private readonly List<HitData> _hitsData = new();
-		protected readonly CharacterDomain _target;
 
 		private AttackConfig _attackConfig;
 
@@ -51,7 +51,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			Time = 0f;
 			ResetForwardMovement();
-
 		}
 
 		public override void Update(float deltaTime)
@@ -156,7 +155,5 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			_target.ExternalData.ApplyDamage.Execute(damageInfo);
 		}
-
-	
 	}
 }

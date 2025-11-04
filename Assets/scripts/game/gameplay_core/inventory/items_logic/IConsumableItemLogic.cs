@@ -6,12 +6,11 @@ namespace game.gameplay_core.inventory.items_logic
 	{
 		public bool HasInfiniteCharges { get; }
 		public int ChargesLeft { get; }
-		public bool CheckCanStartConsumption();
-		
+
 		public ItemAnimationConfig AnimationConfig { get; }
-		
+		public bool CheckCanStartConsumption();
+
 		void HandleAnimationBegin();
 		void HandleAnimationProgress(float normalizedTime);
-		
 	}
 }
