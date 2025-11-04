@@ -147,7 +147,7 @@ MonoBehaviour:
       affectedKeyPositive: 0
       affectedKeyNegative: 0
       keyboardPositive: 323
-      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt0: 104
       keyboardPositiveAlt1: 0
       keyboardPositiveAlt2: 0
       keyboardNegative: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
       affectedKeyPositive: 0
       affectedKeyNegative: 0
       keyboardPositive: 324
-      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt0: 106
       keyboardPositiveAlt1: 0
       keyboardPositiveAlt2: 0
       keyboardNegative: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
       affectedKeyPositive: 0
       affectedKeyNegative: 0
       keyboardPositive: 325
-      keyboardPositiveAlt0: 0
+      keyboardPositiveAlt0: 107
       keyboardPositiveAlt1: 0
       keyboardPositiveAlt2: 0
       keyboardNegative: 0
