@@ -46,7 +46,8 @@ namespace game.gameplay_core
 			_cameraController = new IsometricCameraController(new IsometricCameraController.Context
 			{
 				Camera = _locationContext.MainCamera,
-				Player = _player
+				Player = _player,
+				CameraSettings = _sceneInstaller.CameraSettings,
 			});
 
 			LoadSceneObjects();

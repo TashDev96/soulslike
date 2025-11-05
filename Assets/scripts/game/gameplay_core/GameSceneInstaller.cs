@@ -1,4 +1,5 @@
 using dream_lib.src.utils.serialization;
+using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.location_save_system;
 using Sirenix.OdinInspector;
@@ -16,6 +17,8 @@ namespace game.gameplay_core
 		public CharacterDomain[] Characters { get; private set; }
 		[field: SerializeField]
 		public Camera MainCamera { get; private set; }
+		[field: SerializeField]
+		public CameraSettings CameraSettings { get; private set; }
 		[field: SerializeField]
 		public Transform TestPlayerSpawnPos { get; private set; }
 
