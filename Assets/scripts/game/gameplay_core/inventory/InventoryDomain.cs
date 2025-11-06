@@ -24,6 +24,7 @@ namespace game.gameplay_core.inventory
 #endif
 
 			//TODOload inventory save data
+			await UniTask.Delay(1);
 		}
 
 		public void SaveInventory()

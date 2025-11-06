@@ -55,7 +55,7 @@ namespace game.gameplay_core.characters.ai.utility.editor
 
 		private void HandleWeightUpdate(object sender, WeightUpdateEventArgs e)
 		{
-			if(_target == null || sender != _target)
+			if(_target == null || (SubUtilityBase)sender != _target)
 			{
 				return;
 			}

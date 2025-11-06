@@ -16,10 +16,6 @@ namespace game.gameplay_core.characters.ai.utility
 
 		[SerializeField]
 		private TriggerEventsListener[] _aggroZones;
-		[SerializeField]
-		private float _attackDistance = 2f;
-		[SerializeField]
-		private float _fightModeDistance = 4f;
 
 		private UtilityBrainContext _context;
 

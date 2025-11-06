@@ -23,6 +23,7 @@ namespace game.gameplay_core
 		public async UniTask PlayOnLocation()
 		{
 			//TODO: load scene
+			await Initialize();
 		}
 
 		private async UniTask PreloadCoreGameAssets()

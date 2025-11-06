@@ -10,4 +10,4 @@ namespace game.gameplay_core.camera
 		public float CameraAltitude => _cameraAltitude;
 	}
 }
-
+ 

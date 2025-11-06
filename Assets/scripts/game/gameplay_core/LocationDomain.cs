@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
@@ -25,11 +24,6 @@ namespace game.gameplay_core
 
 		public void Initialize()
 		{
-			InitializeAsync().Forget();
-		}
-
-		private async UniTask InitializeAsync()
-		{
 			_sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>();
 
 			_locationContext = new LocationContext
@@ -47,7 +41,7 @@ namespace game.gameplay_core
 			{
 				Camera = _locationContext.MainCamera,
 				Player = _player,
-				CameraSettings = _sceneInstaller.CameraSettings,
+				CameraSettings = _sceneInstaller.CameraSettings
 			});
 
 			LoadSceneObjects();
