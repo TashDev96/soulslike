@@ -24,8 +24,7 @@ namespace game.gameplay_core.characters.logic
 			public LockOnLogic LockOnLogic { get; set; }
 		}
 
-		[SerializeField]
-		private float _inAirDamping;
+		private const float AirDamping = 0.33f;
 		[SerializeField]
 		private float _slidingAcceleration;
 		[SerializeField]
@@ -225,8 +224,14 @@ namespace game.gameplay_core.characters.logic
 
 				if(_context.IsFalling.Value)
 				{
+					if(AirDamping > 0f && _fallVelocity.sqrMagnitude > 0.0001f)
+					{
+						var velocityMagnitude = _fallVelocity.magnitude;
+						var dampingForce = -_fallVelocity.normalized * velocityMagnitude * AirDamping;
+						_fallVelocity += dampingForce * deltaTime;
+					}
+					
 					_fallVelocity += Physics.gravity * deltaTime;
-					_fallVelocity = Vector3.Lerp(_fallVelocity, Vector3.zero, _inAirDamping * deltaTime);
 
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
