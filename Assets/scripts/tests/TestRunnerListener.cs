@@ -19,8 +19,6 @@ namespace Tests
 
 		private class TestRunCallback : ICallbacks
 		{
-			private int _testsCount = 0;
-
 			public void RunStarted(ITestAdaptor testsToRun)
 			{
 			}

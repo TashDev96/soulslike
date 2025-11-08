@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpriteMeshBaker : MonoBehaviour
 {
 	public SpriteRenderer spriteRenderer;
-	public Collider collider;
+	public Collider Collider;
 	public MeshFilter targetMeshFilter;
 	public float raycastDistance = 10f;
 	public float rayOriginOffset = 0.1f;
@@ -27,7 +27,7 @@ public class SpriteMeshBaker : MonoBehaviour
 	[Button]
 	public void Bake()
 	{
-		if(spriteRenderer == null || collider == null)
+		if(spriteRenderer == null || Collider == null)
 		{
 			Debug.LogError("SpriteRenderer or Collider not assigned!");
 			return;
@@ -74,7 +74,7 @@ public class SpriteMeshBaker : MonoBehaviour
 				Debug.DrawRay(rayOrigin, rayDirection * raycastDistance, Color.yellow, debugDrawDuration);
 			}
 
-			if(collider.Raycast(ray, out hit, raycastDistance))
+			if(Collider.Raycast(ray, out hit, raycastDistance))
 			{
 				hitFound = true;
 
@@ -115,7 +115,7 @@ public class SpriteMeshBaker : MonoBehaviour
 							Debug.DrawRay(correctedOrigin, rayDirection * raycastDistance, Color.cyan, debugDrawDuration);
 						}
 
-						if(collider.Raycast(correctedRay, out hit, raycastDistance))
+						if(Collider.Raycast(correctedRay, out hit, raycastDistance))
 						{
 							// Project hit point onto the original ray direction
 							var rayOriginToHit = hit.point - rayOrigin;
@@ -239,7 +239,7 @@ public class SpriteMeshBaker : MonoBehaviour
 	private ushort GetMidpointIndex(Dictionary<long, int> edgeVertexMap, List<Vector2> newVertices,
 		List<Vector2> newUvs, ushort i1, ushort i2, Vector2[] originalVertices, Vector2[] originalUvs)
 	{
-		var edgeKey = ((long)Mathf.Min(i1, i2) << 32) | Mathf.Max(i1, i2);
+		var edgeKey = ((long)Mathf.Min(i1, i2) << 32) | (uint)Mathf.Max(i1, i2);
 
 		if(edgeVertexMap.TryGetValue(edgeKey, out var existingIndex))
 		{
