@@ -9,7 +9,7 @@ namespace game.gameplay_core.damage_system
 {
 	public class AttackHelpers
 	{
-		private static readonly int LayerMaskBlockers = LayerMask.GetMask("DamageReceivers");
+		private static readonly int LayerMaskDamageReceivers = LayerMask.GetMask("DamageReceivers");
 		private static readonly int LayerMaskWalls = LayerMask.GetMask("Default");
 		private static readonly Collider[] Results = new Collider[40];
 
@@ -39,7 +39,7 @@ namespace game.gameplay_core.damage_system
 
 			if(checkBlockReceivers)
 			{
-				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskBlockers);
+				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskDamageReceivers);
 
 				for(var j = 0; j < count; j++)
 				{
@@ -68,7 +68,7 @@ namespace game.gameplay_core.damage_system
 				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.red, Time.deltaTime);
 			}
 
-			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskBlockers);
+			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskDamageReceivers);
 
 			for(var j = 0; j < count; j++)
 			{

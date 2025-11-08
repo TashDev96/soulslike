@@ -30,7 +30,7 @@ namespace game.gameplay_core.damage_system
 
 		public void ApplyDamage(DamageInfo damageInfo)
 		{
-			if(_context.InvulnerabilityLogic.IsInvulnerable)
+			if(_context.InvulnerabilityLogic is { IsInvulnerable: true })
 			{
 				return;
 			}
