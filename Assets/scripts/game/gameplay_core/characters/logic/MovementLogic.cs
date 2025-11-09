@@ -45,13 +45,13 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _prevPos;
 		private bool _isGroundedCache;
 		private bool _prevIsGrounded;
-		private Vector3 _lastUpdateVelocity;
 
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
 		private Vector3 _acceleratedMovement;
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
+		public Vector3 LastUpdateVelocity { get; private set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
@@ -86,8 +86,6 @@ namespace game.gameplay_core.characters.logic
 				UpdateSliding(deltaTime);
 			}
 
-			_lastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
-			_prevPos = CurrentPosition;
 			if(_hadAcceleratedMovement)
 			{
 				_hadAcceleratedMovement = false;
@@ -96,6 +94,9 @@ namespace game.gameplay_core.characters.logic
 			{
 				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.LocomotionConfig.WalkDeceleration);
 			}
+
+			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
+			_prevPos = CurrentPosition;
 		}
 
 		public void MoveWithAcceleration(Vector3 vector, float deltaTime)
@@ -214,7 +215,7 @@ namespace game.gameplay_core.characters.logic
 			{
 				if(_prevIsGrounded)
 				{
-					_fallVelocity = _lastUpdateVelocity;
+					_fallVelocity = LastUpdateVelocity;
 					if(_fallVelocity.y > 0)
 					{
 						//avoid trampline effect
@@ -230,7 +231,7 @@ namespace game.gameplay_core.characters.logic
 						var dampingForce = -_fallVelocity.normalized * velocityMagnitude * AirDamping;
 						_fallVelocity += dampingForce * deltaTime;
 					}
-					
+
 					_fallVelocity += Physics.gravity * deltaTime;
 
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);

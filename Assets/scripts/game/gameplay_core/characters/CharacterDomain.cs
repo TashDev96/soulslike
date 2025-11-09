@@ -410,6 +410,7 @@ namespace game.gameplay_core.characters
 				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_context.RightWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
+				_context.BodyAttackView.Update(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
 				_staminaLogic.Update(deltaTimeStep);

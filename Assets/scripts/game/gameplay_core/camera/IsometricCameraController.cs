@@ -27,7 +27,7 @@ namespace game.gameplay_core.camera
 			var forward = cameraTransform.forward;
 			var altitude = _context.CameraSettings.CameraAltitude;
 
-			if (forward.y > -1e-3f && forward.y < 1e-3f)
+			if(forward.y > -1e-3f && forward.y < 1e-3f)
 			{
 				var vectorToTarget = targetPosition - cameraTransform.position;
 				var cameraRight = cameraTransform.right;

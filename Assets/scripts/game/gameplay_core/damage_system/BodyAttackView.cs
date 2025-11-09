@@ -28,10 +28,19 @@ namespace game.gameplay_core.damage_system
 			_context = characterContext;
 		}
 
+		public void Update(float deltaTime)
+		{
+			foreach(var rollCollider in _rollColliders)
+			{
+				rollCollider.UpdateMovementDirectionCache();
+			}
+		}
+
 		public void CastRollAttack()
 		{
 			foreach(var rollCollider in _rollColliders)
 			{
+				rollCollider.UpdateMovementDirectionCache();
 				AttackHelpers.CastAttack(_rollDamage, _rollHitData, rollCollider, _context, 999, true);
 			}
 		}

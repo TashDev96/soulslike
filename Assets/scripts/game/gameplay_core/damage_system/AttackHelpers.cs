@@ -113,15 +113,7 @@ namespace game.gameplay_core.damage_system
 					hitData.ImpactedTargets.Add(Results[j]);
 					hitData.ImpactedCharacters.Add(blockReceiver.CharacterId);
 
-					blockReceiver.ApplyDamage(new DamageInfo
-					{
-						DamageAmount = baseDamage * hitData.Config.DamageMultiplier,
-						PoiseDamageAmount = hitData.Config.PoiseDamage,
-						WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
-						DoneByPlayer = casterContext.IsPlayer.Value,
-						DamageDealer = casterContext.SelfLink,
-						DeflectionRating = deflectionRating
-					}, out var attackDeflected);
+					blockReceiver.ApplyDamage(CreateDamageInfo(baseDamage, hitData, Results[j], casterContext, hitCaster, deflectionRating), out var attackDeflected);
 
 					if(attackDeflected)
 					{
@@ -160,15 +152,27 @@ namespace game.gameplay_core.damage_system
 
 				hitData.ImpactedCharacters.Add(damageReceiver.CharacterId);
 
-				damageReceiver.ApplyDamage(new DamageInfo
-				{
-					DamageAmount = baseDamage * hitData.Config.DamageMultiplier,
-					PoiseDamageAmount = hitData.Config.PoiseDamage,
-					WorldPos = Vector3.Lerp((point0 + point1) / 2f, Results[j].transform.position, 0.3f),
-					DoneByPlayer = casterContext.IsPlayer.Value,
-					DamageDealer = casterContext.SelfLink
-				});
+				damageReceiver.ApplyDamage(CreateDamageInfo(baseDamage, hitData, Results[j], casterContext, hitCaster));
 			}
+		}
+
+		private static DamageInfo CreateDamageInfo(float baseDamage, HitData hitData, Collider targetCollider, CharacterContext casterContext, CapsuleCaster hitCaster, int deflectionRating = 0)
+		{
+			hitCaster.GetCapsulePoints(out var point0, out var point1);
+			var hitCapsuleCenter = (point0 + point1) / 2f;
+			var worldPos = targetCollider.ClosestPoint(hitCapsuleCenter);
+			var movementDirection = hitCaster.SampleMoveDirection(worldPos);
+			var direction = movementDirection.sqrMagnitude > 0.0001f ? movementDirection.normalized : (targetCollider.transform.position - hitCapsuleCenter).normalized;
+			return new DamageInfo
+			{
+				DamageAmount = baseDamage * hitData.Config.DamageMultiplier,
+				PoiseDamageAmount = hitData.Config.PoiseDamage,
+				WorldPos = worldPos,
+				Direction = direction,
+				DoneByPlayer = casterContext.IsPlayer.Value,
+				DamageDealer = casterContext.SelfLink,
+				DeflectionRating = deflectionRating
+			};
 		}
 	}
 }

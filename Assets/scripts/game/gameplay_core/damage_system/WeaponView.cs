@@ -100,6 +100,7 @@ namespace game.gameplay_core.damage_system
 					var castRotation = Quaternion.Lerp(prevRotation, currentRotation, interpolationVal);
 					colliderTransform.position = castPos;
 					colliderTransform.rotation = castRotation;
+					castColliders[i].UpdateMovementDirectionCache();
 
 					handleInterpolatedCast(hitData, castColliders[i]);
 				}

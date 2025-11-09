@@ -11,5 +11,6 @@ namespace game.gameplay_core.damage_system
 		public bool DoneByPlayer;
 		public CharacterDomain DamageDealer;
 		public int DeflectionRating;
+		public Vector3 Direction;
 	}
 }

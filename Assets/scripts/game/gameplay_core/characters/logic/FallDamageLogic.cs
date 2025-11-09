@@ -120,6 +120,7 @@ namespace game.gameplay_core.characters.logic
 						DamageAmount = damage,
 						PoiseDamageAmount = fallDistance > _context.StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
 						WorldPos = _context.CharacterTransform.position,
+						Direction = Vector3.down,
 						DoneByPlayer = false,
 						DamageDealer = null
 					};

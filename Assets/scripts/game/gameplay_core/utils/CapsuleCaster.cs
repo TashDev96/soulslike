@@ -35,6 +35,9 @@ namespace game.gameplay_core.utils
 		[SerializeField]
 		[ShowIf(nameof(_useRotationConstraints))]
 		protected Vector3 _fixedRotation = Vector3.zero;
+
+		[SerializeField]
+		protected int _movementDirectionResolution = 5;
 		public float Radius = 0.2f;
 		public float Height = 2f;
 		public Vector3 Center = Vector3.zero;
@@ -44,6 +47,8 @@ namespace game.gameplay_core.utils
 
 		private Transform _transform;
 		private int _triggersLayerMask;
+		private Vector3[] _previousPositions;
+		private Vector3[] _currentPositions;
 
 		private void Awake()
 		{
@@ -106,6 +111,74 @@ namespace game.gameplay_core.utils
 					listener.TriggerManualColliderEnter(gameObject);
 				}
 			}
+		}
+
+		public void UpdateMovementDirectionCache()
+		{
+			if(_previousPositions == null || _previousPositions.Length != _movementDirectionResolution)
+			{
+				_previousPositions = new Vector3[_movementDirectionResolution];
+				_currentPositions = new Vector3[_movementDirectionResolution];
+			}
+
+			for(var i = 0; i < _movementDirectionResolution; i++)
+			{
+				_previousPositions[i] = _currentPositions[i];
+			}
+
+			GetCapsulePoints(out var p1, out var p2);
+			var axisDirection = (p2 - p1).normalized;
+			var axisLength = (p2 - p1).magnitude;
+
+			for(var i = 0; i < _movementDirectionResolution; i++)
+			{
+				var t = _movementDirectionResolution > 1 ? (float)i / (_movementDirectionResolution - 1) : 0f;
+				_currentPositions[i] = p1 + axisDirection * (axisLength * t);
+			}
+		}
+
+		public Vector3 SampleMoveDirection(Vector3 worldPosition)
+		{
+			if(_currentPositions == null || _currentPositions.Length == 0)
+			{
+				return Vector3.zero;
+			}
+
+			var closestIndex1 = 0;
+			var closestIndex2 = 0;
+			var minDistSq1 = float.MaxValue;
+			var minDistSq2 = float.MaxValue;
+
+			for(var i = 0; i < _currentPositions.Length; i++)
+			{
+				var distSq = (worldPosition - _currentPositions[i]).sqrMagnitude;
+				if(distSq < minDistSq1)
+				{
+					minDistSq2 = minDistSq1;
+					closestIndex2 = closestIndex1;
+					minDistSq1 = distSq;
+					closestIndex1 = i;
+				}
+				else if(distSq < minDistSq2)
+				{
+					minDistSq2 = distSq;
+					closestIndex2 = i;
+				}
+			}
+
+			var totalDistSq = minDistSq1 + minDistSq2;
+			if(totalDistSq < 0.0001f)
+			{
+				return Vector3.zero;
+			}
+
+			var weight1 = minDistSq2 / totalDistSq;
+			var weight2 = minDistSq1 / totalDistSq;
+
+			var direction1 = _currentPositions[closestIndex1] - _previousPositions[closestIndex1];
+			var direction2 = _currentPositions[closestIndex2] - _previousPositions[closestIndex2];
+
+			return (direction1 * weight1 + direction2 * weight2).normalized;
 		}
 
 		protected Vector3 GetDirectionVector()

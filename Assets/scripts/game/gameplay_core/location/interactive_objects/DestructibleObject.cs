@@ -5,6 +5,7 @@ using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace game.gameplay_core.location.interactive_objects
 {
@@ -25,6 +26,13 @@ namespace game.gameplay_core.location.interactive_objects
 
 		[SerializeField]
 		private DamageReceiver _damageReceiver;
+
+		[SerializeField]
+		private Vector2 _damageDirectionForceRange = new(1f, 1f);
+
+		[SerializeField]
+		private Vector2 _randomDirectionForceRange = new(0f, 1f);
+
 		private ApplyDamageCommand _applyDamageCommand;
 		private float _currentHp;
 
@@ -83,6 +91,18 @@ namespace game.gameplay_core.location.interactive_objects
 			{
 				SaveData.Destroyed = true;
 				SetVisualState(DestructibleVisualState.DestroyedWithAnimation);
+
+				var rigidbodies = _visualStates[DestructibleVisualState.DestroyedWithAnimation].GetComponentsInChildren<Rigidbody>(true);
+				foreach(var rb in rigidbodies)
+				{
+					var damageForceMultiplier = Random.Range(_damageDirectionForceRange.x, _damageDirectionForceRange.y);
+					var damageDirectionForce = damageInfo.Direction * damageForceMultiplier;
+					var randomDirection = Random.onUnitSphere;
+					var randomForceMultiplier = Random.Range(_randomDirectionForceRange.x, _randomDirectionForceRange.y);
+					var randomDirectionForce = randomDirection * randomForceMultiplier;
+
+					rb.AddForce(damageDirectionForce + randomDirectionForce, ForceMode.Acceleration);
+				}
 			}
 		}
 
