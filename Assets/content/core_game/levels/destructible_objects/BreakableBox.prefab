@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 7685741826358019387}
   - component: {fileID: 364199021779463081}
   - component: {fileID: 2615651342233383516}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.046
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 1631465156331627849}
   - component: {fileID: 551509329957067648}
   - component: {fileID: 7935305603332658548}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.054
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 3055088996237701520}
   - component: {fileID: 8021949952982014595}
   - component: {fileID: 7520725185557224211}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.050
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 5414173128772739247}
   - component: {fileID: 4674307356903179036}
   - component: {fileID: 1452765594213262153}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.051
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -801,7 +801,7 @@ GameObject:
   - component: {fileID: 8456794220168884242}
   - component: {fileID: 4523388421184683589}
   - component: {fileID: 1933010776956023164}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.049
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -938,7 +938,7 @@ GameObject:
   - component: {fileID: 7670875954426016770}
   - component: {fileID: 3005340598757795526}
   - component: {fileID: 5172535293673785513}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.048
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1075,7 +1075,7 @@ GameObject:
   - component: {fileID: 2820586664916341733}
   - component: {fileID: 6043539163806216925}
   - component: {fileID: 3077967875745327757}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.052
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1212,7 +1212,7 @@ GameObject:
   - component: {fileID: 4131579909162454056}
   - component: {fileID: 8995730036237157406}
   - component: {fileID: 4071164802710565200}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.047
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1431,7 +1431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4805033374181113708}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AnimationState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1463,7 +1463,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1664189919002563331}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Shattered.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1507,7 +1507,7 @@ GameObject:
   - component: {fileID: 3077082907539296475}
   - component: {fileID: 221072832229175412}
   - component: {fileID: 4736992643030642254}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Box_Solid_cell.053
   m_TagString: Untagged
   m_Icon: {fileID: 0}
