@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using dream_lib.src.utils.components;
 
 namespace game.gameplay_core.location.interactive_objects.common
 {
 	public class InteractionZone : MonoBehaviour
 	{
 		public string InteractionTextHint;
+		private Action<GameObject> _onEnterHandler;
 
 		public bool IsActive
 		{
@@ -22,7 +24,7 @@ namespace game.gameplay_core.location.interactive_objects.common
 			IsActive = isActive;
 		}
 
-		private void OnCollisionEnter(Collision other)
+		public void InteractFromUi()
 		{
 			OnInteractionTriggered?.Invoke();
 		}

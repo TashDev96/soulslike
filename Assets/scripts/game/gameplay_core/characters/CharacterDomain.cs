@@ -154,6 +154,7 @@ namespace game.gameplay_core.characters
 				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = isDead,
 				TriggerStagger = new ReactiveCommand<StaggerReason>(),
+				EnteredTriggers = new ReactiveHashSet<Collider>(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
 				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
@@ -165,11 +166,18 @@ namespace game.gameplay_core.characters
 			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
+			
+			var characterCollider = GetComponent<CapsuleCharacterCollider>();
+			characterCollider.SetContext(new CapsuleCharacterCollider.Context()
+			{
+				EnteredTriggers = _context.EnteredTriggers,
+				IsPlayer = isPlayer,
+			});
 
 			_movementLogic.SetContext(new MovementLogic.Context
 			{
 				CharacterTransform = transform,
-				CharacterCollider = GetComponent<CapsuleCharacterCollider>(),
+				CharacterCollider = characterCollider,
 				IsDead = _context.IsDead,
 				RotationSpeed = _context.RotationSpeed,
 				IsFalling = _context.IsFalling,
@@ -199,8 +207,8 @@ namespace game.gameplay_core.characters
 				BodyAttackView = _context.BodyAttackView,
 				StaminaLogic = _context.StaminaLogic,
 
-				MinimumFallDamageHeight = 3.0f,
-				LethalFallHeight = 15.0f,
+				MinimumFallDamageHeight = 8.0f,
+				LethalFallHeight = 18.0f,
 				StaggerThreshold = 5.0f
 			});
 
@@ -410,7 +418,7 @@ namespace game.gameplay_core.characters
 				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_context.RightWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
-				_context.BodyAttackView.Update(deltaTimeStep);
+				_context.BodyAttackView.CustomUpdate(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
 				_staminaLogic.Update(deltaTimeStep);

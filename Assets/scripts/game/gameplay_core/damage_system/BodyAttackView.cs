@@ -28,7 +28,7 @@ namespace game.gameplay_core.damage_system
 			_context = characterContext;
 		}
 
-		public void Update(float deltaTime)
+		public void CustomUpdate(float deltaTime)
 		{
 			foreach(var rollCollider in _rollColliders)
 			{

@@ -14,13 +14,15 @@ namespace game.ui
 		}
 
 		[SerializeField]
-		private UiBar _healthBat;
+		private UiBar _healthBar;
 		[SerializeField]
 		private UiBar _staminaBar;
+		[SerializeField]
+		private UiInteractionPrompt _uiInteractionPrompt;
 
 		public void SetContext(Context context)
 		{
-			_healthBat.SetContext(new UiBar.Context
+			_healthBar.SetContext(new UiBar.Context
 			{
 				Current = context.Player.ExternalData.Stats.Hp,
 				Max = context.Player.ExternalData.Stats.HpMax,
@@ -32,6 +34,11 @@ namespace game.ui
 				Current = context.Player.ExternalData.Stats.Stamina,
 				Max = context.Player.ExternalData.Stats.StaminaMax,
 				CustomUpdate = context.LocationUiUpdate
+			});
+			
+			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context()
+			{
+				TriggersEnteredByPlayer = context.Player.ExternalData.EnteredTriggers,
 			});
 		}
 	}

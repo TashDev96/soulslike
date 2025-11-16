@@ -48,8 +48,8 @@ namespace game.gameplay_core.characters
 		public IsDead IsDead;
 		public ReactiveCommand<StaggerReason> TriggerStagger;
 
-		// Add IsFalling reactive property
 		public ReactiveProperty<bool> IsFalling;
+		public ReactiveHashSet<Collider> EnteredTriggers;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
@@ -63,5 +63,6 @@ namespace game.gameplay_core.characters
 		// Parry support
 		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
+		
 	}
 }

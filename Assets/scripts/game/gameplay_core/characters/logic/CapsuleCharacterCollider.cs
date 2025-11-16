@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using dream_lib.src.extensions;
+using dream_lib.src.reactive;
+using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.utils;
 using UnityEngine;
@@ -8,6 +11,12 @@ namespace game.gameplay_core.characters.logic
 {
 	public class CapsuleCharacterCollider : CapsuleCaster
 	{
+		public class Context
+		{
+			public ReactiveHashSet<Collider> EnteredTriggers;
+			public bool IsPlayer;
+		}
+
 		[SerializeField]
 		private int _maxIterations = 4;
 		[SerializeField]
@@ -29,12 +38,21 @@ namespace game.gameplay_core.characters.logic
 		private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
 
 		private float _stepGravityDisableTimer;
+		private readonly Collider[] _castResults = new Collider[50];
+
+		private Context _context;
+		private readonly List<Collider> _exitedTriggersCache = new();
 
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
 		public CollisionFlags Flags { get; private set; }
 		public Vector3 GroundNormal { get; private set; } = Vector3.up;
 		public bool IsOnStableSlope { get; private set; }
 		public bool IsFakeGrounded => _stepGravityDisableTimer > 0;
+
+		public void SetContext(Context context)
+		{
+			_context = context;
+		}
 
 		public void CustomUpdate(float deltaTime)
 		{
@@ -96,7 +114,7 @@ namespace game.gameplay_core.characters.logic
 				transform.position = normalResultPosition;
 			}
 
-			TriggerTriggers(moveStartPosition, transform.position);
+			UpdateTriggers(transform.position);
 		}
 
 		// private void GetGroundNormal()
@@ -194,6 +212,61 @@ namespace game.gameplay_core.characters.logic
 
 			distanceToGround = 0f;
 			return false;
+		}
+
+		private void UpdateTriggers(Vector3 endPos)
+		{
+			//it may probably skip small triggers when moving fast.
+			//consider implementing CapsuleCast if last frame move vector is larger than capsule radius
+
+			GetCapsulePoints(endPos, out var p1, out var p2);
+			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius, _castResults, LayerMask.GetMask("Triggers"), QueryTriggerInteraction.Collide);
+
+			for(var i = 0; i < count; i++)
+			{
+				if(_context.EnteredTriggers.Add(_castResults[i]))
+				{
+					if(_castResults[i].TryGetComponent<TriggerEventsListener>(out var listener))
+					{
+#if UNITY_EDITOR
+						if(_context.IsPlayer)
+						{
+							Debug.Log($"player entered {_castResults[i]}");
+						}
+#endif
+						listener.TriggerManualColliderEnter(gameObject);
+					}
+				}
+			}
+
+			foreach(var enteredTrigger in _context.EnteredTriggers)
+			{
+				var index = Array.IndexOf(_castResults, enteredTrigger);
+				if(index < 0 || index >= count)
+				{
+#if UNITY_EDITOR
+					if(_context.IsPlayer)
+					{
+						Debug.Log($"player exit {enteredTrigger}");
+					}
+#endif
+					_exitedTriggersCache.Add(enteredTrigger);
+				}
+			}
+
+			if(_exitedTriggersCache.Count > 0)
+			{
+				foreach(var exitedTrigger in _exitedTriggersCache)
+				{
+					_context.EnteredTriggers.Remove(exitedTrigger);
+					if(exitedTrigger.TryGetComponent<TriggerEventsListener>(out var listener))
+					{
+						listener.TriggerManualColliderExit(gameObject);
+					}
+				}
+
+				_exitedTriggersCache.Clear();
+			}
 		}
 
 		private void CalculateMovement(Vector3 moveStartPosition, Vector3 motion, bool singleIteration, out Vector3 resultPosition, out CollisionFlags flags)

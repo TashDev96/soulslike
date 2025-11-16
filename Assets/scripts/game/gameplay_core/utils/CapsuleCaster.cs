@@ -94,24 +94,7 @@ namespace game.gameplay_core.utils
 			p2 = position - direction * half + rotation * scaledCenter;
 		}
 
-		public void TriggerTriggers(Vector3 startPos, Vector3 endPos)
-		{
-			GetCapsulePoints(startPos, out var p1, out var p2);
-
-			var castDistance = (endPos - startPos).magnitude;
-
-			var hitsCount = Physics.CapsuleCastNonAlloc(p1, p2, Radius, (endPos - startPos).normalized,
-				_triggersCastResults, castDistance,
-				_triggersLayerMask, QueryTriggerInteraction.Collide);
-
-			for(var i = 0; i < hitsCount; i++)
-			{
-				if(_triggersCastResults[i].collider.TryGetComponent<TriggerEventsListener>(out var listener))
-				{
-					listener.TriggerManualColliderEnter(gameObject);
-				}
-			}
-		}
+		 
 
 		public void UpdateMovementDirectionCache()
 		{
