@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using dream_lib.src.extensions;
@@ -6,9 +7,12 @@ using dream_lib.src.utils.components;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
+using game.gameplay_core.location.interactive_objects;
+using game.gameplay_core.location.interactive_objects.common;
 using game.gameplay_core.location.location_save_system;
 using game.ui;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace game.gameplay_core
 {
@@ -126,6 +130,17 @@ namespace game.gameplay_core
 				{
 					sceneSavableObject.InitializeFirstTime();
 					locationSave.SceneObjects.Add(objectId, sceneSavableObject.GetSave());
+				}
+
+				switch(sceneSavableObject)
+				{
+					case PickupItem pickupItem:
+						//pickupItem.SetContext(_locationContext);
+						break;
+					case Bonfire bonfire:
+						break;
+					default:
+						break;
 				}
 
 				usedIds.Add(objectId);
