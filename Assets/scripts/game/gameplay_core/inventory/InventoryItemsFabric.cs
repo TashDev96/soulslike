@@ -7,7 +7,7 @@ namespace game.gameplay_core.inventory
 {
 	public class InventoryItemsFabric
 	{
-		public static BaseItemLogic CreateItem(InventoryItemSaveData saveableData)
+		public static BaseItemLogic CreateItemFromSave(InventoryItemSaveData saveableData)
 		{
 			var config = AddressableManager.LoadAssetImmediately<BaseItemConfig>(saveableData.ConfigId, AssetOwner.Game);
 			switch(config)

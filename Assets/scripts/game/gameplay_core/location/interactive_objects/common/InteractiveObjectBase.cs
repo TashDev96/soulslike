@@ -1,3 +1,4 @@
+using game.gameplay_core.characters;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace game.gameplay_core.location.interactive_objects.common
 			InteractionZone.IsActive = true;
 		}
 
-		protected abstract void HandleInteractionTriggered();
+		protected abstract void HandleInteractionTriggered(CharacterDomain interactedCharacter);
 		protected abstract string GetInteractionTextHint();
 	}
 }

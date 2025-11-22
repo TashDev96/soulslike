@@ -11,6 +11,7 @@ namespace game.gameplay_core.inventory.serialized_data
 		[ValueDropdown("@ConfigsResolver.GetAllItemConfigs()")]
 		public string ConfigId;
 		public bool IsInitialized;
+		[ShowIf(nameof(IsInitialized))]
 		public SerializableDictionary<string, string> ComponentsData = new();
 
 		public float GetFloat(string key)

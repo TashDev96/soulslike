@@ -57,7 +57,6 @@ namespace game.gameplay_core.characters
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
 		private BlockLogic _blockLogic;
-		private InventoryLogic _inventoryLogic;
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
@@ -81,6 +80,7 @@ namespace game.gameplay_core.characters
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
 		public CharacterStateMachine CharacterStateMachine { get; private set; }
+		public InventoryLogic InventoryLogic { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -104,7 +104,7 @@ namespace game.gameplay_core.characters
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
-			_inventoryLogic = new InventoryLogic();
+			InventoryLogic = new InventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -166,12 +166,12 @@ namespace game.gameplay_core.characters
 			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
-			
+
 			var characterCollider = GetComponent<CapsuleCharacterCollider>();
-			characterCollider.SetContext(new CapsuleCharacterCollider.Context()
+			characterCollider.SetContext(new CapsuleCharacterCollider.Context
 			{
 				EnteredTriggers = _context.EnteredTriggers,
-				IsPlayer = isPlayer,
+				IsPlayer = isPlayer
 			});
 
 			_movementLogic.SetContext(new MovementLogic.Context
@@ -331,7 +331,7 @@ namespace game.gameplay_core.characters
 				}
 			}
 
-			_inventoryLogic.Initialize(_context, saveData);
+			InventoryLogic.Initialize(_context, saveData);
 		}
 
 		[Button]

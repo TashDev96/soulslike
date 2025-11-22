@@ -1,4 +1,5 @@
 using System;
+using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects.common;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace game.gameplay_core.location.interactive_objects
 		{
 		}
 
-		protected override void HandleInteractionTriggered()
+		protected override void HandleInteractionTriggered(CharacterDomain interactingCharacter)
 		{
 			//TODO reset level
 			//TODO heal player

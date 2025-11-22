@@ -1,5 +1,6 @@
 using System;
 using game.enums;
+using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects.common;
 using game.gameplay_core.location.location_save_system;
 using Sirenix.OdinInspector;
@@ -12,7 +13,7 @@ namespace game.gameplay_core.location.interactive_objects
 		[SerializeField]
 		private bool _isClosedByDefault = true;
 		[SerializeField]
-		private bool _canNotOpenFromFrontSide;
+		private bool _canOpenFromFrontSide = true;
 		[SerializeField]
 		private Animator _animator;
 
@@ -51,17 +52,17 @@ namespace game.gameplay_core.location.interactive_objects
 			_interactionBack?.SetData(true, "Open Door", TryOpen);
 		}
 
-		private void TryOpenFromFrontSide()
+		private void TryOpenFromFrontSide(CharacterDomain interactedCharacter)
 		{
-			if(_canNotOpenFromFrontSide)
+			if(!_canOpenFromFrontSide)
 			{
 				//TODO message can not be open from this side
 				return;
 			}
-			TryOpen();
+			TryOpen(interactedCharacter);
 		}
 
-		private void TryOpen()
+		private void TryOpen(CharacterDomain interactedCharacter)
 		{
 			if(_openWithKey)
 			{

@@ -1,5 +1,6 @@
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.serialized_data;
+using UnityEngine;
 
 namespace game.gameplay_core.inventory.items_logic
 {
@@ -12,12 +13,16 @@ namespace game.gameplay_core.inventory.items_logic
 		public bool HasInfiniteCharges => _config.HasInfiniteCharges;
 		public int ChargesLeft { get; protected set; }
 
+		public string Id => _config.name;
+
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 
 		public BaseConsumableItemLogic(BaseConsumableItemConfig config)
 		{
 			_config = config;
 		}
+
+		public override string ConfigId => _config.name;
 
 		public override void LoadData(InventoryItemSaveData saveData)
 		{
@@ -54,6 +59,19 @@ namespace game.gameplay_core.inventory.items_logic
 			if(!_effectApplied && _config.AnimationConfig.ApplyEffectTiming >= normalizedTime)
 			{
 				_effectApplied = true;
+			}
+		}
+		
+		public void HandlePickupAdditionalItem(InventoryItemSaveData itemSaveData)
+		{
+			if(itemSaveData.IsInitialized)
+			{
+				ChargesLeft += itemSaveData.GetInt(ChargesLeftKey);
+				SaveData();
+			}
+			else
+			{
+				Debug.LogError($"{itemSaveData} is not initialized");
 			}
 		}
 	}

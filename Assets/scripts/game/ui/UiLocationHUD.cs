@@ -39,6 +39,7 @@ namespace game.ui
 			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context()
 			{
 				TriggersEnteredByPlayer = context.Player.ExternalData.EnteredTriggers,
+				Player = context.Player,
 			});
 		}
 	}

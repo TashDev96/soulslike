@@ -6,6 +6,8 @@ namespace game.gameplay_core.inventory
 	public abstract class BaseItemLogic
 	{
 		protected InventoryItemSaveData SaveableData;
+		
+		public abstract string ConfigId { get; }
 
 		public virtual void InitializeForLocation(CharacterContext context)
 		{

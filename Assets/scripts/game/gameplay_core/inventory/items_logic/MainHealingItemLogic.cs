@@ -16,6 +16,9 @@ namespace game.gameplay_core.inventory.items_logic
 		public float HealAmount => _config.BaseHealingAmount;
 
 		public bool HasInfiniteCharges => false;
+		
+		public override string ConfigId => _config.name;
+		
 
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 
@@ -73,6 +76,11 @@ namespace game.gameplay_core.inventory.items_logic
 		public bool CheckCanStartConsumption()
 		{
 			return ChargesLeft > 0;
+		}
+
+		public void HandlePickupAdditionalItem(InventoryItemSaveData itemSaveData)
+		{
+			
 		}
 	}
 }

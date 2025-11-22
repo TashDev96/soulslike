@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using dream_lib.src.utils.components;
+using game.gameplay_core.characters;
 
 namespace game.gameplay_core.location.interactive_objects.common
 {
@@ -15,18 +16,18 @@ namespace game.gameplay_core.location.interactive_objects.common
 			get => gameObject.activeSelf;
 		}
 
-		public event Action OnInteractionTriggered;
+		public event Action<CharacterDomain> OnInteractionTriggered;
 
-		public void SetData(bool isActive, string interactionHint, Action callback)
+		public void SetData(bool isActive, string interactionHint, Action<CharacterDomain> callback)
 		{
 			InteractionTextHint = interactionHint;
 			OnInteractionTriggered += callback;
 			IsActive = isActive;
 		}
 
-		public void InteractFromUi()
+		public void InteractFromUi(CharacterDomain interactedCharacter)
 		{
-			OnInteractionTriggered?.Invoke();
+			OnInteractionTriggered?.Invoke(interactedCharacter);
 		}
 	}
 }

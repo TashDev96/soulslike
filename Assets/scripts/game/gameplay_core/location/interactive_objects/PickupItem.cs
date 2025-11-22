@@ -1,4 +1,6 @@
 using System;
+using game.gameplay_core.characters;
+using game.gameplay_core.inventory.serialized_data;
 using game.gameplay_core.location.interactive_objects.common;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
@@ -8,7 +10,7 @@ namespace game.gameplay_core.location.interactive_objects
 	public class PickupItem : InteractiveObjectBase<PickupItemSaveData>
 	{
 		[SerializeField]
-		private string _itemId;
+		private InventoryItemSaveData _item;
 
 		public override void InitializeFirstTime()
 		{
@@ -26,7 +28,7 @@ namespace game.gameplay_core.location.interactive_objects
 			}
 		}
 
-		protected override void HandleInteractionTriggered()
+		protected override void HandleInteractionTriggered(CharacterDomain interactedCharacter)
 		{
 			if(SaveData.PickedUp)
 			{
@@ -34,11 +36,10 @@ namespace game.gameplay_core.location.interactive_objects
 				return;
 			}
 
-			//TODO give item to invetoruy
 			SaveData.PickedUp = true;
 			gameObject.SetActive(false);
 
-			//TODO trigger game save
+			interactedCharacter.InventoryLogic.PickUpItem(_item);
 		}
 
 		protected override string GetInteractionTextHint()

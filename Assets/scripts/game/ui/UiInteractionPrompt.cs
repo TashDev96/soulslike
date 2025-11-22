@@ -1,4 +1,5 @@
 using dream_lib.src.reactive;
+using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects.common;
 using game.input;
 using TMPro;
@@ -11,6 +12,7 @@ namespace game.ui
 		public class Context
 		{
 			public ReactiveHashSet<Collider> TriggersEnteredByPlayer;
+			public CharacterDomain Player;
 		}
 
 		[SerializeField]
@@ -53,7 +55,7 @@ namespace game.ui
 			{
 				if(_selectedInteractionZone != null)
 				{
-					_selectedInteractionZone.InteractFromUi();
+					_selectedInteractionZone.InteractFromUi(_context.Player);
 				}
 			}
 		}
