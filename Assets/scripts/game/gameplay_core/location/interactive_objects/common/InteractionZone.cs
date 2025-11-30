@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
-using dream_lib.src.utils.components;
 using game.gameplay_core.characters;
+using UnityEngine;
 
 namespace game.gameplay_core.location.interactive_objects.common
 {

@@ -17,12 +17,12 @@ namespace game.gameplay_core.inventory.items_logic
 
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 
+		public override string ConfigId => _config.name;
+
 		public BaseConsumableItemLogic(BaseConsumableItemConfig config)
 		{
 			_config = config;
 		}
-
-		public override string ConfigId => _config.name;
 
 		public override void LoadData(InventoryItemSaveData saveData)
 		{
@@ -61,7 +61,7 @@ namespace game.gameplay_core.inventory.items_logic
 				_effectApplied = true;
 			}
 		}
-		
+
 		public void HandlePickupAdditionalItem(InventoryItemSaveData itemSaveData)
 		{
 			if(itemSaveData.IsInitialized)

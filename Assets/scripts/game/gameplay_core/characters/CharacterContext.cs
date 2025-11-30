@@ -30,7 +30,7 @@ namespace game.gameplay_core.characters
 		public ReadOnlyTransform Transform;
 		public AnimancerComponent Animator;
 		public GameObject DeadStateRoot;
-		public LockOnTargetView[] LockOnTargets;
+		public LockOnPointView[] LockOnPoints;
 		public CharacterStats CharacterStats;
 		public CharacterInputData InputData;
 		public ReactiveProperty<WeaponView> RightWeapon;
@@ -63,6 +63,5 @@ namespace game.gameplay_core.characters
 		// Parry support
 		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
-		
 	}
 }

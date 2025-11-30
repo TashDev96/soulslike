@@ -35,11 +35,11 @@ namespace game.ui
 				Max = context.Player.ExternalData.Stats.StaminaMax,
 				CustomUpdate = context.LocationUiUpdate
 			});
-			
-			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context()
+
+			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context
 			{
 				TriggersEnteredByPlayer = context.Player.ExternalData.EnteredTriggers,
-				Player = context.Player,
+				Player = context.Player
 			});
 		}
 	}

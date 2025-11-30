@@ -1,4 +1,3 @@
-using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -93,8 +92,6 @@ namespace game.gameplay_core.utils
 			p1 = position + direction * half + rotation * scaledCenter;
 			p2 = position - direction * half + rotation * scaledCenter;
 		}
-
-		 
 
 		public void UpdateMovementDirectionCache()
 		{

@@ -2,6 +2,8 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+		CameraVertical,
+		CameraHorizontal,
 		Parry,
 		Attack,
 		StrongAttack,

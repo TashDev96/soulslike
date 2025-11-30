@@ -134,7 +134,7 @@ namespace game.gameplay_core.characters
 				Animator = GetComponent<AnimancerComponent>(),
 				DeadStateRoot = _deadStateRoot,
 				CharacterStats = _characterStats,
-				LockOnTargets = GetComponentsInChildren<LockOnTargetView>(),
+				LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
 				InputData = new CharacterInputData(),
 
 				RightWeapon = new ReactiveProperty<WeaponView>(),

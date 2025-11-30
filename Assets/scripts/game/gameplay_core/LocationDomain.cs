@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using dream_lib.src.extensions;
@@ -8,7 +7,6 @@ using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
-using game.gameplay_core.location.interactive_objects.common;
 using game.gameplay_core.location.location_save_system;
 using game.ui;
 using UnityEngine;
@@ -21,7 +19,7 @@ namespace game.gameplay_core
 		private LocationContext _locationContext;
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
-		private IsometricCameraController _cameraController;
+		private ICameraController _cameraController;
 		private readonly ReactiveProperty<CharacterDomain> _player = new();
 
 		private float _frameDelayDebug;
@@ -41,12 +39,7 @@ namespace game.gameplay_core
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 
-			_cameraController = new IsometricCameraController(new IsometricCameraController.Context
-			{
-				Camera = _locationContext.MainCamera,
-				Player = _player,
-				CameraSettings = _sceneInstaller.CameraSettings
-			});
+			_cameraController = CameraControllerFactory.Create(_sceneInstaller.CameraSettings, _locationContext.MainCamera, _player);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();
@@ -138,8 +131,6 @@ namespace game.gameplay_core
 						//pickupItem.SetContext(_locationContext);
 						break;
 					case Bonfire bonfire:
-						break;
-					default:
 						break;
 				}
 

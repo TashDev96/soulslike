@@ -15,15 +15,17 @@ namespace game.gameplay_core.characters
 
 		public string Id => _context.CharacterId.Value;
 		public ReadOnlyTransform Transform => _context.Transform;
-		public LockOnTargetView[] LockOnTargets => _context.LockOnTargets;
+		public LockOnPointView[] LockOnPoints => _context.LockOnPoints;
 		public bool IsDead => _context.IsDead.Value;
 		public Team Team => _context.Team.Value;
 
 		public CharacterStats Stats => _context.CharacterStats;
 		public CharacterConfig Config => _context.Config;
 		public ApplyDamageCommand ApplyDamage => _context.ApplyDamage;
-		
+
 		public ReactiveHashSet<Collider> EnteredTriggers => _context.EnteredTriggers;
+
+		public IReadOnlyReactiveProperty<CharacterDomain> LockOnTarget => _context.LockOnLogic.LockOnTarget;
 
 		public CharacterExternalData(CharacterContext context)
 		{
