@@ -1,7 +1,5 @@
 using Animancer;
-using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
-using game.gameplay_core.utils;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
@@ -56,7 +54,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 			else
 			{
-				_context.RightWeapon.Value.CastCollidersInterpolated(WeaponColliderType.PreciseContact, null, CastPreciseHit);
+				var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.PreciseContact);
+				while(interpolatedCaster.MoveNext() && !_reverseTriggered)
+				{
+					foreach(var caster in interpolatedCaster.GetActiveColliders())
+					{
+						if(AttackHelpers.CastAttackObstacles(caster, true, true))
+						{
+							_waitAfterHitTimer = 1 / 120f;
+							interpolatedCaster.Terminate();
+							TriggerReverse();
+							break;
+						}
+					}
+				}
 
 				_reverseTriggerTimer -= deltaTime;
 				if(_reverseTriggerTimer <= 0)
@@ -70,20 +81,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			_context.MaxDeltaTime.Value = CharacterConstants.MaxDeltaTimeNormal;
 			base.OnExit();
-		}
-
-		private void CastPreciseHit(HitData _, CapsuleCaster caster)
-		{
-			if(_reverseTriggered)
-			{
-				return;
-			}
-
-			if(AttackHelpers.CastAttackObstacles(caster, true, true))
-			{
-				_waitAfterHitTimer = 1 / 120f;
-				TriggerReverse();
-			}
 		}
 
 		private void TriggerReverse()

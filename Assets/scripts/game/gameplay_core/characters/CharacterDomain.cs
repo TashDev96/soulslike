@@ -416,7 +416,6 @@ namespace game.gameplay_core.characters
 				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
 				personalDeltaTime -= deltaTimeStep;
 				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
-				_context.RightWeapon.Value?.CustomUpdate(deltaTimeStep);
 				_movementLogic.Update(deltaTimeStep);
 				_context.BodyAttackView.CustomUpdate(deltaTimeStep);
 				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);

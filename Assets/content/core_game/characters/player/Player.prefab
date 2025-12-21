@@ -62,7 +62,6 @@ MonoBehaviour:
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
   _movementLogic:
-    _inAirDamping: 0.2
     _slidingAcceleration: 10
     _slidingDamping: 0.7
     _slidingStopDamping: 2
@@ -140,22 +139,23 @@ MonoBehaviour:
   _fixYRotation: 0
   _fixZRotation: 1
   _fixedRotation: {x: 0, y: 0, z: 0}
-  Radius: 0.55
+  _movementDirectionResolution: 5
+  Radius: 0.75
   Height: 2
   Center: {x: 0, y: 1, z: 0}
   CapsuleDirection: 1
   _maxIterations: 4
   _characterToCharacterOffset: 0.5
-  SkinWidth: 0.05
-  SlopeLimit: 30
-  StepOffset: 0.55
-  MinStepOffset: 0.01
   _collisionMask:
     serializedVersion: 2
     m_Bits: 577
   _charactersCollisionMask:
     serializedVersion: 2
     m_Bits: 256
+  SkinWidth: 0.05
+  SlopeLimit: 30
+  StepOffset: 0.55
+  MinStepOffset: 0.01
 --- !u!136 &1275262306807060881
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -252,6 +252,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -273,6 +275,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -377,6 +380,7 @@ MonoBehaviour:
   _fixYRotation: 0
   _fixZRotation: 0
   _fixedRotation: {x: 0, y: 0, z: 0}
+  _movementDirectionResolution: 5
   Radius: 1.21
   Height: 1
   Center: {x: 0, y: 1.25, z: 0}
@@ -431,6 +435,7 @@ MonoBehaviour:
   _fixYRotation: 0
   _fixZRotation: 0
   _fixedRotation: {x: 0, y: 0, z: 0}
+  _movementDirectionResolution: 5
   Radius: 0.58
   Height: 1.41
   Center: {x: 0, y: 0.23, z: 0}
@@ -684,6 +689,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -705,6 +712,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0

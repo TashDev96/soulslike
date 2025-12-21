@@ -12,6 +12,7 @@ namespace game.gameplay_core.damage_system
 		private static readonly int LayerMaskDamageReceivers = LayerMask.GetMask("DamageReceivers");
 		private static readonly int LayerMaskWalls = LayerMask.GetMask("Default");
 		private static readonly Collider[] Results = new Collider[40];
+		private static readonly RaycastHit[] HitResults = new RaycastHit[40];
 
 		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
@@ -25,13 +26,28 @@ namespace game.gameplay_core.damage_system
 
 			if(checkWalls)
 			{
-				var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskWalls);
+				var center = (point0 + point1) / 2;
+				var direction = hitCaster.SampleMoveDirection(center, false);
+
+				DebugDrawUtils.DrawArrow(center, center + direction, Color.red, 0.05f);
+
+				var offsetPoint0 = point0 - direction;
+				var offsetPoint1 = point1 - direction;
+				var count = Physics.CapsuleCastNonAlloc(offsetPoint0, offsetPoint1, radius, direction.normalized, HitResults, direction.magnitude, LayerMaskWalls);
 				for(var j = 0; j < count; j++)
 				{
-					if(Results[j].TryGetComponent<SurfacePropertiesView>(out var surfaceProperties) && !surfaceProperties.StopWeapons)
+					if(HitResults[j].collider.TryGetComponent<SurfacePropertiesView>(out var surfaceProperties) && !surfaceProperties.StopWeapons)
 					{
 						continue;
 					}
+					var hitPoint = HitResults[j].point;
+					if(Vector3.Angle(hitPoint - center, direction) > 180)
+					{
+						continue;
+					}
+					Debug.DrawLine(hitPoint, hitPoint + direction.normalized, Color.red, 3f);
+					Debug.DrawLine(hitPoint, hitPoint + (hitPoint - center).normalized, Color.green, 3f);
+
 					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
 					return true;
 				}
@@ -65,7 +81,7 @@ namespace game.gameplay_core.damage_system
 
 			if(drawDebug)
 			{
-				DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.red, Time.deltaTime);
+				//DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.red, Time.deltaTime);
 			}
 
 			var count = Physics.OverlapCapsuleNonAlloc(point0, point1, radius, Results, LayerMaskDamageReceivers);

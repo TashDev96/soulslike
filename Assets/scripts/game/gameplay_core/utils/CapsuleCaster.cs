@@ -1,3 +1,4 @@
+using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -49,10 +50,18 @@ namespace game.gameplay_core.utils
 		private Vector3[] _previousPositions;
 		private Vector3[] _currentPositions;
 
+		public TransformCache PreviousTransform { get; } = new();
+		public TransformCache NextTransform { get; } = new();
+
 		private void Awake()
 		{
 			_transform = transform;
 			_triggersLayerMask = LayerMask.GetMask("Triggers");
+			if(_previousPositions == null || _previousPositions.Length != _movementDirectionResolution)
+			{
+				_previousPositions = new Vector3[_movementDirectionResolution];
+				_currentPositions = new Vector3[_movementDirectionResolution];
+			}
 		}
 
 		public void DrawCollider(float duration, Color color)
@@ -93,14 +102,8 @@ namespace game.gameplay_core.utils
 			p2 = position - direction * half + rotation * scaledCenter;
 		}
 
-		public void UpdateMovementDirectionCache()
+		public void UpdateMovementDirectionCache(bool drawDebug = false, int stepCount = 0)
 		{
-			if(_previousPositions == null || _previousPositions.Length != _movementDirectionResolution)
-			{
-				_previousPositions = new Vector3[_movementDirectionResolution];
-				_currentPositions = new Vector3[_movementDirectionResolution];
-			}
-
 			for(var i = 0; i < _movementDirectionResolution; i++)
 			{
 				_previousPositions[i] = _currentPositions[i];
@@ -114,10 +117,15 @@ namespace game.gameplay_core.utils
 			{
 				var t = _movementDirectionResolution > 1 ? (float)i / (_movementDirectionResolution - 1) : 0f;
 				_currentPositions[i] = p1 + axisDirection * (axisLength * t);
+
+				if(drawDebug)
+				{
+					DebugDrawUtils.DrawArrow(_previousPositions[i], _currentPositions[i], Color.green, 0.05f, 20f, 0f, false);
+				}
 			}
 		}
 
-		public Vector3 SampleMoveDirection(Vector3 worldPosition)
+		public Vector3 SampleMoveDirection(Vector3 worldPosition, bool normalized = true)
 		{
 			if(_currentPositions == null || _currentPositions.Length == 0)
 			{
@@ -157,8 +165,18 @@ namespace game.gameplay_core.utils
 
 			var direction1 = _currentPositions[closestIndex1] - _previousPositions[closestIndex1];
 			var direction2 = _currentPositions[closestIndex2] - _previousPositions[closestIndex2];
+			var resultVector = direction1 * weight1 + direction2 * weight2;
+			return normalized ? resultVector.normalized : resultVector;
+		}
 
-			return (direction1 * weight1 + direction2 * weight2).normalized;
+		public void StorePreviousPosition(bool drawDebug = false)
+		{
+			if(drawDebug)
+			{
+				var prevPos = PreviousTransform.Position;
+				var nextPos = _transform.position;
+			}
+			PreviousTransform.Set(_transform);
 		}
 
 		protected Vector3 GetDirectionVector()

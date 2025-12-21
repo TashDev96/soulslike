@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using dream_lib.src.utils.data_types;
 using game.enums;
 using game.gameplay_core.characters;
-using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.utils;
 using UnityEngine;
@@ -28,9 +26,10 @@ namespace game.gameplay_core.damage_system
 		[NonSerialized]
 		public WeaponItemConfig Config;
 
-		private readonly List<TransformCache> _previousCollidersPositions = new();
+		private readonly InterpolatedCapsuleCaster _interpolatedCaster = new();
 
 		private CharacterContext _context;
+		private readonly List<CapsuleCaster> _castCollidersCache = new();
 
 		public void Initialize(CharacterContext characterContext)
 		{
@@ -60,7 +59,7 @@ namespace game.gameplay_core.damage_system
 			}
 		}
 
-		public void CastCollidersInterpolated(WeaponColliderType colliderType, HitData hitData, Action<HitData, CapsuleCaster> handleInterpolatedCast)
+		public InterpolatedCapsuleCaster StartInterpolatedCast(WeaponColliderType colliderType, IReadOnlyList<bool> involvedColliders = null)
 		{
 			var castColliders = colliderType switch
 			{
@@ -70,57 +69,33 @@ namespace game.gameplay_core.damage_system
 				_ => _hitColliders
 			};
 
+			_castCollidersCache.Clear();
+
 			for(var i = 0; i < castColliders.Length; i++)
 			{
-				if(colliderType == WeaponColliderType.Attack && !hitData.Config.InvolvedColliders[i])
+				if(involvedColliders == null || involvedColliders[i])
 				{
-					continue;
+					_castCollidersCache.Add(castColliders[i]);
 				}
-
-				var colliderTransform = castColliders[i].transform;
-
-				var prevRotation = Quaternion.Euler(_previousCollidersPositions[i].EulerAngles);
-				var currentRotation = colliderTransform.rotation;
-
-				var prevPosition = _previousCollidersPositions[i].Position;
-				var currentPosition = colliderTransform.position;
-
-				const float maxPosStep = 0.2f;
-				const float maxAngleStep = 20f;
-
-				var angleDiff = Quaternion.Angle(prevRotation, currentRotation);
-				var posDiff = (currentPosition - prevPosition).magnitude;
-
-				var stepsCount = Mathf.CeilToInt(Mathf.Max(angleDiff / maxAngleStep, posDiff / maxPosStep));
-				for(var step = 0; step < stepsCount; step++)
-				{
-					var interpolationVal = (float)step / stepsCount;
-
-					var castPos = Vector3.Lerp(prevPosition, currentPosition, interpolationVal);
-					var castRotation = Quaternion.Lerp(prevRotation, currentRotation, interpolationVal);
-					colliderTransform.position = castPos;
-					colliderTransform.rotation = castRotation;
-					castColliders[i].UpdateMovementDirectionCache();
-
-					handleInterpolatedCast(hitData, castColliders[i]);
-				}
-
-				colliderTransform.position = currentPosition;
-				colliderTransform.rotation = currentRotation;
 			}
+
+			_interpolatedCaster.Start(_castCollidersCache);
+			return _interpolatedCaster;
 		}
 
-		public void CustomUpdate(float deltaTimeStep)
+		public void StorePreviousTransform()
 		{
 			for(var i = 0; i < _hitColliders.Length; i++)
 			{
-				var hitCollider = _hitColliders[i];
-				if(_previousCollidersPositions.Count <= i)
-				{
-					_previousCollidersPositions.Add(new TransformCache());
-				}
-
-				_previousCollidersPositions[i].Set(hitCollider.transform);
+				_hitColliders[i].StorePreviousPosition();
+			}
+			for(var i = 0; i < _preciseHitColliders.Length; i++)
+			{
+				_preciseHitColliders[i].StorePreviousPosition();
+			}
+			for(var i = 0; i < _handleColliders.Length; i++)
+			{
+				_handleColliders[i].StorePreviousPosition();
 			}
 		}
 	}

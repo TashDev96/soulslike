@@ -6,7 +6,6 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
-using game.gameplay_core.utils;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
@@ -39,6 +38,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			_comboCounter = 0;
 			LaunchAttack();
+			_context.RightWeapon.Value.StorePreviousTransform();
 		}
 
 		public override void Update(float deltaTime)
@@ -72,7 +72,15 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 				if(hitData.IsActive)
 				{
-					_context.RightWeapon.Value.CastCollidersInterpolated(WeaponColliderType.Attack, hitData, DoCast);
+					var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Attack, hitData.Config.InvolvedColliders);
+					while(interpolatedCaster.MoveNext())
+					{
+						foreach(var caster in interpolatedCaster.GetActiveColliders())
+						{
+							var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
+							AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, caster, _context, deflectionRating, true);
+						}
+					}
 
 					if(NormalizedTime >= hitTiming.y)
 					{
@@ -90,13 +98,26 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 			if(allHitsComplete)
 			{
-				_stage = AttackStage.Impact;
+				_stage = AttackStage.Recovery;
 			}
 
 			var deflectedByHandleCast = false;
 			if(_stage == AttackStage.Windup && NormalizedTime > _currentAttackConfig.StartHandleObstacleCastTime)
 			{
-				_context.RightWeapon.Value.CastCollidersInterpolated(WeaponColliderType.Handle, null, CastHandleForObstacles);
+				var interpolatedHandleCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Handle);
+				while(interpolatedHandleCaster.MoveNext() && !deflectedByHandleCast)
+				{
+					foreach(var caster in interpolatedHandleCaster.GetActiveColliders())
+					{
+						if(AttackHelpers.CastAttackObstacles(caster, false, true))
+						{
+							deflectedByHandleCast = true;
+							_context.DeflectCurrentAttack.Execute();
+							interpolatedHandleCaster.Terminate();
+							break;
+						}
+					}
+				}
 			}
 
 			_context.MaxDeltaTime.Value = hasActiveHit ? CharacterConstants.MaxDeltaTimeAttacking : CharacterConstants.MaxDeltaTimeNormal;
@@ -112,27 +133,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
-
-			void DoCast(HitData hitData, CapsuleCaster capsule)
-			{
-				var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
-
-				AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, capsule, _context, deflectionRating, true);
-			}
-
-			void CastHandleForObstacles(HitData _, CapsuleCaster caster)
-			{
-				if(deflectedByHandleCast)
-				{
-					return;
-				}
-
-				if(AttackHelpers.CastAttackObstacles(caster, false, true))
-				{
-					deflectedByHandleCast = true;
-					_context.DeflectCurrentAttack.Execute();
-				}
-			}
+			_context.RightWeapon.Value.StorePreviousTransform();
 
 			void UpdateStaminaRegenLock()
 			{
