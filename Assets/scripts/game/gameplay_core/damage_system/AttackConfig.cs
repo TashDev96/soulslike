@@ -17,6 +17,14 @@ namespace game.gameplay_core.damage_system
 	{
 		[field: SerializeField]
 		public ClipTransition Animation { get; private set; }
+		
+		[field:SerializeField]
+		public bool IsRangedAttack {get; private set;}
+		
+		[field: ValueDropdown("@AddressableAssetNames.ProjectilePrefabs")]
+		[field: SerializeField]
+		[field:ShowIf(nameof(IsRangedAttack))]
+		public string ProjectilePrefabNames { get; private set; }
 
 		[field: SerializeField]
 		public float BaseDamage { get; private set; }

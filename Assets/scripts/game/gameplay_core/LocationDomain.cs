@@ -38,7 +38,8 @@ namespace game.gameplay_core
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
-
+			GameStaticContext.Instance.CurrentLocationUpdate = _locationContext.LocationUpdate;
+			
 			_cameraController = CameraControllerFactory.Create(_sceneInstaller.CameraSettings, _locationContext.MainCamera, _player);
 
 			LoadSceneObjects();

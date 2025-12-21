@@ -62,7 +62,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						if(AttackHelpers.CastAttackObstacles(caster, true, true))
 						{
 							_waitAfterHitTimer = 1 / 120f;
-							interpolatedCaster.Terminate();
+							interpolatedCaster.ResetOnInterrupted();
 							TriggerReverse();
 							break;
 						}

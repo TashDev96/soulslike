@@ -84,7 +84,7 @@ namespace game.gameplay_core.utils
 			}
 		}
 
-		public void Terminate()
+		public void ResetOnInterrupted()
 		{
 			Terminated = true;
 			foreach(var collider in _colliders)

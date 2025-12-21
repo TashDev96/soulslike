@@ -34,6 +34,10 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: SerializeField]
 		public AttackConfig RunAttackStrong { get; private set; }
 
+		[field: FoldoutGroup("Ranged")]
+		[field: SerializeField]
+		public float ProjectileSpeed { get; private set; } = 20f;
+
 		[field: FoldoutGroup("Block")]
 		[field: SerializeField]
 		[field: Range(0, 100)]

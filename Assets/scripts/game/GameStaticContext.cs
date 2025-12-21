@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace game
 {
-	public struct GameStaticContext
+	public class GameStaticContext
 	{
 		public static GameStaticContext Instance { get; set; }
 
@@ -13,5 +13,6 @@ namespace game
 		public ReactiveProperty<RectTransform> WorldToScreenUiParent { get; set; }
 		public UiDomain UiDomain { get; set; }
 		public InventoryDomain InventoryDomain { get; set; }
+		public ReactiveCommand<float> CurrentLocationUpdate { get; set; }
 	}
 }

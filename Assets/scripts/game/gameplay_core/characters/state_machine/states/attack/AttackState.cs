@@ -6,6 +6,8 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
@@ -21,6 +23,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private int _comboCounter;
 		private bool _staminaSpent;
 		private bool _staminaRegenDisabled;
+		private bool _projectileSpawned;
 
 		private int _framesToUnlockWalk;
 		private AttackStage _stage;
@@ -57,39 +60,69 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			var hasActiveHit = false;
 			var allHitsComplete = true;
 
-			foreach(var hitData in _hitsData)
+			if(_currentAttackConfig.IsRangedAttack)
 			{
-				var hitTiming = hitData.Config.Timing;
-
-				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+				foreach(var hitData in _hitsData)
 				{
-					hitData.IsStarted = true;
-					if(!_staminaSpent)
-					{
-						_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
-					}
-				}
+					var hitTiming = hitData.Config.Timing;
 
-				if(hitData.IsActive)
-				{
-					var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Attack, hitData.Config.InvolvedColliders);
-					while(interpolatedCaster.MoveNext())
+					if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
 					{
-						foreach(var caster in interpolatedCaster.GetActiveColliders())
+						hitData.IsStarted = true;
+						hitData.IsEnded = true;
+						if(!_staminaSpent)
 						{
-							var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
-							AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, caster, _context, deflectionRating, true);
+							_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
+							_staminaSpent = true;
+						}
+
+						if(!_projectileSpawned)
+						{
+							_projectileSpawned = true;
+							SpawnProjectile(hitData.Config);
 						}
 					}
 
-					if(NormalizedTime >= hitTiming.y)
-					{
-						hitData.IsEnded = true;
-					}
+					hasActiveHit |= hitData.IsActive;
+					allHitsComplete &= hitData.IsEnded;
 				}
+			}
+			else
+			{
+				foreach(var hitData in _hitsData)
+				{
+					var hitTiming = hitData.Config.Timing;
 
-				hasActiveHit |= hitData.IsActive;
-				allHitsComplete &= hitData.IsEnded;
+					if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+					{
+						hitData.IsStarted = true;
+						if(!_staminaSpent)
+						{
+							_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
+						}
+					}
+
+					if(hitData.IsActive)
+					{
+						var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Attack, hitData.Config.InvolvedColliders);
+						while(interpolatedCaster.MoveNext())
+						{
+							foreach(var caster in interpolatedCaster.GetActiveColliders())
+							{
+								var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
+								AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, caster, _context, deflectionRating, true);
+							}
+						}
+
+						if(NormalizedTime >= hitTiming.y)
+						{
+							hitData.IsEnded = true;
+						}
+					}
+
+					hasActiveHit |= hitData.IsActive;
+					allHitsComplete &= hitData.IsEnded;
+				}
 			}
 
 			if(hasActiveHit)
@@ -113,7 +146,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						{
 							deflectedByHandleCast = true;
 							_context.DeflectCurrentAttack.Execute();
-							interpolatedHandleCaster.Terminate();
+							interpolatedHandleCaster.ResetOnInterrupted();
 							break;
 						}
 					}
@@ -215,6 +248,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			_stage = AttackStage.Windup;
 			_staminaSpent = false;
+			_projectileSpawned = false;
 			_hitsData.Clear();
 			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
 			{
@@ -253,6 +287,34 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				CurrentAttackAnimation.Time = time * CurrentAttackAnimation.Duration;
 				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 			}
+		}
+
+		private void SpawnProjectile(HitConfig hitConfig)
+		{
+			var weaponConfig = _context.RightWeapon.Value.Config;
+			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(_currentAttackConfig.ProjectilePrefabNames, AssetOwner.Game);
+			var projectileInstance = Object.Instantiate(prefab);
+			var projectileView = projectileInstance.GetComponent<ProjectileView>();
+
+			var spawnPosition = _context.Transform.Position + _context.Transform.Forward * 0.5f + Vector3.up * 1.2f;
+			var direction = _context.Transform.Forward;
+
+			if(_context.LockOnLogic.LockOnTarget.HasValue)
+			{
+				var targetPosition = _context.LockOnLogic.LockOnTarget.Value.transform.position + Vector3.up * 1.2f;
+				direction = (targetPosition - spawnPosition).normalized;
+			}
+
+			projectileView.Initialize(new ProjectileData
+			{
+				Speed = weaponConfig.ProjectileSpeed,
+				BaseDamage = _currentAttackConfig.BaseDamage,
+				HitConfig = hitConfig,
+				CasterContext = _context,
+				DeflectionRating = weaponConfig.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus,
+				SpawnPosition = spawnPosition,
+				Direction = direction
+			});
 		}
 
 		private void GetCurrentAttackConfig(out AttackConfig attackConfig, out int newAttackIndex)
