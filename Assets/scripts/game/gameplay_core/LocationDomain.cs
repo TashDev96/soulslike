@@ -28,19 +28,20 @@ namespace game.gameplay_core
 		{
 			_sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>();
 
+			var mainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera);
+			_cameraController = CameraControllerFactory.Create(_sceneInstaller.CameraSettings, mainCamera, _player);
+
 			_locationContext = new LocationContext
 			{
 				LocationSaveData = new LocationSaveData(),
 				LocationUpdate = new ReactiveCommand<float>(),
 				LocationUiUpdate = new ReactiveCommand<float>(),
-				MainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera),
-				LocationTime = new ReactiveProperty<float>()
+				LocationTime = new ReactiveProperty<float>(),
+				CameraController = _cameraController
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 			GameStaticContext.Instance.CurrentLocationUpdate = _locationContext.LocationUpdate;
-			
-			_cameraController = CameraControllerFactory.Create(_sceneInstaller.CameraSettings, _locationContext.MainCamera, _player);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();

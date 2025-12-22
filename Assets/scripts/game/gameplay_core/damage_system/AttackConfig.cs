@@ -90,6 +90,12 @@ namespace game.gameplay_core.damage_system
 				_animationPreview.Clip = Animation.Clip;
 			}
 
+			var weaponKey = GetWeaponPrefabKeyFromSelection();
+			if(_animationPreview.WeaponPrefabKey != weaponKey)
+			{
+				_animationPreview.WeaponPrefabKey = weaponKey;
+			}
+
 			EditorGUI.BeginChangeCheck();
 
 			_animationPreview.ClearTimeChanges();
@@ -158,6 +164,15 @@ namespace game.gameplay_core.damage_system
 				hitConfig.InvolvedColliders[i] = GUILayout.Toggle(hitConfig.InvolvedColliders[i], $"{i}");
 			}
 			GUILayout.EndHorizontal();
+		}
+
+		private string GetWeaponPrefabKeyFromSelection()
+		{
+			if(Selection.activeObject is game.gameplay_core.inventory.item_configs.WeaponItemConfig weaponConfig)
+			{
+				return weaponConfig.WeaponPrefabName;
+			}
+			return null;
 		}
 
 #endif

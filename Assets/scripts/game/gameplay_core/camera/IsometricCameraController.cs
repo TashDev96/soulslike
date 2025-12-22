@@ -20,6 +20,8 @@ namespace game.gameplay_core.camera
 		private readonly Context _context;
 		private float _currentOcclusionRadius;
 
+		public Camera Camera => _context.Camera.Value;
+
 		public IsometricCameraController(Context context)
 		{
 			_context = context;

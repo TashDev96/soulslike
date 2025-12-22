@@ -291,12 +291,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void SpawnProjectile(HitConfig hitConfig)
 		{
-			var weaponConfig = _context.RightWeapon.Value.Config;
+			var weapon = _context.RightWeapon.Value;
+			var weaponConfig = weapon.Config;
 			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(_currentAttackConfig.ProjectilePrefabNames, AssetOwner.Game);
 			var projectileInstance = Object.Instantiate(prefab);
 			var projectileView = projectileInstance.GetComponent<ProjectileView>();
 
-			var spawnPosition = _context.Transform.Position + _context.Transform.Forward * 0.5f + Vector3.up * 1.2f;
+			var spawnPosition = weapon.ProjectileSpawnPosition;
 			var direction = _context.Transform.Forward;
 
 			if(_context.LockOnLogic.LockOnTarget.HasValue)

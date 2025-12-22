@@ -24,6 +24,8 @@ namespace game.gameplay_core.camera
 		private Vector3 _currentFollowPosition;
 		private Quaternion _currentLookAtRotation;
 
+		public Camera Camera => _context.Camera.Value;
+
 		public FixedCameraController(Context context)
 		{
 			_context = context;

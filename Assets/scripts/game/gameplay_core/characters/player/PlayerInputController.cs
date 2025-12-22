@@ -1,5 +1,5 @@
 using dream_lib.src.camera;
-using dream_lib.src.reactive;
+using game.gameplay_core.camera;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
@@ -11,16 +11,18 @@ namespace game.gameplay_core.characters.player
 	public class PlayerInputController : ICharacterBrain
 	{
 		private CharacterInputData _inputData;
-		private readonly ReactiveProperty<Camera> _mainCamera;
+		private readonly ICameraController _cameraController;
+		private readonly bool _isIsometricCameraMode;
 		private CharacterContext _characterContext;
 		private Vector2 _directionInputScreenSpace;
 		private float _rollDashHoldDuration;
 		private RollDashInputState _rollInputState;
 		private CharacterCommand _nextFrameForcedCommand;
 
-		public PlayerInputController(ReactiveProperty<Camera> locationContextMainCamera)
+		public PlayerInputController(ICameraController cameraController)
 		{
-			_mainCamera = locationContextMainCamera;
+			_cameraController = cameraController;
+			_isIsometricCameraMode = cameraController is IsometricCameraController;
 		}
 
 		public void Initialize(CharacterContext context)
@@ -39,7 +41,7 @@ namespace game.gameplay_core.characters.player
 
 			if(_directionInputScreenSpace.sqrMagnitude > 0)
 			{
-				_inputData.DirectionWorld = _mainCamera.Value.ProjectScreenVectorToWorldPlaneWithSkew(_directionInputScreenSpace);
+				_inputData.DirectionWorld = _cameraController.Camera.ProjectScreenVectorToWorldPlaneWithSkew(_directionInputScreenSpace);
 			}
 
 			if(InputAdapter.GetButton(InputAxesNames.RollDash))
@@ -50,6 +52,11 @@ namespace game.gameplay_core.characters.player
 			_inputData.Command = CalculateCommand(_directionInputScreenSpace);
 			_inputData.HoldBlock = InputAdapter.GetButton(InputAxesNames.Block);
 
+			if(_isIsometricCameraMode && IsAttackCommand(_inputData.Command))
+			{
+				TrySetMouseDirectionForAttack();
+			}
+
 			if(InputAdapter.GetButtonDown(InputAxesNames.LockOn))
 			{
 				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
@@ -58,6 +65,29 @@ namespace game.gameplay_core.characters.player
 			if(!InputAdapter.GetButton(InputAxesNames.RollDash))
 			{
 				_rollDashHoldDuration = 0;
+			}
+		}
+
+		private bool IsAttackCommand(CharacterCommand command)
+		{
+			return command == CharacterCommand.RegularAttack || command == CharacterCommand.StrongAttack;
+		}
+
+		private void TrySetMouseDirectionForAttack()
+		{
+			var mouseRay = _cameraController.Camera.ScreenPointToRay(Input.mousePosition);
+			var playerPos = _characterContext.Transform.Position;
+			var plane = new Plane(Vector3.up, playerPos);
+
+			if(plane.Raycast(mouseRay, out var distance))
+			{
+				var hitPoint = mouseRay.GetPoint(distance);
+				var direction = hitPoint - playerPos;
+				direction.y = 0;
+				if(direction.sqrMagnitude > 0.01f)
+				{
+					_inputData.DirectionWorld = direction.normalized;
+				}
 			}
 		}
 

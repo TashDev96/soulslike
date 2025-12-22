@@ -274,7 +274,7 @@ namespace game.gameplay_core.characters
 
 			if(isPlayer)
 			{
-				_brain = new PlayerInputController(locationContext.MainCamera);
+				_brain = new PlayerInputController(locationContext.CameraController);
 				_brain.Initialize(_context);
 			}
 			else
@@ -374,6 +374,7 @@ namespace game.gameplay_core.characters
 
 			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(config.WeaponPrefabName, AssetOwner.Game);
 			var weaponInstance = Instantiate(prefab, socket);
+			weaponInstance.name = prefab.name;
 			weaponInstance.transform.ResetLocal();
 			var weaponView = weaponInstance.GetComponent<WeaponView>();
 			weaponView.Config = config;

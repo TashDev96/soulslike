@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
   m_Name: DebugBowConfig
   m_EditorClassIdentifier: 
-  <WeaponPrefabName>k__BackingField: DebugWeapon
+  <WeaponPrefabName>k__BackingField: DebugBow
   <RegularAttacks>k__BackingField:
   - <Animation>k__BackingField:
       _FadeDuration: 0.25
@@ -20,7 +20,7 @@ MonoBehaviour:
         _NormalizedTimes: []
         _Callbacks: []
         _Names: []
-      _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
+      _Clip: {fileID: 7400000, guid: 555f697ff0bc646ba89da156d298fe82, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 1
@@ -28,13 +28,13 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3035714, y: 0.55357146}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.28571427, y: 0.58928573}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.55357146}
-    <ExitToComboTime>k__BackingField: {x: 0.46428573, y: 1}
-    <EnterComboTime>k__BackingField: 0.16964285
-    <EnterFromRollTime>k__BackingField: 0.30357143
-    <StartHandleObstacleCastTime>k__BackingField: 0.30357143
+    <RotationDisabledTime>k__BackingField: {x: 0.48333332, y: 0.75}
+    <StaminaRegenDisabledTime>k__BackingField: {x: 0.2, y: 0.78333336}
+    <LockedStateTime>k__BackingField: {x: 0, y: 0.81666666}
+    <ExitToComboTime>k__BackingField: {x: 0.46666667, y: 1}
+    <EnterComboTime>k__BackingField: 0.16666667
+    <EnterFromRollTime>k__BackingField: 0.3
+    <StartHandleObstacleCastTime>k__BackingField: 0.3
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -95,10 +95,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 2
+    <Range>k__BackingField: 10
     <HitConfigs>k__BackingField:
     - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.3125, y: 0.32589287}
+      <Timing>k__BackingField: {x: 0.73333335, y: 0.7416667}
       <FriendlyFire>k__BackingField: 0
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1

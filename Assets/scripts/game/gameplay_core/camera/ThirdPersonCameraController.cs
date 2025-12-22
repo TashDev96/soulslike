@@ -23,6 +23,8 @@ namespace game.gameplay_core.camera
 		private bool _hasInitializedPosition;
 		private Vector3 _lastCameraUnsafePos;
 
+		public Camera Camera => _context.Camera.Value;
+
 		public ThirdPersonCameraController(Context context)
 		{
 			_context = context;

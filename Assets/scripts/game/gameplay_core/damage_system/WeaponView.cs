@@ -23,8 +23,13 @@ namespace game.gameplay_core.damage_system
 		[SerializeField]
 		private BlockReceiver[] _blockColliders;
 
+		[SerializeField]
+		private Transform _projectileSpawnPoint;
+
 		[NonSerialized]
 		public WeaponItemConfig Config;
+
+		public Vector3 ProjectileSpawnPosition => _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
 
 		private readonly InterpolatedCapsuleCaster _interpolatedCaster = new();
 

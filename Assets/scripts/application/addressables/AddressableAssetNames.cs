@@ -9,6 +9,7 @@ public static class AddressableAssetNames
 	public const string DebugWeapon = "DebugWeapon";
 	public const string Player = "Player";
 	public const string MainCanvas = "MainCanvas";
+	public const string DebugArrow = "DebugArrow";
 	public const string DebugShieldConfig = "DebugShieldConfig";
 	public const string SimpleSword = "SimpleSword";
 	public const string MainHealingItemConfig = "MainHealingItemConfig";
@@ -16,7 +17,7 @@ public static class AddressableAssetNames
 	public const string CharacterUi = "CharacterUi";
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
-	public const string DebugArrow = "DebugArrow";
+	public const string DebugBow = "DebugBow";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
@@ -36,6 +37,7 @@ public static class AddressableAssetNames
 		"DebugWeapon",
 		"SimpleSword",
 		"ZombieSword",
-		"DebugShield"
+		"DebugShield",
+		"DebugBow"
 	};
 }
