@@ -302,8 +302,24 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_context.LockOnLogic.LockOnTarget.HasValue)
 			{
+				var maxAngleCorrection = _currentAttackConfig.MaxProjectileHorizontalAngleCorrection;
 				var targetPosition = _context.LockOnLogic.LockOnTarget.Value.transform.position + Vector3.up * 1.2f;
-				direction = (targetPosition - spawnPosition).normalized;
+				var targetDirection = (targetPosition - spawnPosition).normalized;
+				
+				var forwardHorizontal = _context.Transform.Forward;
+				forwardHorizontal.y = 0;
+				forwardHorizontal = forwardHorizontal.normalized;
+				
+				var targetDirectionHorizontal = targetDirection;
+				targetDirectionHorizontal.y = 0;
+				targetDirectionHorizontal = targetDirectionHorizontal.normalized;
+				
+				var angleDifference = Vector3.SignedAngle(forwardHorizontal, targetDirectionHorizontal, Vector3.up);
+				var clampedAngle = Mathf.Clamp(angleDifference, -maxAngleCorrection, maxAngleCorrection);
+				
+				var correctedDirection = Quaternion.AngleAxis(clampedAngle, Vector3.up) * forwardHorizontal;
+				correctedDirection.y = targetDirection.y;
+				direction = correctedDirection.normalized;
 			}
 
 			projectileView.Initialize(new ProjectileData

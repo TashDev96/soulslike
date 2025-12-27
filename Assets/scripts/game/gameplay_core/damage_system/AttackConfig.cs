@@ -25,6 +25,9 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		[field:ShowIf(nameof(IsRangedAttack))]
 		public string ProjectilePrefabNames { get; private set; }
+		[field: SerializeField]
+		[field:ShowIf(nameof(IsRangedAttack))]
+		public float MaxProjectileHorizontalAngleCorrection { get; private set; }
 
 		[field: SerializeField]
 		public float BaseDamage { get; private set; }
@@ -34,7 +37,7 @@ namespace game.gameplay_core.damage_system
 		public int AttackDeflectionRatingBonus { get; private set; }
 
 		[ShowInInspector]
-		public float Duration => Animation.Clip ? Animation.Clip.length * Animation.Speed : 0.1f;
+		public float Duration => Animation.Clip ? Animation.Clip.length / Animation.Speed : 0.1f;
 
 		[field: HideInInspector]
 		[field: SerializeField]

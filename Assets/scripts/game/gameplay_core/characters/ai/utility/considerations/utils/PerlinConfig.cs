@@ -28,6 +28,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.utils
 
 		public float Evaluate(float time)
 		{
+			//return Mathf.Sin(time)*0.5f+0.5f;
 			if(_octaves == null || _octaves.Length == 0)
 			{
 				return Mathf.PerlinNoise1D(time);

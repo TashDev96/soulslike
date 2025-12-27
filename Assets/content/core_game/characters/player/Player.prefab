@@ -67,7 +67,7 @@ MonoBehaviour:
     _slidingStopDamping: 2
     _drawDebug: 1
   <UniqueId>k__BackingField: Player
-  <DebugWeaponConfig>k__BackingField: {fileID: 11400000, guid: b3f4492ad218f46a4b1d99faaa0b6953, type: 2}
+  <DebugWeaponConfig>k__BackingField: {fileID: 11400000, guid: 473e31eb31c15495eae3d76fbd5b22ca, type: 2}
   <DebugWeaponLeftConfig>k__BackingField: {fileID: 0}
   <RightHandSocket>k__BackingField: {fileID: 8792662738043832350}
   <LeftHandSocket>k__BackingField: {fileID: 358735047782199053}

@@ -215,15 +215,19 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_rollState);
 						break;
 					case CharacterCommand.RegularAttack:
+						var weaponConfig = _context.RightWeapon.Value?.Config;
+						
+						var canDoBackStabs = weaponConfig.CanBackstab && _context.Config.CanDoBackstabs;
+						var canRiposte = weaponConfig.CanRiposte;
 
-						var riposteableEnemy = FindRiposteableEnemy();
-						var backstabbableEnemy = FindBackstabbableEnemy();
+						var riposteableEnemy = canRiposte ? FindRiposteableEnemy() : null;
+						var backstabbableEnemy = canDoBackStabs ? FindBackstabbableEnemy() : null;
 
-						if(riposteableEnemy != null)
+						if(canRiposte && riposteableEnemy != null)
 						{
 							SetState(new RiposteAttackState(_context, riposteableEnemy));
 						}
-						else if(_context.Config.CanDoBackstabs && backstabbableEnemy != null)
+						else if(canDoBackStabs && backstabbableEnemy != null)
 						{
 							SetState(new BackstabAttackState(_context, backstabbableEnemy));
 						}
