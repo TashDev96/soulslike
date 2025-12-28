@@ -8,6 +8,8 @@ namespace game.gameplay_core.characters.config
 	{
 		[field: SerializeField]
 		public float HalfTurnDurationSeconds { get; private set; } = 0.22f;
+		[field: SerializeField]
+		public float HalfTurnDurationSecondsLockOn { get; private set; } = 0.22f;
 
 		[field: SerializeField]
 		public float WalkSpeed { get; private set; } = 5f;

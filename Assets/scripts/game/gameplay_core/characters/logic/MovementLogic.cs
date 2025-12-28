@@ -141,15 +141,16 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			var degreesPerSecond = 180f / _context.LocomotionConfig.HalfTurnDurationSeconds;
-			RotateCharacter(toDirection, degreesPerSecond, deltaTime);
+			RotateCharacter(toDirection,  _context.LocomotionConfig.HalfTurnDurationSeconds, deltaTime);
 		}
 
-		public void RotateCharacter(Vector3 toDirection, float speed, float deltaTime)
+		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
 		{
+			var degreesPerSecond = 180f / halfTurnDurationSeconds;
+			
 			toDirection.y = 0;
 			var angleDifference = Vector3.SignedAngle(_context.CharacterTransform.forward, toDirection, Vector3.up);
-			var clampedAngle = Mathf.Clamp(angleDifference, -speed * deltaTime, speed * deltaTime);
+			var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
 			_context.CharacterTransform.rotation *= rotationStep;

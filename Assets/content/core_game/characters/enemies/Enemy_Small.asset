@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5723f2522e7045b09d5fa806bd897878, type: 3}
   m_Name: Enemy_Small
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
-  <ParentConfig>k__BackingField: {fileID: 11400000, guid: d81bc20484e9346fb88bee6e99486bc5, type: 2}
   Roll:
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
@@ -56,6 +55,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
+  <ParentConfig>k__BackingField: {fileID: 11400000, guid: d81bc20484e9346fb88bee6e99486bc5, type: 2}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <ParryStunAnimation>k__BackingField: {fileID: 7400000, guid: c9210f5e361be4756a52a734fe5bdacb, type: 2}
@@ -65,7 +65,8 @@ MonoBehaviour:
   <WalkAnimation>k__BackingField: {fileID: 7400000, guid: 765b4fc7e775c43649ff4ab445d0ffc3, type: 2}
   <RunAnimation>k__BackingField: {fileID: 7400000, guid: f20ed00c7ce344848b522e5dcf56b325, type: 2}
   <Locomotion>k__BackingField:
-    <HalfTurnDurationSeconds>k__BackingField: 0.22
+    <HalfTurnDurationSeconds>k__BackingField: 0.5
+    <HalfTurnDurationSecondsLockOn>k__BackingField: 2
     <WalkSpeed>k__BackingField: 3
     <RunSpeed>k__BackingField: 10
     <WalkAcceleration>k__BackingField: 0.2

@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 3197410386829480636}
   - component: {fileID: 8780913008540546663}
   - component: {fileID: 8249723804972747926}
+  - component: {fileID: 4452352358425544236}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -280,6 +281,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4452352358425544236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333606136359217733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64c7b0edc9084d8c9466e5df5bd00ba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.view.CharacterBodyView
+  _bodyMesh: {fileID: 8249723804972747926}
+  _blinkColor: {r: 1, g: 1, b: 1, a: 1}
+  _blinkDuration: 0.3
+  _blinkCount: 3
 --- !u!1 &2788963343709239770
 GameObject:
   m_ObjectHideFlags: 0

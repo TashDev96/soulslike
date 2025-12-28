@@ -57,12 +57,14 @@ namespace game.gameplay_core.characters
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
 		private BlockLogic _blockLogic;
+		
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
 
 		private WeaponView _rightWeaponView;
 		private WeaponView _leftWeaponView;
+		private CharacterBodyView _characterBodyView;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -87,6 +89,7 @@ namespace game.gameplay_core.characters
 			var isPlayer = UniqueId == "Player";
 
 			_transform = new ReadOnlyTransform(transform);
+			
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
 
@@ -96,7 +99,8 @@ namespace game.gameplay_core.characters
 				AllCharacters = locationContext.Characters,
 				Self = this,
 				MovementLogic = _movementLogic,
-				IsDead = isDead
+				IsDead = isDead,
+				CharacterConfig = _config,
 			});
 
 			_blockLogic = new BlockLogic();
@@ -292,6 +296,9 @@ namespace game.gameplay_core.characters
 
 				CreateCharacterUi();
 			}
+			
+			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
+			_characterBodyView.Initialize(_context.ApplyDamage);
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(transform, _context, CharacterStateMachine, _brain);

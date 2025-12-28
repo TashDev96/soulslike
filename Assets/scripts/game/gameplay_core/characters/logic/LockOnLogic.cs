@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data.bindings;
 
 namespace game.gameplay_core.characters.logic
@@ -15,6 +16,7 @@ namespace game.gameplay_core.characters.logic
 			public List<CharacterDomain> AllCharacters { get; set; }
 			public MovementLogic MovementLogic { get; set; }
 			public IsDead IsDead { get; set; }
+			public CharacterConfig CharacterConfig { get; set; }
 		}
 
 		private readonly Context _context;
@@ -57,7 +59,7 @@ namespace game.gameplay_core.characters.logic
 			if(!DisableRotationForThisFrame)
 			{
 				var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.CharacterTransform.Position).SetY(0);
-				_context.MovementLogic.RotateCharacter(lookVector, deltaTime);
+				_context.MovementLogic.RotateCharacter(lookVector, _context.CharacterConfig.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			DisableRotationForThisFrame = false;
