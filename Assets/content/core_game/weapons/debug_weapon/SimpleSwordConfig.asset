@@ -23,6 +23,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -109,6 +112,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: e8f71e52c23a3a94facf4b2923df9262, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -178,6 +184,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 2
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -265,6 +274,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -298,6 +310,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -331,6 +346,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       _Speed: 1
       _NormalizedStartTime: 0.1125
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -391,6 +409,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -441,6 +462,7 @@ MonoBehaviour:
       <FriendlyFire>k__BackingField: 0
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
+  <ProjectileSpeed>k__BackingField: 20
   <BlockStability>k__BackingField: 15.8
   <DamageReduction>k__BackingField: 0.609
   <BlockStaminaCost>k__BackingField: 5
@@ -493,6 +515,9 @@ MonoBehaviour:
       _Clip: {fileID: 0}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -511,6 +536,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     <Range>k__BackingField: 1
     <HitConfigs>k__BackingField: []
+  <CanRiposte>k__BackingField: 1
   <RiposteAttack>k__BackingField:
     <Animation>k__BackingField:
       _FadeDuration: 0.25
@@ -521,6 +547,9 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
@@ -562,6 +591,7 @@ MonoBehaviour:
       <FriendlyFire>k__BackingField: 0
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
+  <CanBackstab>k__BackingField: 1
   <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
   <BackstabAttack>k__BackingField:
     <Animation>k__BackingField:
@@ -573,10 +603,13 @@ MonoBehaviour:
       _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
       _Speed: 1
       _NormalizedStartTime: NaN
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
     <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
+    <RotationDisabledTime>k__BackingField: {x: 0, y: 0.8242187}
     <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
     <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
     <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}

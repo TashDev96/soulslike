@@ -29,7 +29,14 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 
 			_animation = _context.Animator.Play(_animationClip, 0.1f, FadeMode.FromStart);
+			_context.MovementLogic.SetRotationAndMovementLocked(true);
 			Duration = _animationDuration;
+		}
+
+		public override void OnExit()
+		{
+			_context.MovementLogic.SetRotationAndMovementLocked(false);
+			base.OnExit();
 		}
 
 		public override void Update(float deltaTime)

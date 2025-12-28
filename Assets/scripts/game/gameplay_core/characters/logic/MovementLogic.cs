@@ -51,6 +51,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _acceleratedMovement;
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
+		private bool _rotationMovementLocked;
 		public Vector3 LastUpdateVelocity { get; private set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
@@ -71,6 +72,11 @@ namespace game.gameplay_core.characters.logic
 			_isGroundedCache = false;
 
 			if(_context.IsDead.Value)
+			{
+				return;
+			}
+
+			if(_rotationMovementLocked)
 			{
 				return;
 			}
@@ -99,30 +105,12 @@ namespace game.gameplay_core.characters.logic
 			_prevPos = CurrentPosition;
 		}
 
-		public void MoveWithAcceleration(Vector3 vector, float deltaTime)
-		{
-			_hadAcceleratedMovement = true;
-			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
-
-			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.LocomotionConfig.WalkAcceleration);
-			var resultMovement = _acceleratedMovement;
-
-			if(_isGroundedCache)
-			{
-				if(CharacterCollider.HasStableGround)
-				{
-					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
-				}
-				else
-				{
-					resultMovement -= Vector3.Project(resultMovement, _slidingVelocity.normalized);
-				}
-			}
-			MoveAndStoreFrameData(resultMovement);
-		}
-
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
 		{
+			if(_rotationMovementLocked)
+			{
+				return;
+			}
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
 			if(_isGroundedCache)
@@ -141,13 +129,17 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			RotateCharacter(toDirection,  _context.LocomotionConfig.HalfTurnDurationSeconds, deltaTime);
+			RotateCharacter(toDirection, _context.LocomotionConfig.HalfTurnDurationSeconds, deltaTime);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
 		{
+			if(_rotationMovementLocked)
+			{
+				return;
+			}
 			var degreesPerSecond = 180f / halfTurnDurationSeconds;
-			
+
 			toDirection.y = 0;
 			var angleDifference = Vector3.SignedAngle(_context.CharacterTransform.forward, toDirection, Vector3.up);
 			var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
@@ -162,6 +154,10 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
 		{
+			if(_rotationMovementLocked)
+			{
+				return;
+			}
 			var hasLockOnTarget = _context.LockOnLogic.LockOnTarget.HasValue;
 
 			if(!hasLockOnTarget)
@@ -193,6 +189,33 @@ namespace game.gameplay_core.characters.logic
 			sb.AppendLine($"grounded {_isGroundedCache}/{CharacterCollider.IsGrounded}, stable: {CharacterCollider.HasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
 			sb.AppendLine($"falling: {_context.IsFalling.Value}  fall velocity {_fallVelocity}");
 			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
+		}
+
+		public void SetRotationAndMovementLocked(bool value)
+		{
+			_rotationMovementLocked = value;
+		}
+
+		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
+		{
+			_hadAcceleratedMovement = true;
+			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
+
+			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.LocomotionConfig.WalkAcceleration);
+			var resultMovement = _acceleratedMovement;
+
+			if(_isGroundedCache)
+			{
+				if(CharacterCollider.HasStableGround)
+				{
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime * 10f);
+				}
+				else
+				{
+					resultMovement -= Vector3.Project(resultMovement, _slidingVelocity.normalized);
+				}
+			}
+			MoveAndStoreFrameData(resultMovement);
 		}
 
 		private void UpdateFalling(float deltaTime)

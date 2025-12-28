@@ -50,7 +50,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
 			{
-				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
+				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
