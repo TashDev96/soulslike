@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1423bfcefefc74a0689c342f33a49a17
+    m_Address: FloatingTextView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1cc72ed40ea14401d9bdc3bc4992c15a
     m_Address: ZombieSwordConfig
     m_ReadOnly: 0

@@ -68,6 +68,11 @@ namespace game.gameplay_core.characters.player
 			}
 		}
 
+		public string GetDebugSting()
+		{
+			return $"Player Input {_directionInputScreenSpace}";
+		}
+
 		private bool IsAttackCommand(CharacterCommand command)
 		{
 			return command == CharacterCommand.RegularAttack || command == CharacterCommand.StrongAttack;
@@ -89,11 +94,6 @@ namespace game.gameplay_core.characters.player
 					_inputData.DirectionWorld = direction.normalized;
 				}
 			}
-		}
-
-		public string GetDebugSting()
-		{
-			return $"Player Input {_directionInputScreenSpace}";
 		}
 
 		private CharacterCommand CalculateCommand(Vector3 directionInputLocalSpace)

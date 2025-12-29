@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Animancer;
 using game.editor;
+using game.gameplay_core.inventory.item_configs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -17,16 +18,16 @@ namespace game.gameplay_core.damage_system
 	{
 		[field: SerializeField]
 		public ClipTransition Animation { get; private set; }
-		
-		[field:SerializeField]
-		public bool IsRangedAttack {get; private set;}
-		
+
+		[field: SerializeField]
+		public bool IsRangedAttack { get; private set; }
+
 		[field: ValueDropdown("@AddressableAssetNames.ProjectilePrefabs")]
 		[field: SerializeField]
-		[field:ShowIf(nameof(IsRangedAttack))]
+		[field: ShowIf(nameof(IsRangedAttack))]
 		public string ProjectilePrefabNames { get; private set; }
 		[field: SerializeField]
-		[field:ShowIf(nameof(IsRangedAttack))]
+		[field: ShowIf(nameof(IsRangedAttack))]
 		public float MaxProjectileHorizontalAngleCorrection { get; private set; }
 
 		[field: SerializeField]
@@ -171,7 +172,7 @@ namespace game.gameplay_core.damage_system
 
 		private string GetWeaponPrefabKeyFromSelection()
 		{
-			if(Selection.activeObject is game.gameplay_core.inventory.item_configs.WeaponItemConfig weaponConfig)
+			if(Selection.activeObject is WeaponItemConfig weaponConfig)
 			{
 				return weaponConfig.WeaponPrefabName;
 			}

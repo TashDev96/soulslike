@@ -216,7 +216,7 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.RegularAttack:
 						var weaponConfig = _context.RightWeapon.Value?.Config;
-						
+
 						var canDoBackStabs = weaponConfig.CanBackstab && _context.Config.CanDoBackstabs;
 						var canRiposte = weaponConfig.CanRiposte;
 

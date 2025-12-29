@@ -20,6 +20,7 @@ using game.gameplay_core.inventory;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
+using game.gameplay_core.worldspace_ui;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -57,7 +58,6 @@ namespace game.gameplay_core.characters
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
 		private BlockLogic _blockLogic;
-		
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
@@ -89,7 +89,7 @@ namespace game.gameplay_core.characters
 			var isPlayer = UniqueId == "Player";
 
 			_transform = new ReadOnlyTransform(transform);
-			
+
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
 
@@ -100,7 +100,7 @@ namespace game.gameplay_core.characters
 				Self = this,
 				MovementLogic = _movementLogic,
 				IsDead = isDead,
-				CharacterConfig = _config,
+				CharacterConfig = _config
 			});
 
 			_blockLogic = new BlockLogic();
@@ -296,13 +296,22 @@ namespace game.gameplay_core.characters
 
 				CreateCharacterUi();
 			}
-			
+
 			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
 			_characterBodyView.Initialize(_context.ApplyDamage);
 
 			locationContext.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(transform, _context, CharacterStateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
+
+			_context.ApplyDamage.Subscribe(info =>
+			{
+				if(_context.IsDead.Value)
+				{
+					return;
+				}
+				GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(info.DamageAmount.RoundFormat(), FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
+			});
 
 			void CreateCharacterUi()
 			{
@@ -312,7 +321,8 @@ namespace game.gameplay_core.characters
 				{
 					CharacterStats = _context.CharacterStats,
 					UiPivotWorld = _uiPivot,
-					LocationUiUpdate = locationContext.LocationUiUpdate
+					LocationUiUpdate = locationContext.LocationUiUpdate,
+					ApplyDamage = _context.ApplyDamage
 				});
 			}
 		}

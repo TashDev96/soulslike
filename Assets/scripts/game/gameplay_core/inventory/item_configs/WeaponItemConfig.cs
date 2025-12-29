@@ -79,12 +79,11 @@ namespace game.gameplay_core.inventory.item_configs
 
 		[field: SerializeField]
 		public bool CanRiposte { get; private set; } = true;
-		
+
 		[field: ShowIf("CanRiposte")]
 		[field: FoldoutGroup("Riposte")]
-
 		[field: SerializeField]
-		
+
 		public AttackConfig RiposteAttack { get; private set; }
 
 		[field: SerializeField]
@@ -92,12 +91,10 @@ namespace game.gameplay_core.inventory.item_configs
 
 		[field: FoldoutGroup("BackStab")]
 		[field: SerializeField]
-		
 		[field: ShowIf("CanBackstab")]
 		public AnimationClip BackstabbedEnemyAnimation { get; set; }
 		[field: FoldoutGroup("BackStab")]
 		[field: ShowIf("CanBackstab")]
-
 		[field: SerializeField]
 		public AttackConfig BackstabAttack { get; private set; }
 

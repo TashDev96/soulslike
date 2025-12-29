@@ -23,6 +23,8 @@ namespace game.gameplay_core.damage_system
 		public Team OwnerTeam => _context.Team.Value;
 		public string CharacterId => _context.CharacterId.Value;
 
+		public bool IsInvulnerable => _context.InvulnerabilityLogic.IsInvulnerable;
+
 		public void Initialize(DamageReceiverContext damageReceiverContext)
 		{
 			_context = damageReceiverContext;

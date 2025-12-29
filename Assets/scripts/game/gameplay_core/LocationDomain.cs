@@ -8,6 +8,7 @@ using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
 using game.gameplay_core.location.location_save_system;
+using game.gameplay_core.worldspace_ui;
 using game.ui;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -42,6 +43,7 @@ namespace game.gameplay_core
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
 			GameStaticContext.Instance.CurrentLocationUpdate = _locationContext.LocationUpdate;
+			GameStaticContext.Instance.FloatingTextsManager = new FloatingTextsManager(_locationContext.CameraController, _locationContext.LocationUpdate);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();

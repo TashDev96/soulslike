@@ -30,6 +30,7 @@ namespace game.gameplay_core
 		{
 			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.Player, AssetOwner.Game);
 			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.CharacterUi, AssetOwner.Game);
+			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.FloatingTextView, AssetOwner.Game);
 		}
 	}
 }

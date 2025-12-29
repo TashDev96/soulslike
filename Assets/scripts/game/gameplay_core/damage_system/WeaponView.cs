@@ -29,12 +29,12 @@ namespace game.gameplay_core.damage_system
 		[NonSerialized]
 		public WeaponItemConfig Config;
 
-		public Vector3 ProjectileSpawnPosition => _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
-
 		private readonly InterpolatedCapsuleCaster _interpolatedCaster = new();
 
 		private CharacterContext _context;
 		private readonly List<CapsuleCaster> _castCollidersCache = new();
+
+		public Vector3 ProjectileSpawnPosition => _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
 
 		public void Initialize(CharacterContext characterContext)
 		{

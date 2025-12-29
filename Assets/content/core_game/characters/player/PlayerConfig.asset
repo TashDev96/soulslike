@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5723f2522e7045b09d5fa806bd897878, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
-  <ParentConfig>k__BackingField: {fileID: 0}
   Roll:
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
     <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}
     <LeftAnimation>k__BackingField: {fileID: 7400000, guid: 10652e60d73513c45bf96e754ad3dd61, type: 2}
-    <RollInvulnerabilityTiming>k__BackingField: {x: 0.33928573, y: 0.6428572}
+    <RollInvulnerabilityTiming>k__BackingField: {x: 0.17857143, y: 0.58928573}
     <BodyAttackTiming>k__BackingField: {x: 0.08928572, y: 0.53571427}
     <ExitToRollAttackTiming>k__BackingField: {x: 0.67857146, y: 0.69642854}
     <RotationDisabledTime>k__BackingField: {x: 0.33928573, y: 1}
@@ -56,6 +55,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
+  <ParentConfig>k__BackingField: {fileID: 0}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <ParryStunAnimation>k__BackingField: {fileID: 7400000, guid: c9210f5e361be4756a52a734fe5bdacb, type: 2}
@@ -66,8 +66,11 @@ MonoBehaviour:
   <RunAnimation>k__BackingField: {fileID: 7400000, guid: f20ed00c7ce344848b522e5dcf56b325, type: 2}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.22
+    <HalfTurnDurationSecondsLockOn>k__BackingField: 0.22
     <WalkSpeed>k__BackingField: 5
     <RunSpeed>k__BackingField: 10
+    <WalkAcceleration>k__BackingField: 1
+    <WalkDeceleration>k__BackingField: 0.1
     <WalkAccelerationCurve>k__BackingField:
       serializedVersion: 2
       m_Curve:

@@ -4,19 +4,17 @@ using game.enums;
 using game.gameplay_core.characters;
 using game.gameplay_core.utils;
 using UnityEngine;
-using game;
 
 namespace game.gameplay_core.damage_system
 {
 	[AddressableAssetTag(nameof(AddressableCollections.ProjectilePrefabs))]
 	public class ProjectileView : MonoBehaviour
 	{
+		private const float StuckInWallDuration = 60f;
 		[SerializeField]
 		private CapsuleCaster[] _hitCasters;
 		[SerializeField]
 		private float _maxLifetime = 10f;
-
-		private const float StuckInWallDuration = 60f;
 
 		private float _speed;
 		private float _baseDamage;
@@ -206,18 +204,17 @@ namespace game.gameplay_core.damage_system
 
 				_impactedCharacters.Add(damageReceiver.CharacterId);
 
+				if(damageReceiver.IsInvulnerable)
+				{
+					//hit rolling target
+					return HitResult.None;
+				}
+
 				damageReceiver.ApplyDamage(CreateDamageInfo(Results[j], caster));
 				return HitResult.HitTarget;
 			}
 
 			return HitResult.None;
-		}
-
-		private enum HitResult
-		{
-			None,
-			HitWall,
-			HitTarget
 		}
 
 		private DamageInfo CreateDamageInfo(Collider targetCollider, CapsuleCaster caster)
@@ -239,6 +236,13 @@ namespace game.gameplay_core.damage_system
 				DeflectionRating = _deflectionRating
 			};
 		}
+
+		private enum HitResult
+		{
+			None,
+			HitWall,
+			HitTarget
+		}
 	}
 
 	public struct ProjectileData
@@ -252,4 +256,3 @@ namespace game.gameplay_core.damage_system
 		public Vector3 Direction;
 	}
 }
-

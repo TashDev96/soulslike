@@ -2,6 +2,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.ui;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui
@@ -13,6 +14,7 @@ namespace game.gameplay_core.characters.view.ui
 			public ReactiveCommand<float> LocationUiUpdate;
 			public CharacterStats CharacterStats { get; set; }
 			public Transform UiPivotWorld { get; set; }
+			public ApplyDamageCommand ApplyDamage { get; set; }
 		}
 
 		[SerializeField]
