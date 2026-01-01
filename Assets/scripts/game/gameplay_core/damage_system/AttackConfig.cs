@@ -13,9 +13,14 @@ using UnityEditor;
 
 namespace game.gameplay_core.damage_system
 {
+	using game.gameplay_core.characters.config.animation;
+
 	[Serializable]
 	public class AttackConfig
 	{
+		[field: SerializeField]
+		public AnimationConfig AnimationConfig { get; private set; } = new();
+
 		[field: SerializeField]
 		public ClipTransition Animation { get; private set; }
 
@@ -40,30 +45,6 @@ namespace game.gameplay_core.damage_system
 		[ShowInInspector]
 		public float Duration => Animation.Clip ? Animation.Clip.length / Animation.Speed : 0.1f;
 
-		[field: HideInInspector]
-		[field: SerializeField]
-		public Vector2 RotationDisabledTime { get; private set; }
-		[field: HideInInspector]
-		[field: SerializeField]
-		public Vector2 StaminaRegenDisabledTime { get; private set; }
-
-		[field: HideInInspector]
-		[field: SerializeField]
-		public Vector2 LockedStateTime { get; private set; } = new(0, 1f);
-
-		[field: HideInInspector]
-		[field: SerializeField]
-		public Vector2 ExitToComboTime { get; private set; } = new(0, 1f);
-		[field: HideInInspector]
-		[field: SerializeField]
-		public float EnterComboTime { get; private set; }
-		[field: HideInInspector]
-		[field: SerializeField]
-		public float EnterFromRollTime { get; private set; }
-
-		[field: HideInInspector]
-		[field: SerializeField]
-		public float StartHandleObstacleCastTime { get; set; }
 
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
@@ -72,103 +53,20 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float Range { get; set; } = 1f;
 
-		[field: SerializeField]
-
-		//[field: HideInInspector]
-		public List<HitConfig> HitConfigs { get; private set; }
 
 #if UNITY_EDITOR
 
-		private PreviewAnimationDrawer _animationPreview;
 
 		[OnInspectorGUI]
 		private void DrawCustomHitsInspector()
 		{
-			if(_animationPreview == null)
-			{
-				_animationPreview = new PreviewAnimationDrawer(AddressableAssetNames.Player, Animation.Clip);
-			}
-
-			if(_animationPreview.Clip != Animation.Clip)
-			{
-				_animationPreview.Clip = Animation.Clip;
-			}
-
 			var weaponKey = GetWeaponPrefabKeyFromSelection();
-			if(_animationPreview.WeaponPrefabKey != weaponKey)
-			{
-				_animationPreview.WeaponPrefabKey = weaponKey;
-			}
-
-			EditorGUI.BeginChangeCheck();
-
-			_animationPreview.ClearTimeChanges();
-			RotationDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Rotation Disabled Time:", RotationDisabledTime, Animation.Clip, _animationPreview);
-			StaminaRegenDisabledTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Stamina Regen Disabled Time:", StaminaRegenDisabledTime, Animation.Clip, _animationPreview);
-			LockedStateTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Locked State Time:", LockedStateTime, Animation.Clip, _animationPreview);
-			StartHandleObstacleCastTime = CharacterInspectorUtils.DrawTimingSlider("Start Handle Obstacle Cast Time", StartHandleObstacleCastTime, Animation.Clip, _animationPreview);
-
-			EditorGUILayout.Space();
-			SirenixEditorGUI.BeginBox("Cross-state Timings");
-			ExitToComboTime = CharacterInspectorUtils.DrawTimingSliderMinMax("Exit To Next Combo Time:", ExitToComboTime, Animation.Clip, _animationPreview);
-			EnterComboTime = CharacterInspectorUtils.DrawTimingSlider("Enter Combo Time:", EnterComboTime, Animation.Clip, _animationPreview);
-			EnterFromRollTime = CharacterInspectorUtils.DrawTimingSlider("Enter From Roll Time:", EnterFromRollTime, Animation.Clip, _animationPreview);
-			SirenixEditorGUI.EndBox();
-
-			GUILayout.Space(20);
-			GUILayout.Label("Hit Configs:");
-			GUILayout.Space(10);
-
-			for(var i = 0; i < HitConfigs.Count; i++)
-			{
-				GUILayout.BeginHorizontal();
-				GUILayout.Label($"Hit {i}");
-				if(GUILayout.Button("Remove", GUILayout.Width(30)))
-				{
-					HitConfigs.RemoveAt(i);
-					EditorUtility.SetDirty(Selection.activeObject);
-					return;
-				}
-				GUILayout.EndHorizontal();
-
-				DrawSelectColliders(HitConfigs[i]);
-
-				HitConfigs[i].Timing = CharacterInspectorUtils.DrawTimingSliderMinMax("Timing (120 fps):", HitConfigs[i].Timing, Animation.Clip, _animationPreview, 120f);
-				HitConfigs[i].DamageMultiplier = SirenixEditorFields.FloatField("Damage Multiplier:", HitConfigs[i].DamageMultiplier);
-				HitConfigs[i].PoiseDamage = SirenixEditorFields.FloatField("Poise Damage:", HitConfigs[i].PoiseDamage);
-				GUILayout.Space(10);
-			}
-
-			if(GUILayout.Button("Add Hit"))
-			{
-				HitConfigs.Add(new HitConfig
-				{
-					Timing = new Vector2(0.5f, 0.6f),
-					DamageMultiplier = 1
-				});
-			}
-
-			_animationPreview.CalculateTimeFromChanges();
-			_animationPreview.Draw();
-
-			GUILayout.Space(40);
-
-			if(EditorGUI.EndChangeCheck())
-			{
-				EditorUtility.SetDirty(Selection.activeObject);
-			}
+			
+			//TODO: use weapon in animationpewview
+			AnimationConfig.WeaponForPreview = weaponKey;
+			
 		}
 
-		private void DrawSelectColliders(HitConfig hitConfig)
-		{
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Colliders involved: ");
-			for(var i = 0; i < 3; i++)
-			{
-				hitConfig.InvolvedColliders[i] = GUILayout.Toggle(hitConfig.InvolvedColliders[i], $"{i}");
-			}
-			GUILayout.EndHorizontal();
-		}
 
 		private string GetWeaponPrefabKeyFromSelection()
 		{
@@ -179,6 +77,7 @@ namespace game.gameplay_core.damage_system
 			return null;
 		}
 
-#endif
+#endif //
+		
 	}
 }

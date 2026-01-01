@@ -14,7 +14,79 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <WeaponPrefabName>k__BackingField: DebugBow
   <RegularAttacks>k__BackingField:
-  - <Animation>k__BackingField:
+  - <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 594e1566368b24fc08c1b67a0090d422, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.48333332
+        EndTimeNormalized: 0.75
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.2
+        EndTimeNormalized: 0.78333336
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.96666664
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.85
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.06666667
+        EndTimeNormalized: 0.06666667
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.3
+        EndTimeNormalized: 0.3
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.73333335
+        EndTimeNormalized: 0.7416667
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
+    <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
         _NormalizedTimes: []
@@ -105,6 +177,78 @@ MonoBehaviour:
       <PoiseDamage>k__BackingField: 1
   <StrongAttacks>k__BackingField: []
   <RollAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 555f697ff0bc646ba89da156d298fe82, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.48333332
+        EndTimeNormalized: 0.75
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.2
+        EndTimeNormalized: 0.78333336
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.81666666
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.76666665
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.21666667
+        EndTimeNormalized: 0.21666667
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.23333333
+        EndTimeNormalized: 0.23333333
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.3
+        EndTimeNormalized: 0.3
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.73333335
+        EndTimeNormalized: 0.7416667
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -195,6 +339,78 @@ MonoBehaviour:
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
   <RollAttackStrong>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 555f697ff0bc646ba89da156d298fe82, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.48333332
+        EndTimeNormalized: 0.75
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.2
+        EndTimeNormalized: 0.78333336
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.81666666
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.76666665
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.21666667
+        EndTimeNormalized: 0.21666667
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.23333333
+        EndTimeNormalized: 0.23333333
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.3
+        EndTimeNormalized: 0.3
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.73333335
+        EndTimeNormalized: 0.7416667
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -285,6 +501,78 @@ MonoBehaviour:
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
   <RunAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.7321428
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.6071428
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.7321428
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.58928573
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.3035714
+        EndTimeNormalized: 0.33928573
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -348,6 +636,78 @@ MonoBehaviour:
       <DamageMultiplier>k__BackingField: 1
       <PoiseDamage>k__BackingField: 1
   <RunAttackStrong>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.7608696
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.73188406
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.73913044
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.58695656
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.2826087
+        EndTimeNormalized: 0.34057972
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -454,6 +814,51 @@ MonoBehaviour:
     _NormalizedStartTime: NaN
   <CanParry>k__BackingField: 0
   <Parry>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 0}
+      Speed: 1
+      FlagEvents:
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 1
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0
+        EndTimeNormalized: 1
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 1
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 1
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0
+        LayerIndex: 2
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents: []
+      LayerNames:
+      - StateLocked
+      - Combo
+      - Markers
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -486,6 +891,78 @@ MonoBehaviour:
     <HitConfigs>k__BackingField: []
   <CanRiposte>k__BackingField: 0
   <RiposteAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.3046875
+        EndTimeNormalized: 0.5546875
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.28515625
+        EndTimeNormalized: 0.58984375
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.9101562
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.46484372
+        EndTimeNormalized: 0.99999994
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.28515625
+        EndTimeNormalized: 0.28515625
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.30468747
+        EndTimeNormalized: 0.30468747
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.22265624
+        EndTimeNormalized: 0.22265624
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.22851561
+        EndTimeNormalized: 0.23046874
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:
@@ -542,6 +1019,78 @@ MonoBehaviour:
   <CanBackstab>k__BackingField: 0
   <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
   <BackstabAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.3046875
+        EndTimeNormalized: 0.5546875
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.28515625
+        EndTimeNormalized: 0.58984375
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.9101562
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.46484372
+        EndTimeNormalized: 0.99999994
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.28515625
+        EndTimeNormalized: 0.28515625
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.30468747
+        EndTimeNormalized: 0.30468747
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.22265624
+        EndTimeNormalized: 0.22265624
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 0
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.22851561
+        EndTimeNormalized: 0.23046874
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:

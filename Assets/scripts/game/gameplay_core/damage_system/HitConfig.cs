@@ -5,13 +5,10 @@ using UnityEngine;
 namespace game.gameplay_core.damage_system
 {
 	[Serializable]
-	public class HitConfig
+	public class HitConfig : IHitConfig
 	{
 		[field: SerializeField]
 		public List<bool> InvolvedColliders { get; set; } = new() { true, false, false };
-
-		[field: SerializeField]
-		public Vector2 Timing { get; set; }
 
 		[field: SerializeField]
 		public bool FriendlyFire { get; set; }
@@ -21,5 +18,8 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public float PoiseDamage { get; set; } = 1;
+
+		public float StartTime { get; set; }
+		public float EndTime { get; set; }
 	}
 }

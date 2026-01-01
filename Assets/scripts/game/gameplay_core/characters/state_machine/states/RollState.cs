@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
+	using game.gameplay_core.characters.config.animation;
+
 	public class RollState : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenLockKey = nameof(RollState);
@@ -20,7 +22,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
-		public bool CanSwitchToAttack => _context.Config.Roll.ExitToRollAttackTiming.Contains(NormalizedTime);
+		public bool CanSwitchToAttack => _context.Config.Roll.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.TimingExitToAttack, NormalizedTime);
 
 		public RollState(CharacterContext context) : base(context)
 		{
@@ -106,7 +108,9 @@ namespace game.gameplay_core.characters.state_machine.states
 				IsComplete = true;
 			}
 
-			if(_config.RollInvulnerabilityTiming.Contains(NormalizedTime))
+			var isInvulnerable = _config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.Invulnerability, NormalizedTime);
+
+			if(isInvulnerable)
 			{
 				if(!_staminaSpent)
 				{
@@ -121,7 +125,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
 			}
 
-			if(_config.BodyAttackTiming.Contains(NormalizedTime))
+			if(_config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.BodyAttack, NormalizedTime))
 			{
 				_context.BodyAttackView.CastRollAttack();
 			}

@@ -39,11 +39,11 @@ namespace game.gameplay_core.characters.state_machine.states
 				Duration = _parryConfig.Duration;
 
 				_hitsData.Clear();
-				for(var i = 0; i < _parryConfig.HitConfigs.Count; i++)
+				foreach (var hitEvent in _parryConfig.AnimationConfig.GetHitEvents())
 				{
 					_hitsData.Add(new HitData
 					{
-						Config = _parryConfig.HitConfigs[i]
+						Config = hitEvent
 					});
 				}
 
@@ -75,9 +75,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			foreach(var hitData in _hitsData)
 			{
-				var hitTiming = hitData.Config.Timing;
-
-				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+				if(!hitData.IsStarted && NormalizedTime >= hitData.Config.StartTime)
 				{
 					hitData.IsStarted = true;
 				}
@@ -87,7 +85,7 @@ namespace game.gameplay_core.characters.state_machine.states
 					IsInActiveFrames = true;
 					hasActiveHit = true;
 
-					if(NormalizedTime >= hitTiming.y)
+					if(NormalizedTime >= hitData.Config.EndTime)
 					{
 						hitData.IsEnded = true;
 					}

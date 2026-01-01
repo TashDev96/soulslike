@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.config.animation
 {
+	using game.gameplay_core.damage_system;
+
 	[Serializable]
-	public class AnimationEventHit : AnimationEventBase
+	public class AnimationEventHit : AnimationEventBase, IHitConfig
 	{
 		[field: SerializeField]
 		public List<bool> InvolvedColliders { get; set; } = new() { true, false, false };
@@ -18,5 +20,8 @@ namespace game.gameplay_core.characters.config.animation
 
 		[field: SerializeField]
 		public float PoiseDamage { get; set; } = 1;
+
+		float IHitConfig.StartTime => StartTimeNormalized;
+		float IHitConfig.EndTime => EndTimeNormalized;
 	}
 }

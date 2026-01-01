@@ -13,6 +13,45 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
   Roll:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: New Flag
+        StartTimeNormalized: 0.1392812
+        EndTimeNormalized: 0.606748
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 5
+      - Name: New Flag
+        StartTimeNormalized: 0.08928572
+        EndTimeNormalized: 0.5357143
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 3
+      - Name: New Flag
+        StartTimeNormalized: 0.6785715
+        EndTimeNormalized: 0.6964285
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 4
+      - Name: New Flag
+        StartTimeNormalized: 0.3392857
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 0
+      HitEvents: []
+      LayerNames:
+      - Invincible
+      - Attack
+      - Combo
+      - Rotation
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
     <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}

@@ -18,7 +18,7 @@ namespace game.gameplay_core.damage_system
 
 		private float _speed;
 		private float _baseDamage;
-		private HitConfig _hitConfig;
+		private IHitConfig _hitConfig;
 		private CharacterContext _casterContext;
 		private int _deflectionRating;
 		private float _lifetime;
@@ -249,7 +249,7 @@ namespace game.gameplay_core.damage_system
 	{
 		public float Speed;
 		public float BaseDamage;
-		public HitConfig HitConfig;
+		public IHitConfig HitConfig;
 		public CharacterContext CasterContext;
 		public int DeflectionRating;
 		public Vector3 SpawnPosition;

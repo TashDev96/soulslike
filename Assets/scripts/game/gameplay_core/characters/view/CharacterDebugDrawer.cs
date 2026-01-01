@@ -14,6 +14,8 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.view
 {
+	using game.gameplay_core.characters.config.animation;
+
 	[Serializable]
 	public class CharacterDebugDrawer : MonoBehaviour
 	{
@@ -58,14 +60,18 @@ namespace game.gameplay_core.characters.view
 			_attackIndex++;
 			_comboTriggered = false;
 			var line = _graphDrawer.AddLine(_attackIndex.ToString());
+			
+			float start = 0, end = 0;
+			currentAttackConfig.AnimationConfig.GetEventRange(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, out start, out end);
+			
 			line.AddRange(new[]
 			{
 				new GraphPoint(0, AttackGraphY),
-				new GraphPoint(currentAttackConfig.ExitToComboTime.x * currentAttackConfig.Duration, AttackGraphY)
+				new GraphPoint(start * currentAttackConfig.Duration, AttackGraphY)
 				{
 					Color = Color.green
 				},
-				new GraphPoint(currentAttackConfig.ExitToComboTime.y * currentAttackConfig.Duration, AttackGraphY),
+				new GraphPoint(end * currentAttackConfig.Duration, AttackGraphY),
 				new GraphPoint(currentAttackConfig.Duration, AttackGraphY)
 			});
 		}

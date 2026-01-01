@@ -7,9 +7,13 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.config
 {
+	using game.gameplay_core.characters.config.animation;
+
 	[Serializable]
 	public class RollConfig
 	{
+		[field: SerializeField]
+		public AnimationConfig AnimationConfig { get; private set; } = new();
 		[field: SerializeField]
 		public AnimationClip ForwardAnimation { get; private set; }
 		[field: SerializeField]

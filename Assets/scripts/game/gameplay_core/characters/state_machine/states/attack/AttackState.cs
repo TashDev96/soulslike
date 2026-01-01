@@ -11,6 +11,8 @@ using Object = UnityEngine.Object;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
+	using game.gameplay_core.characters.config.animation;
+
 	public class AttackState : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "AttackState";
@@ -48,7 +50,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			base.Update(deltaTime);
 
-			if(_context.InputData.HasDirectionInput && !_currentAttackConfig.RotationDisabledTime.Contains(NormalizedTime))
+			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
@@ -64,9 +67,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				foreach(var hitData in _hitsData)
 				{
-					var hitTiming = hitData.Config.Timing;
+					var hitTimingStart = hitData.Config.StartTime;
 
-					if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+					if(!hitData.IsStarted && NormalizedTime >= hitTimingStart)
 					{
 						hitData.IsStarted = true;
 						hitData.IsEnded = true;
@@ -91,9 +94,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				foreach(var hitData in _hitsData)
 				{
-					var hitTiming = hitData.Config.Timing;
+					var hitTimingStart = hitData.Config.StartTime;
 
-					if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+					if(!hitData.IsStarted && NormalizedTime >= hitTimingStart)
 					{
 						hitData.IsStarted = true;
 						if(!_staminaSpent)
@@ -114,7 +117,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 							}
 						}
 
-						if(NormalizedTime >= hitTiming.y)
+						if(NormalizedTime >= hitData.Config.EndTime)
 						{
 							hitData.IsEnded = true;
 						}
@@ -135,7 +138,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			var deflectedByHandleCast = false;
-			if(_stage == AttackStage.Windup && NormalizedTime > _currentAttackConfig.StartHandleObstacleCastTime)
+			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.StartHandleObstacleCast) ?? 0;
+			if(_stage == AttackStage.Windup && NormalizedTime > handleCastTime)
 			{
 				var interpolatedHandleCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Handle);
 				while(interpolatedHandleCaster.MoveNext() && !deflectedByHandleCast)
@@ -160,7 +164,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				IsComplete = true;
 			}
 
-			if(_currentAttackConfig.LockedStateTime.Contains(NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime))
 			{
 				_framesToUnlockWalk = FramesToUnlockWalkAfterStateUnlocked;
 			}
@@ -170,15 +174,17 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			void UpdateStaminaRegenLock()
 			{
+				var disableRegen = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled, NormalizedTime);
+
 				if(!_staminaRegenDisabled)
 				{
-					if(_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+					if(disableRegen)
 					{
 						_staminaRegenDisabled = true;
 						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
-				else if(!_currentAttackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				else if(!disableRegen)
 				{
 					_staminaRegenDisabled = false;
 					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
@@ -206,7 +212,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			//_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
 
-			if(_currentAttackConfig.ExitToComboTime.Contains(NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, NormalizedTime))
 			{
 				_comboCounter++;
 				SetEnterParams(nextCommand is CharacterCommand.StrongAttack ? AttackType.Strong : AttackType.Regular);
@@ -233,7 +239,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 			}
 
-			return !_currentAttackConfig.LockedStateTime.Contains(NormalizedTime);
+			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
 		}
 
 		public void SetEnterParams(AttackType attackType)
@@ -250,11 +256,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			_staminaSpent = false;
 			_projectileSpawned = false;
 			_hitsData.Clear();
-			for(var i = 0; i < _currentAttackConfig.HitConfigs.Count; i++)
+
+			foreach(var hitEvent in _currentAttackConfig.AnimationConfig.GetHitEvents())
 			{
 				_hitsData.Add(new HitData
 				{
-					Config = _currentAttackConfig.HitConfigs[i]
+					Config = hitEvent
 				});
 			}
 
@@ -262,13 +269,15 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_attackType.IsRollAttack())
 			{
-				SetAttackInitialTime(_currentAttackConfig.EnterFromRollTime);
+				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromRoll) ?? 0;
+				SetAttackInitialTime(startTime);
 			}
 			else
 			{
 				if(_comboCounter > 0)
 				{
-					SetAttackInitialTime(_currentAttackConfig.EnterComboTime);
+					var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromCombo) ?? 0;
+					SetAttackInitialTime(startTime);
 				}
 				else
 				{
@@ -289,7 +298,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 		}
 
-		private void SpawnProjectile(HitConfig hitConfig)
+		private void SpawnProjectile(IHitConfig hitConfig)
 		{
 			var weapon = _context.RightWeapon.Value;
 			var weaponConfig = weapon.Config;

@@ -15,37 +15,14 @@ MonoBehaviour:
   Config:
     Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
     Speed: 1
-    Events:
-    - rid: -2
-    - rid: -2
-    - rid: -2
-    - rid: 3111629526920593617
-    - rid: 3111629526920593618
+    FlagEvents:
+    - Name: New Flag
+      StartTimeNormalized: 0
+      EndTimeNormalized: 0.8320464
+      LayerIndex: 0
+      ClipDuration: 1.8666667
+      Flag: 3
+    HitEvents: []
     LayerNames:
     - Default
     - Attack
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 3111629526920593617
-      type: {class: AnimationEventBase, ns: game.gameplay_core.characters.config.animation, asm: GameAssembly}
-      data:
-        Name: New AnimationEventBase
-        StartTimeNormalized: 6.9524647e-10
-        EndTimeNormalized: 0.06545196
-        LayerIndex: 0
-        ClipDuration: 1.8666667
-    - rid: 3111629526920593618
-      type: {class: AnimationEventHit, ns: game.gameplay_core.characters.config.animation, asm: GameAssembly}
-      data:
-        Name: Hit1
-        StartTimeNormalized: 0.12120762
-        EndTimeNormalized: 0.239393
-        LayerIndex: 1
-        ClipDuration: 1.8666667
-        <InvolvedColliders>k__BackingField: 010000
-        <FriendlyFire>k__BackingField: 0
-        <DamageMultiplier>k__BackingField: 1
-        <PoiseDamage>k__BackingField: 1

@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
+	using game.gameplay_core.characters.config.animation;
 	public class CriticalAttackStateBase : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "CriticalAttackState";
@@ -39,11 +40,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			_staminaSpent = false;
 			_hitsData.Clear();
-			for(var i = 0; i < _attackConfig.HitConfigs.Count; i++)
+			foreach (var hitEvent in _attackConfig.AnimationConfig.GetHitEvents())
 			{
 				_hitsData.Add(new HitData
 				{
-					Config = _attackConfig.HitConfigs[i]
+					Config = hitEvent
 				});
 			}
 
@@ -57,7 +58,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		{
 			base.Update(deltaTime);
 
-			if(_context.InputData.HasDirectionInput && !_attackConfig.RotationDisabledTime.Contains(NormalizedTime))
+			var rotationDisabled = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
@@ -68,9 +70,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			foreach(var hitData in _hitsData)
 			{
-				var hitTiming = hitData.Config.Timing;
-
-				if(!hitData.IsStarted && NormalizedTime >= hitTiming.x)
+				if(!hitData.IsStarted && NormalizedTime >= hitData.Config.StartTime)
 				{
 					hitData.IsStarted = true;
 					if(!_staminaSpent)
@@ -81,7 +81,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 					ApplyGuaranteedDamage(hitData);
 				}
 
-				if(hitData.IsStarted && NormalizedTime >= hitTiming.y)
+				if(hitData.IsStarted && NormalizedTime >= hitData.Config.EndTime)
 				{
 					hitData.IsEnded = true;
 				}
@@ -96,15 +96,16 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			void UpdateStaminaRegenLock()
 			{
+				var disableRegen = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled, NormalizedTime);
 				if(!_staminaRegenDisabled)
 				{
-					if(_attackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+					if(disableRegen)
 					{
 						_staminaRegenDisabled = true;
 						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
-				else if(!_attackConfig.StaminaRegenDisabledTime.Contains(NormalizedTime))
+				else if(!disableRegen)
 				{
 					_staminaRegenDisabled = false;
 					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
@@ -125,12 +126,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			var result = !_attackConfig.LockedStateTime.Contains(NormalizedTime);
-			if(result)
+			var stateLocked = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
+			if(!stateLocked)
 			{
 				Debug.LogError(NormalizedTime);
 			}
-			return !_attackConfig.LockedStateTime.Contains(NormalizedTime);
+			return !stateLocked;
 		}
 
 		private void ApplyGuaranteedDamage(HitData hitData)
