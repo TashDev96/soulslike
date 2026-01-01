@@ -69,6 +69,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			CharacterDomain selectedTarget = null;
 			var minDistance = float.MaxValue;
+			var maxDistance = 30f;
 
 			foreach(var character in _context.AllCharacters)
 			{
@@ -78,7 +79,7 @@ namespace game.gameplay_core.characters.logic
 				}
 
 				var distance = (_context.CharacterTransform.Position - character.ExternalData.Transform.Position).sqrMagnitude;
-				if(distance < minDistance)
+				if(distance < minDistance && distance < maxDistance * maxDistance)
 				{
 					minDistance = distance;
 					selectedTarget = character;

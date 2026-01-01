@@ -132,10 +132,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
 			var stateLocked = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
-			if(!stateLocked)
-			{
-				Debug.LogError(NormalizedTime);
-			}
 			return !stateLocked;
 		}
 
