@@ -40,8 +40,8 @@ MonoBehaviour:
         ClipDuration: 0.93333334
         Flag: 4
       - Name: New Flag
-        StartTimeNormalized: 0.3392857
-        EndTimeNormalized: 1
+        StartTimeNormalized: 0.37421036
+        EndTimeNormalized: 0.7031406
         LayerIndex: 3
         IsSingleFrame: 0
         ClipDuration: 0.93333334

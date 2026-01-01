@@ -59,6 +59,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 			base.Update(deltaTime);
 
 			var rotationDisabled = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+
+			if(rotationDisabled)
+			{
+				_context.LockOnLogic.DisableRotationForThisFrame = true;
+			}
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
