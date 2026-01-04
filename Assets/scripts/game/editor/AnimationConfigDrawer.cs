@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using dream_lib.src.utils.editor;
 using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
-using dream_lib.src.utils.editor;
-using dream_lib.src.extensions;
 
 namespace game.editor
 {
@@ -22,6 +21,10 @@ namespace game.editor
 		private const float DefaultFrameWidth = 10f;
 		private const float MinFrameWidth = 1f;
 		private const float MaxFrameWidth = 100f;
+
+		// 0 = Flag, 1 = Hit
+		private const int TypeFlag = 0;
+		private const int TypeHit = 1;
 
 		private static readonly Dictionary<string, Vector2> _scrollPositions = new();
 		private static readonly Dictionary<string, bool> _showSecondsMap = new();
@@ -43,10 +46,6 @@ namespace game.editor
 
 		private AnimationConfig _config;
 
-		// 0 = Flag, 1 = Hit
-		private const int TypeFlag = 0;
-		private const int TypeHit = 1;
-
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
@@ -56,17 +55,17 @@ namespace game.editor
 			var flagEventsProp = property.FindPropertyRelative("FlagEvents");
 			var hitEventsProp = property.FindPropertyRelative("HitEvents");
 			var layerNamesProp = property.FindPropertyRelative("LayerNames");
-			
+
 			_config = GetValue(property) as AnimationConfig;
-			
-			if (_config == null)
+
+			if(_config == null)
 			{
 				EditorGUILayout.HelpBox("Could not retrieve AnimationConfig instance.", MessageType.Warning);
 				EditorGUI.EndProperty();
 				return;
 			}
 
-			if (!DrawHeader(clipProp, speedProp, out var clip, out var speed))
+			if(!DrawHeader(clipProp, speedProp, out var clip, out var speed))
 			{
 				EditorGUI.EndProperty();
 				return;
@@ -82,9 +81,12 @@ namespace game.editor
 
 			var target = property.serializedObject.targetObject;
 			var targetKey = AssetDatabase.GetAssetPath(target);
-			if (string.IsNullOrEmpty(targetKey)) targetKey = target.GetInstanceID().ToString();
+			if(string.IsNullOrEmpty(targetKey))
+			{
+				targetKey = target.GetInstanceID().ToString();
+			}
 			var uniquePath = targetKey + "_" + path;
-			
+
 			var previewDrawer = GetPreviewDrawer(uniquePath, clip);
 
 			// Timeline UI
@@ -181,7 +183,10 @@ namespace game.editor
 		private void DrawSelectedEventInspector(SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, string path)
 		{
 			var packedId = _selectedEventMap.ContainsKey(path) ? _selectedEventMap[path] : -1;
-			if (packedId == -1) return;
+			if(packedId == -1)
+			{
+				return;
+			}
 
 			var typeId = packedId >> 16;
 			var index = packedId & 0xFFFF;
@@ -189,18 +194,18 @@ namespace game.editor
 			SerializedProperty activeListChangeCheck = null;
 			SerializedProperty eventProp = null;
 
-			if (typeId == TypeFlag && index < flagEventsProp.arraySize)
+			if(typeId == TypeFlag && index < flagEventsProp.arraySize)
 			{
 				eventProp = flagEventsProp.GetArrayElementAtIndex(index);
 				activeListChangeCheck = flagEventsProp;
 			}
-			else if (typeId == TypeHit && index < hitEventsProp.arraySize)
+			else if(typeId == TypeHit && index < hitEventsProp.arraySize)
 			{
 				eventProp = hitEventsProp.GetArrayElementAtIndex(index);
 				activeListChangeCheck = hitEventsProp;
 			}
 
-			if (eventProp != null)
+			if(eventProp != null)
 			{
 				EditorGUILayout.Space();
 				EditorGUILayout.LabelField("Selected Event Settings", EditorStyles.boldLabel);
@@ -210,7 +215,7 @@ namespace game.editor
 				if(targetElement != null)
 				{
 					targetElement.ClipDuration = _config.Duration;
-					
+
 					if(!_propertyTreeMap.TryGetValue(path, out var tree) || !_targetObjectMap.TryGetValue(path, out var oldTarget) || oldTarget != targetElement)
 					{
 						tree?.Dispose();
@@ -268,7 +273,7 @@ namespace game.editor
 			while(type != null)
 			{
 				var field = type.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				if (field == null)
+				if(field == null)
 				{
 					// For auto-properties, the backing field is named <Name>k__BackingField
 					field = type.GetField($"<{name}>k__BackingField", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -331,25 +336,28 @@ namespace game.editor
 				{
 					var layer = i;
 					var layerName = layerNamesProp.GetArrayElementAtIndex(layer).stringValue;
-					
-					if (layerName == AnimationEventLayer.Hits.ToString())
+
+					if(layerName == AnimationEventLayer.Hits.ToString())
 					{
 						AddEvent(hitEventsProp, layer, 0, 0.1f, typeof(AnimationEventHit), AnimationEventLayer.Hits);
 					}
-					else if (layerName == AnimationEventLayer.Combo.ToString())
+					else if(layerName == AnimationEventLayer.Combo.ToString())
 					{
 						var menu = new GenericMenu();
-						menu.AddItem(new GUIContent("Exit To Next Combo"), false, () => {
+						menu.AddItem(new GUIContent("Exit To Next Combo"), false, () =>
+						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
 							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo;
 							evt.serializedObject.ApplyModifiedProperties();
 						});
-						menu.AddItem(new GUIContent("Enter From Combo"), false, () => {
+						menu.AddItem(new GUIContent("Enter From Combo"), false, () =>
+						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
 							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingEnterFromCombo;
 							evt.serializedObject.ApplyModifiedProperties();
 						});
-						menu.AddItem(new GUIContent("Enter From Roll"), false, () => {
+						menu.AddItem(new GUIContent("Enter From Roll"), false, () =>
+						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
 							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingEnterFromRoll;
 							evt.serializedObject.ApplyModifiedProperties();
@@ -358,7 +366,7 @@ namespace game.editor
 					}
 					else
 					{
-						if (Enum.TryParse<AnimationEventLayer>(layerName, out var layerType))
+						if(Enum.TryParse<AnimationEventLayer>(layerName, out var layerType))
 						{
 							AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), layerType);
 						}
@@ -386,7 +394,7 @@ namespace game.editor
 
 			// Events
 			HandleEventsInteraction(path, flagEventsProp, hitEventsProp, layerNamesProp.arraySize, frameWidth, maxFrame);
-			
+
 			// Timeline Playhead Handle
 			DrawTimelineHandle(previewDrawer, totalTimelineWidth, timelineViewHeight, frameWidth, maxFrame);
 
@@ -403,14 +411,14 @@ namespace game.editor
 		{
 			var e = Event.current;
 			var x = previewDrawer.Time * totalWidth;
-			
+
 			// Ruler handle rect
 			var handleRect = new Rect(x - 5, 0, 10, TimelineHeaderHeight);
 			var rulerRect = new Rect(0, 0, totalWidth, TimelineHeaderHeight);
 			EditorGUIUtility.AddCursorRect(handleRect, MouseCursor.SplitResizeLeftRight);
 
 			// Handle interaction
-			if (e.type == EventType.MouseDown && rulerRect.Contains(e.mousePosition) && e.button == 0)
+			if(e.type == EventType.MouseDown && rulerRect.Contains(e.mousePosition) && e.button == 0)
 			{
 				previewDrawer.Time = Mathf.Clamp01(e.mousePosition.x / totalWidth);
 				_isTimelineHandleDragging = true;
@@ -418,15 +426,15 @@ namespace game.editor
 				e.Use();
 			}
 
-			if (_isTimelineHandleDragging)
+			if(_isTimelineHandleDragging)
 			{
-				if (e.type == EventType.MouseDrag)
+				if(e.type == EventType.MouseDrag)
 				{
 					previewDrawer.Time = Mathf.Clamp01(e.mousePosition.x / totalWidth);
 					GUI.changed = true;
 					e.Use();
 				}
-				else if (e.type == EventType.MouseUp)
+				else if(e.type == EventType.MouseUp)
 				{
 					_isTimelineHandleDragging = false;
 					e.Use();
@@ -445,26 +453,26 @@ namespace game.editor
 			// Draw arrow-shaped handle cap
 			var handleHeight = TimelineHeaderHeight;
 			var handleWidth = 12f;
-			Vector3[] handlePoints = new Vector3[]
+			var handlePoints = new[]
 			{
-				new Vector3(x - handleWidth/2, 0, 0),
-				new Vector3(x + handleWidth/2, 0, 0),
-				new Vector3(x + handleWidth/2, handleHeight * 0.7f, 0),
+				new Vector3(x - handleWidth / 2, 0, 0),
+				new Vector3(x + handleWidth / 2, 0, 0),
+				new Vector3(x + handleWidth / 2, handleHeight * 0.7f, 0),
 				new Vector3(x, handleHeight, 0),
-				new Vector3(x - handleWidth/2, handleHeight * 0.7f, 0)
+				new Vector3(x - handleWidth / 2, handleHeight * 0.7f, 0)
 			};
-			
+
 			// Fill
 			Handles.color = handleColor;
 			Handles.DrawAAConvexPolygon(handlePoints);
-			
+
 			// Outline
 			Handles.color = outlineColor;
-			for (int i = 0; i < handlePoints.Length; i++)
+			for(var i = 0; i < handlePoints.Length; i++)
 			{
 				Handles.DrawLine(handlePoints[i], handlePoints[(i + 1) % handlePoints.Length]);
 			}
-			
+
 			Handles.EndGUI();
 		}
 
@@ -496,7 +504,7 @@ namespace game.editor
 			}
 
 			// Force draw last frame if not already drawn
-			if (maxFrame % step != 0)
+			if(maxFrame % step != 0)
 			{
 				DrawGridLabel(maxFrame, maxFrame, height, frameWidth, path, showSeconds);
 			}
@@ -522,7 +530,7 @@ namespace game.editor
 
 			var labelWidth = 50f;
 			var labelRect = new Rect(x, 0, labelWidth, TimelineHeaderHeight);
-			if (f == maxFrame && f > 0)
+			if(f == maxFrame && f > 0)
 			{
 				labelRect.x -= labelWidth;
 				var style = new GUIStyle(EditorStyles.miniLabel);
@@ -583,28 +591,37 @@ namespace game.editor
 				{
 					var eventProp = listProp.GetArrayElementAtIndex(i);
 					var layerProp = eventProp.FindPropertyRelative("LayerIndex");
-					if (layerProp == null) continue;
-					
+					if(layerProp == null)
+					{
+						continue;
+					}
+
 					var layer = layerProp.intValue;
-					if(layer >= layerCount) continue;
+					if(layer >= layerCount)
+					{
+						continue;
+					}
 
 					var startProp = eventProp.FindPropertyRelative("StartTimeNormalized");
 					var endProp = eventProp.FindPropertyRelative("EndTimeNormalized");
 					var nameProp = eventProp.FindPropertyRelative("Name");
 
-					if (startProp == null || endProp == null || nameProp == null) continue;
-					
+					if(startProp == null || endProp == null || nameProp == null)
+					{
+						continue;
+					}
+
 					var targetElement = GetValue(eventProp) as AnimationEventBase;
-					
+
 					var startTime = startProp.floatValue;
 					var endTime = endProp.floatValue;
 					var name = targetElement != null ? targetElement.ToString() : nameProp.stringValue;
 
 					var isSingleFrame = targetElement != null && targetElement.IsSingleFrame;
-					if (isSingleFrame)
+					if(isSingleFrame)
 					{
 						var oneFrame = 1.0f / (totalEditorFrames > 0 ? totalEditorFrames : 1);
-						if (endTime != startTime + oneFrame)
+						if(endTime != startTime + oneFrame)
 						{
 							endTime = startTime + oneFrame;
 							endProp.floatValue = endTime;
@@ -620,58 +637,64 @@ namespace game.editor
 					var isRightEarHidden = isSingleFrame || endTime >= 0.9999f;
 					var earVisualWidth = 4f;
 					var earHitWidth = 14f;
-					
+
 					var leftEarRect = new Rect(rect.x - 2, rect.y, earVisualWidth, rect.height / 2f);
 					var rightEarRect = new Rect(rect.xMax - 2, rect.y, earVisualWidth, rect.height / 2f);
-					
+
 					var leftEarHitRect = new Rect(rect.x - earHitWidth / 2f, rect.y, earHitWidth, rect.height / 2f);
 					var rightEarHitRect = new Rect(rect.xMax - earHitWidth / 2f, rect.y, earHitWidth, rect.height / 2f);
 
 					var currentPackedId = (typeId << 16) | i;
 					var isSelected = selectedPackedId == currentPackedId;
 					var isDragged = _draggedEventPackedId == currentPackedId;
-					
+
 					// Different colors for different types?
-					var baseColor = isSelected || isDragged ? new Color(0.3f, 0.6f, 1f, 0.8f) : 
-								   (typeId == TypeHit ? new Color(0.8f, 0.3f, 0.3f, 0.8f) : new Color(0.2f, 0.2f, 0.2f, 0.8f));
-					
+					var baseColor = isSelected || isDragged ? new Color(0.3f, 0.6f, 1f, 0.8f) :
+						typeId == TypeHit ? new Color(0.8f, 0.3f, 0.3f, 0.8f) : new Color(0.2f, 0.2f, 0.2f, 0.8f);
+
 					var earColor = isSelected || isDragged ? new Color(0.5f, 0.8f, 1f, 1f) : new Color(0.5f, 0.5f, 0.5f, 1f);
 
 					GUI.color = baseColor;
 					GUI.Box(rect, "", EditorStyles.helpBox);
-					
+
 					var leftEarColor = earColor;
-					if (isLeftEarHidden) leftEarColor.a = 0;
+					if(isLeftEarHidden)
+					{
+						leftEarColor.a = 0;
+					}
 					GUI.color = leftEarColor;
 					GUI.Box(leftEarRect, "", "minibutton");
 
 					var rightEarColor = earColor;
-					if (isRightEarHidden) rightEarColor.a = 0;
+					if(isRightEarHidden)
+					{
+						rightEarColor.a = 0;
+					}
 					GUI.color = rightEarColor;
 					GUI.Box(rightEarRect, "", "minibutton");
 
 					GUI.color = Color.white;
 
-					if (!isSingleFrame && leftEarHitRect.Contains(e.mousePosition))
+					if(!isSingleFrame && leftEarHitRect.Contains(e.mousePosition))
 					{
 						hoveredPackedId = currentPackedId;
 						hoveredType = 1;
 					}
-					else if (!isSingleFrame && rightEarHitRect.Contains(e.mousePosition))
+					else if(!isSingleFrame && rightEarHitRect.Contains(e.mousePosition))
 					{
 						hoveredPackedId = currentPackedId;
 						hoveredType = 2;
 					}
-					else if (rect.Contains(e.mousePosition))
+					else if(rect.Contains(e.mousePosition))
 					{
 						hoveredPackedId = currentPackedId;
 						hoveredType = 0;
 					}
 
 					// Context click
-					if (e.type == EventType.ContextClick && (rect.Contains(e.mousePosition) || 
-						leftEarHitRect.Contains(e.mousePosition) || 
-						rightEarHitRect.Contains(e.mousePosition)))
+					if(e.type == EventType.ContextClick && (rect.Contains(e.mousePosition) ||
+					                                        leftEarHitRect.Contains(e.mousePosition) ||
+					                                        rightEarHitRect.Contains(e.mousePosition)))
 					{
 						var menu = new GenericMenu();
 						var index = i;
@@ -684,7 +707,7 @@ namespace game.editor
 						menu.ShowAsContext();
 						e.Use();
 					}
-					
+
 					if(isSelected)
 					{
 						// Highlight
@@ -694,8 +717,8 @@ namespace game.editor
 					var labelContent = new GUIContent(name);
 					var labelWidth = labelStyle.CalcSize(labelContent).x;
 					var labelRect = new Rect(rect.x + 5, rect.y, rect.width - 10, rect.height);
-					
-					if (hoveredPackedId == currentPackedId && rect.width < labelWidth + 10)
+
+					if(hoveredPackedId == currentPackedId && rect.width < labelWidth + 10)
 					{
 						labelRect.width = labelWidth + 10;
 						var bgRect = labelRect;
@@ -705,7 +728,7 @@ namespace game.editor
 						GUI.Box(bgRect, "", EditorStyles.helpBox);
 						GUI.color = Color.white;
 					}
-					
+
 					GUI.Label(labelRect, labelContent, labelStyle);
 				}
 			}
@@ -714,7 +737,7 @@ namespace game.editor
 			DrawAndCheckIter(hitsProp, TypeHit);
 
 			// Cursor for hovered
-			if (hoveredPackedId != -1)
+			if(hoveredPackedId != -1)
 			{
 				var t = hoveredPackedId >> 16;
 				var idx = hoveredPackedId & 0xFFFF;
@@ -725,35 +748,41 @@ namespace game.editor
 					var startTime = p.FindPropertyRelative("StartTimeNormalized").floatValue;
 					var endTime = p.FindPropertyRelative("EndTimeNormalized").floatValue;
 					var layer = p.FindPropertyRelative("LayerIndex").intValue;
-					
+
 					var startPx = startTime * totalEditorFrames * frameWidth;
 					var endPx = endTime * totalEditorFrames * frameWidth;
 					var r = new Rect(startPx, TimelineHeaderHeight + layer * LayerHeight + 2, endPx - startPx, LayerHeight - 4);
-					
+
 					var targetElement = GetValue(p) as AnimationEventBase;
 					var isSingleFrame = targetElement != null && targetElement.IsSingleFrame;
-					
-					if (hoveredType == 1 && !isSingleFrame) 
+
+					if(hoveredType == 1 && !isSingleFrame)
+					{
 						EditorGUIUtility.AddCursorRect(new Rect(r.x - 7, r.y, 14, r.height / 2f), MouseCursor.ResizeHorizontal);
-					else if (hoveredType == 2 && !isSingleFrame) 
+					}
+					else if(hoveredType == 2 && !isSingleFrame)
+					{
 						EditorGUIUtility.AddCursorRect(new Rect(r.xMax - 7, r.y, 14, r.height / 2f), MouseCursor.ResizeHorizontal);
-					else 
+					}
+					else
+					{
 						EditorGUIUtility.AddCursorRect(r, MouseCursor.MoveArrow);
+					}
 				}
 			}
-			
+
 			// Dragging Logic
 			switch(e.type)
 			{
 				case EventType.MouseDown:
-					if (hoveredPackedId != -1 && e.button == 0)
+					if(hoveredPackedId != -1 && e.button == 0)
 					{
 						var t = hoveredPackedId >> 16;
 						var idx = hoveredPackedId & 0xFFFF;
 						var list = t == TypeFlag ? flagsProp : hitsProp;
 						var p = list.GetArrayElementAtIndex(idx);
 						var targetElement = GetValue(p) as AnimationEventBase;
-						if (targetElement != null && targetElement.IsSingleFrame && hoveredType != 0)
+						if(targetElement != null && targetElement.IsSingleFrame && hoveredType != 0)
 						{
 							return;
 						}
@@ -766,7 +795,7 @@ namespace game.editor
 						var startProp = p?.FindPropertyRelative("StartTimeNormalized");
 						var endProp = p?.FindPropertyRelative("EndTimeNormalized");
 
-						if (startProp != null && endProp != null)
+						if(startProp != null && endProp != null)
 						{
 							_dragInitialStartNormalized = startProp.floatValue;
 							_dragInitialEndNormalized = endProp.floatValue;
@@ -794,7 +823,7 @@ namespace game.editor
 						var idx = _draggedEventPackedId & 0xFFFF;
 						var list = t == TypeFlag ? flagsProp : hitsProp;
 
-						if(idx >= list.arraySize) 
+						if(idx >= list.arraySize)
 						{
 							_isDragging = false;
 							return;
@@ -803,23 +832,26 @@ namespace game.editor
 						var currentNormalized = e.mousePosition.x / (frameWidth * totalEditorFrames);
 						var delta = currentNormalized - _dragOffsetNormalized;
 
-						if (_dragType == 0 && !_dragIsVerticalLock)
+						if(_dragType == 0 && !_dragIsVerticalLock)
 						{
 							var totalDelta = e.mousePosition - _dragInitialMousePos;
-							if (Mathf.Abs(totalDelta.y) > 10f && Mathf.Abs(totalDelta.y) > Mathf.Abs(totalDelta.x) * 2f)
+							if(Mathf.Abs(totalDelta.y) > 10f && Mathf.Abs(totalDelta.y) > Mathf.Abs(totalDelta.x) * 2f)
 							{
 								_dragIsVerticalLock = true;
 							}
 						}
 
-						if (_dragIsVerticalLock) delta = 0;
+						if(_dragIsVerticalLock)
+						{
+							delta = 0;
+						}
 
 						var p = list.GetArrayElementAtIndex(idx);
 						var startProp = p?.FindPropertyRelative("StartTimeNormalized");
 						var endProp = p?.FindPropertyRelative("EndTimeNormalized");
 						var layerProp = p?.FindPropertyRelative("LayerIndex");
 
-						if (startProp == null || endProp == null)
+						if(startProp == null || endProp == null)
 						{
 							return;
 						}
@@ -841,7 +873,7 @@ namespace game.editor
 							startProp.floatValue = newStart;
 							endProp.floatValue = newEnd;
 
-							if (layerProp != null)
+							if(layerProp != null)
 							{
 								var newLayer = Mathf.FloorToInt((e.mousePosition.y - TimelineHeaderHeight) / LayerHeight);
 								layerProp.intValue = Mathf.Clamp(newLayer, 0, layerCount - 1);
@@ -868,27 +900,39 @@ namespace game.editor
 			}
 		}
 
-		private SerializedProperty AddEvent(SerializedProperty eventsProp, int layerIndex, float startTime, float duration, System.Type type, AnimationEventLayer layerCategory)
+		private SerializedProperty AddEvent(SerializedProperty eventsProp, int layerIndex, float startTime, float duration, Type type, AnimationEventLayer layerCategory)
 		{
 			eventsProp.InsertArrayElementAtIndex(eventsProp.arraySize);
 			var newEvent = eventsProp.GetArrayElementAtIndex(eventsProp.arraySize - 1);
-			
+
 			var nameProp = newEvent.FindPropertyRelative("Name");
 			var layerProp = newEvent.FindPropertyRelative("LayerIndex");
 			var startProp = newEvent.FindPropertyRelative("StartTimeNormalized");
 			var endProp = newEvent.FindPropertyRelative("EndTimeNormalized");
 
-			if (nameProp != null) nameProp.stringValue = "New " + (type?.Name.Replace("Animation", "").Replace("Event", "") ?? "Event");
-			if (layerProp != null) layerProp.intValue = layerIndex;
-			if (startProp != null) startProp.floatValue = startTime;
-			if (endProp != null) endProp.floatValue = startTime + duration;
+			if(nameProp != null)
+			{
+				nameProp.stringValue = "New " + (type?.Name.Replace("Animation", "").Replace("Event", "") ?? "Event");
+			}
+			if(layerProp != null)
+			{
+				layerProp.intValue = layerIndex;
+			}
+			if(startProp != null)
+			{
+				startProp.floatValue = startTime;
+			}
+			if(endProp != null)
+			{
+				endProp.floatValue = startTime + duration;
+			}
 
-			if (type == typeof(AnimationFlagEvent))
+			if(type == typeof(AnimationFlagEvent))
 			{
 				var flagProp = newEvent.FindPropertyRelative("Flag");
-				if (flagProp != null)
+				if(flagProp != null)
 				{
-					switch (layerCategory)
+					switch(layerCategory)
 					{
 						case AnimationEventLayer.RotationLocked: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.RotationLocked; break;
 						case AnimationEventLayer.StateLocked: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.StateLocked; break;
@@ -901,7 +945,7 @@ namespace game.editor
 					}
 				}
 			}
-			
+
 			eventsProp.serializedObject.ApplyModifiedProperties();
 			return newEvent;
 		}

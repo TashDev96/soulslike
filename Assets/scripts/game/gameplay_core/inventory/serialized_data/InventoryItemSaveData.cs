@@ -8,8 +8,9 @@ namespace game.gameplay_core.inventory.serialized_data
 	[Serializable]
 	public sealed class InventoryItemSaveData
 	{
-		[ValueDropdown("@ConfigsResolver.GetAllItemConfigs()")]
+		[ValueDropdown("@AddressableAssetNames.ItemConfigs")]
 		public string ConfigId;
+		public string UniqueId;
 		public bool IsInitialized;
 		[ShowIf(nameof(IsInitialized))]
 		public SerializableDictionary<string, string> ComponentsData = new();

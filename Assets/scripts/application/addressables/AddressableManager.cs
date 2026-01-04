@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Object = UnityEngine.Object;
 
 public enum AssetOwner
 {
 	Application,
 	Game,
+	CoreGame,
 	Location
 }
 
@@ -18,8 +20,22 @@ public static class AddressableManager
 	{
 		{ AssetOwner.Application, new List<string>() },
 		{ AssetOwner.Game, new List<string>() },
+		{ AssetOwner.CoreGame, new List<string>() },
 		{ AssetOwner.Location, new List<string>() }
 	};
+
+	public static async UniTask PreloadAssetsListAsync(string[] addresses, AssetOwner owner)
+	{
+		foreach(var address in addresses)
+		{
+			await LoadAssetAsync<Object>(address, owner);
+		}
+	}
+
+	public static async UniTask PreloadAssetAsync(string address, AssetOwner owner)
+	{
+		await LoadAssetAsync<Object>(address, owner);
+	}
 
 	public static async UniTask<T> LoadAssetAsync<T>(string address, AssetOwner owner)
 	{

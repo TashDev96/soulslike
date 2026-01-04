@@ -17,6 +17,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 1cc72ed40ea14401d9bdc3bc4992c15a, type: 2}
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      propertyPath: <InitialRightWeapon>k__BackingField
+      value: ZombieSwordConfig
+      objectReference: {fileID: 0}
+    - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _rotationSpeed._halfTurnDurationSeconds
       value: 1.5
       objectReference: {fileID: 0}
@@ -122,6 +126,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 483563225637759694}
+    - targetCorrespondingSourceObject: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2412503847255696516}
   m_SourcePrefab: {fileID: 100100000, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
@@ -130,6 +137,31 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
   m_PrefabInstance: {fileID: 3948280309709674056}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &483563225637759694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2805140959445292629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f26c3615764b0cba6edc91b93e1dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.inventory.NpcInventoryConfigView
+  <InventoryData>k__BackingField:
+    Items:
+    - ConfigId: ZombieSwordConfig
+      UniqueId: 123
+      IsInitialized: 0
+      ComponentsData:
+        _list: []
+        _keyCollision: 0
+    EquippedItems:
+      _list:
+      - Key: 2
+        Value: 123
+      _keyCollision: 0
 --- !u!114 &2412503847255696516
 MonoBehaviour:
   m_ObjectHideFlags: 0

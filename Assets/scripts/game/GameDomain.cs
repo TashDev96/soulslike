@@ -2,9 +2,12 @@ using application;
 using Cysharp.Threading.Tasks;
 using dream_lib.src.reactive;
 using game.gameplay_core;
+using game.gameplay_core.characters;
+using game.gameplay_core.debug;
 using game.gameplay_core.inventory;
 using game.ui;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace game
 {
@@ -29,8 +32,6 @@ namespace game
 		{
 			_inventoryDomain = new InventoryDomain();
 
-			await _inventoryDomain.Initialize(_sceneDebugMode);
-
 			_uiDomain = new UiDomain();
 
 			GameStaticContext.Instance = new GameStaticContext
@@ -38,19 +39,41 @@ namespace game
 				WorldToScreenUiParent = new ReactiveProperty<RectTransform>(),
 				MainCamera = new ReactiveProperty<Camera>(),
 				UiDomain = _uiDomain,
-				InventoryDomain = _inventoryDomain
+				InventoryDomain = _inventoryDomain,
+				ReloadLocation = new ReactiveCommand()
 			};
+
+			GameStaticContext.Instance.ReloadLocation.OnExecute += ReloadLocation;
 
 			await _uiDomain.Initialize();
 
 			if(_sceneDebugMode)
 			{
-				//TODO fake initialize meta game
+				//fake initialize meta game
+				var charDebugConfig = Object.FindAnyObjectByType<DebugSceneCharacterConfig>(FindObjectsInactive.Include);
+
 				_coreGameDomain = new CoreGameDomain();
+
+				var debugSaveData = new PlayerSaveData
+				{
+					InventoryData = charDebugConfig.InventoryData,
+					CurrentLocationId = "debug",
+					CharacterData = new CharacterSaveData()
+				};
+
+				GameStaticContext.Instance.SaveSlotId = "debug";
+				GameStaticContext.Instance.PlayerSave = debugSaveData;
+
+				await _inventoryDomain.Initialize(_sceneDebugMode);
+
 				await _coreGameDomain.PlayOnDebugLocation();
 			}
 
 			//TODO: open main menu
+		}
+
+		private void ReloadLocation()
+		{
 		}
 	}
 }

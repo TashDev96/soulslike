@@ -27,6 +27,11 @@ namespace game.gameplay_core
 
 #if UNITY_EDITOR
 
+		private void Awake()
+		{
+			FindObjectsOnScene();
+		}
+
 		[Button]
 		private void FindObjectsOnScene()
 		{

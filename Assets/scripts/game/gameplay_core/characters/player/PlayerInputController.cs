@@ -191,17 +191,11 @@ namespace game.gameplay_core.characters.player
 				return CharacterCommand.Parry;
 			}
 
-			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && HasParryWeapon())
+			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && _characterContext.InventoryLogic.CheckHasParryWeapon())
 			{
 				return CharacterCommand.Parry;
 			}
 			return CharacterCommand.None;
-		}
-
-		private bool HasParryWeapon()
-		{
-			var weapon = _characterContext.LeftWeapon.HasValue ? _characterContext.LeftWeapon.Value : _characterContext.RightWeapon.Value;
-			return weapon != null && weapon.Config.CanParry;
 		}
 
 		private enum RollDashInputState

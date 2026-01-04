@@ -1,6 +1,7 @@
 using System;
 using Animancer;
 using dream_lib.src.utils.data_types;
+using game.enums;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
@@ -8,10 +9,11 @@ using UnityEngine;
 
 namespace game.gameplay_core.inventory.item_configs
 {
+	[AddressableAssetTag(nameof(AddressableCollections.WeaponConfigs))]
 	[CreateAssetMenu(menuName = "Configs/WeaponConfig")]
 	public class WeaponItemConfig : BaseItemConfig
 	{
-		[field: ValueDropdown("@AddressableAssetNames.WeaponNames")]
+		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]
 		[field: SerializeField]
 		public string WeaponPrefabName { get; private set; }
 

@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using dream_lib.src.reactive;
-using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using game.gameplay_core.characters.state_machine.states;
-using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -13,8 +10,6 @@ namespace game.gameplay_core.characters.logic
 		{
 			public Stamina Stamina;
 			public StaminaMax StaminaMax;
-			public CharacterConfig CharacterConfig;
-			public ReactiveProperty<WeaponView> CurrentWeapon;
 		}
 
 		private Context _context;

@@ -25,7 +25,7 @@ namespace game.gameplay_core
 
 		private float _frameDelayDebug;
 
-		public void Initialize()
+		public void Initialize(LocationSaveData saveData)
 		{
 			_sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>();
 
@@ -34,7 +34,7 @@ namespace game.gameplay_core
 
 			_locationContext = new LocationContext
 			{
-				LocationSaveData = new LocationSaveData(),
+				LocationSaveData = saveData,
 				LocationUpdate = new ReactiveCommand<float>(),
 				LocationUiUpdate = new ReactiveCommand<float>(),
 				LocationTime = new ReactiveProperty<float>(),
@@ -84,6 +84,7 @@ namespace game.gameplay_core
 		private void LoadCharacters()
 		{
 			_locationContext.Characters = new List<CharacterDomain>();
+
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
@@ -102,6 +103,16 @@ namespace game.gameplay_core
 						continue;
 					}
 					character.Initialize(_locationContext);
+					if(_locationContext.LocationSaveData.Enemies.TryGetValue(character.UniqueId, out var enemySaveData))
+					{
+						character.SetSaveDataForEnemy(_locationContext.LocationSaveData.Enemies[character.UniqueId]);
+					}
+					else
+					{
+						var saveData = new CharacterSaveData();
+						character.SetSaveDataForEnemy(saveData);
+						_locationContext.LocationSaveData.Enemies.Add(character.UniqueId, saveData);
+					}
 					_locationContext.Characters.Add(character);
 				}
 			}
@@ -135,6 +146,7 @@ namespace game.gameplay_core
 						//pickupItem.SetContext(_locationContext);
 						break;
 					case Bonfire bonfire:
+						bonfire.SetContext(_locationContext.Player);
 						break;
 				}
 

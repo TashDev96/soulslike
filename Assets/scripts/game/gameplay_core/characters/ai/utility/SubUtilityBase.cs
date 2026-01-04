@@ -138,9 +138,9 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private void UpdateBlackboardValues()
 		{
-			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.RightWeapon.Value.Config.RegularAttacks[0].Range;
-			var leftWeapon = _context.CharacterContext.LeftWeapon.Value;
-			if(leftWeapon && leftWeapon.Config.BlockDeflectionRating > 0)
+			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.InventoryLogic.RightWeapon.Config.RegularAttacks[0].Range;
+			var leftWeapon = _context.CharacterContext.InventoryLogic.LeftWeapon;
+			if(leftWeapon != null && leftWeapon.Config.BlockDeflectionRating > 0)
 			{
 				_context.BlackboardValues[BlackboardValues.HasShield] = 1;
 			}

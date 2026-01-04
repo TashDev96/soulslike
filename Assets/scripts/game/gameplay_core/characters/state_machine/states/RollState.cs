@@ -3,13 +3,12 @@ using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.logic;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	using game.gameplay_core.characters.config.animation;
-
 	public class RollState : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenLockKey = nameof(RollState);
@@ -50,7 +49,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			if(_context.LockOnLogic.IsLockedOn && _context.InputData.HasDirectionInput)
 			{
-				_localMovementDirection = _context.Transform.InverseTransformDirection(_context.InputData.DirectionWorld); 
+				_localMovementDirection = _context.Transform.InverseTransformDirection(_context.InputData.DirectionWorld);
 				var directionType = _localMovementDirection.GetDirectionHor();
 
 				switch(directionType)
@@ -100,12 +99,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_context.LockOnLogic.IsLockedOn)
 			{
 				_context.LockOnLogic.DisableRotationForThisFrame = true;
-				
+
 				if(!_config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime))
-				{ 
+				{
 					var lockOnTarget = _context.LockOnLogic.LockOnTarget.Value;
 					var lookVector = (lockOnTarget.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
-					_context.MovementLogic.RotateCharacter(lookVector, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn*3, deltaTime);
+					_context.MovementLogic.RotateCharacter(lookVector, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn * 3, deltaTime);
 				}
 				UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _context.Transform.TransformDirection(_localMovementDirection), deltaTime);
 			}
@@ -114,7 +113,6 @@ namespace game.gameplay_core.characters.state_machine.states
 				_context.MovementLogic.RotateCharacter(_characterDirectionTarget, deltaTime);
 				UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld, deltaTime);
 			}
-
 
 			if(TimeLeft <= 0f)
 			{

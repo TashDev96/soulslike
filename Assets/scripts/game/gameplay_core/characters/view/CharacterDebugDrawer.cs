@@ -5,6 +5,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.damage_system;
@@ -14,8 +15,6 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.view
 {
-	using game.gameplay_core.characters.config.animation;
-
 	[Serializable]
 	public class CharacterDebugDrawer : MonoBehaviour
 	{
@@ -60,10 +59,10 @@ namespace game.gameplay_core.characters.view
 			_attackIndex++;
 			_comboTriggered = false;
 			var line = _graphDrawer.AddLine(_attackIndex.ToString());
-			
+
 			float start = 0, end = 0;
 			currentAttackConfig.AnimationConfig.GetEventRange(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, out start, out end);
-			
+
 			line.AddRange(new[]
 			{
 				new GraphPoint(0, AttackGraphY),

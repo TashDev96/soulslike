@@ -16,7 +16,7 @@ namespace game.gameplay_core.characters.config.animation
 			TimingExitToNextCombo,
 			TimingEnterFromCombo,
 			TimingEnterFromRoll,
-			StartHandleObstacleCast,
+			StartHandleObstacleCast
 		}
 
 		public AnimationFlags Flag;

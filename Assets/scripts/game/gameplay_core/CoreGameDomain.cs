@@ -1,4 +1,6 @@
+using System.IO;
 using Cysharp.Threading.Tasks;
+using game.gameplay_core.location.location_save_system;
 using UnityEngine;
 
 namespace game.gameplay_core
@@ -7,30 +9,37 @@ namespace game.gameplay_core
 	{
 		private LocationDomain _locationDomain;
 
-		private async UniTask Initialize()
+		private async UniTask Initialize(LocationSaveData saveData)
+
 		{
 			await PreloadCoreGameAssets();
 
 			_locationDomain = new LocationDomain();
-			_locationDomain.Initialize();
+			_locationDomain.Initialize(saveData);
 		}
 
 		public async UniTask PlayOnDebugLocation()
 		{
-			await Initialize();
+			var saveData = new LocationSaveData();
+			await Initialize(saveData);
 		}
 
-		public async UniTask PlayOnLocation()
+		public async UniTask PlayOnLocation(string locationId)
 		{
 			//TODO: load scene
-			await Initialize();
+			var locationSavePath = Path.Combine(GameStaticContext.Instance.SaveSlotId, locationId);
+			var saveData = JsonUtility.FromJson<LocationSaveData>(File.ReadAllText(locationSavePath));
+			await Initialize(saveData);
 		}
 
 		private async UniTask PreloadCoreGameAssets()
 		{
-			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.Player, AssetOwner.Game);
-			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.CharacterUi, AssetOwner.Game);
-			await AddressableManager.LoadAssetAsync<GameObject>(AddressableAssetNames.FloatingTextView, AssetOwner.Game);
+			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ItemConfigs, AssetOwner.CoreGame);
+			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.WeaponPrefabNames, AssetOwner.CoreGame);
+			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ProjectilePrefabs, AssetOwner.CoreGame);
+			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.Player, AssetOwner.CoreGame);
+			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.CharacterUi, AssetOwner.CoreGame);
+			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.FloatingTextView, AssetOwner.CoreGame);
 		}
 	}
 }

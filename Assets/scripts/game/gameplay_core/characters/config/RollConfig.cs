@@ -1,14 +1,13 @@
 using System;
 using dream_lib.src.utils.editor;
 using game.editor;
+using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.config
 {
-	using game.gameplay_core.characters.config.animation;
-
 	[Serializable]
 	public class RollConfig
 	{

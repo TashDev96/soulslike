@@ -13,8 +13,10 @@ namespace game.gameplay_core.location.interactive_objects
 		[SerializeField]
 		private bool _unlockedByDefault;
 
-		[SerializeField]
-		private InteractionZone _interactiveZone;
+		public void SetContext(CharacterDomain locationContextPlayer)
+		{
+			base.Initialize();
+		}
 
 		public override void InitializeFirstTime()
 		{
@@ -28,6 +30,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void InitializeAfterSaveLoaded()
 		{
+			base.Initialize();
 		}
 
 		protected override void HandleInteractionTriggered(CharacterDomain interactingCharacter)
@@ -40,7 +43,7 @@ namespace game.gameplay_core.location.interactive_objects
 		{
 			if(SaveData.IsUnlocked)
 			{
-				return "Rest At  Bonfire";
+				return "Rest At Bonfire";
 			}
 			return "Unlock Bonfire";
 		}

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.damage_system
 {
-	[AddressableAssetTag(nameof(AddressableCollections.WeaponNames))]
+	[AddressableAssetTag(nameof(AddressableCollections.WeaponPrefabNames))]
 	public class WeaponView : MonoBehaviour
 	{
 		[SerializeField]

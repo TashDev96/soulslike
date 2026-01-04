@@ -76,7 +76,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected override void PlayBlockAnimation()
 		{
-			_context.Animator.Play(BlockingWeapon.Config.BlockWalkAnimation);
+			_context.Animator.Play(BlockingWeaponView.Config.BlockWalkAnimation);
 		}
 	}
 }

@@ -10,11 +10,15 @@ namespace game
 	{
 		public static GameStaticContext Instance { get; set; }
 
+		public string SaveSlotId { get; set; }
+
 		public ReactiveProperty<Camera> MainCamera { get; set; }
 		public ReactiveProperty<RectTransform> WorldToScreenUiParent { get; set; }
 		public UiDomain UiDomain { get; set; }
 		public InventoryDomain InventoryDomain { get; set; }
 		public ReactiveCommand<float> CurrentLocationUpdate { get; set; }
 		public FloatingTextsManager FloatingTextsManager { get; set; }
+		public ReactiveCommand ReloadLocation { get; set; }
+		public PlayerSaveData PlayerSave { get; set; }
 	}
 }

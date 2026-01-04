@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.config.animation
 {
-	using game.gameplay_core.damage_system;
-
 	[Serializable]
 	public class AnimationEventHit : AnimationEventBase, IHitConfig
 	{

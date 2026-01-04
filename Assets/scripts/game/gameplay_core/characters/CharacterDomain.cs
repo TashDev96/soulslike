@@ -4,6 +4,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.serialization;
+using game.enums;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
@@ -17,7 +18,6 @@ using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory;
-using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
 using game.gameplay_core.worldspace_ui;
@@ -62,27 +62,19 @@ namespace game.gameplay_core.characters
 		[ShowInInspector]
 		private CharacterStats _characterStats;
 
-		private WeaponView _rightWeaponView;
-		private WeaponView _leftWeaponView;
+		private readonly Dictionary<ArmamentSlot, WeaponView> _equippedWeaponsViews = new();
 		private CharacterBodyView _characterBodyView;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
 
 		[field: SerializeField]
-		private WeaponItemConfig DebugWeaponConfig { get; set; }
-		[field: SerializeField]
-		private WeaponItemConfig DebugWeaponLeftConfig { get; set; }
-
-		[field: SerializeField]
-		private Transform RightHandSocket { get; set; }
-		[field: SerializeField]
-		private Transform LeftHandSocket { get; set; }
+		private SerializableDictionary<ArmamentSlot, Transform> ArmSockets { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterConfig Config => _config;
 		public CharacterStateMachine CharacterStateMachine { get; private set; }
-		public InventoryLogic InventoryLogic { get; private set; }
+		public CharacterInventoryLogic InventoryLogic { get; private set; }
 
 		public void Initialize(LocationContext locationContext)
 		{
@@ -108,7 +100,7 @@ namespace game.gameplay_core.characters
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
-			InventoryLogic = new InventoryLogic();
+			InventoryLogic = new CharacterInventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -132,6 +124,7 @@ namespace game.gameplay_core.characters
 				StaminaLogic = _staminaLogic,
 				PoiseLogic = _poiseLogic,
 				BlockLogic = _blockLogic,
+				InventoryLogic = InventoryLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -141,8 +134,7 @@ namespace game.gameplay_core.characters
 				LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
 				InputData = new CharacterInputData(),
 
-				RightWeapon = new ReactiveProperty<WeaponView>(),
-				LeftWeapon = new ReactiveProperty<WeaponView>(),
+				EquippedWeaponViews = _equippedWeaponsViews,
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
@@ -218,8 +210,6 @@ namespace game.gameplay_core.characters
 
 			_staminaLogic.Initialize(new StaminaLogic.Context
 			{
-				CharacterConfig = _context.Config,
-				CurrentWeapon = _context.RightWeapon,
 				Stamina = _context.CharacterStats.Stamina,
 				StaminaMax = _context.CharacterStats.StaminaMax
 			});
@@ -230,14 +220,6 @@ namespace game.gameplay_core.characters
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
 
-			if(DebugWeaponConfig != null)
-			{
-				SetWeapon(DebugWeaponConfig, true);
-			}
-			if(DebugWeaponLeftConfig != null)
-			{
-				SetWeapon(DebugWeaponLeftConfig, false);
-			}
 			_context.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
@@ -329,26 +311,25 @@ namespace game.gameplay_core.characters
 
 		private void InitializeInventory()
 		{
-			List<InventoryItemSaveData> saveData;
-
 			if(_context.IsPlayer.Value)
 			{
-				saveData = GameStaticContext.Instance.InventoryDomain.InventoryItemsData;
+				InventoryLogic.Initialize(_context, GameStaticContext.Instance.InventoryDomain.InventoryData);
 			}
 			else
 			{
 				var npcInventoryComponent = gameObject.GetComponent<NpcInventoryConfigView>();
 				if(npcInventoryComponent != null)
 				{
-					saveData = npcInventoryComponent.Items;
+					InventoryLogic.Initialize(_context, npcInventoryComponent.InventoryData);
 				}
 				else
 				{
-					saveData = new List<InventoryItemSaveData>();
+					InventoryLogic.Initialize(_context, new InventoryData());
 				}
 			}
 
-			InventoryLogic.Initialize(_context, saveData);
+			SetWeapon(ArmamentSlot.Left, InventoryLogic.GetArmament(ArmamentSlot.Left));
+			SetWeapon(ArmamentSlot.Right, InventoryLogic.GetArmament(ArmamentSlot.Right));
 		}
 
 		[Button]
@@ -357,64 +338,60 @@ namespace game.gameplay_core.characters
 			UniqueId = name + Random.value;
 		}
 
-		public void SetWeapon(WeaponItemConfig config, bool isRight)
+		public void SetWeapon(ArmamentSlot slot, BaseItemLogic logic)
 		{
-			if(config == null)
+			if(logic == null)
 			{
-				if(isRight)
+				if(_equippedWeaponsViews.TryGetValue(slot, out var view))
 				{
-					if(_rightWeaponView != null)
-					{
-						Destroy(_rightWeaponView.gameObject);
-						_rightWeaponView = null;
-					}
-					_context.RightWeapon.Value = null;
-				}
-				else
-				{
-					if(_leftWeaponView != null)
-					{
-						Destroy(_leftWeaponView.gameObject);
-						_leftWeaponView = null;
-					}
-					_context.LeftWeapon.Value = null;
+					Destroy(view.gameObject);
+					_equippedWeaponsViews.Remove(slot);
 				}
 				return;
 			}
 
-			var socket = isRight ? RightHandSocket : LeftHandSocket;
+			var socket = ArmSockets[slot];
 			if(socket == null)
 			{
-				Debug.LogError($"{(isRight ? "Right" : "Left")} hand socket is not assigned!");
+				Debug.LogError($"{slot} hand socket is not assigned!");
 				return;
 			}
 
-			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(config.WeaponPrefabName, AssetOwner.Game);
-			var weaponInstance = Instantiate(prefab, socket);
-			weaponInstance.name = prefab.name;
-			weaponInstance.transform.ResetLocal();
-			var weaponView = weaponInstance.GetComponent<WeaponView>();
-			weaponView.Config = config;
-			weaponView.Initialize(_context);
+			if(logic is WeaponItemLogic weaponLogic)
+			{
+				if(_equippedWeaponsViews.TryGetValue(slot, out var oldView))
+				{
+					Destroy(oldView.gameObject);
+				}
 
-			if(isRight)
-			{
-				if(_rightWeaponView != null)
-				{
-					Destroy(_rightWeaponView.gameObject);
-				}
-				_rightWeaponView = weaponView;
-				_context.RightWeapon.Value = weaponView;
+				var config = weaponLogic.Config;
+				var prefab = AddressableManager.GetPreloadedAsset<GameObject>(config.WeaponPrefabName);
+				var weaponInstance = Instantiate(prefab, socket);
+				weaponInstance.name = prefab.name;
+				weaponInstance.transform.ResetLocal();
+				var weaponView = weaponInstance.GetComponent<WeaponView>();
+				weaponView.Config = config;
+				weaponView.Initialize(_context);
+
+				_equippedWeaponsViews[slot] = weaponView;
 			}
-			else
+		}
+
+		public void SetSaveDataForEnemy(CharacterSaveData data)
+		{
+			if(data.Initialized)
 			{
-				if(_leftWeaponView != null)
-				{
-					Destroy(_leftWeaponView.gameObject);
-				}
-				_leftWeaponView = weaponView;
-				_context.LeftWeapon.Value = weaponView;
+				transform.position = data.Position;
+				transform.eulerAngles = data.Euler;
+				_context.CharacterStats.Hp.Value = data.Hp;
 			}
+		}
+
+		public void GetSaveDataEnemy(CharacterSaveData data)
+		{
+			data.Position = transform.position;
+			data.Euler = transform.eulerAngles;
+			data.Hp = _context.CharacterStats.Hp.Value;
 		}
 
 		private void HandleDeath(bool isDead)

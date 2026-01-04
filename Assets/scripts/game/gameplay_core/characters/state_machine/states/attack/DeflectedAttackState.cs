@@ -1,4 +1,5 @@
 using Animancer;
+using game.enums;
 using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
@@ -54,7 +55,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 			else
 			{
-				var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.PreciseContact);
+				var interpolatedCaster = _context.EquippedWeaponViews[ArmamentSlot.Right].StartInterpolatedCast(WeaponColliderType.PreciseContact);
 				while(interpolatedCaster.MoveNext() && !_reverseTriggered)
 				{
 					foreach(var caster in interpolatedCaster.GetActiveColliders())

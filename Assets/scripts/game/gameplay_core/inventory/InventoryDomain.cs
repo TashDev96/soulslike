@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using game.gameplay_core.debug;
 using game.gameplay_core.inventory.serialized_data;
-using UnityEngine;
 
 namespace game.gameplay_core.inventory
 {
@@ -10,20 +8,15 @@ namespace game.gameplay_core.inventory
 	{
 		private bool _sceneDebugMode;
 
+		public InventoryData InventoryData { get; private set; }
 		public List<InventoryItemSaveData> InventoryItemsData { get; private set; }
 
 		public async UniTask Initialize(bool sceneDebugMode)
 		{
 			_sceneDebugMode = sceneDebugMode;
+			InventoryData = GameStaticContext.Instance.PlayerSave.InventoryData;
+			InventoryItemsData = InventoryData.Items;
 
-#if UNITY_EDITOR
-			if(_sceneDebugMode)
-			{
-				LoadTestInventory();
-			}
-#endif
-
-			//TODOload inventory save data
 			await UniTask.Delay(1);
 		}
 
@@ -34,12 +27,6 @@ namespace game.gameplay_core.inventory
 			}
 
 			//todo save inventory to file
-		}
-
-		private void LoadTestInventory()
-		{
-			var charConfig = Object.FindAnyObjectByType<DebugSceneCharacterConfig>(FindObjectsInactive.Include);
-			InventoryItemsData = charConfig.InventoryData;
 		}
 	}
 }

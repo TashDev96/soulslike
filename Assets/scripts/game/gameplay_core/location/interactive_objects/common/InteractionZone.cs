@@ -1,5 +1,6 @@
 using System;
 using game.gameplay_core.characters;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.location.interactive_objects.common
@@ -27,6 +28,12 @@ namespace game.gameplay_core.location.interactive_objects.common
 		public void InteractFromUi(CharacterDomain interactedCharacter)
 		{
 			OnInteractionTriggered?.Invoke(interactedCharacter);
+		}
+
+		[Button]
+		private void SetLayer()
+		{
+			gameObject.layer = LayerMask.NameToLayer("Triggers");
 		}
 	}
 }

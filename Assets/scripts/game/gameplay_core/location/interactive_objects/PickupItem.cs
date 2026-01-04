@@ -18,6 +18,7 @@ namespace game.gameplay_core.location.interactive_objects
 			{
 				PickedUp = false
 			};
+			base.Initialize();
 		}
 
 		protected override void InitializeAfterSaveLoaded()
@@ -25,6 +26,10 @@ namespace game.gameplay_core.location.interactive_objects
 			if(SaveData.PickedUp)
 			{
 				gameObject.SetActive(false);
+			}
+			else
+			{
+				base.Initialize();
 			}
 		}
 

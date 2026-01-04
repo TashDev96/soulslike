@@ -1,13 +1,18 @@
 using dream_lib.src.extensions;
+using game.enums;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
 	public class RiposteAttackState : CriticalAttackStateBase
 	{
+		private readonly WeaponView _weaponView;
+
 		public RiposteAttackState(CharacterContext context, CharacterDomain target) : base(context, target)
 		{
-			var attackConfig = _context.RightWeapon.Value.Config.RiposteAttack;
+			_weaponView = _context.EquippedWeaponViews[ArmamentSlot.Right];
+			var attackConfig = _weaponView.Config.RiposteAttack;
 
 			SetEnterParams(attackConfig);
 			LockTargetInAnimation();

@@ -10,7 +10,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private const string HitReactReason = "BlockHitReactReason";
 		protected bool _isBlocking;
 		protected AnimancerState _receiveHitAnimation;
-		public WeaponView BlockingWeapon { get; private set; }
+		public WeaponView BlockingWeaponView { get; private set; }
 
 		public override bool CanInterruptByStagger => true;
 
@@ -27,11 +27,12 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_isBlocking = true;
 
-			BlockingWeapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
+			var blockingSlot = _context.InventoryLogic.GetBlockingWeaponSlot();
+			BlockingWeaponView = _context.EquippedWeaponViews[blockingSlot];
 
-			if(BlockingWeapon != null)
+			if(BlockingWeaponView != null)
 			{
-				BlockingWeapon.SetBlockColliderActive(true);
+				BlockingWeaponView.SetBlockColliderActive(true);
 				PlayBlockAnimation();
 			}
 
@@ -42,9 +43,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			_isBlocking = false;
 
-			if(BlockingWeapon != null)
+			if(BlockingWeaponView != null)
 			{
-				BlockingWeapon.SetBlockColliderActive(false);
+				BlockingWeaponView.SetBlockColliderActive(false);
 			}
 
 			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
@@ -94,7 +95,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private void HandleBlockTriggered()
 		{
-			_receiveHitAnimation = _context.Animator.Play(BlockingWeapon.Config.BlockHitAnimation);
+			_receiveHitAnimation = _context.Animator.Play(BlockingWeaponView.Config.BlockHitAnimation);
 			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, true);
 		}
 	}

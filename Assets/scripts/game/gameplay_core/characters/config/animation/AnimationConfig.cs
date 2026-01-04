@@ -11,9 +11,9 @@ namespace game.gameplay_core.characters.config.animation
 	{
 		public const float EditorPrecisionFps = 200;
 		public const float EditorTimelineFps = 60;
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		public string WeaponForPreview;
-		#endif
+#endif
 
 		public AnimationClip Clip;
 		[FoldoutGroup("Clip Settings")]
@@ -65,7 +65,7 @@ namespace game.gameplay_core.characters.config.animation
 			end = 0;
 			return false;
 		}
-		
+
 		public bool GetEventRange(AnimationFlagEvent.AnimationFlags flag, out float start, out float end)
 		{
 			foreach(var evt in FlagEvents)

@@ -35,7 +35,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected override void PlayBlockAnimation()
 		{
-			_context.Animator.Play(BlockingWeapon.Config.BlockStayAnimation, 0.2f);
+			_context.Animator.Play(BlockingWeaponView.Config.BlockStayAnimation, 0.2f);
 		}
 	}
 }

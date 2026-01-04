@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Animancer;
-using dream_lib.src.extensions;
+using game.enums;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
@@ -11,8 +12,6 @@ using Object = UnityEngine.Object;
 
 namespace game.gameplay_core.characters.state_machine.states.attack
 {
-	using game.gameplay_core.characters.config.animation;
-
 	public class AttackState : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "AttackState";
@@ -29,6 +28,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private int _framesToUnlockWalk;
 		private AttackStage _stage;
+		private WeaponView _weaponView;
 		public AnimancerState CurrentAttackAnimation { get; private set; }
 		public AttackConfig CurrentAttackConfig => _currentAttackConfig;
 
@@ -43,7 +43,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			_comboCounter = 0;
 			LaunchAttack();
-			_context.RightWeapon.Value.StorePreviousTransform();
+			_weaponView.StorePreviousTransform();
 		}
 
 		public override void Update(float deltaTime)
@@ -107,12 +107,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 					if(hitData.IsActive)
 					{
-						var interpolatedCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Attack, hitData.Config.InvolvedColliders);
+						var interpolatedCaster = _weaponView.StartInterpolatedCast(WeaponColliderType.Attack, hitData.Config.InvolvedColliders);
 						while(interpolatedCaster.MoveNext())
 						{
 							foreach(var caster in interpolatedCaster.GetActiveColliders())
 							{
-								var deflectionRating = _context.RightWeapon.Value.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
+								var deflectionRating = _weaponView.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
 								AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, caster, _context, deflectionRating, true);
 							}
 						}
@@ -141,7 +141,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.StartHandleObstacleCast) ?? 0;
 			if(_stage == AttackStage.Windup && NormalizedTime > handleCastTime)
 			{
-				var interpolatedHandleCaster = _context.RightWeapon.Value.StartInterpolatedCast(WeaponColliderType.Handle);
+				var interpolatedHandleCaster = _weaponView.StartInterpolatedCast(WeaponColliderType.Handle);
 				while(interpolatedHandleCaster.MoveNext() && !deflectedByHandleCast)
 				{
 					foreach(var caster in interpolatedHandleCaster.GetActiveColliders())
@@ -170,7 +170,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			IsReadyToRememberNextCommand = TimeLeft < 3f;
-			_context.RightWeapon.Value.StorePreviousTransform();
+			_weaponView.StorePreviousTransform();
 
 			void UpdateStaminaRegenLock()
 			{
@@ -224,8 +224,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		public override float GetEnterStaminaCost()
 		{
-			GetCurrentAttackConfig(out var config, out _);
-			return config.StaminaCost;
+			//TODO: make correct calculation
+			return _context.InventoryLogic.RightWeapon.Config.RegularAttacks[0].StaminaCost;
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
@@ -250,6 +250,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private void LaunchAttack()
 		{
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
+
+			_weaponView = _context.EquippedWeaponViews[ArmamentSlot.Right];
 			Duration = _currentAttackConfig.Duration;
 
 			_stage = AttackStage.Windup;
@@ -300,9 +302,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void SpawnProjectile(IHitConfig hitConfig)
 		{
-			var weapon = _context.RightWeapon.Value;
+			var weapon = _weaponView;
 			var weaponConfig = weapon.Config;
-			var prefab = AddressableManager.LoadAssetImmediately<GameObject>(_currentAttackConfig.ProjectilePrefabNames, AssetOwner.Game);
+			var prefab = AddressableManager.GetPreloadedAsset<GameObject>(_currentAttackConfig.ProjectilePrefabNames);
 			var projectileInstance = Object.Instantiate(prefab);
 			var projectileView = projectileInstance.GetComponent<ProjectileView>();
 
@@ -345,7 +347,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void GetCurrentAttackConfig(out AttackConfig attackConfig, out int newAttackIndex)
 		{
-			var weaponConfig = _context.RightWeapon.Value.Config;
+			var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{
 				newAttackIndex = _currentAttackIndex;
@@ -371,19 +373,19 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return;
 				case AttackType.RollAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _context.RightWeapon.Value.Config.RollAttack;
+					attackConfig = _weaponView.Config.RollAttack;
 					return;
 				case AttackType.RollAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _context.RightWeapon.Value.Config.RollAttackStrong;
+					attackConfig = _weaponView.Config.RollAttackStrong;
 					return;
 				case AttackType.RunAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _context.RightWeapon.Value.Config.RunAttack;
+					attackConfig = _weaponView.Config.RunAttack;
 					return;
 				case AttackType.RunAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _context.RightWeapon.Value.Config.RunAttackStrong;
+					attackConfig = _weaponView.Config.RunAttackStrong;
 					return;
 
 				default:

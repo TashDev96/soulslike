@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using Animancer;
-using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
-	using game.gameplay_core.characters.config.animation;
 	public class CriticalAttackStateBase : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "CriticalAttackState";
@@ -40,7 +38,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			_staminaSpent = false;
 			_hitsData.Clear();
-			foreach (var hitEvent in _attackConfig.AnimationConfig.GetHitEvents())
+			foreach(var hitEvent in _attackConfig.AnimationConfig.GetHitEvents())
 			{
 				_hitsData.Add(new HitData
 				{

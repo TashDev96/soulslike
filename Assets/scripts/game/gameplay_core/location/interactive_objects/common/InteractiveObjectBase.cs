@@ -15,7 +15,7 @@ namespace game.gameplay_core.location.interactive_objects.common
 			get => InteractionZone.InteractionTextHint;
 		}
 
-		private void Start()
+		protected virtual void Initialize()
 		{
 			InteractionZone.OnInteractionTriggered += HandleInteractionTriggered;
 			InteractionZone.InteractionTextHint = GetInteractionTextHint();

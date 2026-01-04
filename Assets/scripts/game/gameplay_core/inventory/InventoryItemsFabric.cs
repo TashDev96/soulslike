@@ -9,7 +9,7 @@ namespace game.gameplay_core.inventory
 	{
 		public static BaseItemLogic CreateItemFromSave(InventoryItemSaveData saveableData)
 		{
-			var config = AddressableManager.LoadAssetImmediately<BaseItemConfig>(saveableData.ConfigId, AssetOwner.Game);
+			var config = AddressableManager.GetPreloadedAsset<BaseItemConfig>(saveableData.ConfigId);
 			switch(config)
 			{
 				case WeaponItemConfig weaponItemConfig:

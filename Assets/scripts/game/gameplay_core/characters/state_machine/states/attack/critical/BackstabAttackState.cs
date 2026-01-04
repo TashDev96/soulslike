@@ -1,13 +1,19 @@
 using dream_lib.src.extensions;
+using game.enums;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
 	public class BackstabAttackState : CriticalAttackStateBase
 	{
+		private readonly WeaponView _weaponView;
+
 		public BackstabAttackState(CharacterContext context, CharacterDomain target) : base(context, target)
 		{
-			var attackConfig = _context.RightWeapon.Value.Config.BackstabAttack;
+			_weaponView = _context.EquippedWeaponViews[ArmamentSlot.Right];
+
+			var attackConfig = _weaponView.Config.BackstabAttack;
 
 			SetEnterParams(attackConfig);
 			LockTargetInAnimation();
@@ -22,7 +28,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			_target.transform.rotation = Quaternion.LookRotation((_target.transform.position - _context.Transform.Position).SetY(0));
 			_target.transform.position = _context.Transform.Position + _target.transform.forward * 1.5f;
-			_target.CharacterStateMachine.LockInAnimation(_context.RightWeapon.Value.Config.BackstabbedEnemyAnimation);
+			_target.CharacterStateMachine.LockInAnimation(_weaponView.Config.BackstabbedEnemyAnimation);
 		}
 	}
 }

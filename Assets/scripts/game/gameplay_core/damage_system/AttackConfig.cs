@@ -1,20 +1,15 @@
 using System;
-using System.Collections.Generic;
 using Animancer;
-using game.editor;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.inventory.item_configs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
-using dream_lib.src.utils.editor;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
 #endif
 
 namespace game.gameplay_core.damage_system
 {
-	using game.gameplay_core.characters.config.animation;
-
 	[Serializable]
 	public class AttackConfig
 	{
@@ -45,7 +40,6 @@ namespace game.gameplay_core.damage_system
 		[ShowInInspector]
 		public float Duration => Animation.Clip ? Animation.Clip.length / Animation.Speed : 0.1f;
 
-
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
 
@@ -53,20 +47,16 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		public float Range { get; set; } = 1f;
 
-
 #if UNITY_EDITOR
-
 
 		[OnInspectorGUI]
 		private void DrawCustomHitsInspector()
 		{
 			var weaponKey = GetWeaponPrefabKeyFromSelection();
-			
+
 			//TODO: use weapon in animationpewview
 			AnimationConfig.WeaponForPreview = weaponKey;
-			
 		}
-
 
 		private string GetWeaponPrefabKeyFromSelection()
 		{
@@ -78,6 +68,5 @@ namespace game.gameplay_core.damage_system
 		}
 
 #endif //
-		
 	}
 }

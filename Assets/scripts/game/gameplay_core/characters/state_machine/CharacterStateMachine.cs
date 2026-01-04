@@ -215,7 +215,8 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_rollState);
 						break;
 					case CharacterCommand.RegularAttack:
-						var weaponConfig = _context.RightWeapon.Value?.Config;
+
+						var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
 
 						var canDoBackStabs = weaponConfig.CanBackstab && _context.Config.CanDoBackstabs;
 						var canRiposte = weaponConfig.CanRiposte;
@@ -248,7 +249,7 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_walkBlockState);
 						break;
 					case CharacterCommand.Parry:
-						if(CanParry())
+						if(_context.InventoryLogic.CheckHasParryWeapon())
 						{
 							SetState(_parryState);
 						}
@@ -354,12 +355,6 @@ namespace game.gameplay_core.characters.state_machine
 			_currentState.Value.OnEnter();
 			_context.OnStateChanged.Execute(oldState, newState);
 			NextCommand = CharacterCommand.None;
-		}
-
-		private bool CanParry()
-		{
-			var weapon = _context.LeftWeapon.HasValue ? _context.LeftWeapon.Value : _context.RightWeapon.Value;
-			return weapon != null && weapon.Config.CanParry;
 		}
 
 		private CharacterDomain FindBackstabbableEnemy()

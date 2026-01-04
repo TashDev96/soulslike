@@ -2,7 +2,8 @@ namespace game.enums
 {
 	public enum AddressableCollections
 	{
-		WeaponNames,
+		WeaponPrefabNames,
+		WeaponConfigs,
 		ItemConfigs,
 		ProjectilePrefabs
 	}
