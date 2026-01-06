@@ -73,6 +73,10 @@ namespace game.gameplay_core.characters.player
 			return $"Player Input {_directionInputScreenSpace}";
 		}
 
+		public void Reset()
+		{
+		}
+
 		private bool IsAttackCommand(CharacterCommand command)
 		{
 			return command == CharacterCommand.RegularAttack || command == CharacterCommand.StrongAttack;

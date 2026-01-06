@@ -757,7 +757,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 3b9dfb1920d5b4d229ad61c5e4947e39, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockWalkAnimation>k__BackingField:
@@ -766,7 +766,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 6b812dd11bfb74f42b2b85c349424d28, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockBreakAnimation>k__BackingField:
@@ -775,7 +775,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 80833d67cd02645f78aafe38288b02d9, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <BlockHitAnimation>k__BackingField:
@@ -784,7 +784,7 @@ MonoBehaviour:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 0}
+    _Clip: {fileID: 7400000, guid: 8d2edfc86392c402a93b7f93cb6730ee, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN
   <CanParry>k__BackingField: 0

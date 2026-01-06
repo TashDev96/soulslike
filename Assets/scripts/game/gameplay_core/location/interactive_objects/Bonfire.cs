@@ -35,8 +35,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void HandleInteractionTriggered(CharacterDomain interactingCharacter)
 		{
-			//TODO reset level
-			//TODO heal player
+			GameStaticContext.Instance.ReloadLocation.Execute();
 		}
 
 		protected override string GetInteractionTextHint()

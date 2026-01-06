@@ -64,6 +64,8 @@ namespace game.gameplay_core.characters
 
 		private readonly Dictionary<ArmamentSlot, WeaponView> _equippedWeaponsViews = new();
 		private CharacterBodyView _characterBodyView;
+		private CharacterSaveData _saveData;
+		private TransformCache _respawnTransform;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -377,21 +379,40 @@ namespace game.gameplay_core.characters
 			}
 		}
 
-		public void SetSaveDataForEnemy(CharacterSaveData data)
+		public void SetSaveData(CharacterSaveData data)
 		{
+			_saveData = data;
+			_respawnTransform = new TransformCache(transform);
 			if(data.Initialized)
 			{
 				transform.position = data.Position;
 				transform.eulerAngles = data.Euler;
 				_context.CharacterStats.Hp.Value = data.Hp;
+				_context.CharacterStats.Stamina.Value = data.Stamina;
 			}
 		}
 
-		public void GetSaveDataEnemy(CharacterSaveData data)
+		public void WriteStateToSaveData()
 		{
-			data.Position = transform.position;
-			data.Euler = transform.eulerAngles;
-			data.Hp = _context.CharacterStats.Hp.Value;
+			_saveData.Position = transform.position;
+			_saveData.Euler = transform.eulerAngles;
+			_saveData.Hp = _context.CharacterStats.Hp.Value;
+			_saveData.Stamina = _context.CharacterStats.Stamina.Value;
+			_saveData.Initialized = true;
+		}
+
+		public void HandleLocationRespawn()
+		{
+			_context.CharacterStats.SetStatsToMax();
+			_movementLogic.Teleport(_respawnTransform);
+			CharacterStateMachine.Reset();
+			_brain.Reset();
+			_worldSpaceUi?.Reset();
+		}
+
+		public void SetRespawnTransform(TransformCache transformCache)
+		{
+			_respawnTransform = transformCache;
 		}
 
 		private void HandleDeath(bool isDead)

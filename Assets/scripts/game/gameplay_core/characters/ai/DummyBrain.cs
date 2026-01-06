@@ -72,5 +72,10 @@ namespace game.gameplay_core.characters.ai
 		{
 			return "Dummy Brain";
 		}
+
+		public void Reset()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

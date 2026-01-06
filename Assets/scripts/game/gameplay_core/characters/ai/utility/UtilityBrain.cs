@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using dream_lib.src.utils.components;
 using game.gameplay_core.characters.ai.navigation;
 using game.gameplay_core.characters.ai.utility.blackbox;
@@ -64,6 +65,16 @@ namespace game.gameplay_core.characters.ai.utility
 		public string GetDebugSting()
 		{
 			return $"brain: {_subUtilities[0].DebugString}\n";
+		}
+
+		public void Reset()
+		{
+			_context.Target = null;
+			foreach(var key in _context.BlackboardValues.Keys.ToList())
+			{
+				_context.BlackboardValues[key] = 0f;
+			}
+			_context.BrainTime = 0;
 		}
 
 		private void HandleAggroTriggerEnter(GameObject enteredObject)

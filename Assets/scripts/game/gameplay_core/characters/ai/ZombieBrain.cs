@@ -155,6 +155,11 @@ namespace game.gameplay_core.characters.ai
 			return $"Zombie Brain, state {_state}";
 		}
 
+		public void Reset()
+		{
+			throw new NotImplementedException();
+		}
+
 		private void HandleDamage(DamageInfo info)
 		{
 			if(!HasTarget)

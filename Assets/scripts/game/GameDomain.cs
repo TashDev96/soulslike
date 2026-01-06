@@ -74,6 +74,7 @@ namespace game
 
 		private void ReloadLocation()
 		{
+			_coreGameDomain.RespawnAndReloadLocation();
 		}
 	}
 }

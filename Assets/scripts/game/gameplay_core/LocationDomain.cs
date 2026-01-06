@@ -3,6 +3,7 @@ using System.Linq;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
+using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
@@ -61,6 +62,28 @@ namespace game.gameplay_core
 			RegisterCheats();
 		}
 
+		public void RespawnAndReloadLocation()
+		{
+			_player.Value.SetRespawnTransform(new TransformCache(_player.Value.transform));
+			
+			foreach(var character in _locationContext.Characters)
+			{
+				character.HandleLocationRespawn();
+			}
+			SaveCurrentStateToData();
+		}
+		
+		public LocationSaveData SaveCurrentStateToData()
+		{
+			foreach(var character in _locationContext.Characters)
+			{
+				character.WriteStateToSaveData();
+			}
+			
+			
+			return _locationContext.LocationSaveData;
+		}
+
 		private void HandleUpdate()
 		{
 			var deltaTime = Time.deltaTime;
@@ -88,10 +111,15 @@ namespace game.gameplay_core
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
-			if(_sceneInstaller.TestPlayerSpawnPos != null)
+			
+			var playerSave = GameStaticContext.Instance.PlayerSave;
+			if(_sceneInstaller.TestPlayerSpawnPos != null && !playerSave.CharacterData.Initialized)
 			{
-				_player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos);
+				playerSave.CharacterData.Position = _sceneInstaller.TestPlayerSpawnPos.position;
+				playerSave.CharacterData.Euler = _sceneInstaller.TestPlayerSpawnPos.eulerAngles;
+				playerSave.CharacterData.Initialized = true;
 			}
+			_player.Value.SetSaveData(playerSave.CharacterData);
 			_locationContext.Characters.Add(_player.Value);
 
 			if(!_sceneInstaller.OnlySpawnPlayer)
@@ -105,12 +133,12 @@ namespace game.gameplay_core
 					character.Initialize(_locationContext);
 					if(_locationContext.LocationSaveData.Enemies.TryGetValue(character.UniqueId, out var enemySaveData))
 					{
-						character.SetSaveDataForEnemy(_locationContext.LocationSaveData.Enemies[character.UniqueId]);
+						character.SetSaveData(enemySaveData);
 					}
 					else
 					{
 						var saveData = new CharacterSaveData();
-						character.SetSaveDataForEnemy(saveData);
+						character.SetSaveData(saveData);
 						_locationContext.LocationSaveData.Enemies.Add(character.UniqueId, saveData);
 					}
 					_locationContext.Characters.Add(character);

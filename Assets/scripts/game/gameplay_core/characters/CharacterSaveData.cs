@@ -10,7 +10,9 @@ namespace game.gameplay_core.characters
 		public Vector3 Position;
 		public Vector3 Euler;
 		public float Hp;
+		public float Stamina;
 		public string LeftWeaponId;
 		public string RightWeaponId;
+		
 	}
 }
