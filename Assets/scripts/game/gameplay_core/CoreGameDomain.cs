@@ -36,19 +36,19 @@ namespace game.gameplay_core
 		private async UniTask PreloadCoreGameAssets()
 		{
 			var stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ItemConfigs, AssetOwner.CoreGame);
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.WeaponPrefabNames, AssetOwner.CoreGame);
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ProjectilePrefabs, AssetOwner.CoreGame);
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.Player, AssetOwner.CoreGame);
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.CharacterUi, AssetOwner.CoreGame);
-			stringBuilder.AppendLine($"Frame Sequence: {Time.frameCount}");
-			await AddressableManager.PreloadAssetAsync(AddressableAssetNames.FloatingTextView, AssetOwner.CoreGame);
-			Debug.LogError(stringBuilder.ToString());
+			stringBuilder.AppendLine($"Preload Start - Frame: {Time.frameCount}");
+
+			await UniTask.WhenAll(
+				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ItemConfigs, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.WeaponPrefabNames, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ProjectilePrefabs, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetAsync(AddressableAssetNames.Player, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetAsync(AddressableAssetNames.CharacterUi, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetAsync(AddressableAssetNames.FloatingTextView, AssetOwner.CoreGame)
+			);
+
+			stringBuilder.AppendLine($"Preload End - Frame: {Time.frameCount}");
+			Debug.Log(stringBuilder.ToString());
 		}
 
 		public void RespawnAndReloadLocation()

@@ -26,10 +26,12 @@ public static class AddressableManager
 
 	public static async UniTask PreloadAssetsListAsync(string[] addresses, AssetOwner owner)
 	{
-		foreach(var address in addresses)
+		var tasks = new UniTask[addresses.Length];
+		for (int i = 0; i < addresses.Length; i++)
 		{
-			await LoadAssetAsync<Object>(address, owner);
+			tasks[i] = LoadAssetAsync<Object>(addresses[i], owner);
 		}
+		await UniTask.WhenAll(tasks);
 	}
 
 	public static async UniTask PreloadAssetAsync(string address, AssetOwner owner)
