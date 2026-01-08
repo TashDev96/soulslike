@@ -113,14 +113,17 @@ namespace game.gameplay_core
 			_player.Value.Initialize(_locationContext);
 			
 			var playerSave = GameStaticContext.Instance.PlayerSave;
+			var isFirstTimePlayerCreated = false;
 			if(_sceneInstaller.TestPlayerSpawnPos != null && !playerSave.CharacterData.Initialized)
 			{
 				playerSave.CharacterData.Position = _sceneInstaller.TestPlayerSpawnPos.position;
 				playerSave.CharacterData.Euler = _sceneInstaller.TestPlayerSpawnPos.eulerAngles;
 				playerSave.CharacterData.Initialized = true;
 				playerSave.RespawnTransform = new TransformCache(_sceneInstaller.TestPlayerSpawnPos);
+				isFirstTimePlayerCreated = true;
 			}
-			_player.Value.SetSaveData(playerSave.CharacterData);
+			_player.Value.SetSaveData(playerSave.CharacterData, isFirstTimePlayerCreated);
+			
 			_locationContext.Characters.Add(_player.Value);
 
 			if(!_sceneInstaller.OnlySpawnPlayer)

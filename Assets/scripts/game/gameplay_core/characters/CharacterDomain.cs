@@ -383,7 +383,7 @@ namespace game.gameplay_core.characters
 			}
 		}
 
-		public void SetSaveData(CharacterSaveData data)
+		public void SetSaveData(CharacterSaveData data, bool ignoreStats = false)
 		{
 			_saveData = data;
 			_respawnTransform = new TransformCache(transform);
@@ -391,8 +391,15 @@ namespace game.gameplay_core.characters
 			{
 				transform.position = data.Position;
 				transform.eulerAngles = data.Euler;
-				_context.CharacterStats.Hp.Value = data.Hp;
-				_context.CharacterStats.Stamina.Value = data.Stamina;
+				if(!ignoreStats)
+				{
+					_context.CharacterStats.Hp.Value = data.Hp;
+					_context.CharacterStats.Stamina.Value = data.Stamina;
+				}
+			}
+			else
+			{
+				_context.CharacterStats.SetStatsToMax();
 			}
 		}
 
@@ -408,6 +415,7 @@ namespace game.gameplay_core.characters
 		public void HandleLocationRespawn()
 		{
 			_context.CharacterStats.SetStatsToMax();
+			_context.IsDead.Value = false;
 			_movementLogic.Teleport(_respawnTransform);
 			CharacterStateMachine.Reset();
 			_brain.Reset();

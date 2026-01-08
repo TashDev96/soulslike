@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.runtime_data
 {

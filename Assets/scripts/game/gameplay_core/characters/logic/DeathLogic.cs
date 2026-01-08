@@ -23,11 +23,11 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(isDead)
 			{
-				_unityEventsListener.StartCoroutine(ProcessDeathSequence());
+				_unityEventsListener.StartCoroutine(ProcessPlayerDeathSequence());
 			}
 		}
 
-		private IEnumerator ProcessDeathSequence()
+		private IEnumerator ProcessPlayerDeathSequence()
 		{
 			yield return new WaitForSeconds(1);
 			GameStaticContext.Instance.ReloadLocation.Execute();
