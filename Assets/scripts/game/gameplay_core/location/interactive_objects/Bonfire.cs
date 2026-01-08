@@ -35,6 +35,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void HandleInteractionTriggered(CharacterDomain interactingCharacter)
 		{
+			GameStaticContext.Instance.PlayerSave.RespawnTransform = interactingCharacter.ExternalData.Transform.GetCache();
 			GameStaticContext.Instance.ReloadLocation.Execute();
 		}
 

@@ -58,6 +58,7 @@ namespace game.gameplay_core.characters
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
 		private BlockLogic _blockLogic;
+		private DeathLogic _deathLogic;
 
 		[ShowInInspector]
 		private CharacterStats _characterStats;
@@ -66,6 +67,7 @@ namespace game.gameplay_core.characters
 		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
+		
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -171,6 +173,8 @@ namespace game.gameplay_core.characters
 				EnteredTriggers = _context.EnteredTriggers,
 				IsPlayer = isPlayer
 			});
+			
+			_deathLogic = new DeathLogic(_context);
 
 			_movementLogic.SetContext(new MovementLogic.Context
 			{
