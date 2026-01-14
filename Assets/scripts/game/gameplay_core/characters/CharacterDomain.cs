@@ -67,7 +67,6 @@ namespace game.gameplay_core.characters
 		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
-		
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -174,7 +173,7 @@ namespace game.gameplay_core.characters
 				EnteredTriggers = _context.EnteredTriggers,
 				IsPlayer = isPlayer
 			});
-			
+
 			_deathLogic = new DeathLogic(_context);
 
 			_movementLogic.SetContext(new MovementLogic.Context
@@ -416,6 +415,7 @@ namespace game.gameplay_core.characters
 		public void HandleLocationRespawn()
 		{
 			_context.CharacterStats.SetStatsToMax();
+			_context.InventoryLogic.HandleRespawn();
 			_context.IsDead.Value = false;
 			_movementLogic.Teleport(_respawnTransform);
 			CharacterStateMachine.Reset();

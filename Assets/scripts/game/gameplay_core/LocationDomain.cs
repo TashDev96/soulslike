@@ -65,22 +65,21 @@ namespace game.gameplay_core
 		public void RespawnAndReloadLocation()
 		{
 			_player.Value.SetRespawnTransform(new TransformCache(_player.Value.transform));
-			
+
 			foreach(var character in _locationContext.Characters)
 			{
 				character.HandleLocationRespawn();
 			}
 			SaveCurrentStateToData();
 		}
-		
+
 		public LocationSaveData SaveCurrentStateToData()
 		{
 			foreach(var character in _locationContext.Characters)
 			{
 				character.WriteStateToSaveData();
 			}
-			
-			
+
 			return _locationContext.LocationSaveData;
 		}
 
@@ -111,7 +110,7 @@ namespace game.gameplay_core
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
 			_player.Value.Initialize(_locationContext);
-			
+
 			var playerSave = GameStaticContext.Instance.PlayerSave;
 			var isFirstTimePlayerCreated = false;
 			if(_sceneInstaller.TestPlayerSpawnPos != null && !playerSave.CharacterData.Initialized)
@@ -123,7 +122,7 @@ namespace game.gameplay_core
 				isFirstTimePlayerCreated = true;
 			}
 			_player.Value.SetSaveData(playerSave.CharacterData, isFirstTimePlayerCreated);
-			
+
 			_locationContext.Characters.Add(_player.Value);
 
 			if(!_sceneInstaller.OnlySpawnPlayer)

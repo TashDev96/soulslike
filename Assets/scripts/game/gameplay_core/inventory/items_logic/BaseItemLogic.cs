@@ -22,5 +22,10 @@ namespace game.gameplay_core.inventory.items_logic
 		}
 
 		public abstract void SaveData();
+
+		public virtual void HandleLocationRespawn()
+		{
+			
+		}
 	}
 }

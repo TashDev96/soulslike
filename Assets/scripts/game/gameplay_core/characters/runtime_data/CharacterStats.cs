@@ -2,8 +2,6 @@ using System;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using Sirenix.OdinInspector;
-using UnityEditor;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.runtime_data
 {
@@ -40,7 +38,7 @@ namespace game.gameplay_core.characters.runtime_data
 #if UNITY_EDITOR
 		[Button]
 #endif
-		
+
 		public void SetStatsToMax()
 		{
 			Hp.Value = HpMax.Value;

@@ -100,6 +100,11 @@ namespace game.gameplay_core.characters.state_machine
 			return str;
 		}
 
+		public void Reset()
+		{
+			SetState(_idleState);
+		}
+
 		private void HandleParryFail()
 		{
 			if(_currentState.Value is ParryState parryState)
@@ -498,11 +503,6 @@ namespace game.gameplay_core.characters.state_machine
 			var victimConeRight = Quaternion.AngleAxis(victimMaxAngle, Vector3.up) * victimForward;
 			Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, debugColor, debugDuration);
 			Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, debugColor, debugDuration);
-		}
-
-		public void Reset()
-		{
-			SetState(_idleState);
 		}
 	}
 }

@@ -1,6 +1,8 @@
+using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace game.gameplay_core.characters.ai
 {
@@ -75,7 +77,7 @@ namespace game.gameplay_core.characters.ai
 
 		public void Reset()
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

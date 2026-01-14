@@ -37,15 +37,15 @@ namespace game.gameplay_core.characters.view.ui
 			context.LocationUiUpdate.OnExecute += CustomUpdate;
 		}
 
+		public void Reset()
+		{
+			_healthBar.Reset();
+		}
+
 		private void CustomUpdate(float deltaTime)
 		{
 			var screenPos = GameStaticContext.Instance.MainCamera.Value.WorldToScreenPoint(_context.UiPivotWorld.position).Round();
 			_transform.position = screenPos;
-		}
-
-		public void Reset()
-		{
-			_healthBar.Reset();
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace game.gameplay_core.characters.logic
 {
 	public class DeathLogic
 	{
-		private CharacterContext _context;
+		private readonly CharacterContext _context;
 		private readonly UnityEventsListener _unityEventsListener;
 
 		public DeathLogic(CharacterContext context)

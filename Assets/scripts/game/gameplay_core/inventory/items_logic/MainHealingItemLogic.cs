@@ -12,9 +12,9 @@ namespace game.gameplay_core.inventory.items_logic
 		private readonly MainHealingItemConfig _config;
 		private float _healProgressDone;
 		private CharacterContext _characterContext;
+		private readonly ReactiveProperty<int> _chargesLeft = new();
 
 		public IReadOnlyReactiveProperty<int> ChargesLeft => _chargesLeft;
-		private readonly ReactiveProperty<int> _chargesLeft = new();
 		public float HealAmount => _config.BaseHealingAmount;
 
 		public bool HasInfiniteCharges => false;
@@ -38,6 +38,7 @@ namespace game.gameplay_core.inventory.items_logic
 		public void HandleAnimationBegin()
 		{
 			_healProgressDone = 0f;
+			_chargesLeft.Value--;
 		}
 
 		public void HandleAnimationProgress(float normalizedTime)
@@ -73,6 +74,13 @@ namespace game.gameplay_core.inventory.items_logic
 		public override void SaveData()
 		{
 			SaveableData.SetInt(ChargesLeftKey, _chargesLeft.Value);
+		}
+
+		public override void HandleLocationRespawn()
+		{
+			base.HandleLocationRespawn();
+			_healProgressDone = 0;
+			_chargesLeft.Value = _config.ChargesCount;
 		}
 
 		public bool CheckCanStartConsumption()

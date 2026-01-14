@@ -33,6 +33,12 @@ namespace game.gameplay_core
 			await Initialize(saveData);
 		}
 
+		public void RespawnAndReloadLocation()
+		{
+			//TODO: reload scene for maximum consistency
+			_locationDomain.RespawnAndReloadLocation();
+		}
+
 		private async UniTask PreloadCoreGameAssets()
 		{
 			var stringBuilder = new StringBuilder();
@@ -49,12 +55,6 @@ namespace game.gameplay_core
 
 			stringBuilder.AppendLine($"Preload End - Frame: {Time.frameCount}");
 			Debug.Log(stringBuilder.ToString());
-		}
-
-		public void RespawnAndReloadLocation()
-		{
-			//TODO: reload scene for maximum consistency
-			_locationDomain.RespawnAndReloadLocation();
 		}
 	}
 }

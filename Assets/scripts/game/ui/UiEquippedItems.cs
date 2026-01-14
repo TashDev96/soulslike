@@ -1,4 +1,3 @@
-using dream_lib.src.reactive;
 using game.enums;
 using game.gameplay_core.characters;
 using game.gameplay_core.inventory.items_logic;
@@ -27,13 +26,12 @@ namespace game.ui
 			_context = context;
 
 			var inventory = _context.Player.ExternalData.InventoryLogic;
-			
+
 			_leftSlot.SetItem(inventory.GetArmament(ArmamentSlot.Left));
 			_rightSlot.SetItem(inventory.GetArmament(ArmamentSlot.Right));
-			
+
 			UpdateConsumable(_context.Player.Context.CurrentConsumableItem.Value);
 			_context.Player.Context.CurrentConsumableItem.OnChanged += UpdateConsumable;
-			
 		}
 
 		private void UpdateConsumable(IConsumableItemLogic item)

@@ -397,7 +397,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						Debug.LogError(_weaponView.Config.RunAttack);
 						throw;
 					}
-					
+
 					return;
 				case AttackType.RunAttackStrong:
 					newAttackIndex = 0;

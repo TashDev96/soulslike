@@ -7,7 +7,6 @@ using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters.state_machine;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -198,6 +197,12 @@ namespace game.gameplay_core.characters.logic
 			_rotationMovementLocked = value;
 		}
 
+		public void Teleport(TransformCache respawnTransform)
+		{
+			_context.CharacterTransform.position = respawnTransform.Position;
+			_context.CharacterTransform.eulerAngles = respawnTransform.EulerAngles;
+		}
+
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
 		{
 			_hadAcceleratedMovement = true;
@@ -315,13 +320,6 @@ namespace game.gameplay_core.characters.logic
 		private void HandleFallingChanged(bool isFalling)
 		{
 			DebugDrawUtils.DrawText(isFalling ? "start fall" : "end fall", _context.CharacterTransform.position, 2f);
-		}
-
-		public void Teleport(TransformCache respawnTransform)
-		{
-			_context.CharacterTransform.position = respawnTransform.Position;
-			_context.CharacterTransform.eulerAngles = respawnTransform.EulerAngles;
-			
 		}
 	}
 }

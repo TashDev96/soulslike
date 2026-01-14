@@ -13,6 +13,5 @@ namespace game.gameplay_core.characters
 		public float Stamina;
 		public string LeftWeaponId;
 		public string RightWeaponId;
-		
 	}
 }

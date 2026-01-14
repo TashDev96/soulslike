@@ -10,11 +10,11 @@ namespace game.gameplay_core.inventory.items_logic
 		private const string ChargesLeftKey = "charges_left";
 		private readonly BaseConsumableItemConfig _config;
 		private bool _effectApplied;
+		private readonly ReactiveProperty<int> _chargesLeft = new();
 
 		public override BaseItemConfig BaseConfig => _config;
 		public bool HasInfiniteCharges => _config.HasInfiniteCharges;
 		public IReadOnlyReactiveProperty<int> ChargesLeft => _chargesLeft;
-		private readonly ReactiveProperty<int> _chargesLeft = new();
 
 		public string Id => _config.name;
 
