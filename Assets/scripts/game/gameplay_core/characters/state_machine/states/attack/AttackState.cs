@@ -328,9 +328,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				var angleDifference = Vector3.SignedAngle(forwardHorizontal, targetDirectionHorizontal, Vector3.up);
 				var clampedAngle = Mathf.Clamp(angleDifference, -maxAngleCorrection, maxAngleCorrection);
 
-				var correctedDirection = Quaternion.AngleAxis(clampedAngle, Vector3.up) * forwardHorizontal;
+				var horizontalMagnitude = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
+				var correctedDirection = Quaternion.AngleAxis(clampedAngle, Vector3.up) * forwardHorizontal * horizontalMagnitude;
 				correctedDirection.y = targetDirection.y;
-				direction = correctedDirection.normalized;
+				direction = correctedDirection;
 			}
 
 			projectileView.Initialize(new ProjectileData
@@ -381,7 +382,22 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return;
 				case AttackType.RunAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _weaponView.Config.RunAttack;
+					try
+					{
+						attackConfig = _weaponView.Config.RunAttack;
+						if(attackConfig == null)
+						{
+							attackConfig = weaponConfig.GetAttacksSequence(AttackType.Regular)[0];
+						}
+					}
+					catch(Exception e)
+					{
+						Debug.LogError(_weaponView);
+						Debug.LogError(_weaponView.Config);
+						Debug.LogError(_weaponView.Config.RunAttack);
+						throw;
+					}
+					
 					return;
 				case AttackType.RunAttackStrong:
 					newAttackIndex = 0;

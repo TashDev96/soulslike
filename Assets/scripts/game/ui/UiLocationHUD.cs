@@ -19,6 +19,8 @@ namespace game.ui
 		private UiBar _staminaBar;
 		[SerializeField]
 		private UiInteractionPrompt _uiInteractionPrompt;
+		[SerializeField]
+		private UiEquippedItems _equippedItems;
 
 		public void SetContext(Context context)
 		{
@@ -39,6 +41,11 @@ namespace game.ui
 			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context
 			{
 				TriggersEnteredByPlayer = context.Player.ExternalData.EnteredTriggers,
+				Player = context.Player
+			});
+
+			_equippedItems.SetContext(new UiEquippedItems.Context
+			{
 				Player = context.Player
 			});
 		}

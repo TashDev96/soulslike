@@ -19,7 +19,7 @@ namespace game.gameplay_core.characters.logic
 		private ArmamentSlot[] ParrySlots => new[] { ArmamentSlot.Left, ArmamentSlot.Right };
 
 		public WeaponItemLogic RightWeapon => _equippedItems[ArmamentSlot.Right] as WeaponItemLogic;
-		public WeaponItemLogic LeftWeapon => _equippedItems[ArmamentSlot.Right] as WeaponItemLogic;
+		public WeaponItemLogic LeftWeapon => _equippedItems[ArmamentSlot.Left] as WeaponItemLogic;
 
 		public void Initialize(CharacterContext context, InventoryData data)
 		{
@@ -63,6 +63,7 @@ namespace game.gameplay_core.characters.logic
 					break;
 			}
 		}
+		
 
 		public BaseItemLogic GetArmament(ArmamentSlot slot)
 		{

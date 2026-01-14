@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20366e04c90e40d1b53094fc6daa2b63, type: 3}
   m_Name: MainHealingItemConfig
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 2104114952, guid: 9c5f2426d24484699a497c354e7a81db, type: 3}
   <HasInfiniteCharges>k__BackingField: 0
   <ChargesCount>k__BackingField: 5
   <AnimationConfig>k__BackingField:

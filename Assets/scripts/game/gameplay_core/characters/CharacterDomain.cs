@@ -76,6 +76,7 @@ namespace game.gameplay_core.characters
 		private SerializableDictionary<ArmamentSlot, Transform> ArmSockets { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
+		public CharacterContext Context => _context;
 		public CharacterConfig Config => _config;
 		public CharacterStateMachine CharacterStateMachine { get; private set; }
 		public CharacterInventoryLogic InventoryLogic { get; private set; }

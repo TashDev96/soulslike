@@ -1,3 +1,4 @@
+using dream_lib.src.reactive;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.serialized_data;
 using UnityEngine;
@@ -10,8 +11,10 @@ namespace game.gameplay_core.inventory.items_logic
 		private readonly BaseConsumableItemConfig _config;
 		private bool _effectApplied;
 
+		public override BaseItemConfig BaseConfig => _config;
 		public bool HasInfiniteCharges => _config.HasInfiniteCharges;
-		public int ChargesLeft { get; protected set; }
+		public IReadOnlyReactiveProperty<int> ChargesLeft => _chargesLeft;
+		private readonly ReactiveProperty<int> _chargesLeft = new();
 
 		public string Id => _config.name;
 
@@ -29,24 +32,24 @@ namespace game.gameplay_core.inventory.items_logic
 			base.LoadData(saveData);
 			if(!saveData.IsInitialized)
 			{
-				ChargesLeft = _config.ChargesCount;
+				_chargesLeft.Value = _config.ChargesCount;
 				saveData.IsInitialized = true;
 				SaveData();
 			}
 			else
 			{
-				ChargesLeft = SaveableData.GetInt(ChargesLeftKey);
+				_chargesLeft.Value = SaveableData.GetInt(ChargesLeftKey);
 			}
 		}
 
 		public override void SaveData()
 		{
-			SaveableData.SetInt(ChargesLeftKey, ChargesLeft);
+			SaveableData.SetInt(ChargesLeftKey, _chargesLeft.Value);
 		}
 
 		public bool CheckCanStartConsumption()
 		{
-			return HasInfiniteCharges || ChargesLeft > 0;
+			return HasInfiniteCharges || _chargesLeft.Value > 0;
 		}
 
 		public void HandleAnimationBegin()
@@ -66,7 +69,7 @@ namespace game.gameplay_core.inventory.items_logic
 		{
 			if(itemSaveData.IsInitialized)
 			{
-				ChargesLeft += itemSaveData.GetInt(ChargesLeftKey);
+				_chargesLeft.Value += itemSaveData.GetInt(ChargesLeftKey);
 				SaveData();
 			}
 			else

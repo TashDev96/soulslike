@@ -1,3 +1,4 @@
+using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.serialized_data;
@@ -12,11 +13,13 @@ namespace game.gameplay_core.inventory.items_logic
 		private float _healProgressDone;
 		private CharacterContext _characterContext;
 
-		public int ChargesLeft { get; private set; }
+		public IReadOnlyReactiveProperty<int> ChargesLeft => _chargesLeft;
+		private readonly ReactiveProperty<int> _chargesLeft = new();
 		public float HealAmount => _config.BaseHealingAmount;
 
 		public bool HasInfiniteCharges => false;
 
+		public override BaseItemConfig BaseConfig => _config;
 		public override string ConfigId => _config.name;
 
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
@@ -57,24 +60,24 @@ namespace game.gameplay_core.inventory.items_logic
 			base.LoadData(saveData);
 			if(!saveData.IsInitialized)
 			{
-				ChargesLeft = _config.ChargesCount;
+				_chargesLeft.Value = _config.ChargesCount;
 				saveData.IsInitialized = true;
 				SaveData();
 			}
 			else
 			{
-				ChargesLeft = SaveableData.GetInt(ChargesLeftKey);
+				_chargesLeft.Value = SaveableData.GetInt(ChargesLeftKey);
 			}
 		}
 
 		public override void SaveData()
 		{
-			SaveableData.SetInt(ChargesLeftKey, ChargesLeft);
+			SaveableData.SetInt(ChargesLeftKey, _chargesLeft.Value);
 		}
 
 		public bool CheckCanStartConsumption()
 		{
-			return ChargesLeft > 0;
+			return _chargesLeft.Value > 0;
 		}
 
 		public void HandlePickupAdditionalItem(InventoryItemSaveData itemSaveData)

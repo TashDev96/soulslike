@@ -1,3 +1,4 @@
+using dream_lib.src.reactive;
 using game.gameplay_core.inventory.item_configs;
 
 namespace game.gameplay_core.inventory.items_logic
@@ -5,7 +6,7 @@ namespace game.gameplay_core.inventory.items_logic
 	public interface IConsumableItemLogic
 	{
 		public bool HasInfiniteCharges { get; }
-		public int ChargesLeft { get; }
+		public IReadOnlyReactiveProperty<int> ChargesLeft { get; }
 
 		public ItemAnimationConfig AnimationConfig { get; }
 		public bool CheckCanStartConsumption();

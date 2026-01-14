@@ -1,6 +1,7 @@
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.config;
+using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.view;
@@ -26,6 +27,7 @@ namespace game.gameplay_core.characters
 		public ReactiveHashSet<Collider> EnteredTriggers => _context.EnteredTriggers;
 
 		public IReadOnlyReactiveProperty<CharacterDomain> LockOnTarget => _context.LockOnLogic.LockOnTarget;
+		public CharacterInventoryLogic InventoryLogic => _context.InventoryLogic;
 
 		public CharacterExternalData(CharacterContext context)
 		{
