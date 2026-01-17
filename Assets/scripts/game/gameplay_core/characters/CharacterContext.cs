@@ -35,6 +35,8 @@ namespace game.gameplay_core.characters
 		public LockOnPointView[] LockOnPoints;
 		public CharacterStats CharacterStats;
 		public CharacterInputData InputData;
+		public CapsuleCharacterCollider CharacterCollider;
+		
 
 		public ReactiveProperty<float> WalkSpeed;
 		public ReactiveProperty<float> RunSpeed;

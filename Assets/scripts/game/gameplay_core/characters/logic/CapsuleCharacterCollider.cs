@@ -164,6 +164,31 @@ namespace game.gameplay_core.characters.logic
 		// 	}
 		// }
 
+		public bool CheckForFallOff(Vector3 moveDirection, float checkDistance, float safeDropHeight = 1.3f)
+		{
+			if(moveDirection.sqrMagnitude < 0.001f)
+			{
+				return false;
+			}
+
+			var targetPos = transform.position + moveDirection.normalized * checkDistance;
+
+			GetCapsulePoints(targetPos, out var p1, out var p2);
+
+			var isSafe = false;
+
+			if(Physics.CheckCapsule(p1, p2, Radius, _collisionMask, QueryTriggerInteraction.Ignore))
+			{
+				isSafe = true;
+			}
+			else if(Physics.CapsuleCast(p1, p2, Radius, Vector3.down, out var hit, safeDropHeight + 0.1f, _collisionMask, QueryTriggerInteraction.Ignore))
+			{
+				isSafe = true;
+			}
+
+			return !isSafe;
+		}
+
 		public bool SampleGroundBelow(float maxDistance, out float distanceToGround)
 		{
 			var offset = Radius + SkinWidth;

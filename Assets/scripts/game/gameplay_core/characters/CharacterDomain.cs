@@ -114,6 +114,8 @@ namespace game.gameplay_core.characters
 				CharacterStats = _characterStats,
 				CharacterConfig = _config
 			});
+			
+			var characterCollider = GetComponent<CapsuleCharacterCollider>();
 
 			_context = new CharacterContext
 			{
@@ -137,6 +139,7 @@ namespace game.gameplay_core.characters
 				CharacterStats = _characterStats,
 				LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
 				InputData = new CharacterInputData(),
+				CharacterCollider = characterCollider,
 
 				EquippedWeaponViews = _equippedWeaponsViews,
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
@@ -167,7 +170,6 @@ namespace game.gameplay_core.characters
 
 			ExternalData = new CharacterExternalData(_context);
 
-			var characterCollider = GetComponent<CapsuleCharacterCollider>();
 			characterCollider.SetContext(new CapsuleCharacterCollider.Context
 			{
 				EnteredTriggers = _context.EnteredTriggers,

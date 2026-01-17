@@ -140,6 +140,15 @@ namespace game.gameplay_core.characters.ai
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
+			if(_context.InputData.Command is CharacterCommand.Walk or CharacterCommand.WalkBlock or CharacterCommand.Run or CharacterCommand.Roll)
+			{
+				if(_context.CharacterCollider.CheckForFallOff(_context.InputData.DirectionWorld, 0.5f))
+				{
+					_context.InputData.Command = CharacterCommand.None;
+					_context.InputData.DirectionWorld = Vector3.zero;
+				}
+			}
 		}
 
 		public string GetDebugSting()

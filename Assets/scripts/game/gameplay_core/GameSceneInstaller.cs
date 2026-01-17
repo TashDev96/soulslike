@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using dream_lib.src.utils.serialization;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
@@ -24,6 +25,12 @@ namespace game.gameplay_core
 
 		[field: SerializeField]
 		public bool OnlySpawnPlayer { get; private set; }
+		
+		[field: SerializeField]
+		private bool OnlySpawnCustomEnemies { get; set; }
+		[field: SerializeField]
+		[field:ShowIf("OnlySpawnCustomEnemies")]
+		private CharacterDomain[] CustomEnemies { get; set; }
 
 #if UNITY_EDITOR
 
@@ -37,6 +44,10 @@ namespace game.gameplay_core
 		{
 			SavableObjects = FindObjectsByType<SceneSavableObjectBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 			Characters = FindObjectsByType<CharacterDomain>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+			if(OnlySpawnCustomEnemies)
+			{
+				Characters = CustomEnemies;
+			}
 		}
 
 		private void OnEnable()

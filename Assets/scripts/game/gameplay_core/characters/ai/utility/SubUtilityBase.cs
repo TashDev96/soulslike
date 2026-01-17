@@ -264,6 +264,15 @@ namespace game.gameplay_core.characters.ai.utility
 					throw new ArgumentOutOfRangeException();
 			}
 
+			if(InputData.Command is CharacterCommand.Walk or CharacterCommand.WalkBlock or CharacterCommand.Run or CharacterCommand.Roll)
+			{
+				if(_context.CharacterContext.CharacterCollider.CheckForFallOff(InputData.DirectionWorld, 1f, 1.3f))
+				{
+					InputData.Command = CharacterCommand.None;
+					InputData.DirectionWorld = Vector3.zero;
+				}
+			}
+
 			if(!_hasMovedByPathThisFrame)
 			{
 				_needRecalculatePath = true;
