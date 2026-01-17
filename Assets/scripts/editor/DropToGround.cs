@@ -10,7 +10,8 @@ namespace editor
 		{
 			foreach (var obj in Selection.gameObjects)
 			{
-				if (Physics.Raycast(obj.transform.position + Vector3.up * 100f, Vector3.down, out RaycastHit hit, 200f))
+				var layer = LayerMask.GetMask("Default", "LevelGeometry");
+				if (Physics.Raycast(obj.transform.position + Vector3.up * 100f, Vector3.down,  out RaycastHit hit, 200f, layer))
 				{
 					Undo.RecordObject(obj.transform, "Drop To Ground");
 					obj.transform.position = hit.point;

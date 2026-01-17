@@ -76,10 +76,13 @@ namespace game.gameplay_core.location.interactive_objects
 		private void UpdateAnimatorState(bool immediate = false)
 		{
 			SaveData.IsOpened = !SaveData.IsOpened;
-			_animator.SetBool(IsOpen, SaveData.IsOpened);
-			if(immediate)
+			if(_animator != null)
 			{
-				_animator.SetTrigger(Immediate);
+				_animator.SetBool(IsOpen, SaveData.IsOpened);
+				if(immediate)
+				{
+					_animator.SetTrigger(Immediate);
+				}
 			}
 		}
 	}

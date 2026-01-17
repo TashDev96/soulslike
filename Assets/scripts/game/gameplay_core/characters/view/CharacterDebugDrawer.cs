@@ -20,6 +20,7 @@ namespace game.gameplay_core.characters.view
 	{
 		public bool DrawStateMachineInfo;
 		public bool DrawBrainInfo;
+		public bool DrawAttacksInfo;
 
 		private bool _initialized;
 		private CharacterContext _context;
@@ -131,17 +132,20 @@ namespace game.gameplay_core.characters.view
 
 			Handles.Label(_transform.position + Vector3.up * 3f, sb.ToString(), _textStyle);
 
-			_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
-
-			if(_stateMachine.CurrentState.Value is AttackState attackState)
+			if(DrawAttacksInfo)
 			{
-				if(_context.InputData.Command == CharacterCommand.RegularAttack)
+				_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
+
+				if(_stateMachine.CurrentState.Value is AttackState attackState)
 				{
-					_graphDrawer.FreePoints.Add(new GraphPoint(attackState.Time, AttackGraphY)
+					if(_context.InputData.Command == CharacterCommand.RegularAttack)
 					{
-						Color = Color.blue,
-						Size = 0.03f
-					});
+						_graphDrawer.FreePoints.Add(new GraphPoint(attackState.Time, AttackGraphY)
+						{
+							Color = Color.blue,
+							Size = 0.03f
+						});
+					}
 				}
 			}
 		}

@@ -1,7 +1,9 @@
 namespace game.enums
 {
+	
 	public enum KeyId
 	{
-		TutorialKey
+		TutorialKey,
+		L1DoorBehindWall,
 	}
 }
