@@ -6,6 +6,9 @@ namespace game.gameplay_core.characters.ai.navigation
 {
 	public class AiNavigationModule
 	{
+		private const float NavMeshSampleRadius = 2f;
+		private const float ArrivalThreshold = 0.2f;
+
 		public Vector3 TargetPosition;
 		private readonly ReadOnlyTransform _characterTransform;
 
@@ -25,7 +28,20 @@ namespace game.gameplay_core.characters.ai.navigation
 		public void BuildPath(Vector3 targetPosition)
 		{
 			TargetPosition = targetPosition;
-			NavMesh.CalculatePath(_characterTransform.Position, targetPosition, NavMesh.AllAreas, _navMeshPath);
+
+			var startPos = _characterTransform.Position;
+			if(NavMesh.SamplePosition(startPos, out var startHit, NavMeshSampleRadius, NavMesh.AllAreas))
+			{
+				startPos = startHit.position;
+			}
+
+			var endPos = targetPosition;
+			if(NavMesh.SamplePosition(endPos, out var endHit, NavMeshSampleRadius, NavMesh.AllAreas))
+			{
+				endPos = endHit.position;
+			}
+
+			NavMesh.CalculatePath(startPos, endPos, NavMesh.AllAreas, _navMeshPath);
 			if(_navMeshPath.status != NavMeshPathStatus.PathInvalid)
 			{
 				Path.SetPath(_navMeshPath);
@@ -34,21 +50,32 @@ namespace game.gameplay_core.characters.ai.navigation
 			_currentLength = 0;
 		}
 
-		public bool CheckTargetPositionChangedSignificantly(Vector3 newTargetPosition, float mean = 0.1f)
+		public bool CheckTargetPositionChangedSignificantly(Vector3 newTargetPosition, float threshold = 0.1f)
 		{
-			return (TargetPosition - newTargetPosition).sqrMagnitude > mean * mean;
+			return (TargetPosition - newTargetPosition).sqrMagnitude > threshold * threshold;
 		}
 
 		public Vector3 CalculateMoveDirection(Vector3 currentPosition)
 		{
 			SampleByLength(_currentLength, out var targetPos, out _);
-			if((targetPos - currentPosition).sqrMagnitude < 0.1f * 0.1f)
+
+			var diff = targetPos - currentPosition;
+			var diff2D = new Vector2(diff.x, diff.z);
+
+			if(diff2D.sqrMagnitude < ArrivalThreshold * ArrivalThreshold)
 			{
-				_currentLength += 0.2f;
+				_currentLength += ArrivalThreshold;
 				SampleByLength(_currentLength, out targetPos, out _);
+				diff = targetPos - currentPosition;
+				diff2D = new Vector2(diff.x, diff.z);
 			}
 
-			return (targetPos - currentPosition).normalized;
+			if(diff2D.sqrMagnitude < Mathf.Epsilon)
+			{
+				return Vector3.zero;
+			}
+
+			return new Vector3(diff2D.x, 0, diff2D.y).normalized;
 		}
 
 		public void DrawDebug(Color color, float duration = 0)

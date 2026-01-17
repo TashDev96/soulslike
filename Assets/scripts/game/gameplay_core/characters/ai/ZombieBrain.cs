@@ -127,16 +127,8 @@ namespace game.gameplay_core.characters.ai
 					if(!_navigationModule.Path.IsEmpty)
 					{
 						_context.InputData.Command = CharacterCommand.Walk;
-
-						if(_navigationModule.Path.IsEmpty)
-						{
-							_context.InputData.DirectionWorld = directionToTarget;
-						}
-						else
-						{
-							var newDir = _navigationModule.CalculateMoveDirection(selfPosition);
-							_context.InputData.DirectionWorld = newDir;
-						}
+						var newDir = _navigationModule.CalculateMoveDirection(selfPosition);
+						_context.InputData.DirectionWorld = newDir;
 					}
 
 					break;
