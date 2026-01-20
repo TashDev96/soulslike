@@ -17,7 +17,7 @@ namespace game.gameplay_core
 		public SceneSavableObjectBase[] SceneSavableObjects { get; set; }
 
 		public List<CharacterDomain> Characters { get; set; }
-		public List<SpawnedObjectController> SpawnedObjects { get; set; } = new List<SpawnedObjectController>();
+		public List<SpawnedObjectController> SpawnedObjects { get; set; } = new();
 		public ReactiveCommand<float> LocationUpdate { get; set; }
 		public ReactiveCommand<float> LocationUiUpdate { get; set; }
 		public ReactiveProperty<float> LocationTime { get; set; }

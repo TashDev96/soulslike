@@ -110,6 +110,14 @@ namespace game.gameplay_core.characters.logic
 			return false;
 		}
 
+		public void HandleRespawn()
+		{
+			foreach(var baseItemLogic in _items)
+			{
+				baseItemLogic.HandleLocationRespawn();
+			}
+		}
+
 		private void HandleConsumableItemPickup(InventoryItemSaveData itemSaveData, BaseConsumableItemLogic createdItemLogic)
 		{
 			if(TryGetExistingItem<BaseConsumableItemLogic>(itemSaveData.ConfigId, out var existingItemLogic))
@@ -176,14 +184,6 @@ namespace game.gameplay_core.characters.logic
 			}
 			result = null;
 			return false;
-		}
-
-		public void HandleRespawn()
-		{
-			foreach(var baseItemLogic in _items)
-			{
-				baseItemLogic.HandleLocationRespawn();
-			}
 		}
 	}
 }

@@ -96,13 +96,13 @@ namespace game.gameplay_core.characters
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
 			_statsLogic = new StatsLogic();
-			
+
 			InventoryLogic = new CharacterInventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
 			_characterStats = new CharacterStats();
-			
+
 			var characterCollider = GetComponent<CapsuleCharacterCollider>();
 
 			_context = new CharacterContext
@@ -153,7 +153,7 @@ namespace game.gameplay_core.characters
 
 				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
-			
+
 			_statsLogic.SetContext(_context);
 			_lockOnLogic.SetContext(_context);
 
@@ -247,7 +247,7 @@ namespace game.gameplay_core.characters
 				{
 					CharacterContext = _context,
 					UiPivotWorld = _uiPivot,
-					LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate,
+					LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate
 				});
 			}
 		}

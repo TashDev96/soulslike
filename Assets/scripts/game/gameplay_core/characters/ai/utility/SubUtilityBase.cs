@@ -266,7 +266,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 			if(InputData.Command is CharacterCommand.Walk or CharacterCommand.WalkBlock or CharacterCommand.Run or CharacterCommand.Roll)
 			{
-				if(_context.CharacterContext.CharacterCollider.CheckForFallOff(InputData.DirectionWorld, 1f, 1.3f))
+				if(_context.CharacterContext.CharacterCollider.CheckForFallOff(InputData.DirectionWorld, 1f))
 				{
 					InputData.Command = CharacterCommand.None;
 					InputData.DirectionWorld = Vector3.zero;

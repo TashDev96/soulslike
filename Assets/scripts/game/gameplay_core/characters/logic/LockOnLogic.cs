@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 
@@ -11,7 +10,6 @@ namespace game.gameplay_core.characters.logic
 		public ReactiveProperty<CharacterDomain> LockOnTarget { get; } = new();
 		public bool IsLockedOn => LockOnTarget.HasValue;
 		public bool DisableRotationForThisFrame { get; set; }
- 
 
 		public void SetContext(CharacterContext context)
 		{

@@ -226,7 +226,7 @@ namespace game.gameplay_core.characters.state_machine
 						var canDoBackStabs = weaponConfig.CanBackstab && _context.Config.CanDoBackstabs;
 						var canRiposte = weaponConfig.CanRiposte;
 
-						var riposteableEnemy = canRiposte ? FindRiposteableEnemy() : null;
+						var riposteableEnemy = canRiposte ? FindRipostableEnemy() : null;
 						var backstabbableEnemy = canDoBackStabs ? FindBackstabbableEnemy() : null;
 
 						if(canRiposte && riposteableEnemy != null)
@@ -401,7 +401,7 @@ namespace game.gameplay_core.characters.state_machine
 			return null;
 		}
 
-		private CharacterDomain FindRiposteableEnemy()
+		private CharacterDomain FindRipostableEnemy()
 		{
 			const float maxRiposteDistance = 3f;
 			const float attackerLookingAtVictimMaxAngle = 10f;

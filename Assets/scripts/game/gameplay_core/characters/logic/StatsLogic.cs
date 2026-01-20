@@ -1,7 +1,3 @@
-using game.gameplay_core.characters.config;
-using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.characters;
-
 namespace game.gameplay_core.characters.logic
 {
 	public class StatsLogic

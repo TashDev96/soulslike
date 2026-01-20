@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using dream_lib.src.extensions;
-using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.utils;
-using game.gameplay_core.characters;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic

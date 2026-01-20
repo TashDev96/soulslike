@@ -18,7 +18,6 @@ namespace game.gameplay_core
 {
 	public class LocationDomain
 	{
-
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
 		private ICameraController _cameraController;
