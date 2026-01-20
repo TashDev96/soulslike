@@ -5,18 +5,13 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.utils;
+using game.gameplay_core.characters;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
 	public class CapsuleCharacterCollider : CapsuleCaster
 	{
-		public class Context
-		{
-			public ReactiveHashSet<Collider> EnteredTriggers;
-			public bool IsPlayer;
-		}
-
 		[SerializeField]
 		private int _maxIterations = 4;
 		[SerializeField]
@@ -40,7 +35,7 @@ namespace game.gameplay_core.characters.logic
 		private float _stepGravityDisableTimer;
 		private readonly Collider[] _castResults = new Collider[50];
 
-		private Context _context;
+		private CharacterContext _context;
 		private readonly List<Collider> _exitedTriggersCache = new();
 
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
@@ -49,7 +44,7 @@ namespace game.gameplay_core.characters.logic
 		public bool IsOnStableSlope { get; private set; }
 		public bool IsFakeGrounded => _stepGravityDisableTimer > 0;
 
-		public void SetContext(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 		}
@@ -254,7 +249,7 @@ namespace game.gameplay_core.characters.logic
 					if(_castResults[i].TryGetComponent<TriggerEventsListener>(out var listener))
 					{
 #if UNITY_EDITOR
-						if(_context.IsPlayer)
+						if(_context.IsPlayer.Value)
 						{
 							Debug.Log($"player entered {_castResults[i]}");
 						}
@@ -270,7 +265,7 @@ namespace game.gameplay_core.characters.logic
 				if(index < 0 || index >= count)
 				{
 #if UNITY_EDITOR
-					if(_context.IsPlayer)
+					if(_context.IsPlayer.Value)
 					{
 						Debug.Log($"player exit {enteredTrigger}");
 					}

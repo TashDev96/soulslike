@@ -1,5 +1,4 @@
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory.item_configs;
 
@@ -7,25 +6,15 @@ namespace game.gameplay_core.characters.logic
 {
 	public class BlockLogic
 	{
-		public struct Context
-		{
-			public IReadOnlyReactiveProperty<Team> Team { get; set; }
-			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public ApplyDamageCommand ApplyDamage { get; set; }
-			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
-			public StaminaLogic StaminaLogic { get; set; }
-			public PoiseLogic PoiseLogic { get; set; }
-		}
-
 		private readonly ReactiveCommand _onBlockTriggered = new();
 		private readonly ReactiveCommand _onParryFail = new();
 
-		private Context _context;
+		private CharacterContext _context;
 
 		public IReadOnlyReactiveCommand OnBlockTriggered => _onBlockTriggered;
 		public IReadOnlyReactiveCommand OnParryFail => _onParryFail;
 
-		public void SetContext(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 		}

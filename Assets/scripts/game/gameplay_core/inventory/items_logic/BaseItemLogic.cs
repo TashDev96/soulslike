@@ -25,7 +25,6 @@ namespace game.gameplay_core.inventory.items_logic
 
 		public virtual void HandleLocationRespawn()
 		{
-			
 		}
 	}
 }

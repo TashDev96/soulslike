@@ -1,6 +1,4 @@
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -9,39 +7,25 @@ namespace game.gameplay_core.characters.logic
 {
 	public class FallDamageLogic
 	{
-		public struct Context
-		{
-			public ApplyDamageCommand ApplyDamage;
-			public IsDead IsDead;
-			public Transform CharacterTransform;
-			public CharacterStats CharacterStats;
-			public ReactiveProperty<bool> IsFalling;
-			public InvulnerabilityLogic InvulnerabilityLogic;
-			public ReactiveCommand<StaggerReason> TriggerStagger;
-
-			public BodyAttackView BodyAttackView;
-			public StaminaLogic StaminaLogic;
-
-			public float MinimumFallDamageHeight;
-			public float LethalFallHeight;
-			public float StaggerThreshold;
-		}
-
 		private const float PROTECTION_COOLDOWN = 0.5f;
 		private const float PROTECTION_DURATION = 1.5f;
+
+		private const float MinimumFallDamageHeight = 8.0f;
+		private const float LethalFallHeight = 18.0f;
+		private const float StaggerThreshold = 5.0f;
 
 		private readonly float _minFallDamagePercent = 0.1f;
 
 		private readonly float _maxFallDamagePercent = 1.0f;
 
-		private Context _context;
+		private CharacterContext _context;
 		private float _fallStartY;
 
 		private float _lastProtectionActivationTime;
 
 		public ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
 
-		public void SetContext(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 
@@ -94,7 +78,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(!_context.IsDead.Value)
 			{
-				_fallStartY = _context.CharacterTransform.position.y;
+				_fallStartY = _context.Transform.Position.y;
 			}
 		}
 
@@ -102,14 +86,14 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
 			{
-				var fallDistance = _fallStartY - _context.CharacterTransform.position.y;
+				var fallDistance = _fallStartY - _context.Transform.Position.y;
 
-				if(fallDistance > _context.MinimumFallDamageHeight)
+				if(fallDistance > MinimumFallDamageHeight)
 				{
 					var damagePercentage = Mathf.Lerp(
 						_minFallDamagePercent,
 						_maxFallDamagePercent,
-						Mathf.InverseLerp(_context.MinimumFallDamageHeight, _context.LethalFallHeight, fallDistance)
+						Mathf.InverseLerp(MinimumFallDamageHeight, LethalFallHeight, fallDistance)
 					);
 
 					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
@@ -118,8 +102,8 @@ namespace game.gameplay_core.characters.logic
 					var damageInfo = new DamageInfo
 					{
 						DamageAmount = damage,
-						PoiseDamageAmount = fallDistance > _context.StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
-						WorldPos = _context.CharacterTransform.position,
+						PoiseDamageAmount = fallDistance > StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
+						WorldPos = _context.Transform.Position,
 						Direction = Vector3.down,
 						DoneByPlayer = false,
 						DamageDealer = null
@@ -129,7 +113,7 @@ namespace game.gameplay_core.characters.logic
 					_context.BodyAttackView.CastFallAttack(fallDistance);
 					_context.StaminaLogic.SpendStamina(staminaDamage);
 
-					if(fallDistance > _context.StaggerThreshold)
+					if(fallDistance > StaggerThreshold)
 					{
 						_context.TriggerStagger.Execute(StaggerReason.Fall);
 					}

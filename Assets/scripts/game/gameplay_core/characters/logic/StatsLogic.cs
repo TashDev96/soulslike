@@ -1,19 +1,14 @@
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.characters;
 
 namespace game.gameplay_core.characters.logic
 {
 	public class StatsLogic
 	{
-		public struct Context
-		{
-			public CharacterStats CharacterStats;
-			public CharacterConfig CharacterConfig;
-		}
+		private CharacterContext _context;
 
-		private readonly Context _context;
-
-		public StatsLogic(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			InitializeStats();
@@ -21,7 +16,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void InitializeStats()
 		{
-			var baseStats = _context.CharacterConfig.BaseStats;
+			var baseStats = _context.Config.BaseStats;
 
 			_context.CharacterStats.HpMax.Value = baseStats.HpMax;
 			_context.CharacterStats.Hp.Value = baseStats.HpMax;

@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using dream_lib.src.ui;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui
@@ -11,10 +12,9 @@ namespace game.gameplay_core.characters.view.ui
 	{
 		public struct CharacterWorldSpaceUiContext
 		{
+			public CharacterContext CharacterContext;
 			public ReactiveCommand<float> LocationUiUpdate;
-			public CharacterStats CharacterStats { get; set; }
 			public Transform UiPivotWorld { get; set; }
-			public ApplyDamageCommand ApplyDamage { get; set; }
 		}
 
 		[SerializeField]
@@ -29,8 +29,8 @@ namespace game.gameplay_core.characters.view.ui
 			transform.parent = GameStaticContext.Instance.WorldToScreenUiParent.Value;
 			_healthBar.SetContext(new UiBar.Context
 			{
-				Current = context.CharacterStats.Hp,
-				Max = context.CharacterStats.HpMax,
+				Current = context.CharacterContext.CharacterStats.Hp,
+				Max = context.CharacterContext.CharacterStats.HpMax,
 				CustomUpdate = context.LocationUiUpdate
 			});
 

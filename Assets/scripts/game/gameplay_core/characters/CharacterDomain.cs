@@ -80,7 +80,7 @@ namespace game.gameplay_core.characters
 		public CharacterStateMachine CharacterStateMachine { get; private set; }
 		public CharacterInventoryLogic InventoryLogic { get; private set; }
 
-		public void Initialize(LocationContext locationContext)
+		public void Initialize()
 		{
 			var isPlayer = UniqueId == "Player";
 
@@ -89,37 +89,25 @@ namespace game.gameplay_core.characters
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
 
-			_lockOnLogic = new LockOnLogic(new LockOnLogic.Context
-			{
-				CharacterTransform = _transform,
-				AllCharacters = locationContext.Characters,
-				Self = this,
-				MovementLogic = _movementLogic,
-				IsDead = isDead,
-				CharacterConfig = _config
-			});
-
+			_lockOnLogic = new LockOnLogic();
 			_blockLogic = new BlockLogic();
 			_invulnerabilityLogic = new InvulnerabilityLogic();
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
+			_statsLogic = new StatsLogic();
+			
 			InventoryLogic = new CharacterInventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
 			_characterStats = new CharacterStats();
-			_statsLogic = new StatsLogic(new StatsLogic.Context
-			{
-				CharacterStats = _characterStats,
-				CharacterConfig = _config
-			});
 			
 			var characterCollider = GetComponent<CapsuleCharacterCollider>();
 
 			_context = new CharacterContext
 			{
-				LocationTime = locationContext.LocationTime,
+				LocationTime = LocationStaticContext.Instance.LocationTime,
 				SelfLink = this,
 
 				MovementLogic = _movementLogic,
@@ -165,62 +153,25 @@ namespace game.gameplay_core.characters
 
 				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
 			};
+			
+			_statsLogic.SetContext(_context);
+			_lockOnLogic.SetContext(_context);
 
 			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
 
-			characterCollider.SetContext(new CapsuleCharacterCollider.Context
-			{
-				EnteredTriggers = _context.EnteredTriggers,
-				IsPlayer = isPlayer
-			});
+			characterCollider.SetContext(_context);
 
 			_deathLogic = new DeathLogic(_context);
 
-			_movementLogic.SetContext(new MovementLogic.Context
-			{
-				CharacterTransform = transform,
-				CharacterCollider = characterCollider,
-				IsDead = _context.IsDead,
-				RotationSpeed = _context.RotationSpeed,
-				IsFalling = _context.IsFalling,
-				LocomotionConfig = _config.Locomotion,
-				LockOnLogic = _context.LockOnLogic
-			});
+			_movementLogic.SetContext(_context, transform);
 
-			_blockLogic.SetContext(new BlockLogic.Context
-			{
-				Team = _context.Team,
-				CharacterId = _context.CharacterId,
-				ApplyDamage = _context.ApplyDamage,
-				InvulnerabilityLogic = _context.InvulnerabilityLogic,
-				StaminaLogic = _context.StaminaLogic,
-				PoiseLogic = _context.PoiseLogic
-			});
+			_blockLogic.SetContext(_context);
 
-			_fallDamageLogic.SetContext(new FallDamageLogic.Context
-			{
-				ApplyDamage = _context.ApplyDamage,
-				IsDead = _context.IsDead,
-				CharacterTransform = transform,
-				CharacterStats = _context.CharacterStats,
-				IsFalling = _context.IsFalling,
-				InvulnerabilityLogic = _context.InvulnerabilityLogic,
-				TriggerStagger = _context.TriggerStagger,
-				BodyAttackView = _context.BodyAttackView,
-				StaminaLogic = _context.StaminaLogic,
+			_fallDamageLogic.SetContext(_context);
 
-				MinimumFallDamageHeight = 8.0f,
-				LethalFallHeight = 18.0f,
-				StaggerThreshold = 5.0f
-			});
-
-			_staminaLogic.Initialize(new StaminaLogic.Context
-			{
-				Stamina = _context.CharacterStats.Stamina,
-				StaminaMax = _context.CharacterStats.StaminaMax
-			});
+			_staminaLogic.Initialize(_context);
 
 			CharacterStateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = CharacterStateMachine.CurrentState;
@@ -244,31 +195,16 @@ namespace game.gameplay_core.characters
 
 			if(_context.ParryReceiver != null)
 			{
-				_context.ParryReceiver.Initialize(new ParryReceiver.Context
-				{
-					Team = _context.Team,
-					CharacterId = _context.CharacterId,
-					OnParryTriggered = _context.OnParryTriggered
-				});
+				_context.ParryReceiver.Initialize(_context);
 			}
 
-			_healthLogic = new HealthLogic(new HealthLogic.Context
-			{
-				ApplyDamage = _context.ApplyDamage,
-				IsDead = _context.IsDead,
-				CharacterStats = _context.CharacterStats
-			});
+			_healthLogic = new HealthLogic(_context);
 
-			_poiseLogic.SetContext(new PoiseLogic.Context
-			{
-				ApplyDamage = _context.ApplyDamage,
-				Stats = _context.CharacterStats,
-				TriggerStagger = _context.TriggerStagger
-			});
+			_poiseLogic.SetContext(_context);
 
 			if(isPlayer)
 			{
-				_brain = new PlayerInputController(locationContext.CameraController);
+				_brain = new PlayerInputController(LocationStaticContext.Instance.CameraController);
 				_brain.Initialize(_context);
 			}
 			else
@@ -290,7 +226,7 @@ namespace game.gameplay_core.characters
 			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
 			_characterBodyView.Initialize(_context.ApplyDamage);
 
-			locationContext.LocationUpdate.OnExecute += CustomUpdate;
+			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(transform, _context, CharacterStateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
 
@@ -309,10 +245,9 @@ namespace game.gameplay_core.characters
 				_worldSpaceUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
 				_worldSpaceUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
 				{
-					CharacterStats = _context.CharacterStats,
+					CharacterContext = _context,
 					UiPivotWorld = _uiPivot,
-					LocationUiUpdate = locationContext.LocationUiUpdate,
-					ApplyDamage = _context.ApplyDamage
+					LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate,
 				});
 			}
 		}

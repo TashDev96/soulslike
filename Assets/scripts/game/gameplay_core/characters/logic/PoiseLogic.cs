@@ -1,6 +1,3 @@
-using dream_lib.src.reactive;
-using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.characters.runtime_data.bindings.stats;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
@@ -9,20 +6,13 @@ namespace game.gameplay_core.characters.logic
 {
 	public class PoiseLogic
 	{
-		public struct Context
-		{
-			public CharacterStats Stats { get; set; }
-			public ApplyDamageCommand ApplyDamage { get; set; }
-			public ReactiveCommand<StaggerReason> TriggerStagger { get; set; }
-		}
+		private CharacterContext _context;
 
-		private Context _context;
+		private Poise Poise => _context.CharacterStats.Poise;
+		private PoiseMax PoiseMax => _context.CharacterStats.PoiseMax;
+		private PoiseRestoreTimer PoiseRestoreTimer => _context.CharacterStats.PoiseRestoreTimer;
 
-		private Poise Poise => _context.Stats.Poise;
-		private PoiseMax PoiseMax => _context.Stats.PoiseMax;
-		private PoiseRestoreTimer PoiseRestoreTimer => _context.Stats.PoiseRestoreTimer;
-
-		public void SetContext(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			_context.ApplyDamage.OnExecute += ApplyDamage;
@@ -53,7 +43,7 @@ namespace game.gameplay_core.characters.logic
 				ApplyStagger(StaggerReason.Poise);
 			}
 
-			PoiseRestoreTimer.Value = _context.Stats.PoiseRestoreTimerMax.Value;
+			PoiseRestoreTimer.Value = _context.CharacterStats.PoiseRestoreTimerMax.Value;
 		}
 
 		private void ApplyStagger(StaggerReason reason)

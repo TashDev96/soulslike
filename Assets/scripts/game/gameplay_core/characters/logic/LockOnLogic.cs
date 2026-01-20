@@ -1,32 +1,19 @@
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
-using dream_lib.src.utils.data_types;
-using game.gameplay_core.characters.config;
-using game.gameplay_core.characters.runtime_data.bindings;
 
 namespace game.gameplay_core.characters.logic
 {
 	public class LockOnLogic
 	{
-		public struct Context
-		{
-			public ReadOnlyTransform CharacterTransform;
-			public CharacterDomain Self;
-			public List<CharacterDomain> AllCharacters { get; set; }
-			public MovementLogic MovementLogic { get; set; }
-			public IsDead IsDead { get; set; }
-			public CharacterConfig CharacterConfig { get; set; }
-		}
-
-		private readonly Context _context;
+		private CharacterContext _context;
 
 		public ReactiveProperty<CharacterDomain> LockOnTarget { get; } = new();
 		public bool IsLockedOn => LockOnTarget.HasValue;
 		public bool DisableRotationForThisFrame { get; set; }
-		public List<CharacterDomain> AllCharacters => _context.AllCharacters;
+ 
 
-		public LockOnLogic(Context context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 		}
@@ -58,8 +45,8 @@ namespace game.gameplay_core.characters.logic
 
 			if(!DisableRotationForThisFrame)
 			{
-				var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.CharacterTransform.Position).SetY(0);
-				_context.MovementLogic.RotateCharacter(lookVector, _context.CharacterConfig.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
+				var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
+				_context.MovementLogic.RotateCharacter(lookVector, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			DisableRotationForThisFrame = false;
@@ -71,14 +58,14 @@ namespace game.gameplay_core.characters.logic
 			var minDistance = float.MaxValue;
 			var maxDistance = 30f;
 
-			foreach(var character in _context.AllCharacters)
+			foreach(var character in LocationStaticContext.Instance.Characters)
 			{
-				if(character == _context.Self || character.ExternalData.IsDead)
+				if(character == _context.SelfLink || character.ExternalData.IsDead)
 				{
 					continue;
 				}
 
-				var distance = (_context.CharacterTransform.Position - character.ExternalData.Transform.Position).sqrMagnitude;
+				var distance = (_context.Transform.Position - character.ExternalData.Transform.Position).sqrMagnitude;
 				if(distance < minDistance && distance < maxDistance * maxDistance)
 				{
 					minDistance = distance;

@@ -14,17 +14,6 @@ namespace game.gameplay_core.characters.logic
 	[Serializable]
 	public class MovementLogic
 	{
-		public struct Context
-		{
-			public Transform CharacterTransform;
-			public CapsuleCharacterCollider CharacterCollider;
-			public LocomotionConfig LocomotionConfig;
-			public IsDead IsDead { get; set; }
-			public ReactiveProperty<RotationSpeedData> RotationSpeed { get; set; }
-			public ReactiveProperty<bool> IsFalling { get; set; }
-			public LockOnLogic LockOnLogic { get; set; }
-		}
-
 		private const float AirDamping = 0.33f;
 		[SerializeField]
 		private float _slidingAcceleration;
@@ -37,7 +26,7 @@ namespace game.gameplay_core.characters.logic
 		[SerializeField]
 		private bool _drawDebug;
 
-		private Context _context;
+		private CharacterContext _context;
 
 		private Vector3 _slidingVelocity;
 
@@ -53,18 +42,20 @@ namespace game.gameplay_core.characters.logic
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
 		private bool _rotationMovementLocked;
+		private Transform _transform;
 		public Vector3 LastUpdateVelocity { get; private set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
-		private Vector3 CurrentPosition => _context.CharacterTransform.position;
+		private Vector3 CurrentPosition => _context.Transform.Position;
 
-		public void SetContext(Context context)
+		public void SetContext(CharacterContext context, Transform transform)
 		{
 			_context = context;
+			_transform = transform;
 			_context.IsDead.OnChanged += HandleDeath;
 			_prevPos = CurrentPosition;
-			_virtualForward = _context.CharacterTransform.forward;
+			_virtualForward = _context.Transform.Forward;
 		}
 
 		public void Update(float deltaTime)
@@ -99,7 +90,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			else
 			{
-				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.LocomotionConfig.WalkDeceleration);
+				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.Config.Locomotion.WalkDeceleration);
 			}
 
 			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
@@ -130,7 +121,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			RotateCharacter(toDirection, _context.LocomotionConfig.HalfTurnDurationSeconds, deltaTime);
+			RotateCharacter(toDirection, _context.Config.Locomotion.HalfTurnDurationSeconds, deltaTime);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
@@ -142,14 +133,14 @@ namespace game.gameplay_core.characters.logic
 			var degreesPerSecond = 180f / halfTurnDurationSeconds;
 
 			toDirection.y = 0;
-			var angleDifference = Vector3.SignedAngle(_context.CharacterTransform.forward, toDirection, Vector3.up);
+			var angleDifference = Vector3.SignedAngle(_context.Transform.Forward, toDirection, Vector3.up);
 			var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
-			_context.CharacterTransform.rotation *= rotationStep;
+			_transform.rotation *= rotationStep;
 			if(!_context.LockOnLogic.LockOnTarget.HasValue)
 			{
-				_virtualForward = _context.CharacterTransform.forward;
+				_virtualForward = _context.Transform.Forward;
 			}
 		}
 
@@ -172,7 +163,7 @@ namespace game.gameplay_core.characters.logic
 					var targetForward = inputDirection.normalized;
 					targetForward.y = 0;
 					targetForward = targetForward.normalized;
-					var degreesPerSecond = 180f / _context.LocomotionConfig.HalfTurnDurationSeconds;
+					var degreesPerSecond = 180f / _context.Config.Locomotion.HalfTurnDurationSeconds;
 					var angleDifference = Vector3.SignedAngle(_virtualForward, targetForward, Vector3.up);
 					var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 					var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
@@ -199,8 +190,8 @@ namespace game.gameplay_core.characters.logic
 
 		public void Teleport(TransformCache respawnTransform)
 		{
-			_context.CharacterTransform.position = respawnTransform.Position;
-			_context.CharacterTransform.eulerAngles = respawnTransform.EulerAngles;
+			_context.SelfLink.transform.position = respawnTransform.Position;
+			_context.SelfLink.transform.eulerAngles = respawnTransform.EulerAngles;
 		}
 
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
@@ -208,7 +199,7 @@ namespace game.gameplay_core.characters.logic
 			_hadAcceleratedMovement = true;
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
-			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.LocomotionConfig.WalkAcceleration);
+			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.Config.Locomotion.WalkAcceleration);
 			var resultMovement = _acceleratedMovement;
 
 			if(_isGroundedCache)
@@ -319,7 +310,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void HandleFallingChanged(bool isFalling)
 		{
-			DebugDrawUtils.DrawText(isFalling ? "start fall" : "end fall", _context.CharacterTransform.position, 2f);
+			DebugDrawUtils.DrawText(isFalling ? "start fall" : "end fall", _context.Transform.Position, 2f);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using UnityEngine;
 
@@ -6,19 +5,12 @@ namespace game.gameplay_core.damage_system
 {
 	public class ParryReceiver : MonoBehaviour
 	{
-		public struct Context
-		{
-			public IReadOnlyReactiveProperty<Team> Team { get; set; }
-			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public ReactiveCommand<CharacterDomain> OnParryTriggered { get; set; }
-		}
-
-		private Context _context;
+		private CharacterContext _context;
 
 		public Team OwnerTeam => _context.Team.Value;
 		public string CharacterId => _context.CharacterId.Value;
 
-		public void Initialize(Context context)
+		public void Initialize(CharacterContext context)
 		{
 			_context = context;
 			gameObject.SetActive(false);

@@ -1,21 +1,12 @@
-using game.gameplay_core.characters.runtime_data;
-using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.logic
 {
 	public class HealthLogic
 	{
-		public struct Context
-		{
-			public ApplyDamageCommand ApplyDamage { get; set; }
-			public CharacterStats CharacterStats { get; set; }
-			public IsDead IsDead { get; set; }
-		}
+		private readonly CharacterContext _context;
 
-		private readonly Context _context;
-
-		public HealthLogic(Context context)
+		public HealthLogic(CharacterContext context)
 		{
 			_context = context;
 			_context.ApplyDamage.OnExecute += ApplyDamage;

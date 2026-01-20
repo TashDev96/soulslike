@@ -370,7 +370,7 @@ namespace game.gameplay_core.characters.state_machine
 			var selfPosition = _context.Transform.Position;
 			var selfForward = _context.Transform.Forward;
 
-			foreach(var character in _context.LockOnLogic.AllCharacters)
+			foreach(var character in LocationStaticContext.Instance.Characters)
 			{
 				if(character == _context.SelfLink || character.ExternalData.IsDead)
 				{
@@ -410,7 +410,7 @@ namespace game.gameplay_core.characters.state_machine
 			var selfPosition = _context.Transform.Position;
 			var selfForward = _context.Transform.Forward;
 
-			foreach(var character in _context.LockOnLogic.AllCharacters)
+			foreach(var character in LocationStaticContext.Instance.Characters)
 			{
 				if(character == _context.SelfLink || character.ExternalData.IsDead)
 				{

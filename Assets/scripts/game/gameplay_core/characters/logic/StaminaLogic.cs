@@ -1,23 +1,16 @@
 using System.Collections.Generic;
-using game.gameplay_core.characters.runtime_data.bindings.stats;
 using game.gameplay_core.characters.state_machine.states;
 
 namespace game.gameplay_core.characters.logic
 {
 	public class StaminaLogic
 	{
-		public struct Context
-		{
-			public Stamina Stamina;
-			public StaminaMax StaminaMax;
-		}
-
-		private Context _context;
+		private CharacterContext _context;
 
 		private readonly HashSet<string> _regenLockReasons = new();
 		private readonly Dictionary<string, float> _regenMultiplierReasons = new();
 
-		public void Initialize(Context context)
+		public void Initialize(CharacterContext context)
 		{
 			_context = context;
 		}
@@ -31,16 +24,16 @@ namespace game.gameplay_core.characters.logic
 			var staminaCost = stateBase.GetEnterStaminaCost() + stateBase.RequiredStaminaOffset;
 
 			//here potential rpg tweaks
-			return _context.Stamina.Value >= staminaCost;
+			return _context.CharacterStats.Stamina.Value >= staminaCost;
 		}
 
 		public void Update(float deltaTime)
 		{
-			if(_context.Stamina.Value < _context.StaminaMax.Value && _regenLockReasons.Count == 0)
+			if(_context.CharacterStats.Stamina.Value < _context.CharacterStats.StaminaMax.Value && _regenLockReasons.Count == 0)
 			{
 				var baseRegenRate = deltaTime * 10f;
 				var totalMultiplier = CalculateTotalRegenMultiplier();
-				_context.Stamina.Value += baseRegenRate * totalMultiplier;
+				_context.CharacterStats.Stamina.Value += baseRegenRate * totalMultiplier;
 			}
 		}
 
@@ -75,12 +68,12 @@ namespace game.gameplay_core.characters.logic
 
 		public void SpendStamina(float amount)
 		{
-			_context.Stamina.Value -= amount;
+			_context.CharacterStats.Stamina.Value -= amount;
 		}
 
 		public void SpendStaminaForBlock(float blockStaminaCost, out bool hadEnough)
 		{
-			hadEnough = _context.Stamina.Value >= blockStaminaCost;
+			hadEnough = _context.CharacterStats.Stamina.Value >= blockStaminaCost;
 			SpendStamina(blockStaminaCost);
 		}
 

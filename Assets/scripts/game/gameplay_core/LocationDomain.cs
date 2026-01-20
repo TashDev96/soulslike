@@ -18,7 +18,7 @@ namespace game.gameplay_core
 {
 	public class LocationDomain
 	{
-		private LocationContext _locationContext;
+
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
 		private ICameraController _cameraController;
@@ -33,7 +33,7 @@ namespace game.gameplay_core
 			var mainCamera = new ReactiveProperty<Camera>(_sceneInstaller.MainCamera);
 			_cameraController = CameraControllerFactory.Create(_sceneInstaller.CameraSettings, mainCamera, _player);
 
-			_locationContext = new LocationContext
+			LocationStaticContext.Instance = new LocationStaticContext
 			{
 				LocationSaveData = saveData,
 				LocationUpdate = new ReactiveCommand<float>(),
@@ -43,8 +43,8 @@ namespace game.gameplay_core
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
-			GameStaticContext.Instance.CurrentLocationUpdate = _locationContext.LocationUpdate;
-			GameStaticContext.Instance.FloatingTextsManager = new FloatingTextsManager(_locationContext.CameraController, _locationContext.LocationUpdate);
+			GameStaticContext.Instance.CurrentLocationUpdate = LocationStaticContext.Instance.LocationUpdate;
+			GameStaticContext.Instance.FloatingTextsManager = new FloatingTextsManager(LocationStaticContext.Instance.CameraController, LocationStaticContext.Instance.LocationUpdate);
 
 			LoadSceneObjects();
 			LoadSpawnedObjects();
@@ -56,7 +56,7 @@ namespace game.gameplay_core
 			GameStaticContext.Instance.UiDomain.ShowLocationUi(new UiLocationHUD.Context
 			{
 				Player = _player.Value,
-				LocationUiUpdate = _locationContext.LocationUiUpdate
+				LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate
 			});
 
 			RegisterCheats();
@@ -66,7 +66,7 @@ namespace game.gameplay_core
 		{
 			_player.Value.SetRespawnTransform(new TransformCache(_player.Value.transform));
 
-			foreach(var character in _locationContext.Characters)
+			foreach(var character in LocationStaticContext.Instance.Characters)
 			{
 				character.HandleLocationRespawn();
 			}
@@ -75,12 +75,12 @@ namespace game.gameplay_core
 
 		public LocationSaveData SaveCurrentStateToData()
 		{
-			foreach(var character in _locationContext.Characters)
+			foreach(var character in LocationStaticContext.Instance.Characters)
 			{
 				character.WriteStateToSaveData();
 			}
 
-			return _locationContext.LocationSaveData;
+			return LocationStaticContext.Instance.LocationSaveData;
 		}
 
 		private void HandleUpdate()
@@ -92,24 +92,25 @@ namespace game.gameplay_core
 			}
 			else
 			{
-				_locationContext.LocationTime.Value += deltaTime;
-				_locationContext.LocationUpdate.Execute(deltaTime);
+				LocationStaticContext.Instance.LocationTime.Value += deltaTime;
+				LocationStaticContext.Instance.LocationUpdate.Execute(deltaTime);
 				_cameraController.Update(deltaTime);
 #if UNITY_EDITOR
 				_frameDelayDebug = EditorComfortWindow.FrameDelay;
 #endif
 			}
 
-			_locationContext.LocationUiUpdate.Execute(deltaTime);
+			LocationStaticContext.Instance.LocationUiUpdate.Execute(deltaTime);
 		}
 
 		private void LoadCharacters()
 		{
-			_locationContext.Characters = new List<CharacterDomain>();
+			LocationStaticContext.Instance.Characters = new List<CharacterDomain>();
 
 			var playerPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.Player);
 			_player.Value = Object.Instantiate(playerPrefab).GetComponent<CharacterDomain>();
-			_player.Value.Initialize(_locationContext);
+			LocationStaticContext.Instance.Player = _player.Value;
+			_player.Value.Initialize();
 
 			var playerSave = GameStaticContext.Instance.PlayerSave;
 			var isFirstTimePlayerCreated = false;
@@ -123,7 +124,7 @@ namespace game.gameplay_core
 			}
 			_player.Value.SetSaveData(playerSave.CharacterData, isFirstTimePlayerCreated);
 
-			_locationContext.Characters.Add(_player.Value);
+			LocationStaticContext.Instance.Characters.Add(_player.Value);
 
 			if(!_sceneInstaller.OnlySpawnPlayer)
 			{
@@ -133,8 +134,8 @@ namespace game.gameplay_core
 					{
 						continue;
 					}
-					character.Initialize(_locationContext);
-					if(_locationContext.LocationSaveData.Enemies.TryGetValue(character.UniqueId, out var enemySaveData))
+					character.Initialize();
+					if(LocationStaticContext.Instance.LocationSaveData.Enemies.TryGetValue(character.UniqueId, out var enemySaveData))
 					{
 						character.SetSaveData(enemySaveData);
 					}
@@ -142,22 +143,22 @@ namespace game.gameplay_core
 					{
 						var saveData = new CharacterSaveData();
 						character.SetSaveData(saveData);
-						_locationContext.LocationSaveData.Enemies.Add(character.UniqueId, saveData);
+						LocationStaticContext.Instance.LocationSaveData.Enemies.Add(character.UniqueId, saveData);
 					}
-					_locationContext.Characters.Add(character);
+					LocationStaticContext.Instance.Characters.Add(character);
 				}
 			}
 		}
 
 		private void LoadSceneObjects()
 		{
-			_locationContext.SceneSavableObjects = _sceneInstaller.SavableObjects.ToArray();
+			LocationStaticContext.Instance.SceneSavableObjects = _sceneInstaller.SavableObjects.ToArray();
 
-			var locationSave = _locationContext.LocationSaveData;
+			var locationSave = LocationStaticContext.Instance.LocationSaveData;
 
 			var usedIds = new HashSet<string>();
 
-			foreach(var sceneSavableObject in _locationContext.SceneSavableObjects)
+			foreach(var sceneSavableObject in LocationStaticContext.Instance.SceneSavableObjects)
 			{
 				var objectId = sceneSavableObject.UniqueId;
 
@@ -177,7 +178,7 @@ namespace game.gameplay_core
 						//pickupItem.SetContext(_locationContext);
 						break;
 					case Bonfire bonfire:
-						bonfire.SetContext(_locationContext.Player);
+						bonfire.SetContext(LocationStaticContext.Instance.Player);
 						break;
 				}
 
@@ -198,7 +199,7 @@ namespace game.gameplay_core
 
 		private void LoadSpawnedObjects()
 		{
-			var locationSave = _locationContext.LocationSaveData;
+			var locationSave = LocationStaticContext.Instance.LocationSaveData;
 
 			foreach(var spawnedObjectSave in locationSave.SpawnedObjects)
 			{
@@ -211,7 +212,7 @@ namespace game.gameplay_core
 				};
 
 				spawnedObjectController.LoadSave(spawnedObjectSave);
-				_locationContext.SpawnedObjects.Add(spawnedObjectController);
+				LocationStaticContext.Instance.SpawnedObjects.Add(spawnedObjectController);
 			}
 		}
 
