@@ -16,7 +16,7 @@ namespace game.gameplay_core.damage_system
 		}
 
 		[SerializeField]
-		private float _damageMultiplier = 1f;
+		protected float _damageMultiplier = 1f;
 
 		private DamageReceiverContext _context;
 
@@ -25,12 +25,12 @@ namespace game.gameplay_core.damage_system
 
 		public bool IsInvulnerable => _context.InvulnerabilityLogic.IsInvulnerable;
 
-		public void Initialize(DamageReceiverContext damageReceiverContext)
+		public virtual void Initialize(DamageReceiverContext damageReceiverContext)
 		{
 			_context = damageReceiverContext;
 		}
 
-		public void ApplyDamage(DamageInfo damageInfo)
+		public virtual void ApplyDamage(DamageInfo damageInfo)
 		{
 			if(_context.InvulnerabilityLogic is { IsInvulnerable: true })
 			{

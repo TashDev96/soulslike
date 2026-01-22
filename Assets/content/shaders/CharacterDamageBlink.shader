@@ -175,6 +175,7 @@ Shader "Custom/CharacterDamageBlink"
                 float2 texcoord     : TEXCOORD0;
                 float2 staticLightmapUV   : TEXCOORD1;
                 float2 dynamicLightmapUV  : TEXCOORD2;
+                float4 color        : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -214,6 +215,7 @@ Shader "Custom/CharacterDamageBlink"
                 float4 probeOcclusion : TEXCOORD10;
             #endif
 
+                half4 color                     : COLOR;
                 float4 positionCS               : SV_POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -353,6 +355,7 @@ Shader "Custom/CharacterDamageBlink"
             #endif
 
                 output.positionCS = vertexInput.positionCS;
+                output.color = input.color;
 
                 return output;
             }
@@ -380,6 +383,10 @@ Shader "Custom/CharacterDamageBlink"
 
                 SurfaceData surfaceData;
                 InitializeStandardLitSurfaceData(input.uv, surfaceData);
+                surfaceData.alpha *= input.color.a;
+            #ifdef _ALPHATEST_ON
+                clip(surfaceData.alpha - _Cutoff);
+            #endif
 
             #ifdef LOD_FADE_CROSSFADE
                 LODFadeCrossFade(input.positionCS);
@@ -400,6 +407,7 @@ Shader "Custom/CharacterDamageBlink"
                 
                 color.rgb = MixFog(color.rgb, inputData.fogCoord);
                 color.a = OutputAlpha(color.a, IsSurfaceTypeTransparent(_Surface));
+            	color.a *= input.color.a;
                 color.rgb = lerp(color.rgb, _BlinkColor.rgb, _BlinkIntensity);
 
                 outColor = color;

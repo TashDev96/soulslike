@@ -13,7 +13,8 @@ namespace game.gameplay_core.worldspace_ui
 		public enum TextColorVariant
 		{
 			Red,
-			Green
+			Green,
+			Grey
 		}
 
 		public struct Context
@@ -48,6 +49,10 @@ namespace game.gameplay_core.worldspace_ui
 			_text.text = text;
 			_textForBevelEffect.text = text;
 
+			if(context.CameraController is IsometricCameraController)
+			{
+				worldPosition -= context.CameraController.Camera.transform.forward * 4f;
+			}
 			transform.position = worldPosition;
 
 			_cameraController = context.CameraController;

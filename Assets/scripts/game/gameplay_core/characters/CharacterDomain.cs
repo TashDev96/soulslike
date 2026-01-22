@@ -236,6 +236,10 @@ namespace game.gameplay_core.characters
 				{
 					return;
 				}
+				if(info.DamageAmount <= 0)
+				{
+					return;
+				}
 				GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(info.DamageAmount.RoundFormat(), FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
 			});
 
