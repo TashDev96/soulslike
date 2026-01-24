@@ -51,22 +51,25 @@ namespace game
 			{
 				//fake initialize meta game
 				var charDebugConfig = Object.FindAnyObjectByType<DebugSceneCharacterConfig>(FindObjectsInactive.Include);
+				var sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>(FindObjectsInactive.Include);
+
+				var sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
 				_coreGameDomain = new CoreGameDomain();
 
 				var debugSaveData = new PlayerSaveData
 				{
 					InventoryData = charDebugConfig.InventoryData,
-					CurrentLocationId = "debug",
+					CurrentLocationId = sceneName,
 					CharacterData = new CharacterSaveData()
 				};
 
-				GameStaticContext.Instance.SaveSlotId = "debug";
+				GameStaticContext.Instance.SaveSlotId = $"debug_{sceneName}";
 				GameStaticContext.Instance.PlayerSave = debugSaveData;
 
 				await _inventoryDomain.Initialize(_sceneDebugMode);
 
-				await _coreGameDomain.PlayOnDebugLocation();
+				await _coreGameDomain.PlayOnDebugLocation(sceneName, sceneInstaller != null && sceneInstaller.ResetState);
 			}
 
 			//TODO: open main menu

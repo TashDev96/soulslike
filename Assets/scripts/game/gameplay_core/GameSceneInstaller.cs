@@ -26,6 +26,9 @@ namespace game.gameplay_core
 		public bool OnlySpawnPlayer { get; private set; }
 
 		[field: SerializeField]
+		public bool ResetState { get; private set; }
+
+		[field: SerializeField]
 		private bool OnlySpawnCustomEnemies { get; set; }
 		[field: SerializeField]
 		[field: ShowIf("OnlySpawnCustomEnemies")]
