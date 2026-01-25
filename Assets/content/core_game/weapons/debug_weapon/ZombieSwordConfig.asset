@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
   m_Name: ZombieSwordConfig
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 0}
   <WeaponPrefabName>k__BackingField: ZombieSword
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: 
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: a229e3d89cee04fafba7b2b79e4826e2, type: 2}
       Speed: 1
       FlagEvents:
@@ -49,21 +50,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0.0055555557
-        EndTimeNormalized: 0.0055555557
+        EndTimeNormalized: 0.007222222
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0.30555555
-        EndTimeNormalized: 0.30555555
+        EndTimeNormalized: 0.30722222
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.22222222
-        EndTimeNormalized: 0.22222222
+        EndTimeNormalized: 0.22388889
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -503,7 +504,7 @@ MonoBehaviour:
     <Range>k__BackingField: 1
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
-      WeaponForPreview: 
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       Speed: 1
       FlagEvents:
@@ -537,21 +538,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -625,7 +626,7 @@ MonoBehaviour:
     <Range>k__BackingField: 1
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
-      WeaponForPreview: 
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       Speed: 1
       FlagEvents:
@@ -659,21 +660,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0

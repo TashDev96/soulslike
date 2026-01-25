@@ -34,6 +34,7 @@ namespace game.gameplay_core.characters.logic
 		private readonly Collider[] _castResults = new Collider[50];
 
 		private CharacterContext _context;
+		private CapsuleCollider _myCapsuleCollider;
 		private readonly List<Collider> _exitedTriggersCache = new();
 
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
@@ -45,6 +46,7 @@ namespace game.gameplay_core.characters.logic
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
+			_myCapsuleCollider = GetComponent<CapsuleCollider>();
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -80,7 +82,7 @@ namespace game.gameplay_core.characters.logic
 					CalculateMovement(moveStartPosition + Vector3.up * StepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
 					stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
 
-					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red, 3f);
+					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red, 0);
 
 					if(stepUpSuccess)
 					{
@@ -293,6 +295,11 @@ namespace game.gameplay_core.characters.logic
 			resultPosition = moveStartPosition;
 			var remainingMovement = motion;
 
+			if(CheckInsideOtherCharacter(moveStartPosition, out var vectorToIntersectingCharacter))
+			{
+				remainingMovement = vectorToIntersectingCharacter;
+			}
+
 			var iterations = singleIteration ? 1 : _maxIterations;
 
 			for(var i = 0; i < iterations && remainingMovement.sqrMagnitude > 0f; i++)
@@ -359,6 +366,39 @@ namespace game.gameplay_core.characters.logic
 			{
 				return Vector3.ProjectOnPlane(remaining, hit.normal);
 			}
+		}
+
+		private bool CheckInsideOtherCharacter(Vector3 position, out Vector3 escapeVector)
+		{
+			escapeVector = Vector3.zero;
+			
+			if(_myCapsuleCollider == null)
+			{
+				return false;
+			}
+
+			GetCapsulePoints(position, out var p1, out var p2);
+			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius+_characterToCharacterOffset, _castResults, _charactersCollisionMask, QueryTriggerInteraction.Ignore);
+
+			for(var i = 0; i < count; i++)
+			{
+				var other = _castResults[i];
+				if(other.gameObject == gameObject)
+				{
+					continue;
+				}
+
+				if(Physics.ComputePenetration(
+					   _myCapsuleCollider, position, transform.rotation,
+					   other, other.transform.position, other.transform.rotation,
+					   out var direction, out var distance))
+				{
+					escapeVector = direction * (distance + SkinWidth);
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private bool CastCapsule(Vector3 resultPosition, Vector3 remainingMovement, out RaycastHit hit)

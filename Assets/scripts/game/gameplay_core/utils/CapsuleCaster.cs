@@ -18,6 +18,9 @@ namespace game.gameplay_core.utils
 		protected bool _drawDebug;
 
 		[SerializeField]
+		protected bool _drawSelected = true;
+
+		[SerializeField]
 		protected bool _useRotationConstraints;
 
 		[SerializeField]
@@ -257,6 +260,10 @@ namespace game.gameplay_core.utils
 
 		private void OnDrawGizmosSelected()
 		{
+			if(!_drawSelected)
+			{
+				return;
+			}
 			if(!enabled)
 			{
 				return;

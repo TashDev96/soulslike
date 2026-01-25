@@ -9,9 +9,11 @@ public static class AddressableAssetNames
 	public const string DebugWeaponConfig = "DebugWeaponConfig";
 	public const string DebugWeapon = "DebugWeapon";
 	public const string Player = "Player";
+	public const string ZombieBowConfig = "ZombieBowConfig";
 	public const string MainCanvas = "MainCanvas";
 	public const string DebugBow = "DebugBow";
 	public const string DebugArrow = "DebugArrow";
+	public const string DebugBowConfig = "DebugBowConfig";
 	public const string DebugShieldConfig = "DebugShieldConfig";
 	public const string SimpleSword = "SimpleSword";
 	public const string MainHealingItemConfig = "MainHealingItemConfig";
@@ -19,18 +21,18 @@ public static class AddressableAssetNames
 	public const string CharacterUi = "CharacterUi";
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
-	public const string ZombieBowConfig = "ZombieBowConfig";
-	public const string DebugBowConfig = "DebugBowConfig";
+	public const string Boss1Weapon = "Boss1Weapon";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
 		"EmptyHandConfig",
 		"DebugWeaponConfig",
+		"ZombieBowConfig",
+		"DebugBowConfig",
 		"DebugShieldConfig",
 		"MainHealingItemConfig",
 		"SimpleSwordConfig",
-		"ZombieBowConfig",
-		"DebugBowConfig"
+		"Boss1Weapon"
 	};
 
 	public static readonly string[] ProjectilePrefabs = new[] {
@@ -41,10 +43,11 @@ public static class AddressableAssetNames
 		"ZombieSwordConfig",
 		"EmptyHandConfig",
 		"DebugWeaponConfig",
+		"ZombieBowConfig",
+		"DebugBowConfig",
 		"DebugShieldConfig",
 		"SimpleSwordConfig",
-		"ZombieBowConfig",
-		"DebugBowConfig"
+		"Boss1Weapon"
 	};
 
 	public static readonly string[] WeaponPrefabNames = new[] {

@@ -74,7 +74,7 @@ MonoBehaviour:
   <RunAnimation>k__BackingField: {fileID: 7400000, guid: f20ed00c7ce344848b522e5dcf56b325, type: 2}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.6
-    <HalfTurnDurationSecondsLockOn>k__BackingField: 1
+    <HalfTurnDurationSecondsLockOn>k__BackingField: 2
     <WalkSpeed>k__BackingField: 2.5
     <RunSpeed>k__BackingField: 10
     <WalkAcceleration>k__BackingField: 0.2
