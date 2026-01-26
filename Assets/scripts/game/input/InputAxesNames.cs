@@ -2,6 +2,7 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+		Inventory,
 		CameraVertical,
 		CameraHorizontal,
 		Parry,

@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: Enemy_Small
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
   Roll:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 0}
+      Speed: 1
+      FlagEvents: []
+      HitEvents: []
+      LayerNames:
+      - Default
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
     <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}
@@ -101,3 +109,4 @@ MonoBehaviour:
     PoiseMax: 0
     PoiseRestoreTimerMax: 5
   <CanDoBackstabs>k__BackingField: 0
+  <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig

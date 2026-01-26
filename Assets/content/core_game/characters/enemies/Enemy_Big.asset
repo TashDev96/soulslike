@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5723f2522e7045b09d5fa806bd897878, type: 3}
   m_Name: Enemy_Big
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
-  <ParentConfig>k__BackingField: {fileID: 11400000, guid: 01f2b10a98d114b82b5c6e115c8bbac7, type: 2}
   Roll:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 0}
+      Speed: 1
+      FlagEvents: []
+      HitEvents: []
+      LayerNames:
+      - Default
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
     <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}
@@ -56,14 +63,22 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
+  <ParentConfig>k__BackingField: {fileID: 11400000, guid: 01f2b10a98d114b82b5c6e115c8bbac7, type: 2}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
+  <ParryStunAnimation>k__BackingField: {fileID: 0}
+  <RipostedAnimation>k__BackingField: {fileID: 0}
   <DeathAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <FallAnimation>k__BackingField: {fileID: 0}
+  <WalkAnimation>k__BackingField: {fileID: 0}
+  <RunAnimation>k__BackingField: {fileID: 0}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.22
+    <HalfTurnDurationSecondsLockOn>k__BackingField: 0.22
     <WalkSpeed>k__BackingField: 3.96
     <RunSpeed>k__BackingField: 10
+    <WalkAcceleration>k__BackingField: 1
+    <WalkDeceleration>k__BackingField: 0.1
     <WalkAccelerationCurve>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -93,3 +108,5 @@ MonoBehaviour:
     StaminaMax: 50
     PoiseMax: 5
     PoiseRestoreTimerMax: 5
+  <CanDoBackstabs>k__BackingField: 0
+  <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig

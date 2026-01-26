@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
   m_Name: SimpleSwordConfig
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 0}
+  <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: SimpleSword
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:

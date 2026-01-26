@@ -11,7 +11,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 		public RiposteAttackState(CharacterContext context, CharacterDomain target) : base(context, target)
 		{
-			_weaponView = _context.EquippedWeaponViews[ArmamentSlot.Right];
+			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
 			var attackConfig = _weaponView.Config.RiposteAttack;
 
 			SetEnterParams(attackConfig);

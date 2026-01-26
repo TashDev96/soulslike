@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Boss1Weapon
   m_EditorClassIdentifier: 
   <Icon>k__BackingField: {fileID: 0}
+  <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: ZombieSword
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -50,21 +51,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0.0055555557
-        EndTimeNormalized: 0.007222222
+        EndTimeNormalized: 0.17232382
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0.30555555
-        EndTimeNormalized: 0.30722222
+        EndTimeNormalized: 0.3062524
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.22222222
-        EndTimeNormalized: 0.22388889
+        EndTimeNormalized: 0.3062524
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0

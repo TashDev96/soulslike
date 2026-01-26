@@ -70,9 +70,9 @@ MonoBehaviour:
   <ArmSockets>k__BackingField:
     _list:
     - Key: 1
-      Value: {fileID: 358735047782199053}
-    - Key: 2
       Value: {fileID: 8792662738043832350}
+    - Key: 2
+      Value: {fileID: 358735047782199053}
     - Key: 3
       Value: {fileID: 8792662738043832350}
     _keyCollision: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DrawStateMachineInfo: 0
   DrawBrainInfo: 0
+  DrawAttacksInfo: 0
 --- !u!114 &1937557130125307911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
   _drawDebug: 1
+  _drawSelected: 1
   _useRotationConstraints: 0
   _fixXRotation: 1
   _fixYRotation: 0
@@ -285,6 +287,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4452352358425544236
 MonoBehaviour:
@@ -397,6 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
+  _drawSelected: 1
   _useRotationConstraints: 0
   _fixXRotation: 0
   _fixYRotation: 0
@@ -452,6 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
+  _drawSelected: 1
   _useRotationConstraints: 0
   _fixXRotation: 0
   _fixYRotation: 0
@@ -738,6 +743,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &9174135647659503688
 BoxCollider:

@@ -251,7 +251,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 
-			_weaponView = _context.EquippedWeaponViews[ArmamentSlot.Right];
+			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
 			Duration = _currentAttackConfig.Duration;
 
 			_stage = AttackStage.Windup;

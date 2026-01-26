@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: DebugWeaponConfig
   m_EditorClassIdentifier: 
   <Icon>k__BackingField: {fileID: 736855538, guid: 9c5f2426d24484699a497c354e7a81db, type: 3}
+  <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: DebugWeapon
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: DebugWeapon
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       Speed: 1
       FlagEvents:
@@ -634,7 +635,7 @@ MonoBehaviour:
     <Range>k__BackingField: 1
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
-      WeaponForPreview: DebugWeapon
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
       Speed: 1
       FlagEvents:
@@ -756,7 +757,7 @@ MonoBehaviour:
     <Range>k__BackingField: 1
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
-      WeaponForPreview: DebugWeapon
+      WeaponForPreview: ZombieSword
       Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       Speed: 1
       FlagEvents:

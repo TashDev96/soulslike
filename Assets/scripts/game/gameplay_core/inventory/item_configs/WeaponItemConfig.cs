@@ -11,7 +11,7 @@ namespace game.gameplay_core.inventory.item_configs
 {
 	[AddressableAssetTag(nameof(AddressableCollections.WeaponConfigs))]
 	[CreateAssetMenu(menuName = "Configs/WeaponConfig")]
-	public class WeaponItemConfig : BaseItemConfig
+	public class WeaponItemConfig : BaseEquipmentItemConfig
 	{
 		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]
 		[field: SerializeField]

@@ -108,6 +108,11 @@ namespace game.gameplay_core.characters.player
 			var attackInput = GetAttackInput();
 			var parryInput = GetParryInput();
 
+			if(GameStaticContext.Instance.UiDomain.IsInventoryOpen)
+			{
+				return CharacterCommand.None;
+			}
+
 			if(_nextFrameForcedCommand != CharacterCommand.None)
 			{
 				var result = _nextFrameForcedCommand;

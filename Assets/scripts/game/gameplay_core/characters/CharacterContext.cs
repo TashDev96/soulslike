@@ -64,7 +64,7 @@ namespace game.gameplay_core.characters
 		// Parry support
 		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 		public CharacterInventoryLogic InventoryLogic { get; set; }
-		public Dictionary<ArmamentSlot, WeaponView> EquippedWeaponViews { get; set; }
+		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 	}
 }

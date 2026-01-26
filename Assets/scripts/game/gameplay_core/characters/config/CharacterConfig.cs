@@ -1,4 +1,5 @@
 using game.gameplay_core.characters.runtime_data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.config
@@ -38,5 +39,9 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public bool CanDoBackstabs { get; private set; }
+
+		[field: ValueDropdown("@AddressableAssetNames.WeaponConfigs")]
+		[field: SerializeField]
+		public string EmptyHandItemConfigId { get; private set; }
 	}
 }

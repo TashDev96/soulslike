@@ -7,6 +7,7 @@ using game.gameplay_core.debug;
 using game.gameplay_core.inventory;
 using game.ui;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace game
@@ -53,7 +54,7 @@ namespace game
 				var charDebugConfig = Object.FindAnyObjectByType<DebugSceneCharacterConfig>(FindObjectsInactive.Include);
 				var sceneInstaller = Object.FindAnyObjectByType<GameSceneInstaller>(FindObjectsInactive.Include);
 
-				var sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+				var sceneName = SceneManager.GetActiveScene().name;
 
 				_coreGameDomain = new CoreGameDomain();
 

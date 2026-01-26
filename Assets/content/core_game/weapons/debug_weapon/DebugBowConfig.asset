@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
   m_Name: DebugBowConfig
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 0}
+  <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: DebugBow
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -49,21 +51,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0.21666667
-        EndTimeNormalized: 0.22166666
+        EndTimeNormalized: 0.17232382
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 1
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0.23606059
-        EndTimeNormalized: 0.24106058
+        EndTimeNormalized: 0.3062524
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 1
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.3
-        EndTimeNormalized: 0.305
+        EndTimeNormalized: 0.3062524
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 1
@@ -101,13 +103,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.48333332, y: 0.75}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.2, y: 0.78333336}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.81666666}
-    <ExitToComboTime>k__BackingField: {x: 0.76666665, y: 1}
-    <EnterComboTime>k__BackingField: 0.21666667
-    <EnterFromRollTime>k__BackingField: 0.23333333
-    <StartHandleObstacleCastTime>k__BackingField: 0.3
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -169,12 +164,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 10
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.73333335, y: 0.7416667}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <StrongAttacks>k__BackingField: []
   <RollAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -264,13 +253,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.48333332, y: 0.75}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.2, y: 0.78333336}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.81666666}
-    <ExitToComboTime>k__BackingField: {x: 0.76666665, y: 1}
-    <EnterComboTime>k__BackingField: 0.21666667
-    <EnterFromRollTime>k__BackingField: 0.23333333
-    <StartHandleObstacleCastTime>k__BackingField: 0.3
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -332,12 +314,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 10
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.73333335, y: 0.7416667}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <RollAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugBow
@@ -426,13 +402,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.48333332, y: 0.75}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.2, y: 0.78333336}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.81666666}
-    <ExitToComboTime>k__BackingField: {x: 0.76666665, y: 1}
-    <EnterComboTime>k__BackingField: 0.21666667
-    <EnterFromRollTime>k__BackingField: 0.23333333
-    <StartHandleObstacleCastTime>k__BackingField: 0.3
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -494,12 +463,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 10
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.73333335, y: 0.7416667}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugBow
@@ -588,13 +551,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0, y: 0.7321428}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0.6071428}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.7321428}
-    <ExitToComboTime>k__BackingField: {x: 0.58928573, y: 1}
-    <EnterComboTime>k__BackingField: 0
-    <EnterFromRollTime>k__BackingField: 0
-    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -629,12 +585,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.3035714, y: 0.33928573}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugBow
@@ -723,13 +673,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0, y: 0.7608696}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0.73188406}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.73913044}
-    <ExitToComboTime>k__BackingField: {x: 0.58695656, y: 1}
-    <EnterComboTime>k__BackingField: 0
-    <EnterFromRollTime>k__BackingField: 0
-    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -764,12 +707,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.2826087, y: 0.34057972}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <ProjectileSpeed>k__BackingField: 20
   <BlockStability>k__BackingField: 15.8
   <DamageReduction>k__BackingField: 0.609
@@ -874,13 +811,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0, y: 0}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0, y: 0}
-    <LockedStateTime>k__BackingField: {x: 0, y: 1}
-    <ExitToComboTime>k__BackingField: {x: 0, y: 1}
-    <EnterComboTime>k__BackingField: 0
-    <EnterFromRollTime>k__BackingField: 0
-    <StartHandleObstacleCastTime>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve: []
@@ -888,7 +818,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField: []
   <CanRiposte>k__BackingField: 0
   <RiposteAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -978,13 +907,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
-    <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}
-    <EnterComboTime>k__BackingField: 0.28515625
-    <EnterFromRollTime>k__BackingField: 0.30468747
-    <StartHandleObstacleCastTime>k__BackingField: 0.22265624
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -1010,12 +932,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.22851561, y: 0.23046874}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <CanBackstab>k__BackingField: 0
   <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
   <BackstabAttack>k__BackingField:
@@ -1106,13 +1022,6 @@ MonoBehaviour:
     <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
-    <RotationDisabledTime>k__BackingField: {x: 0.3046875, y: 0.5546875}
-    <StaminaRegenDisabledTime>k__BackingField: {x: 0.28515625, y: 0.58984375}
-    <LockedStateTime>k__BackingField: {x: 0, y: 0.9101562}
-    <ExitToComboTime>k__BackingField: {x: 0.46484372, y: 0.99999994}
-    <EnterComboTime>k__BackingField: 0.28515625
-    <EnterFromRollTime>k__BackingField: 0.30468747
-    <StartHandleObstacleCastTime>k__BackingField: 0.22265624
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -1138,12 +1047,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
-    <HitConfigs>k__BackingField:
-    - <InvolvedColliders>k__BackingField: 010000
-      <Timing>k__BackingField: {x: 0.22851561, y: 0.23046874}
-      <FriendlyFire>k__BackingField: 0
-      <DamageMultiplier>k__BackingField: 1
-      <PoiseDamage>k__BackingField: 1
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0

@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters
 		[ShowInInspector]
 		private CharacterStats _characterStats;
 
-		private readonly Dictionary<ArmamentSlot, WeaponView> _equippedWeaponsViews = new();
+		private readonly Dictionary<EquipmentSlotType, WeaponView> _equippedWeaponsViews = new();
 		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
@@ -72,7 +72,7 @@ namespace game.gameplay_core.characters
 		public string UniqueId { get; private set; }
 
 		[field: SerializeField]
-		private SerializableDictionary<ArmamentSlot, Transform> ArmSockets { get; set; }
+		private SerializableDictionary<EquipmentSlotType, Transform> ArmSockets { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
 		public CharacterContext Context => _context;
@@ -275,8 +275,10 @@ namespace game.gameplay_core.characters
 				}
 			}
 
-			SetWeapon(ArmamentSlot.Left, InventoryLogic.GetArmament(ArmamentSlot.Left));
-			SetWeapon(ArmamentSlot.Right, InventoryLogic.GetArmament(ArmamentSlot.Right));
+			InventoryLogic.OnEquipChanged += HandleEquipChanged;
+
+			SetWeapon(EquipmentSlotType.LeftHand, InventoryLogic.GetEquipment(EquipmentSlotType.LeftHand));
+			SetWeapon(EquipmentSlotType.RightHand, InventoryLogic.GetEquipment(EquipmentSlotType.RightHand));
 		}
 
 		[Button]
@@ -285,7 +287,7 @@ namespace game.gameplay_core.characters
 			UniqueId = name + Random.value;
 		}
 
-		public void SetWeapon(ArmamentSlot slot, BaseItemLogic logic)
+		public void SetWeapon(EquipmentSlotType slot, BaseItemLogic logic)
 		{
 			if(logic == null)
 			{
@@ -367,6 +369,14 @@ namespace game.gameplay_core.characters
 		public void SetRespawnTransform(TransformCache transformCache)
 		{
 			_respawnTransform = transformCache;
+		}
+
+		private void HandleEquipChanged(EquipmentSlotAdress address, BaseItemLogic item)
+		{
+			if(address.SlotType == EquipmentSlotType.LeftHand || address.SlotType == EquipmentSlotType.RightHand)
+			{
+				SetWeapon(address.SlotType, item);
+			}
 		}
 
 		private void HandleDeath(bool isDead)

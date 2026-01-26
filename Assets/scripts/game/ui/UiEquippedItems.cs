@@ -27,8 +27,8 @@ namespace game.ui
 
 			var inventory = _context.Player.ExternalData.InventoryLogic;
 
-			_leftSlot.SetItem(inventory.GetArmament(ArmamentSlot.Left));
-			_rightSlot.SetItem(inventory.GetArmament(ArmamentSlot.Right));
+			_leftSlot.SetItem(inventory.GetEquipment(EquipmentSlotType.LeftHand));
+			_rightSlot.SetItem(inventory.GetEquipment(EquipmentSlotType.RightHand));
 
 			UpdateConsumable(_context.Player.Context.CurrentConsumableItem.Value);
 			_context.Player.Context.CurrentConsumableItem.OnChanged += UpdateConsumable;

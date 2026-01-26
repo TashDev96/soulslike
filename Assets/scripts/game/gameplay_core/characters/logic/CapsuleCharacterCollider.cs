@@ -82,7 +82,7 @@ namespace game.gameplay_core.characters.logic
 					CalculateMovement(moveStartPosition + Vector3.up * StepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
 					stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
 
-					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red, 0);
+					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red);
 
 					if(stepUpSuccess)
 					{
@@ -371,14 +371,14 @@ namespace game.gameplay_core.characters.logic
 		private bool CheckInsideOtherCharacter(Vector3 position, out Vector3 escapeVector)
 		{
 			escapeVector = Vector3.zero;
-			
+
 			if(_myCapsuleCollider == null)
 			{
 				return false;
 			}
 
 			GetCapsulePoints(position, out var p1, out var p2);
-			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius+_characterToCharacterOffset, _castResults, _charactersCollisionMask, QueryTriggerInteraction.Ignore);
+			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius + _characterToCharacterOffset, _castResults, _charactersCollisionMask, QueryTriggerInteraction.Ignore);
 
 			for(var i = 0; i < count; i++)
 			{

@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using dream_lib.src.utils.data_types;
 using game.enums;
 using game.gameplay_core.inventory;
+using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
 using UnityEngine;
@@ -13,18 +16,22 @@ namespace game.gameplay_core.characters.logic
 		private CharacterContext _context;
 		private InventoryData _data;
 
-		private readonly Dictionary<ArmamentSlot, BaseItemLogic> _equippedItems = new();
-		public IReadOnlyDictionary<ArmamentSlot, BaseItemLogic> EquippedItems => _equippedItems;
+		private readonly Dictionary<EquipmentSlotAdress, BaseItemLogic> _equippedItems = new();
+		public IReadOnlyDictionary<EquipmentSlotAdress, BaseItemLogic> EquippedItems => _equippedItems;
 
-		private ArmamentSlot[] ParrySlots => new[] { ArmamentSlot.Left, ArmamentSlot.Right };
+		private EquipmentSlotType[] ParrySlots => new[] { EquipmentSlotType.LeftHand, EquipmentSlotType.RightHand };
 
-		public WeaponItemLogic RightWeapon => _equippedItems.GetValueOrDefault(ArmamentSlot.Right) as WeaponItemLogic;
-		public WeaponItemLogic LeftWeapon => _equippedItems.GetValueOrDefault(ArmamentSlot.Left) as WeaponItemLogic;
+		public WeaponItemLogic RightWeapon => GetEquipment(EquipmentSlotType.RightHand) as WeaponItemLogic;
+		public WeaponItemLogic LeftWeapon => GetEquipment(EquipmentSlotType.LeftHand) as WeaponItemLogic;
+
+		public event Action<EquipmentSlotAdress, BaseItemLogic> OnEquipChanged;
 
 		public void Initialize(CharacterContext context, InventoryData data)
 		{
 			_context = context;
 			_data = data;
+			data.Items ??= new List<InventoryItemSaveData>();
+			data.EquippedItems ??= new SerializableDictionary<EquipmentSlotAdress, string>();
 			foreach(var itemSaveData in data.Items)
 			{
 				var itemLogic = InventoryItemsFabric.CreateItemFromSave(itemSaveData);
@@ -43,8 +50,11 @@ namespace game.gameplay_core.characters.logic
 
 			foreach(var kvp in data.EquippedItems)
 			{
-				_equippedItems[kvp.Key] = _items.Find(item => item.UniqueId == kvp.Value);
+				var itemToEquip = _items.Find(item => item.UniqueId == kvp.Value);
+				_equippedItems[kvp.Key] = itemToEquip;
 			}
+
+			EnsureHandsNotNull();
 		}
 
 		public void PickUpItem(InventoryItemSaveData itemSaveData)
@@ -64,22 +74,97 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		public BaseItemLogic GetArmament(ArmamentSlot slot)
+		public BaseItemLogic GetEquipment(EquipmentSlotType slot, int index = 0)
 		{
-			return _equippedItems.GetValueOrDefault(slot);
+			return _equippedItems.GetValueOrDefault(new EquipmentSlotAdress(slot, index));
 		}
 
-		public ArmamentSlot GetBlockingWeaponSlot()
+		public void EquipItem(BaseItemLogic item, EquipmentSlotType slotType, int slotIndex)
 		{
-			if(_equippedItems.TryGetValue(ArmamentSlot.Left, out var leftItem))
+			if(item == null && (slotType == EquipmentSlotType.LeftHand || slotType == EquipmentSlotType.RightHand))
 			{
-				if(leftItem is WeaponItemLogic)
+				item = CreateEmptyHandItem();
+			}
+
+			var key = new EquipmentSlotAdress(slotType, slotIndex);
+			_equippedItems[key] = item;
+			if(item != null)
+			{
+				_data.EquippedItems[key] = item.UniqueId;
+			}
+			else
+			{
+				_data.EquippedItems.Remove(key);
+			}
+
+			OnEquipChanged?.Invoke(key, item);
+		}
+
+		public void UnequipItem(EquipmentSlotType slotType, int slotIndex)
+		{
+			EquipItem(null, slotType, slotIndex);
+		}
+
+		public void EquipItemAuto(BaseEquipmentItemConfig config, BaseItemLogic item)
+		{
+			var index = 0;
+
+			var maxIndex = GetMaxItemsForSlot(config.EquipmentSlotType);
+
+			for(var i = 0; i < maxIndex; i++)
+			{
+				var existing = GetEquipment(config.EquipmentSlotType, i);
+				if(existing == null)
 				{
-					return ArmamentSlot.Left;
+					index = i;
+					break;
 				}
 			}
 
-			return ArmamentSlot.Right;
+			EquipItem(item, config.EquipmentSlotType, index);
+		}
+
+		public static int GetMaxItemsForSlot(EquipmentSlotType configEquipmentSlotType)
+		{
+			switch(configEquipmentSlotType)
+			{
+				case EquipmentSlotType.RightHand:
+					return 1;
+				case EquipmentSlotType.LeftHand:
+					return 1;
+				case EquipmentSlotType.QuickUse:
+					return 1;
+				case EquipmentSlotType.Head:
+					return 1;
+				case EquipmentSlotType.Body:
+					return 1;
+				case EquipmentSlotType.Hands:
+					return 1;
+				case EquipmentSlotType.Legs:
+					return 1;
+				case EquipmentSlotType.Talisman:
+					return 4;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(configEquipmentSlotType), configEquipmentSlotType, null);
+			}
+		}
+
+		public IEnumerable<BaseItemLogic> GetAllItems()
+		{
+			return _items;
+		}
+
+		public EquipmentSlotType GetBlockingWeaponSlot()
+		{
+			if(_equippedItems.TryGetValue(new EquipmentSlotAdress(EquipmentSlotType.LeftHand, 0), out var leftItem))
+			{
+				if(leftItem is WeaponItemLogic)
+				{
+					return EquipmentSlotType.LeftHand;
+				}
+			}
+
+			return EquipmentSlotType.RightHand;
 		}
 
 		public bool CheckHasParryWeapon()
@@ -87,11 +172,11 @@ namespace game.gameplay_core.characters.logic
 			return TryGetParryWeapon(out _, out _);
 		}
 
-		public bool TryGetParryWeapon(out WeaponItemLogic parryWeapon, out ArmamentSlot slot)
+		public bool TryGetParryWeapon(out WeaponItemLogic parryWeapon, out EquipmentSlotType slot)
 		{
 			foreach(var parrySlot in ParrySlots)
 			{
-				if(EquippedItems.TryGetValue(parrySlot, out var item))
+				if(EquippedItems.TryGetValue(new EquipmentSlotAdress(parrySlot, 0), out var item))
 				{
 					if(item is WeaponItemLogic weaponItem)
 					{
@@ -105,7 +190,7 @@ namespace game.gameplay_core.characters.logic
 				}
 			}
 
-			slot = ArmamentSlot.Undefined;
+			slot = EquipmentSlotType.Undefined;
 			parryWeapon = null;
 			return false;
 		}
@@ -116,6 +201,39 @@ namespace game.gameplay_core.characters.logic
 			{
 				baseItemLogic.HandleLocationRespawn();
 			}
+		}
+
+		private void EnsureHandsNotNull()
+		{
+			if(GetEquipment(EquipmentSlotType.LeftHand) == null)
+			{
+				EquipItem(null, EquipmentSlotType.LeftHand, 0);
+			}
+
+			if(GetEquipment(EquipmentSlotType.RightHand) == null)
+			{
+				EquipItem(null, EquipmentSlotType.RightHand, 0);
+			}
+		}
+
+		private BaseItemLogic CreateEmptyHandItem()
+		{
+			var configId = _context.Config.EmptyHandItemConfigId;
+			if(string.IsNullOrEmpty(configId))
+			{
+				Debug.LogError("EmptyHandItemConfigId is not set in CharacterConfig!");
+				return null;
+			}
+
+			var itemSaveData = new InventoryItemSaveData
+			{
+				ConfigId = configId,
+				UniqueId = "EmptyHand_" + Guid.NewGuid()
+			};
+			var itemLogic = InventoryItemsFabric.CreateItemFromSave(itemSaveData);
+			itemLogic.InitializeForLocation(_context);
+			itemLogic.LoadData(itemSaveData);
+			return itemLogic;
 		}
 
 		private void HandleConsumableItemPickup(InventoryItemSaveData itemSaveData, BaseConsumableItemLogic createdItemLogic)
@@ -150,8 +268,6 @@ namespace game.gameplay_core.characters.logic
 						_context.CurrentConsumableItem.Value = mainHealingItem;
 					}
 				}
-
-				Debug.Log("picked healing item first time");
 			}
 		}
 

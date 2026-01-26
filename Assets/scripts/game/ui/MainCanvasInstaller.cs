@@ -1,3 +1,4 @@
+using game.ui.inventory;
 using UnityEngine;
 
 namespace game.ui
@@ -9,5 +10,7 @@ namespace game.ui
 
 		[field: SerializeField]
 		public UiLocationHUD UiLocationHUD { get; private set; }
+		[field: SerializeField]
+		public InventoryScreenView Inventory { get; set; }
 	}
 }

@@ -25,14 +25,14 @@ namespace game.gameplay_core
 			var savePath = GetSavePath(locationId);
 			var playerSavePath = GetPlayerSavePath();
 
-			if (!resetState)
+			if(!resetState)
 			{
-				if (File.Exists(savePath))
+				if(File.Exists(savePath))
 				{
 					saveData = JsonUtility.FromJson<LocationSaveData>(File.ReadAllText(savePath));
 				}
 
-				if (File.Exists(playerSavePath))
+				if(File.Exists(playerSavePath))
 				{
 					GameStaticContext.Instance.PlayerSave = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(playerSavePath));
 				}
@@ -46,25 +46,36 @@ namespace game.gameplay_core
 			//TODO: load scene
 			var locationSavePath = GetSavePath(locationId);
 			var saveData = JsonUtility.FromJson<LocationSaveData>(File.ReadAllText(locationSavePath));
+
 			//TODO: load player data as well
 			await Initialize(saveData);
 		}
 
 		public void SaveCurrentLocation()
 		{
-			if (_locationDomain == null) return;
+			if(_locationDomain == null)
+			{
+				return;
+			}
 			var saveData = _locationDomain.SaveCurrentStateToData();
 			var savePath = GetSavePath(GameStaticContext.Instance.PlayerSave.CurrentLocationId);
 			var playerSavePath = GetPlayerSavePath();
 
 			var directory = Path.GetDirectoryName(savePath);
-			if (!Directory.Exists(directory))
+			if(!Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);
 			}
 
 			File.WriteAllText(savePath, JsonUtility.ToJson(saveData, true));
 			File.WriteAllText(playerSavePath, JsonUtility.ToJson(GameStaticContext.Instance.PlayerSave, true));
+		}
+
+		public void RespawnAndReloadLocation()
+		{
+			//TODO: reload scene for maximum consistency
+			_locationDomain.RespawnAndReloadLocation();
+			SaveCurrentLocation();
 		}
 
 		private string GetSavePath(string locationId)
@@ -75,13 +86,6 @@ namespace game.gameplay_core
 		private string GetPlayerSavePath()
 		{
 			return Path.Combine(Application.persistentDataPath, "saves", GameStaticContext.Instance.SaveSlotId, "player.json");
-		}
-
-		public void RespawnAndReloadLocation()
-		{
-			//TODO: reload scene for maximum consistency
-			_locationDomain.RespawnAndReloadLocation();
-			SaveCurrentLocation();
 		}
 
 		private async UniTask PreloadCoreGameAssets()

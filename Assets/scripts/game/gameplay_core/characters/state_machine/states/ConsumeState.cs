@@ -26,7 +26,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 			_animation = _context.Animator.Play(_animationConfig.Animation, 0.1f, FadeMode.FromStart);
 			Duration = _animationConfig.Animation.Length;
-			if(_animationConfig.DisableRightHandWeapon && _context.EquippedWeaponViews.TryGetValue(ArmamentSlot.Right, out var rightView))
+			if(_animationConfig.DisableRightHandWeapon && _context.EquippedWeaponViews.TryGetValue(EquipmentSlotType.RightHand, out var rightView))
 			{
 				rightView.gameObject.SetActive(false);
 			}
@@ -36,7 +36,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			base.OnExit();
-			if(_animationConfig.DisableRightHandWeapon && _context.EquippedWeaponViews.TryGetValue(ArmamentSlot.Right, out var rightView))
+			if(_animationConfig.DisableRightHandWeapon && _context.EquippedWeaponViews.TryGetValue(EquipmentSlotType.RightHand, out var rightView))
 			{
 				rightView.gameObject.SetActive(true);
 			}

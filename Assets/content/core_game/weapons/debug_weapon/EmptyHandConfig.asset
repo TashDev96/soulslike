@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c16c23ba73431aa03959b51afda5f7, type: 3}
   m_Name: EmptyHandConfig
   m_EditorClassIdentifier: 
+  <Icon>k__BackingField: {fileID: 1506671222, guid: 9c5f2426d24484699a497c354e7a81db, type: 3}
+  <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: EmptyHand
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -49,21 +51,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0.16964285
-        EndTimeNormalized: 0.16964285
+        EndTimeNormalized: 0.17232382
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0.30357143
-        EndTimeNormalized: 0.30357143
+        EndTimeNormalized: 0.3062524
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.30357143
-        EndTimeNormalized: 0.30357143
+        EndTimeNormalized: 0.3062524
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -197,21 +199,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0027777778
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0027777778
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.2777778
-        EndTimeNormalized: 0.2777778
+        EndTimeNormalized: 0.28055558
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -294,7 +296,7 @@ MonoBehaviour:
     <Range>k__BackingField: 1
   <StrongAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: EmptyHand
+      WeaponForPreview: 
       Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
       Speed: 1
       FlagEvents:
@@ -667,21 +669,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.0026809652
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -789,21 +791,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0
-        EndTimeNormalized: 0
+        EndTimeNormalized: 0.002173913
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0

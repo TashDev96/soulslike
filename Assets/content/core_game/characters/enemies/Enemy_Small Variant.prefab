@@ -159,7 +159,9 @@ MonoBehaviour:
         _keyCollision: 0
     EquippedItems:
       _list:
-      - Key: 2
+      - Key:
+          SlotType: 1
+          Index: 0
         Value: 123
       _keyCollision: 0
 --- !u!114 &2412503847255696516

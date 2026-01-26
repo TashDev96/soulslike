@@ -34,9 +34,9 @@ namespace game.gameplay_core.characters.bosses
 				_blinkView.PlayDamageBlink();
 				return;
 			}
-			
+
 			base.ApplyDamage(damageInfo);
-			
+
 			if(_armorAmount <= 0)
 			{
 				_unarmoredReceiver.gameObject.SetActive(true);
