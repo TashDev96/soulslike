@@ -1,11 +1,15 @@
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
+#if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
+#endif
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
 {
+	#if UNITY_EDITOR
 	[OdinDontRegister]
+	#endif
 	public class SubUtilityFight : SubUtilityBase
 	{
 		[SerializeField]

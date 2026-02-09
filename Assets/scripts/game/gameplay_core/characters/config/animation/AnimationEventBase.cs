@@ -38,12 +38,13 @@ namespace game.gameplay_core.characters.config.animation
 		{
 			return Name;
 		}
-
+#if UNITY_EDITOR
 		[OnInspectorGUI]
 		private void OnGui()
 		{
 			var denormalizeMult = ClipDuration * AnimationConfig.EditorTimelineFps;
 			EditorGUILayout.LabelField($"Frames: {(StartTimeNormalized * denormalizeMult).Round(1)} - {(EndTimeNormalized * denormalizeMult).Round(1)}");
 		}
+#endif
 	}
 }

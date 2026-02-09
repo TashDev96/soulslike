@@ -1,7 +1,9 @@
 using System;
 using Animancer;
+#if UNITY_EDITOR
 using dream_lib.src.utils.editor;
 using game.editor;
+#endif
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;

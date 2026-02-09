@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using game.gameplay_core.inventory.item_configs;
 using UnityEditor;
 
@@ -17,3 +18,4 @@ namespace game.editor
 		}
 	}
 }
+#endif

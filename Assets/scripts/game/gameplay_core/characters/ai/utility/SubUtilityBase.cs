@@ -31,9 +31,9 @@ namespace game.gameplay_core.characters.ai.utility
 	{
 		[SerializeField]
 		private float _noGoalsWeight = 5f;
-		[ValidateInput(nameof(ValidateGoals))]
+		[ValidateInput("ValidateGoals")]
 		public List<GoalsChain> GoalChains;
-		[ValidateInput(nameof(ValidateActions))]
+		[ValidateInput("ValidateActions")]
 		public List<UtilityAction> Actions;
 
 		[HideInInspector]
