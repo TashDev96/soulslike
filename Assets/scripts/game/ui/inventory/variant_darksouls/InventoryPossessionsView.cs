@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using game.enums;
+using game.gameplay_core;
+using game.gameplay_core.characters.logic;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace game.ui.inventory
+namespace game.ui.inventory.variant_darksouls
 {
-	public class InventoryPossessionsView : MonoBehaviour
+	public class InventoryPossessionsView : InventoryPossessionsViewAbstract
 	{
 		[SerializeField]
 		private Transform _itemsContainer;
@@ -29,11 +31,22 @@ namespace game.ui.inventory
 		private Action<BaseItemLogic> _onItemDoubleClicked;
 		private List<BaseItemLogic> _allItems = new();
 		private ItemCategory _currentCategory = ItemCategory.All;
+		private CharacterInventoryLogic _inventoryLogic;
 
-		public void Initialize(IEnumerable<BaseItemLogic> items, Action<BaseItemLogic> onItemDoubleClicked)
+		public override void Initialize(Action<BaseItemLogic> autoEquipItem)
 		{
-			_allItems = items.ToList();
-			_onItemDoubleClicked = onItemDoubleClicked;
+			_inventoryLogic = LocationStaticContext.Instance.Player.InventoryLogic;
+
+			var equippedItemsIds = _inventoryLogic.EquippedItems.Values
+				.Where(i => i != null)
+				.Select(i => i.UniqueId)
+				.ToHashSet();
+
+			var unequippedItems = _inventoryLogic.GetAllItems()
+				.Where(item => !equippedItemsIds.Contains(item.UniqueId));
+
+			_allItems = unequippedItems.ToList();
+			_onItemDoubleClicked = autoEquipItem;
 			RefreshList();
 		}
 

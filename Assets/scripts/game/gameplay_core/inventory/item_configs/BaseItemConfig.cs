@@ -8,5 +8,8 @@ namespace game.gameplay_core.inventory.item_configs
 	{
 		[field: SerializeField]
 		public Sprite Icon { get; private set; }
+		[field: SerializeField]
+		[field: TextArea]
+		public string Description { get; set; }
 	}
 }

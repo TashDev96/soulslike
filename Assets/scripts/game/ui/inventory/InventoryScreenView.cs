@@ -10,7 +10,7 @@ namespace game.ui.inventory
 	public class InventoryScreenView : MonoBehaviour
 	{
 		[SerializeField]
-		private InventoryPossessionsView _possessionsView;
+		private InventoryPossessionsViewAbstract _possessionsView;
 		private CharacterContext _context;
 		private InventorySlotView[] _slots;
 
@@ -48,15 +48,9 @@ namespace game.ui.inventory
 				slotView.SetItem(item);
 			}
 
-			var equippedItemsIds = _context.InventoryLogic.EquippedItems.Values
-				.Where(i => i != null)
-				.Select(i => i.UniqueId)
-				.ToHashSet();
+		
 
-			var unequippedItems = _context.InventoryLogic.GetAllItems()
-				.Where(item => !equippedItemsIds.Contains(item.UniqueId));
-
-			_possessionsView.Initialize(unequippedItems, OnItemDoubleClicked);
+			_possessionsView.Initialize(HandleItemAutoEquip);
 		}
 
 		public void ToggleIsShowing()
@@ -78,7 +72,7 @@ namespace game.ui.inventory
 			Refresh();
 		}
 
-		private void OnItemDoubleClicked(BaseItemLogic item)
+		private void HandleItemAutoEquip(BaseItemLogic item)
 		{
 			if(item.BaseConfig is BaseEquipmentItemConfig equippableConfig)
 			{

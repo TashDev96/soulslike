@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: DebugWeaponConfig
   m_EditorClassIdentifier: 
   <Icon>k__BackingField: {fileID: 736855538, guid: 9c5f2426d24484699a497c354e7a81db, type: 3}
+  <Description>k__BackingField: The first weapon in the game, unique artifact of
+    antient era. May have unique stats each time, depending on developer needs.
   <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: DebugWeapon
   <RegularAttacks>k__BackingField:
