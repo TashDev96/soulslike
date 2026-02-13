@@ -40,6 +40,7 @@ namespace game.gameplay_core.characters.logic
 		private bool _rotationMovementLocked;
 		private Transform _transform;
 		public Vector3 LastUpdateVelocity { get; private set; }
+		public bool RotationIsControlledByCamera { get; set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
@@ -124,6 +125,12 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(_rotationMovementLocked)
 			{
+				return;
+			}
+
+			if(RotationIsControlledByCamera)
+			{
+				_virtualForward = _context.InputData.DirectionWorld;
 				return;
 			}
 			var degreesPerSecond = 180f / halfTurnDurationSeconds;

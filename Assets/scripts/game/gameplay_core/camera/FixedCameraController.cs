@@ -1,3 +1,4 @@
+using dream_lib.src.camera;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using UnityEngine;
@@ -84,6 +85,32 @@ namespace game.gameplay_core.camera
 			{
 				UpdateCameraBehavior(cameraTransform, playerPosition, deltaTime);
 			}
+		}
+
+		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput)
+		{
+			return Camera.ProjectScreenVectorToWorldPlaneWithSkew(screenSpaceInput);
+		}
+
+		public bool OverrideAttackDirectionOnClick(out Vector3 newDirectionWorld)
+		{
+			var mouseRay = Camera.ScreenPointToRay(Input.mousePosition);
+			var playerPos = _context.Player.Value.Context.Transform.Position;
+			var plane = new Plane(Vector3.up, playerPos);
+
+			if(plane.Raycast(mouseRay, out var distance))
+			{
+				var hitPoint = mouseRay.GetPoint(distance);
+				var direction = hitPoint - playerPos;
+				direction.y = 0;
+				if(direction.sqrMagnitude > 0.01f)
+				{
+					newDirectionWorld = direction.normalized;
+					return true;
+				}
+			}
+			newDirectionWorld = default;
+			return false;
 		}
 
 		private void UpdateCameraBehavior(Transform cameraTransform, Vector3 playerPosition, float deltaTime)

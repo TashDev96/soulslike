@@ -1,8 +1,10 @@
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using dream_lib.src.extensions;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace game.gameplay_core
 {
@@ -46,6 +48,8 @@ namespace game.gameplay_core
 			//TODO: load scene
 			var locationSavePath = GetSavePath(locationId);
 			var saveData = JsonUtility.FromJson<LocationSaveData>(File.ReadAllText(locationSavePath));
+
+			await SceneManager.LoadSceneAsync(locationId, LoadSceneMode.Single);
 
 			//TODO: load player data as well
 			await Initialize(saveData);

@@ -29,6 +29,12 @@ namespace game.gameplay_core.camera
 					Player = player,
 					CameraSettings = fixedCamera
 				}),
+				FirstPersonCameraSettings firstPerson => new FirstPersonCameraController(new FirstPersonCameraController.Context()
+				{
+					Camera = camera,
+					Player = player,
+					CameraSettings = firstPerson
+				}),
 				_ => throw new ArgumentException($"Unknown camera settings type: {settings.GetType()}")
 			};
 		}

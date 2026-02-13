@@ -1,4 +1,5 @@
 using ControlFreak2;
+using dream_lib.src.camera;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
 using game.input;
@@ -56,7 +57,6 @@ namespace game.gameplay_core.camera
 				_hasInitializedPosition = true;
 			}
 
-			// 1. Smooth Pivot Follow
 			_currentPivotPosition = Vector3.SmoothDamp(
 				_currentPivotPosition,
 				targetPivot,
@@ -64,13 +64,11 @@ namespace game.gameplay_core.camera
 				1f / settings.FollowSpeed
 			);
 
-			// 2. Input
 			var input = new Vector2(
 				InputAdapter.GetAxisRaw(InputAxesNames.CameraHorizontal),
 				InputAdapter.GetAxisRaw(InputAxesNames.CameraVertical)
 			);
 
-			// 3. Rotate Camera (Manual)
 			if(Mathf.Abs(input.x) > 0.001f || Mathf.Abs(input.y) > 0.001f)
 			{
 				_currentRotation.y += input.x * settings.RotationSpeed * deltaTime;
@@ -78,7 +76,6 @@ namespace game.gameplay_core.camera
 				_currentRotation.x = Mathf.Clamp(_currentRotation.x, settings.MinPitch, settings.MaxPitch);
 			}
 
-			// 4. LockOn Rotation
 			else if(player.ExternalData.LockOnTarget.HasValue)
 			{
 				var target = player.ExternalData.LockOnTarget.Value.ExternalData.Transform.Position;
@@ -89,8 +86,6 @@ namespace game.gameplay_core.camera
 					var targetRotation = Quaternion.LookRotation(dirToTarget);
 					var targetEuler = targetRotation.eulerAngles;
 
-					// Smoothly rotate towards target
-					// We use a faster speed for LockOn tracking than auto-rotate
 					var lockOnSpeed = settings.RotationSpeed * 2f;
 
 					_currentRotation.y = Mathf.LerpAngle(_currentRotation.y, targetEuler.y, lockOnSpeed * deltaTime);
@@ -111,14 +106,10 @@ namespace game.gameplay_core.camera
 
 			_lastPlayerPosition = playerPos;
 
-			// 6. Calculate Target Position & Rotation
 			var rotation = Quaternion.Euler(_currentRotation);
 
-			// Note: Use _currentPivotPosition here instead of direct player pivot
 			var targetCamPos = _currentPivotPosition + rotation * new Vector3(0f, settings.HeightOffset, -settings.Distance);
 
-			// 7. Obstacle Avoidance (SphereCast)
-			// Cast from the SMOOTHED pivot to ensure stability
 			var directionToCam = (targetCamPos - _currentPivotPosition).normalized;
 			var distanceToCam = Vector3.Distance(_currentPivotPosition, targetCamPos);
 
@@ -126,16 +117,25 @@ namespace game.gameplay_core.camera
 
 			if(Physics.SphereCast(_currentPivotPosition, settings.ObstacleCheckRadius, directionToCam, out var hit, distanceToCam, settings.ObstacleLayerMask))
 			{
-				// Move camera to hit point (minus radius to not clip)
 				var hitDistance = hit.distance;
 
-				// Ensure we don't get too close (min distance clamp optional but recommended)
 				hitDistance = Mathf.Max(hitDistance, 0.1f);
 				targetCamPos = _currentPivotPosition + directionToCam * hitDistance;
 			}
 
 			cameraTransform.position = targetCamPos;
 			cameraTransform.rotation = rotation;
+		}
+		
+		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput)
+		{
+			return Camera.ProjectScreenVectorToWorldPlaneWithSkew(screenSpaceInput);
+		}
+
+		public bool OverrideAttackDirectionOnClick(out Vector3 newDirectionWorld)
+		{
+			newDirectionWorld = default;
+			return false;
 		}
 	}
 }

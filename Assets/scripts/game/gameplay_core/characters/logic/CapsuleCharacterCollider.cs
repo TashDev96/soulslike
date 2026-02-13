@@ -251,7 +251,7 @@ namespace game.gameplay_core.characters.logic
 #if UNITY_EDITOR
 						if(_context.IsPlayer.Value)
 						{
-							Debug.Log($"player entered {_castResults[i]}");
+							//Debug.Log($"player entered {_castResults[i]}");
 						}
 #endif
 						listener.TriggerManualColliderEnter(gameObject);
