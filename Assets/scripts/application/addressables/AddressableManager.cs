@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 public enum AssetOwner
@@ -15,7 +16,7 @@ public enum AssetOwner
 
 public static class AddressableManager
 {
-	private static readonly Dictionary<string, object> _loadedAssets = new();
+	private static readonly Dictionary<string, AsyncOperationHandle> _handles = new();
 	private static readonly Dictionary<AssetOwner, List<string>> _assetOwners = new()
 	{
 		{ AssetOwner.Application, new List<string>() },
@@ -27,7 +28,7 @@ public static class AddressableManager
 	public static async UniTask PreloadAssetsListAsync(string[] addresses, AssetOwner owner)
 	{
 		var tasks = new UniTask[addresses.Length];
-		for (int i = 0; i < addresses.Length; i++)
+		for(int i = 0; i < addresses.Length; i++)
 		{
 			tasks[i] = LoadAssetAsync<Object>(addresses[i], owner);
 		}
@@ -41,36 +42,41 @@ public static class AddressableManager
 
 	public static async UniTask<T> LoadAssetAsync<T>(string address, AssetOwner owner)
 	{
-		if(_loadedAssets.TryGetValue(address, out var loadedAsset))
+		if(_handles.TryGetValue(address, out var existingHandle))
 		{
-			return (T)loadedAsset;
+			await existingHandle.ToUniTask();
+			return (T)existingHandle.Result;
 		}
 
 		try
 		{
-			var asset = await Addressables.LoadAssetAsync<T>(address);
-			_loadedAssets[address] = asset;
+			var handle = Addressables.LoadAssetAsync<T>(address);
+			_handles[address] = handle;
 			_assetOwners[owner].Add(address);
-			return asset;
+
+			await handle.ToUniTask();
+			return (T)handle.Result;
 		}
 		catch(Exception e)
 		{
 			Debug.LogError($"Failed to load asset at address {address}: {e.Message}");
+			_handles.Remove(address);
 			return default;
 		}
 	}
 
 	public static T LoadAssetImmediately<T>(string address, AssetOwner owner)
 	{
-		if(_loadedAssets.TryGetValue(address, out var loadedAsset))
+		if(_handles.TryGetValue(address, out var existingHandle))
 		{
-			return (T)loadedAsset;
+			return (T)existingHandle.Result;
 		}
 
 		try
 		{
-			var asset = Addressables.LoadAssetAsync<T>(address).WaitForCompletion();
-			_loadedAssets[address] = asset;
+			var handle = Addressables.LoadAssetAsync<T>(address);
+			var asset = handle.WaitForCompletion();
+			_handles[address] = handle;
 			_assetOwners[owner].Add(address);
 			return asset;
 		}
@@ -83,9 +89,13 @@ public static class AddressableManager
 
 	public static T GetPreloadedAsset<T>(string address)
 	{
-		if(_loadedAssets.TryGetValue(address, out var loadedAsset))
+		if(_handles.TryGetValue(address, out var handle))
 		{
-			return (T)loadedAsset;
+			if(handle.Status == AsyncOperationStatus.Succeeded)
+			{
+				return (T)handle.Result;
+			}
+			throw new Exception($"Error! asset {address} is in status {handle.Status}");
 		}
 		throw new Exception($"Error! asset {address} was not preloaded");
 	}
@@ -94,10 +104,10 @@ public static class AddressableManager
 	{
 		foreach(var address in _assetOwners[owner])
 		{
-			if(_loadedAssets.TryGetValue(address, out var asset))
+			if(_handles.TryGetValue(address, out var handle))
 			{
-				Addressables.Release(asset);
-				_loadedAssets.Remove(address);
+				Addressables.Release(handle);
+				_handles.Remove(address);
 			}
 		}
 		_assetOwners[owner].Clear();
@@ -105,12 +115,12 @@ public static class AddressableManager
 
 	public static void ClearAllMemory()
 	{
-		foreach(var asset in _loadedAssets.Values)
+		foreach(var handle in _handles.Values)
 		{
-			Addressables.Release(asset);
+			Addressables.Release(handle);
 		}
 
-		_loadedAssets.Clear();
+		_handles.Clear();
 		foreach(var list in _assetOwners.Values)
 		{
 			list.Clear();
