@@ -48,9 +48,9 @@ namespace game.gameplay_core.characters.ai.utility
 		private GoalsChain _currentGoalChain;
 		private int _currentGoalIndex;
 		private float _currentGoalExecutionTime;
-		private UtilityAction _lastAction;
+		protected UtilityAction _lastAction;
 
-		private CharacterInputData InputData => _context.CharacterContext.InputData;
+		protected CharacterInputData InputData => _context.CharacterContext.InputData;
 
 		protected IReadOnlyCollection<CharacterObservation> CharacterObservations { get; set; }
 
@@ -159,7 +159,7 @@ namespace game.gameplay_core.characters.ai.utility
 				_lastAction = action;
 			}
 
-			var vectorToTarget = _transform.Forward;
+			var vectorToTarget = _transform.Forward * _context.BlackboardValues[BlackboardValues.DistanceToTarget];
 
 			switch(action.Type)
 			{
