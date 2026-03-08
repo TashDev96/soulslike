@@ -1,10 +1,12 @@
 using dream_lib.src.extensions;
+using game.gameplay_core.characters.config.animation;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class CharacterAnimationStateBase : CharacterStateBase
 	{
+		protected AnimationConfig AnimationConfig;
 		private float _forwardMovementDone;
 		public abstract float Time { get; protected set; }
 		protected float NormalizedTime => Time / Duration;
@@ -23,7 +25,15 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
+			var previousNormalizedTime = NormalizedTime;
 			Time += deltaTime;
+			if(AnimationConfig != null)
+			{
+				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedTime, out var soundName, out var hearDistance))
+				{
+					EmitNoise(hearDistance);
+				}
+			}
 		}
 
 		public override string GetDebugString()

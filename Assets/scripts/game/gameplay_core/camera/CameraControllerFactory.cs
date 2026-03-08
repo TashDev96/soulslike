@@ -29,7 +29,7 @@ namespace game.gameplay_core.camera
 					Player = player,
 					CameraSettings = fixedCamera
 				}),
-				FirstPersonCameraSettings firstPerson => new FirstPersonCameraController(new FirstPersonCameraController.Context()
+				FirstPersonCameraSettings firstPerson => new FirstPersonCameraController(new FirstPersonCameraController.Context
 				{
 					Camera = camera,
 					Player = player,

@@ -126,7 +126,7 @@ namespace game.gameplay_core.camera
 			cameraTransform.position = targetCamPos;
 			cameraTransform.rotation = rotation;
 		}
-		
+
 		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput)
 		{
 			return Camera.ProjectScreenVectorToWorldPlaneWithSkew(screenSpaceInput);

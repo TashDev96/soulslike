@@ -24,6 +24,10 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
+
+			//TODO go to unified animation config
+			//AnimationConfig = _animationConfig; 
+
 			_animation = _context.Animator.Play(_animationConfig.Animation, 0.1f, FadeMode.FromStart);
 			Duration = _animationConfig.Animation.Length;
 			if(_animationConfig.DisableRightHandWeapon && _context.EquippedWeaponViews.TryGetValue(EquipmentSlotType.RightHand, out var rightView))

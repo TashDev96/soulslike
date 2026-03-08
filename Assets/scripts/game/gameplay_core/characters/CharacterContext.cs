@@ -3,6 +3,7 @@ using Animancer;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.enums;
+using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
@@ -66,5 +67,6 @@ namespace game.gameplay_core.characters
 		public CharacterInventoryLogic InventoryLogic { get; set; }
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
+		public CharacterSensorsDomain SensorsDomain { get; set; }
 	}
 }

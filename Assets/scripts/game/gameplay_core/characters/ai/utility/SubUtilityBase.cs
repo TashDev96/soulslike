@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
@@ -15,7 +16,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
 {
-	public class WeightUpdateEventArgs : EventArgs
+	public struct WeightUpdateEventArgs
 	{
 		public List<UtilityAction> Actions { get; }
 		public float DeltaTime { get; }
@@ -27,7 +28,7 @@ namespace game.gameplay_core.characters.ai.utility
 		}
 	}
 
-	public class SubUtilityBase : MonoBehaviour
+	public abstract class SubUtilityBase : MonoBehaviour
 	{
 		[SerializeField]
 		private float _noGoalsWeight = 5f;
@@ -51,6 +52,8 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private CharacterInputData InputData => _context.CharacterContext.InputData;
 
+		protected IReadOnlyCollection<CharacterObservation> CharacterObservations { get; set; }
+
 		public static event EventHandler<WeightUpdateEventArgs> OnWeightUpdate;
 
 		public void Initialize(UtilityBrainContext context)
@@ -58,6 +61,8 @@ namespace game.gameplay_core.characters.ai.utility
 			_context = context;
 			_transform = _context.CharacterContext.Transform;
 			_context.CharacterContext.OnStateChanged.OnExecute += HandleCharacterStateChanged;
+
+			CharacterObservations = _context.CharacterContext.SensorsDomain.CharacterObservations;
 		}
 
 		public virtual void Think(float deltaTime)
@@ -133,7 +138,113 @@ namespace game.gameplay_core.characters.ai.utility
 				}
 			}
 
-			PerformAction(selectedAction);
+			TryPerformAction(selectedAction);
+
+			if(!_hasMovedByPathThisFrame)
+			{
+				//I don't understand why it is here lol
+				_needRecalculatePath = true;
+			}
+		}
+
+		public abstract float GetExecutionWorthWeight();
+
+		protected virtual bool TryPerformAction(UtilityAction action)
+		{
+			_hasMovedByPathThisFrame = false;
+
+			if(_lastAction != action)
+			{
+				action.InertiaTimer = action.InertiaDuration;
+				_lastAction = action;
+			}
+
+			var vectorToTarget = _transform.Forward;
+
+			switch(action.Type)
+			{
+				case UtilityAction.ActionType.LightAttack:
+					InputData.Command = CharacterCommand.RegularAttack;
+					InputData.DirectionWorld = vectorToTarget;
+					break;
+				case UtilityAction.ActionType.StrongAttack:
+					InputData.Command = CharacterCommand.RegularAttack;
+					InputData.DirectionWorld = vectorToTarget;
+					break;
+				case UtilityAction.ActionType.SpecialAttack:
+					InputData.Command = CharacterCommand.RegularAttack;
+					InputData.DirectionWorld = vectorToTarget;
+					break;
+				case UtilityAction.ActionType.Roll:
+					InputData.Command = CharacterCommand.Roll;
+					InputData.DirectionWorld = _transform.TransformDirection(action.Direction.ToVector());
+					break;
+				case UtilityAction.ActionType.WalkToTransform:
+					break;
+				case UtilityAction.ActionType.KeepSafeDistance:
+
+					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.WalkBlock : CharacterCommand.Walk;
+
+					if(vectorToTarget.sqrMagnitude < action.Distance * action.Distance)
+					{
+						InputData.DirectionWorld = -vectorToTarget;
+					}
+					else
+					{
+						InputData.DirectionWorld = Mathf.Sin(Time.time) > 0 ? _transform.Right : -_transform.Right;
+					}
+					break;
+
+				case UtilityAction.ActionType.Strafe:
+					break;
+				case UtilityAction.ActionType.Heal:
+					InputData.Command = CharacterCommand.UseItem;
+					break;
+				case UtilityAction.ActionType.Block:
+					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.StayBlock : CharacterCommand.None;
+
+					break;
+				default:
+					return false;
+			}
+
+			var needCancelCommandToPreventFallOff = InputData.Command is CharacterCommand.Walk or CharacterCommand.WalkBlock or CharacterCommand.Run or CharacterCommand.Roll;
+			needCancelCommandToPreventFallOff &= _context.CharacterContext.CharacterCollider.CheckForFallOff(InputData.DirectionWorld, 1f);
+			if(needCancelCommandToPreventFallOff)
+			{
+				InputData.Command = CharacterCommand.None;
+				InputData.DirectionWorld = Vector3.zero;
+			}
+
+			return true;
+		}
+
+		protected void MoveTo(Vector3 worldPos)
+		{
+			const float navMeshDistance = 4f;
+			var moveVector = worldPos - _transform.Position;
+			InputData.Command = CharacterCommand.Walk;
+			if(moveVector.sqrMagnitude < navMeshDistance * navMeshDistance)
+			{
+				InputData.DirectionWorld = moveVector;
+				if(moveVector.sqrMagnitude < 0.03f)
+				{
+					InputData.Command = CharacterCommand.None;
+				}
+			}
+			else
+			{
+				_needRecalculatePath |= _context.NavigationModule.CheckTargetPositionChangedSignificantly(worldPos, 1f);
+				if(_needRecalculatePath)
+				{
+					_context.NavigationModule.BuildPath(worldPos);
+					_context.NavigationModule.DrawDebug(Color.green, 2f);
+					_needRecalculatePath = false;
+				}
+				_context.CharacterContext.LockOnLogic.LockOnTarget.Value = null;
+				InputData.DirectionWorld = _context.NavigationModule.CalculateMoveDirection(_transform.Position);
+				_hasMovedByPathThisFrame = true;
+			}
 		}
 
 		private void UpdateBlackboardValues()
@@ -193,118 +304,6 @@ namespace game.gameplay_core.characters.ai.utility
 				result += consideration.Evaluate(_context);
 			}
 			return result;
-		}
-
-		private void PerformAction(UtilityAction action)
-		{
-			_hasMovedByPathThisFrame = false;
-
-			if(_lastAction != action)
-			{
-				action.InertiaTimer = action.InertiaDuration;
-				_lastAction = action;
-			}
-
-			var vectorToTarget = _transform.Forward;
-			var mainAttackDistance = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
-
-			if(_context.TargetTransform != null)
-			{
-				vectorToTarget = _context.TargetTransform.Position - _transform.Position;
-			}
-
-			_context.CharacterContext.LockOnLogic.LockOnTarget.Value = _context.Target;
-
-			switch(action.Type)
-			{
-				case UtilityAction.ActionType.LightAttack:
-					InputData.Command = CharacterCommand.RegularAttack;
-					InputData.DirectionWorld = vectorToTarget;
-					break;
-				case UtilityAction.ActionType.StrongAttack:
-					InputData.Command = CharacterCommand.RegularAttack;
-					InputData.DirectionWorld = vectorToTarget;
-					break;
-				case UtilityAction.ActionType.SpecialAttack:
-					InputData.Command = CharacterCommand.RegularAttack;
-					InputData.DirectionWorld = vectorToTarget;
-					break;
-				case UtilityAction.ActionType.Roll:
-					InputData.Command = CharacterCommand.Roll;
-					InputData.DirectionWorld = _transform.TransformDirection(action.Direction.ToVector());
-					break;
-				case UtilityAction.ActionType.WalkToTransform:
-					break;
-				case UtilityAction.ActionType.KeepSafeDistance:
-
-					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.WalkBlock : CharacterCommand.Walk;
-
-					if(vectorToTarget.sqrMagnitude < action.Distance * action.Distance)
-					{
-						InputData.DirectionWorld = -vectorToTarget;
-					}
-					else
-					{
-						InputData.DirectionWorld = Mathf.Sin(Time.time) > 0 ? _transform.Right : -_transform.Right;
-					}
-					break;
-				case UtilityAction.ActionType.GetIntoAttackDistance:
-					MoveTo(_context.TargetTransform.Position - vectorToTarget.normalized * mainAttackDistance);
-					break;
-				case UtilityAction.ActionType.Strafe:
-					break;
-				case UtilityAction.ActionType.Heal:
-					InputData.Command = CharacterCommand.UseItem;
-					break;
-				case UtilityAction.ActionType.Block:
-					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.StayBlock : CharacterCommand.None;
-
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			if(InputData.Command is CharacterCommand.Walk or CharacterCommand.WalkBlock or CharacterCommand.Run or CharacterCommand.Roll)
-			{
-				if(_context.CharacterContext.CharacterCollider.CheckForFallOff(InputData.DirectionWorld, 1f))
-				{
-					InputData.Command = CharacterCommand.None;
-					InputData.DirectionWorld = Vector3.zero;
-				}
-			}
-
-			if(!_hasMovedByPathThisFrame)
-			{
-				_needRecalculatePath = true;
-			}
-		}
-
-		private void MoveTo(Vector3 worldPos)
-		{
-			const float navMeshDistance = 4f;
-			var moveVector = worldPos - _transform.Position;
-			InputData.Command = CharacterCommand.Walk;
-			if(moveVector.sqrMagnitude < navMeshDistance * navMeshDistance)
-			{
-				InputData.DirectionWorld = moveVector;
-				if(moveVector.sqrMagnitude < 0.03f)
-				{
-					InputData.Command = CharacterCommand.None;
-				}
-			}
-			else
-			{
-				_needRecalculatePath |= _context.NavigationModule.CheckTargetPositionChangedSignificantly(worldPos, 1f);
-				if(_needRecalculatePath)
-				{
-					_context.NavigationModule.BuildPath(worldPos);
-					_context.NavigationModule.DrawDebug(Color.green, 2f);
-					_needRecalculatePath = false;
-				}
-				_context.CharacterContext.LockOnLogic.LockOnTarget.Value = null;
-				InputData.DirectionWorld = _context.NavigationModule.CalculateMoveDirection(_transform.Position);
-				_hasMovedByPathThisFrame = true;
-			}
 		}
 
 #if UNITY_EDITOR

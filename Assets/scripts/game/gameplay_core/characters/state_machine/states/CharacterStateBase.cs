@@ -1,4 +1,7 @@
+using dream_lib.src.utils.drawers;
+using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.commands;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -54,6 +57,18 @@ namespace game.gameplay_core.characters.state_machine.states
 		public virtual float GetEnterStaminaCost()
 		{
 			return 0;
+		}
+
+		protected virtual void EmitNoise(float normalHearDistance)
+		{
+			DebugDrawUtils.DrawWireCircle(_context.Transform.Position + Vector3.up * 0.1f, normalHearDistance, Vector3.up, Color.darkOrange, 2f);
+
+			LocationStaticContext.Instance.WorldInfo.PropagateSoundInfo.Execute(new SoundInfo
+			{
+				Character = _context.SelfLink,
+				NormalHearDistance = normalHearDistance,
+				Position = _context.Transform.Position
+			});
 		}
 	}
 }

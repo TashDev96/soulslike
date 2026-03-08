@@ -1,9 +1,9 @@
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 #if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
 #endif
-using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility.considerations.weights
 {

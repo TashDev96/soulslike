@@ -6,6 +6,7 @@ using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.serialization;
 using game.enums;
 using game.gameplay_core.characters.ai;
+using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
@@ -67,6 +68,7 @@ namespace game.gameplay_core.characters
 		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
+		private CharacterSensorsDomain _sensorsDomain;
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
@@ -201,6 +203,13 @@ namespace game.gameplay_core.characters
 			_healthLogic = new HealthLogic(_context);
 
 			_poiseLogic.SetContext(_context);
+
+			_sensorsDomain = GetComponent<CharacterSensorsDomain>();
+			if(_sensorsDomain != null)
+			{
+				_sensorsDomain.Initialize(this);
+			}
+			_context.SensorsDomain = _sensorsDomain;
 
 			if(isPlayer)
 			{
@@ -388,6 +397,10 @@ namespace game.gameplay_core.characters
 		{
 			var personalDeltaTime = deltaTime * _context.DeltaTimeMultiplier.Value;
 
+			if(_sensorsDomain != null)
+			{
+				_sensorsDomain.CustomUpdate(deltaTime);
+			}
 			_brain.Think(personalDeltaTime);
 			var calculateInputLogic = true;
 

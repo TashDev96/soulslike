@@ -1,4 +1,3 @@
-using System.Linq;
 using game.gameplay_core;
 using game.gameplay_core.characters;
 using game.gameplay_core.inventory.item_configs;
@@ -47,8 +46,6 @@ namespace game.ui.inventory
 				var item = _context.InventoryLogic.GetEquipment(slotView.SlotType, slotView.SlotIndex);
 				slotView.SetItem(item);
 			}
-
-		
 
 			_possessionsView.Initialize(HandleItemAutoEquip);
 		}

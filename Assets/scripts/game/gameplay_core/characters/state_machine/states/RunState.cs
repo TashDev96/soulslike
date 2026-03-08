@@ -4,8 +4,12 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class RunState : CharacterStateBase
 	{
+		private const float NoiseDistance = 6f;
+		private const float NoiseEmitPeriod = 0.23f;
+
 		private const string StaminaRegenLockKey = "RunState";
 		private float _time;
+		private float _noiseTimer;
 
 		public override float RequiredStaminaOffset => _context.CharacterStats.StaminaMax.Value * 0.2f;
 
@@ -18,6 +22,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 			_time = 0;
+			_noiseTimer = 0;
 			IsComplete = false;
 			_context.Animator.Play(_context.Config.RunAnimation, 0.3f);
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
@@ -27,6 +32,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
+			EmitNoise(NoiseDistance);
 			base.OnExit();
 		}
 
@@ -55,6 +61,13 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
 
 			IsComplete = true;
+
+			_noiseTimer += deltaTime;
+			if(_noiseTimer > NoiseEmitPeriod)
+			{
+				_noiseTimer = 0;
+				EmitNoise(NoiseDistance);
+			}
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)

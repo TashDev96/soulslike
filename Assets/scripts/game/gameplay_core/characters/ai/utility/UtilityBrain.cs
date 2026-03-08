@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using dream_lib.src.utils.components;
+using System.Text;
 using game.gameplay_core.characters.ai.navigation;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
@@ -15,13 +14,7 @@ namespace game.gameplay_core.characters.ai.utility
 		[SerializeField]
 		private List<SubUtilityBase> _subUtilities;
 
-		[SerializeField]
-		private TriggerEventsListener[] _aggroZones;
-
 		private UtilityBrainContext _context;
-
-		[ShowInInspector]
-		private bool HasTarget => _context?.Target != null;
 
 		public void Initialize(CharacterContext context)
 		{
@@ -30,7 +23,8 @@ namespace game.gameplay_core.characters.ai.utility
 				CharacterContext = context,
 				PerformedActionsHistory = new List<ActionHistoryNode>(),
 				NavigationModule = new AiNavigationModule(context.Transform),
-				BlackboardValues = new Dictionary<BlackboardValues, float>()
+				BlackboardValues = new Dictionary<BlackboardValues, float>(),
+				Sensors = context.SensorsDomain
 			};
 
 			foreach(BlackboardValues enumKey in Enum.GetValues(typeof(BlackboardValues)))
@@ -40,11 +34,6 @@ namespace game.gameplay_core.characters.ai.utility
 			foreach(var subUtility in _subUtilities)
 			{
 				subUtility.Initialize(_context);
-			}
-
-			foreach(var triggerListener in _aggroZones)
-			{
-				triggerListener.OnTriggerEnterEvent += HandleAggroTriggerEnter;
 			}
 		}
 
@@ -56,42 +45,39 @@ namespace game.gameplay_core.characters.ai.utility
 		public void Think(float deltaTime)
 		{
 			_context.BrainTime += deltaTime;
-			if(_context.Target != null)
+
+			SubUtilityBase utilityToExecute = null;
+			var maxWeight = 0f;
+
+			foreach(var subUtilityBase in _subUtilities)
 			{
-				_subUtilities[0].Think(deltaTime);
+				var weight = subUtilityBase.GetExecutionWorthWeight();
+				if(weight > maxWeight)
+				{
+					maxWeight = weight;
+					utilityToExecute = subUtilityBase;
+				}
 			}
+
+			utilityToExecute?.Think(deltaTime);
 		}
 
-		public string GetDebugSting()
+		public void GetDebugString(StringBuilder sb)
 		{
-			return $"brain: {_subUtilities[0].DebugString}\n";
+			foreach(var subUtilityBase in _subUtilities)
+			{
+				var weight = subUtilityBase.GetExecutionWorthWeight();
+				sb.Append(subUtilityBase.GetType().Name).Append(" ").Append(weight).AppendLine();
+			}
 		}
 
 		public void Reset()
 		{
-			_context.Target = null;
 			foreach(var key in _context.BlackboardValues.Keys.ToList())
 			{
 				_context.BlackboardValues[key] = 0f;
 			}
 			_context.BrainTime = 0;
-		}
-
-		private void HandleAggroTriggerEnter(GameObject enteredObject)
-		{
-			if(HasTarget)
-			{
-				return;
-			}
-
-			if(enteredObject.gameObject.TryGetComponent<CharacterDomain>(out var otherCharacter))
-			{
-				if(otherCharacter.ExternalData.Team != _context.CharacterContext.Team.Value)
-				{
-					_context.Target = otherCharacter;
-					_context.CharacterContext.LockOnLogic.LockOnTarget.Value = otherCharacter;
-				}
-			}
 		}
 	}
 }

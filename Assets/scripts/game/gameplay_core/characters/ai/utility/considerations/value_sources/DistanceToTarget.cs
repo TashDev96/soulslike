@@ -10,7 +10,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 
 		public override float GetValue(UtilityBrainContext context)
 		{
-			var dist = Vector3.Distance(context.TargetTransform.Position, context.CharacterContext.Transform.Position);
+			var dist = context.BlackboardValues[BlackboardValues.DistanceToTarget];
 			if(_normalizeToAttackRange)
 			{
 				return dist / context.BlackboardValues[BlackboardValues.BasicAttackRange];

@@ -21,6 +21,7 @@ namespace game.gameplay_core.characters.view
 		public bool DrawStateMachineInfo;
 		public bool DrawBrainInfo;
 		public bool DrawAttacksInfo;
+		public bool DrawMovementInfo;
 
 		private bool _initialized;
 		private CharacterContext _context;
@@ -113,11 +114,11 @@ namespace game.gameplay_core.characters.view
 				return;
 			}
 
-			var sb = new StringBuilder();
+			_debugStringBuilder.Clear();
+			var sb = _debugStringBuilder;
 
-			sb.AppendLine($"{Time.frameCount % 100}");
-			sb.AppendLine($"hp: {_context.CharacterStats.Hp.Value.CeilFormat(1)}/{_context.CharacterStats.HpMax.Value.CeilFormat()}");
-			sb.AppendLine($"st: {_context.CharacterStats.Stamina.Value.CeilFormat(1)}/{_context.CharacterStats.StaminaMax.Value.CeilFormat()}");
+			sb.Append("hp: ").Append(_context.CharacterStats.Hp.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.HpMax.Value.CeilFormat()).AppendLine();
+			sb.Append("st: ").Append(_context.CharacterStats.Stamina.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.StaminaMax.Value.CeilFormat()).AppendLine();
 
 			if(DrawStateMachineInfo)
 			{
@@ -125,10 +126,13 @@ namespace game.gameplay_core.characters.view
 			}
 			if(DrawBrainInfo)
 			{
-				sb.Append(_brain.GetDebugSting());
+				_brain.GetDebugString(sb);
 			}
 
-			_context.MovementLogic.GetDebugString(sb);
+			if(DrawMovementInfo)
+			{
+				_context.MovementLogic.GetDebugString(sb);
+			}
 
 			Handles.Label(_transform.position + Vector3.up * 3f, sb.ToString(), _textStyle);
 

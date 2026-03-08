@@ -27,6 +27,11 @@ namespace game.gameplay_core.characters.logic
 			FindLockOnTarget();
 		}
 
+		public void HandleLockOnSelectedByAI(CharacterDomain target)
+		{
+			LockOnTarget.Value = target;
+		}
+
 		public void Update(float deltaTime)
 		{
 			if(!LockOnTarget.HasValue || _context.IsDead.Value)

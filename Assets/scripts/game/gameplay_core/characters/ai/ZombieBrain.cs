@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.ai.navigation;
@@ -151,9 +152,9 @@ namespace game.gameplay_core.characters.ai
 			}
 		}
 
-		public string GetDebugSting()
+		public void GetDebugString(StringBuilder sb)
 		{
-			return $"Zombie Brain, state {_state}";
+			sb.Append("Zombie Brain, state ").Append(_state);
 		}
 
 		public void Reset()

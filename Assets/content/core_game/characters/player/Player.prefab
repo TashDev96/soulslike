@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7687702615470328083}
   - component: {fileID: 1275262306807060881}
   - component: {fileID: 4081949895489720870}
+  - component: {fileID: 101471508821587220}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -91,6 +92,7 @@ MonoBehaviour:
   DrawStateMachineInfo: 0
   DrawBrainInfo: 0
   DrawAttacksInfo: 0
+  DrawMovementInfo: 0
 --- !u!114 &1937557130125307911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
-  _drawDebug: 1
-  _drawSelected: 1
+  _drawDebug: 0
+  _drawSelected: 0
   _useRotationConstraints: 0
   _fixXRotation: 1
   _fixYRotation: 0
@@ -198,6 +200,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e857e8c2b864391b8109ceb8064a0ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &101471508821587220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163829566012686365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a0dc759a7b4d84b2ac76abe9d62631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.ai.sensors.CharacterSensorsDomain
+  _drawEyes: 1
+  _drawObservations: 0
+  _eyes:
+  - _name: Left
+    _rootTransform: {fileID: 3197410386829480636}
+    _localPosition: {x: -0.18, y: 1.56, z: 0}
+    _localEuler: {x: 0, y: -15, z: 0}
+    _viewCones:
+    - Name: Main
+      Distance: 30
+      Angle: 60
+      UpdatePeriodSec: 1
+      Color: {r: 0, g: 0.16084719, b: 1, a: 1}
+    - Name: Side
+      Distance: 10
+      Angle: 121.7
+      UpdatePeriodSec: 3
+      Color: {r: 0, g: 0.78302, b: 1, a: 1}
+    _disableDebugDraw: 0
+  - _name: Right
+    _rootTransform: {fileID: 3197410386829480636}
+    _localPosition: {x: 0.18, y: 1.56, z: 0}
+    _localEuler: {x: 0, y: 15, z: 1}
+    _viewCones:
+    - Name: Main
+      Distance: 30
+      Angle: 60
+      UpdatePeriodSec: 1
+      Color: {r: 0, g: 0.16084719, b: 1, a: 1}
+    - Name: Side
+      Distance: 10
+      Angle: 121.7
+      UpdatePeriodSec: 3
+      Color: {r: 0, g: 0.78302, b: 1, a: 1}
+    _disableDebugDraw: 0
+  _ears:
+  - _sensitivityMultiplier: 1
+    _rootTransform: {fileID: 3919925399006202490}
+    _localPosition: {x: 0, y: 0.1, z: 0}
+  _drawVisualPoints: 0
+  _visualInfoPoints:
+  - _name: Head
+    _parentTransform: {fileID: 3197410386829480636}
+    _localPosition: {x: 0, y: 1.74, z: 0}
+  - _name: Torso
+    _parentTransform: {fileID: 3197410386829480636}
+    _localPosition: {x: 0, y: 1.26, z: 0}
+  - _name: Legs
+    _parentTransform: {fileID: 3197410386829480636}
+    _localPosition: {x: 0, y: 0.38, z: 0}
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
-  _drawSelected: 1
+  _drawSelected: 0
   _useRotationConstraints: 0
   _fixXRotation: 0
   _fixYRotation: 0
@@ -456,7 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
-  _drawSelected: 1
+  _drawSelected: 0
   _useRotationConstraints: 0
   _fixXRotation: 0
   _fixYRotation: 0

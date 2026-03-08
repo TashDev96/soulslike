@@ -1,19 +1,22 @@
+using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
+using UnityEngine;
 #if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
 #endif
-using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.utility
 {
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	[OdinDontRegister]
-	#endif
+#endif
 	public class SubUtilityFight : SubUtilityBase
 	{
 		[SerializeField]
 		private PerlinConfig _noAttackWeight;
+		private Vector3 _lastVectorToTarget;
+		private CharacterObservation _lastTarget;
 
 		//chain of goals
 		//chain examples:
@@ -35,7 +38,87 @@ namespace game.gameplay_core.characters.ai.utility
 		public override void Think(float deltaTime)
 		{
 			_context.BlackboardValues[BlackboardValues.NoAttacksWeight] = _noAttackWeight.Evaluate(_context.BrainTime);
-			base.Think(deltaTime);
+
+			_lastTarget = GetOptimalTarget();
+			if(_lastTarget != null)
+			{
+				_lastVectorToTarget = _context.CharacterContext.Transform.Position - _lastTarget.Position;
+				_context.BlackboardValues[BlackboardValues.DistanceToTarget] = _lastVectorToTarget.magnitude;
+
+				var attackRange = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
+				var doLockOn = _lastVectorToTarget.sqrMagnitude < attackRange * attackRange + 1f;
+
+				_context.CharacterContext.LockOnLogic.HandleLockOnSelectedByAI(doLockOn ? _lastTarget.Character : null);
+				base.Think(deltaTime);
+			}
+		}
+
+		public override float GetExecutionWorthWeight()
+		{
+			if(_lastTarget == null)
+			{
+				_lastTarget = GetOptimalTarget();
+				if(_lastTarget == null)
+				{
+					return 0;
+				}
+			}
+
+			const float keepFightDisappearedCharacterTime = 5f;
+			const float keepFightOutOfRangeMeters = 5f;
+
+			if(_lastTarget.TimePassed < keepFightDisappearedCharacterTime)
+			{
+				var vector = _context.CharacterContext.Transform.Position - _lastTarget.Position;
+				var range = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
+
+				//Debug.DrawLine(_context.CharacterContext.Transform.Position, _lastTarget.Position, Color.red);
+				return Mathf.Clamp01(range * range - vector.sqrMagnitude + keepFightOutOfRangeMeters * keepFightOutOfRangeMeters);
+			}
+
+			return 0;
+		}
+
+		protected override bool TryPerformAction(UtilityAction action)
+		{
+			if(base.TryPerformAction(action))
+			{
+				return true;
+			}
+
+			var mainAttackDistance = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
+
+			switch(action.Type)
+			{
+				case UtilityAction.ActionType.GetIntoAttackDistance:
+					MoveTo(_lastTarget.Position - _lastVectorToTarget.normalized * mainAttackDistance);
+					break;
+			}
+
+			return true;
+		}
+
+		private CharacterObservation GetOptimalTarget()
+		{
+			var minDistance = float.MaxValue;
+			CharacterObservation result = null;
+
+			foreach(var observation in CharacterObservations)
+			{
+				if(observation.Character.Context.Team.Value == _context.CharacterContext.Team.Value)
+				{
+					continue;
+				}
+
+				var distanceSq = (_context.CharacterContext.Transform.Position - observation.Position).sqrMagnitude;
+				if(distanceSq < minDistance)
+				{
+					minDistance = distanceSq;
+					result = observation;
+				}
+			}
+
+			return result;
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System.Threading;
 using ControlFreak2;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters;
@@ -25,7 +24,7 @@ namespace game.gameplay_core.camera
 		private Vector3 _lastCameraUnsafePos;
 		private Transform _playerTransform;
 
-		private bool _playerInitialized = false;
+		private bool _playerInitialized;
 
 		public Camera Camera => _context.Camera.Value;
 
@@ -35,10 +34,26 @@ namespace game.gameplay_core.camera
 			var cameraTransform = _context.Camera.Value.transform;
 			_context.Camera.Value.orthographic = false;
 			_currentRotation = cameraTransform.eulerAngles;
-			
 
 			CFCursor.lockState = CursorLockMode.Locked;
 			CFCursor.visible = false;
+		}
+
+		private bool TryInitialize()
+		{
+			if(_playerInitialized)
+			{
+				return true;
+			}
+
+			if(!_context.Player.HasValue)
+			{
+				return false;
+			}
+
+			_playerTransform = _context.Player.Value.transform;
+			_playerInitialized = true;
+			return true;
 		}
 
 		public void Update(float deltaTime)
@@ -50,10 +65,8 @@ namespace game.gameplay_core.camera
 					return;
 				}
 			}
-			
-			var player = _context.Player.Value;
 
-			 
+			var player = _context.Player.Value;
 
 			player.Context.MovementLogic.RotationIsControlledByCamera = true;
 			_context.Camera.Value.fieldOfView = _context.CameraSettings.FOV;
@@ -80,27 +93,9 @@ namespace game.gameplay_core.camera
 			cameraTransform.rotation = Quaternion.Euler(_currentRotation);
 		}
 
-		private bool TryInitialize()
-		{
-			if(_playerInitialized)
-			{
-				return true;
-			}
-
-			if(!_context.Player.HasValue)
-			{
-				return false;
-			}
-			
-			_playerTransform = _context.Player.Value.transform;
-			_playerInitialized = true;
-			return true;
-
-		}
-
 		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput)
 		{
-			var result = _playerTransform.rotation * new  Vector3(screenSpaceInput.x, 0, screenSpaceInput.y);
+			var result = _playerTransform.rotation * new Vector3(screenSpaceInput.x, 0, screenSpaceInput.y);
 			Debug.DrawLine(_playerTransform.position, _playerTransform.position + result, Color.red);
 			return result;
 		}

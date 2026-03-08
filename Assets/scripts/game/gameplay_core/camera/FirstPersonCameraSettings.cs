@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.camera
 {
-	public class FirstPersonCameraSettings:CameraSettings
+	public class FirstPersonCameraSettings : CameraSettings
 	{
 		[field: SerializeField]
 		public Vector3 Offset { get; set; }

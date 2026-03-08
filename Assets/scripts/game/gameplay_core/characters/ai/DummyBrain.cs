@@ -1,4 +1,4 @@
-using System;
+using System.Text;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
@@ -70,14 +70,14 @@ namespace game.gameplay_core.characters.ai
 			_characterContext.InputData.Command = _selectedCommand;
 		}
 
-		public string GetDebugSting()
+		public void GetDebugString(StringBuilder sb)
 		{
-			return "Dummy Brain";
+			sb.Append("Dummy Brain");
 		}
 
 		public void Reset()
 		{
-			throw new NotImplementedException();
+			_timer = 0;
 		}
 	}
 }

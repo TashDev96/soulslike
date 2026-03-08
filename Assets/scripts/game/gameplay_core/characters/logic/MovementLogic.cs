@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
@@ -181,9 +180,12 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.AppendLine($"grounded {_isGroundedCache}/{CharacterCollider.IsGrounded}, stable: {CharacterCollider.HasStableGround}, gravity disabled: {_context.CharacterCollider.IsFakeGrounded}");
-			sb.AppendLine($"falling: {_context.IsFalling.Value}  fall velocity {_fallVelocity}");
-			sb.AppendLine($"Collision Flags: {string.Join(", ", Enum.GetValues(typeof(CollisionFlags)).Cast<CollisionFlags>().Distinct().Where(f => (_debugFlags & f) == f && f != CollisionFlags.None))}");
+			sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
+				.Append(", stable: ").Append(CharacterCollider.HasStableGround)
+				.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
+
+			sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
+			sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
 		}
 
 		public void SetRotationAndMovementLocked(bool value)

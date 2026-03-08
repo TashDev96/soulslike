@@ -19,8 +19,10 @@ namespace game.gameplay_core.characters.config.animation
 		[FoldoutGroup("Clip Settings")]
 		public float Speed = 1;
 
+		//I don't want single polymorphic list, for optimization and code simplicity purpose, even if there is some boilerplate, it's ok
 		public List<AnimationFlagEvent> FlagEvents = new();
 		public List<AnimationEventHit> HitEvents = new();
+		public List<AnimationEventSound> SoundEvents = new();
 		public List<string> LayerNames = new() { "Default" };
 
 		public int MaxFrame => (Duration * EditorPrecisionFps).RoundToInt();
@@ -44,6 +46,34 @@ namespace game.gameplay_core.characters.config.animation
 					}
 				}
 			}
+			return false;
+		}
+
+		public bool CheckFlagBegin(AnimationFlagEvent.AnimationFlags flag, float startTime, float endTime)
+		{
+			foreach(var evt in FlagEvents)
+			{
+				if(evt.Flag == flag && evt.StartTimeNormalized >= startTime && evt.StartTimeNormalized <= endTime)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool CheckSoundBegin(float startTime, float endTime, out string soundName, out float normalizedHearDistance)
+		{
+			foreach(var evt in SoundEvents)
+			{
+				if(evt.StartTimeNormalized >= startTime && evt.StartTimeNormalized <= endTime)
+				{
+					soundName = evt.SoundName;
+					normalizedHearDistance = evt.NormalizedHearDistance;
+					return true;
+				}
+			}
+			soundName = null;
+			normalizedHearDistance = 0;
 			return false;
 		}
 

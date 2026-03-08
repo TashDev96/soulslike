@@ -1,5 +1,4 @@
-using System;
-using dream_lib.src.camera;
+using System.Text;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.commands;
@@ -71,9 +70,9 @@ namespace game.gameplay_core.characters.player
 			}
 		}
 
-		public string GetDebugSting()
+		public void GetDebugString(StringBuilder sb)
 		{
-			return $"Player Input {_directionInputScreenSpace}";
+			sb.Append("Player Input ").Append(_directionInputScreenSpace);
 		}
 
 		public void Reset()
@@ -192,7 +191,6 @@ namespace game.gameplay_core.characters.player
 			return CharacterCommand.None;
 		}
 
-	 
 		private enum RollDashInputState
 		{
 			None,

@@ -52,6 +52,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 				_context.Animator.Play(_parryConfig.Animation, 0.1f, FadeMode.FromStart);
 				_context.StaminaLogic.SpendStamina(_parryConfig.StaminaCost);
+				AnimationConfig = _parryConfig.AnimationConfig;
 			}
 			else
 			{

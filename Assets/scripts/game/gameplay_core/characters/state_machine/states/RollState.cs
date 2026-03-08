@@ -32,6 +32,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
+
+			AnimationConfig = _config.AnimationConfig;
+
 			IsComplete = false;
 
 			_config = _context.Config.Roll;

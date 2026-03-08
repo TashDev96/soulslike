@@ -36,6 +36,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 			base.OnEnter();
 			Duration = _attackConfig.Duration;
 
+			AnimationConfig = _attackConfig.AnimationConfig;
+
 			_staminaSpent = false;
 			_hitsData.Clear();
 			foreach(var hitEvent in _attackConfig.AnimationConfig.GetHitEvents())

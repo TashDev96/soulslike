@@ -16,7 +16,8 @@ namespace game.gameplay_core.characters.config.animation
 		Invulnerability = 5,
 		Combo = 6,
 		Markers = 7,
-		Hits = 8
+		Hits = 8,
+		Sounds = 9
 	}
 
 	[Serializable]

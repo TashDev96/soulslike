@@ -1,12 +1,12 @@
+#if UNITY_EDITOR
+using dream_lib.src.utils.editor;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.data_types;
-#if UNITY_EDITOR
-using dream_lib.src.utils.editor;
-#endif
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
@@ -61,7 +61,7 @@ namespace game.gameplay_core
 			});
 #if UNITY_EDITOR
 			RegisterCheats();
-			#endif
+#endif
 		}
 
 		public void RespawnAndReloadLocation()
@@ -218,12 +218,11 @@ namespace game.gameplay_core
 			}
 		}
 #if UNITY_EDITOR
-		
+
 		private void RegisterCheats()
 		{
 			EditorComfortWindow.RegisterCheatButton("Return to Spawn", () => { _player.Value.transform.SetTo(_sceneInstaller.TestPlayerSpawnPos); });
 		}
 #endif
-		
 	}
 }

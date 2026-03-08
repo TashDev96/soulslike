@@ -1,12 +1,12 @@
 using System;
-#if UNITY_EDITOR
-using dream_lib.src.utils.editor;
-using game.editor;
-#endif
 using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using dream_lib.src.utils.editor;
+using game.editor;
+#endif
 
 namespace game.gameplay_core.characters.config
 {
