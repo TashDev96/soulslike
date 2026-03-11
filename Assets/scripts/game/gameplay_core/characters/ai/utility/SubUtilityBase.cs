@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
-using game.gameplay_core.characters.ai.sensors;
 using game.gameplay_core.characters.ai.utility.blackbox;
 using game.gameplay_core.characters.ai.utility.considerations;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
 using game.gameplay_core.characters.ai.utility.goals;
+using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.state_machine.states;
@@ -41,6 +41,7 @@ namespace game.gameplay_core.characters.ai.utility
 		public string DebugString = "asdasd\nasdasd";
 
 		protected UtilityBrainContext _context;
+		protected UtilityAction _lastAction;
 		private ReadOnlyTransform _transform;
 
 		private bool _hasMovedByPathThisFrame;
@@ -48,7 +49,6 @@ namespace game.gameplay_core.characters.ai.utility
 		private GoalsChain _currentGoalChain;
 		private int _currentGoalIndex;
 		private float _currentGoalExecutionTime;
-		protected UtilityAction _lastAction;
 
 		protected CharacterInputData InputData => _context.CharacterContext.InputData;
 

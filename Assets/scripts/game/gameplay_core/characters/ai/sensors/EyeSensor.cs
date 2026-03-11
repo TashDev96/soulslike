@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using dream_lib.src.utils;
 using dream_lib.src.utils.drawers;
+using game.gameplay_core.characters.ai.world_reflection;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

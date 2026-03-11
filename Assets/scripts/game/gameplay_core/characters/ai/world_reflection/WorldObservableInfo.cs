@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using dream_lib.src.reactive;
 
-namespace game.gameplay_core.characters.ai.sensors
+namespace game.gameplay_core.characters.ai.world_reflection
 {
 	public class WorldObservableInfo
 	{

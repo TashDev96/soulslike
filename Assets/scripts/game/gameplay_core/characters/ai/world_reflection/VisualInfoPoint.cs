@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.ai.sensors
+namespace game.gameplay_core.characters.ai.world_reflection
 {
 	[Serializable]
 	public class VisualInfoPoint
