@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ZombieSwordConfig
   m_EditorClassIdentifier: 
   <Icon>k__BackingField: {fileID: 0}
+  <Description>k__BackingField: 
   <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: ZombieSword
   <RegularAttacks>k__BackingField:
@@ -51,21 +52,21 @@ MonoBehaviour:
         Flag: 6
       - Name: Enter Combo
         StartTimeNormalized: 0.0055555557
-        EndTimeNormalized: 0.17232382
+        EndTimeNormalized: 0.007222222
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0.30555555
-        EndTimeNormalized: 0.3062524
+        EndTimeNormalized: 0.30722222
         LayerIndex: 3
         IsSingleFrame: 1
         ClipDuration: 0
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.22222222
-        EndTimeNormalized: 0.3062524
+        EndTimeNormalized: 0.22388889
         LayerIndex: 4
         IsSingleFrame: 1
         ClipDuration: 0
@@ -81,6 +82,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -100,7 +102,7 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 1
+    <BaseDamage>k__BackingField: 5
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -230,6 +232,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -379,6 +382,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -474,6 +478,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -569,6 +574,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -691,6 +697,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -832,6 +839,7 @@ MonoBehaviour:
         ClipDuration: 0
         Flag: 9
       HitEvents: []
+      SoundEvents: []
       LayerNames:
       - StateLocked
       - Combo
@@ -925,6 +933,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
@@ -1040,6 +1049,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
       LayerNames:
       - RotationLocked
       - StaminaRegenDisabled
