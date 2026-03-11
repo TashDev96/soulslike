@@ -12,6 +12,6 @@ namespace game
 		public InventoryData InventoryData;
 		public CharacterSaveData CharacterData;
 		public string RespawnLocationId;
-		public TransformCache RespawnTransform { get; set; }
+		public TransformCache RespawnTransform;
 	}
 }
