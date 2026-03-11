@@ -33,12 +33,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 
-
 			IsComplete = false;
 
 			_config = _context.Config.Roll;
 			AnimationConfig = _config.AnimationConfig;
-			
+
 			_staminaSpent = false;
 
 			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);

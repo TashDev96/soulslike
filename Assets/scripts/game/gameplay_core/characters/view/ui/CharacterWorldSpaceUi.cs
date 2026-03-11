@@ -28,6 +28,7 @@ namespace game.gameplay_core.characters.view.ui
 			{
 				Current = context.CharacterContext.CharacterStats.Hp,
 				Max = context.CharacterContext.CharacterStats.HpMax,
+				RecoverableAmount = context.CharacterContext.CharacterStats.RecoverableHp,
 				CustomUpdate = context.LocationUiUpdate
 			});
 

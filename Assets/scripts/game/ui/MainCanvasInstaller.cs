@@ -1,3 +1,4 @@
+using game.gameplay_core.ui;
 using game.ui.inventory;
 using UnityEngine;
 

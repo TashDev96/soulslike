@@ -690,9 +690,6 @@ MonoBehaviour:
   _slider: {fileID: 0}
   _topper: {fileID: 0}
   _alphaAppearDuration: 0.15
-  _slowFillerDelayMax: 1
-  _slowFillerSpeed: 0.25
-  _slowFillerStickPercentThreshold: 0.034
   _autoHide: 0
   _notLockedShowDuration: 10
 --- !u!225 &4805269087037581930
@@ -1001,9 +998,6 @@ MonoBehaviour:
   _slider: {fileID: 0}
   _topper: {fileID: 0}
   _alphaAppearDuration: 0.15
-  _slowFillerDelayMax: 1
-  _slowFillerSpeed: 0.25
-  _slowFillerStickPercentThreshold: 0.034
   _autoHide: 0
   _notLockedShowDuration: 10
 --- !u!225 &3771079590493155284

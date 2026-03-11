@@ -419,6 +419,7 @@ namespace game.gameplay_core.characters
 				_lockOnLogic.Update(deltaTimeStep);
 				_staminaLogic.Update(deltaTimeStep);
 				_poiseLogic.Update(deltaTimeStep);
+				_healthLogic.Update(deltaTimeStep);
 
 				_fallDamageLogic.CustomUpdate(deltaTimeStep);
 

@@ -1,5 +1,5 @@
 using dream_lib.src.utils.drawers;
-using game.gameplay_core.characters.ai.sensors;
+using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 

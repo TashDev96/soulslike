@@ -10,9 +10,11 @@ namespace game.gameplay_core.characters.runtime_data
 	{
 		public Hp Hp { get; private set; }
 		public HpMax HpMax { get; private set; }
+		public ReactiveProperty<float> RecoverableHp { get; private set; }
 
 		public Stamina Stamina { get; private set; }
 		public StaminaMax StaminaMax { get; private set; }
+		public ReactiveProperty<float> RecoverableStamina { get; private set; }
 
 		[BoxGroup("Poise")]
 		public Poise Poise { get; private set; }
@@ -27,8 +29,10 @@ namespace game.gameplay_core.characters.runtime_data
 		{
 			Hp = new Hp();
 			HpMax = new HpMax();
+			RecoverableHp = new ReactiveProperty<float>();
 			Stamina = new Stamina();
 			StaminaMax = new StaminaMax();
+			RecoverableStamina = new ReactiveProperty<float>();
 			Poise = new Poise();
 			PoiseMax = new PoiseMax();
 			PoiseRestoreTimer = new PoiseRestoreTimer();
