@@ -11,8 +11,8 @@ using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
 using game.gameplay_core.location.location_save_system;
+using game.gameplay_core.ui;
 using game.gameplay_core.worldspace_ui;
-using game.ui;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -20,12 +20,14 @@ namespace game.gameplay_core
 {
 	public class LocationDomain
 	{
+		private const float LocationAutoSavePeriod = 5f;
 		private UnityEventsListener _unityEventsListener;
 		private GameSceneInstaller _sceneInstaller;
 		private ICameraController _cameraController;
 		private readonly ReactiveProperty<CharacterDomain> _player = new();
 
 		private float _frameDelayDebug;
+		private float _locationSaveTimer;
 
 		public void Initialize(LocationSaveData saveData)
 		{
@@ -59,6 +61,8 @@ namespace game.gameplay_core
 				Player = _player.Value,
 				LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate
 			});
+
+			_locationSaveTimer = LocationAutoSavePeriod;
 #if UNITY_EDITOR
 			RegisterCheats();
 #endif
@@ -100,6 +104,13 @@ namespace game.gameplay_core
 #if UNITY_EDITOR
 				_frameDelayDebug = EditorComfortWindow.FrameDelay;
 #endif
+			}
+
+			_locationSaveTimer -= Time.unscaledDeltaTime;
+			if(_locationSaveTimer <= 0)
+			{
+				_locationSaveTimer = LocationAutoSavePeriod;
+				GameStaticContext.Instance.SavePlayerAndLocationState.Execute();
 			}
 
 			LocationStaticContext.Instance.LocationUiUpdate.Execute(deltaTime);

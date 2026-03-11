@@ -41,10 +41,10 @@ namespace game
 				MainCamera = new ReactiveProperty<Camera>(),
 				UiDomain = _uiDomain,
 				InventoryDomain = _inventoryDomain,
-				ReloadLocation = new ReactiveCommand()
+				ReloadLocation = new ReactiveCommand(),
+				SavePlayerAndLocationState = new ReactiveCommand(),
 			};
 
-			GameStaticContext.Instance.ReloadLocation.OnExecute += ReloadLocation;
 
 			await _uiDomain.Initialize();
 
@@ -76,9 +76,5 @@ namespace game
 			//TODO: open main menu
 		}
 
-		private void ReloadLocation()
-		{
-			_coreGameDomain.RespawnAndReloadLocation();
-		}
 	}
 }

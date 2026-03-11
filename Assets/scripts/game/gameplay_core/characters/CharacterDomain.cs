@@ -348,6 +348,10 @@ namespace game.gameplay_core.characters
 					_context.CharacterStats.Hp.Value = data.Hp;
 					_context.CharacterStats.Stamina.Value = data.Stamina;
 				}
+				if(data.Hp <= 0)
+				{
+					CharacterStateMachine.ForceDeadStateOnLoad();
+				}
 			}
 			else
 			{

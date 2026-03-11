@@ -20,5 +20,6 @@ namespace game
 		public FloatingTextsManager FloatingTextsManager { get; set; }
 		public ReactiveCommand ReloadLocation { get; set; }
 		public PlayerSaveData PlayerSave { get; set; }
+		public ReactiveCommand SavePlayerAndLocationState { get; set; }
 	}
 }

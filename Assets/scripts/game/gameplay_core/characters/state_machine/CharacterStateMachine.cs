@@ -504,5 +504,10 @@ namespace game.gameplay_core.characters.state_machine
 			Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, debugColor, debugDuration);
 			Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, debugColor, debugDuration);
 		}
+
+		public void ForceDeadStateOnLoad()
+		{
+			SetState(new DeadState(_context, true));
+		}
 	}
 }

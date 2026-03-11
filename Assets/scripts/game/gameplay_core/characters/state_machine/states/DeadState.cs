@@ -4,8 +4,12 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class DeadState : CharacterStateBase
 	{
-		public DeadState(CharacterContext context) : base(context)
+		private readonly bool _immediate;
+
+		public DeadState(CharacterContext context, bool immediate = false) : base(context)
 		{
+			_immediate = immediate;
+			context.IsDead.Value = true;
 		}
 
 		public override void Update(float deltaTime)
@@ -14,7 +18,15 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void OnEnter()
 		{
-			_context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
+			if(_immediate)
+			{
+				var anim = _context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
+				anim.NormalizedTime = 1f;
+			}
+			else
+			{
+				_context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
+			}
 			_context.DeadStateRoot.SetActive(true);
 		}
 
