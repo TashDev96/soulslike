@@ -6,5 +6,10 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 			return 0.001f;
 		}
+
+		public override void Reset()
+		{
+			base.Reset();
+		}
 	}
 }

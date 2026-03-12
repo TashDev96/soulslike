@@ -168,11 +168,8 @@ namespace game.gameplay_core.characters
 			_deathLogic = new DeathLogic(_context);
 
 			_movementLogic.SetContext(_context, transform);
-
 			_blockLogic.SetContext(_context);
-
 			_fallDamageLogic.SetContext(_context);
-
 			_staminaLogic.Initialize(_context);
 
 			CharacterStateMachine = new CharacterStateMachine(_context);
@@ -376,6 +373,7 @@ namespace game.gameplay_core.characters
 			_movementLogic.Teleport(_respawnTransform);
 			CharacterStateMachine.Reset();
 			_brain.Reset();
+			_sensorsDomain.Reset();
 			_worldSpaceUi?.Reset();
 		}
 

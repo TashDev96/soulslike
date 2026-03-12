@@ -73,6 +73,10 @@ namespace game.gameplay_core.characters.ai.utility
 
 		public void Reset()
 		{
+			foreach(var subUtility in _subUtilities)
+			{
+				subUtility.Reset();
+			}
 			foreach(var key in _context.BlackboardValues.Keys.ToList())
 			{
 				_context.BlackboardValues[key] = 0f;

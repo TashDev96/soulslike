@@ -344,5 +344,16 @@ namespace game.gameplay_core.characters.ai.utility
 			EditorGUILayout.LabelField(DebugString, EditorStyles.wordWrappedLabel);
 		}
 #endif
+		public virtual void Reset()
+		{
+			_currentGoalChain = null;
+			_currentGoalIndex = 0;
+			_currentGoalExecutionTime = 0;
+			
+			_needRecalculatePath = false;
+			_lastAction = null;
+			_hasMovedByPathThisFrame = false;
+
+		}
 	}
 }

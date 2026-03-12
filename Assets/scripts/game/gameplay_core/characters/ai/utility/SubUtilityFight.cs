@@ -99,6 +99,13 @@ namespace game.gameplay_core.characters.ai.utility
 			return true;
 		}
 
+		public override void Reset()
+		{
+			base.Reset();
+			_lastTarget = null;
+			_lastVectorToTarget = default;
+		}
+
 		private CharacterObservation GetOptimalTarget()
 		{
 			var minDistance = float.MaxValue;

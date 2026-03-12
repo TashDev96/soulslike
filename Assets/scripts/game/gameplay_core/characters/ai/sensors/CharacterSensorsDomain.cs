@@ -91,5 +91,10 @@ namespace game.gameplay_core.characters.ai.sensors
 				}
 			}
 		}
+
+		public void Reset()
+		{
+			_characterObservations.Clear();
+		}
 	}
 }
