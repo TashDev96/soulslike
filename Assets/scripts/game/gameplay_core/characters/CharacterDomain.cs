@@ -98,6 +98,8 @@ namespace game.gameplay_core.characters
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
 			_statsLogic = new StatsLogic();
+			_healthLogic = new HealthLogic();
+			
 
 			InventoryLogic = new CharacterInventoryLogic();
 
@@ -121,6 +123,7 @@ namespace game.gameplay_core.characters
 				PoiseLogic = _poiseLogic,
 				BlockLogic = _blockLogic,
 				InventoryLogic = InventoryLogic,
+				HealthLogic = _healthLogic,
 
 				Config = _config,
 				Transform = _transform,
@@ -158,6 +161,7 @@ namespace game.gameplay_core.characters
 
 			_statsLogic.SetContext(_context);
 			_lockOnLogic.SetContext(_context);
+			_healthLogic.SetContext(_context);
 
 			InitializeInventory();
 
@@ -197,7 +201,6 @@ namespace game.gameplay_core.characters
 				_context.ParryReceiver.Initialize(_context);
 			}
 
-			_healthLogic = new HealthLogic(_context);
 
 			_poiseLogic.SetContext(_context);
 

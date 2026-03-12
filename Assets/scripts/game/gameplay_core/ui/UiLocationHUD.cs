@@ -15,7 +15,7 @@ namespace game.gameplay_core.ui
 		}
 
 		[SerializeField]
-		private UiBar _healthBar;
+		private PlayerHpBar _healthBar;
 		[SerializeField]
 		private UiBar _staminaBar;
 		[SerializeField]
@@ -25,8 +25,9 @@ namespace game.gameplay_core.ui
 
 		public void SetContext(Context context)
 		{
-			_healthBar.SetContext(new UiBar.Context
+			_healthBar.SetContext(new PlayerHpBar.Context
 			{
+				HealthLogic = context.Player.Context.HealthLogic,
 				Current = context.Player.ExternalData.Stats.Hp,
 				Max = context.Player.ExternalData.Stats.HpMax,
 				RecoverableAmount = context.Player.ExternalData.Stats.RecoverableHp,

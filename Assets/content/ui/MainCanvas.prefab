@@ -936,7 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6983f0d3ba45486dada8d07814838c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.ui.UiLocationHUD
-  _healthBar: {fileID: 335462179239854163}
+  _healthBar: {fileID: 3350618544624453856}
   _staminaBar: {fileID: 1365169636919533150}
   _uiInteractionPrompt: {fileID: 1241971623625003487}
   _equippedItems: {fileID: 9217309277385507486}
@@ -950,6 +950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 429412457089612524}
   - component: {fileID: 335462179239854163}
+  - component: {fileID: 3350618544624453856}
   - component: {fileID: 3771079590493155284}
   m_Layer: 5
   m_Name: HealthBar
@@ -1000,6 +1001,29 @@ MonoBehaviour:
   _alphaAppearDuration: 0.15
   _autoHide: 0
   _notLockedShowDuration: 10
+--- !u!114 &3350618544624453856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6819442006374594572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d4b2cdabde4e239eaea5981bf3046a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.ui.PlayerHpBar
+  _fillerFast: {fileID: 9020343758691224472}
+  _fillerSlow: {fileID: 2923982536294831868}
+  _alphaContainer: {fileID: 3771079590493155284}
+  _slider: {fileID: 0}
+  _topper: {fileID: 0}
+  _blinkColor: {r: 1, g: 1, b: 1, a: 1}
+  _blinkDuration: 0.3
+  _blinkCount: 3
+  _alphaAppearDuration: 0.15
+  _autoHide: 0
+  _notLockedShowDuration: 0
 --- !u!225 &3771079590493155284
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1646,7 +1670,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4474266266723772571, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00016692976
+      value: 0.0011180443
       objectReference: {fileID: 0}
     - target: {fileID: 4594091560498863808, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1694,7 +1718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7012815456845227869, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_Size
-      value: 0.9998356
+      value: 0.9999994
       objectReference: {fileID: 0}
     - target: {fileID: 8244063068507453386, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_Pivot.x

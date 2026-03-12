@@ -28,6 +28,7 @@ namespace game.gameplay_core.characters
 		public StaminaLogic StaminaLogic;
 		public PoiseLogic PoiseLogic;
 		public BlockLogic BlockLogic;
+		public HealthLogic HealthLogic;
 
 		public CharacterConfig Config;
 		public ReadOnlyTransform Transform;
@@ -62,11 +63,12 @@ namespace game.gameplay_core.characters
 
 		public ReactiveCommand DeflectCurrentAttack;
 
-		// Parry support
+		 
 		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 		public CharacterInventoryLogic InventoryLogic { get; set; }
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 		public CharacterSensorsDomain SensorsDomain { get; set; }
+		
 	}
 }

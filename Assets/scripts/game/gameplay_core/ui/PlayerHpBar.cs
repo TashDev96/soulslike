@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.logic;
 using UnityEngine;
@@ -27,6 +29,15 @@ namespace game.gameplay_core.ui
 		private Slider _slider;
 		[SerializeField]
 		private Image _topper;
+		
+		[SerializeField]
+		private Color _blinkColor = Color.white;
+
+		[SerializeField]
+		private float _blinkDuration = 0.3f;
+
+		[SerializeField]
+		private int _blinkCount = 3;
 
 		[Header("Settings - Animation")]
 		[SerializeField]
@@ -42,6 +53,13 @@ namespace game.gameplay_core.ui
 		private float _slowFillerValue = 1f;
 		private float _showTime;
 		private bool _isAppearing;
+		private Color _defaultSlowColor;
+		private Coroutine _blinkCoroutine;
+
+		private void Awake()
+		{
+			_defaultSlowColor = _fillerSlow.color;
+		}
 
 		public void SetContext(Context context)
 		{
@@ -65,6 +83,7 @@ namespace game.gameplay_core.ui
 				_context.RecoverableAmount.OnChanged += HandleRecoverableValueChanged;
 			}
 			_context.CustomUpdate.OnExecute += CustomUpdate;
+
 		}
 
 		public void Reset()
@@ -92,7 +111,17 @@ namespace game.gameplay_core.ui
 
 		private void HandleValueChanged(float value)
 		{
+			var prevValue = _currentTargetValue;
 			_currentTargetValue = Mathf.Clamp01(value / _context.Max.Value);
+
+			if(_currentTargetValue < prevValue)
+			{
+				if(_blinkCoroutine != null)
+				{
+					StopCoroutine(_blinkCoroutine);
+				}
+				_blinkCoroutine = StartCoroutine(BlinkCoroutine());
+			}
 			if(_context.RecoverableAmount != null)
 			{
 				_slowFillerValue = Mathf.Clamp01((value + _context.RecoverableAmount.Value) / _context.Max.Value);
@@ -117,6 +146,26 @@ namespace game.gameplay_core.ui
 				HandleAutoShow();
 			}
 		}
+		
+		private IEnumerator BlinkCoroutine()
+		{
+			var singleBlinkDuration = _blinkDuration / _blinkCount;
+			var halfBlinkDuration = singleBlinkDuration * 0.5f;
+
+			 
+
+			for(var i = 0; i < _blinkCount; i++)
+			{
+				_fillerSlow.color = _blinkColor;
+				yield return new WaitForSeconds(halfBlinkDuration);
+				_fillerSlow.color = _defaultSlowColor;
+				yield return new WaitForSeconds(halfBlinkDuration);
+			}
+
+			_fillerSlow.color = _defaultSlowColor;
+			_blinkCoroutine = null;
+		}
+
 
 		private void RefreshUI()
 		{

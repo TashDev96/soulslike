@@ -1,4 +1,6 @@
+using System.Collections;
 using game.gameplay_core.damage_system;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -7,11 +9,13 @@ namespace game.gameplay_core.characters.logic
 		private const float RecoverableFadePercentPerSecond = 50f;
 		public const float RecoverableFadeDelayMax = 0.618f;
 
-		private readonly CharacterContext _context;
+		private CharacterContext _context;
+		
+	
 
 		public float RecoverableFadeDelay { get; private set; }
 
-		public HealthLogic(CharacterContext context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			_context.ApplyDamage.OnExecute += ApplyDamage;
@@ -53,7 +57,8 @@ namespace game.gameplay_core.characters.logic
 				_context.CharacterStats.RecoverableHp.Value = 0;
 			}
 		}
-
+		
+	
 		private void ApplyDamage(DamageInfo damageInfo)
 		{
 			_context.CharacterStats.Hp.Value -= damageInfo.DamageAmount;
