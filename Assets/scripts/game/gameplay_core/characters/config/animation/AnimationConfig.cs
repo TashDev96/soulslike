@@ -128,5 +128,17 @@ namespace game.gameplay_core.characters.config.animation
 		{
 			return HitEvents;
 		}
+
+		public AnimationFlagEvent GetFlag(AnimationFlagEvent.AnimationFlags flag)
+		{
+			foreach(var animationFlagEvent in FlagEvents)
+			{
+				if(animationFlagEvent.Flag == flag)
+				{
+					return animationFlagEvent;
+				}
+			}
+			return null;
+		}
 	}
 }

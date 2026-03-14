@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.logic;
@@ -151,9 +150,7 @@ namespace game.gameplay_core.ui
 		{
 			var singleBlinkDuration = _blinkDuration / _blinkCount;
 			var halfBlinkDuration = singleBlinkDuration * 0.5f;
-
-			 
-
+			
 			for(var i = 0; i < _blinkCount; i++)
 			{
 				_fillerSlow.color = _blinkColor;

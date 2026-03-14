@@ -1,5 +1,6 @@
 using ControlFreak2;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using game.input;
 using UnityEngine;
@@ -104,6 +105,11 @@ namespace game.gameplay_core.camera
 		{
 			newDirectionWorld = default;
 			return false;
+		}
+
+		public void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

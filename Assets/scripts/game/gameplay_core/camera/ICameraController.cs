@@ -1,3 +1,4 @@
+using dream_lib.src.utils.data_types;
 using UnityEngine;
 
 namespace game.gameplay_core.camera
@@ -9,5 +10,6 @@ namespace game.gameplay_core.camera
 
 		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput);
 		public bool OverrideAttackDirectionOnClick(out Vector3 newDirectionWorld);
+		void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration);
 	}
 }

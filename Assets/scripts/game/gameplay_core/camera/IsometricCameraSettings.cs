@@ -4,18 +4,15 @@ namespace game.gameplay_core.camera
 {
 	public class IsometricCameraSettings : CameraSettings
 	{
-		[SerializeField]
-		private float _cameraAltitude;
-		[SerializeField]
-		private float _occlusionCheckRadius = 0.1f;
-		[SerializeField]
-		private LayerMask _occlusionCheckLayerMask;
-		[SerializeField]
-		private float _occlusionFadeSpeed = 5f;
-
-		public float CameraAltitude => _cameraAltitude;
-		public float OcclusionCheckRadius => _occlusionCheckRadius;
-		public LayerMask OcclusionCheckLayerMask => _occlusionCheckLayerMask;
-		public float OcclusionFadeSpeed => _occlusionFadeSpeed;
+		[field: SerializeField]
+		public float CameraAltitude { get; private set; } = 80;
+		[field: SerializeField]
+		public float OcclusionCheckRadius { get; private set; } = 0.1f;
+		[field: SerializeField]
+		public LayerMask OcclusionCheckLayerMask { get; private set; }
+		[field: SerializeField]
+		public float OcclusionFadeSpeed { get; private set; } = 5f;
+		[field: SerializeField]
+		public AnimationCurve CriticalAttackZoomMultiplier { get; private set; }
 	}
 }

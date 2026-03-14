@@ -1,5 +1,6 @@
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using UnityEngine;
 
@@ -21,12 +22,17 @@ namespace game.gameplay_core.camera
 		private readonly Context _context;
 		private float _currentOcclusionRadius;
 
+		private float _criticalAttackAnimationTimeLeft;
+		private float _criticalAttackAnimationDuration;
+		private readonly float _defaultSize;
+
 		public Camera Camera => _context.Camera.Value;
 
 		public IsometricCameraController(Context context)
 		{
 			_context = context;
 			_context.Camera.Value.orthographic = true;
+			_defaultSize = _context.Camera.Value.orthographicSize;
 		}
 
 		public void Update(float deltaTime)
@@ -35,6 +41,18 @@ namespace game.gameplay_core.camera
 			var targetPosition = _context.Player.Value.ExternalData.Transform.Position;
 			var forward = cameraTransform.forward;
 			var altitude = _context.CameraSettings.CameraAltitude;
+
+			if(_criticalAttackAnimationTimeLeft > 0)
+			{
+				_criticalAttackAnimationTimeLeft -= deltaTime;
+				var normalizedTime = 1f - _criticalAttackAnimationTimeLeft / _criticalAttackAnimationDuration;
+				var curve = _context.CameraSettings.CriticalAttackZoomMultiplier.Evaluate(normalizedTime);
+				if(_criticalAttackAnimationTimeLeft < 0)
+				{
+					curve = 1;
+				}
+				_context.Camera.Value.orthographicSize = _defaultSize * curve;
+			}
 
 			if(forward.y > -1e-3f && forward.y < 1e-3f)
 			{
@@ -78,6 +96,12 @@ namespace game.gameplay_core.camera
 			}
 			newDirectionWorld = default;
 			return false;
+		}
+
+		public void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration)
+		{
+			_criticalAttackAnimationTimeLeft = expectedDuration;
+			_criticalAttackAnimationDuration = expectedDuration;
 		}
 
 		private void UpdateOcclusionSphere(Vector3 targetPosition, float deltaTime)

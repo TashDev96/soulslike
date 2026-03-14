@@ -49,6 +49,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 			}
 
 			_context.Animator.Play(_attackConfig.Animation, 0.1f, FadeMode.FromStart);
+			
+			var camera = LocationStaticContext.Instance.CameraController;
+			var lockedFlag = AnimationConfig.GetFlag(AnimationFlagEvent.AnimationFlags.StateLocked);
+			var expectedDuration = lockedFlag.EndTimeNormalized*AnimationConfig.Duration;
+			camera.ShowCriticalAttackAnimation(_context.Transform, expectedDuration);
 
 			Time = 0f;
 			ResetForwardMovement();
