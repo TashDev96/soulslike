@@ -111,5 +111,10 @@ namespace game.gameplay_core.camera
 		{
 			throw new System.NotImplementedException();
 		}
+
+		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

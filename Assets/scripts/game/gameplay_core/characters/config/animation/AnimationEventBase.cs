@@ -17,7 +17,8 @@ namespace game.gameplay_core.characters.config.animation
 		Combo = 6,
 		Markers = 7,
 		Hits = 8,
-		Sounds = 9
+		Sounds = 9,
+		CameraShakes = 10
 	}
 
 	[Serializable]

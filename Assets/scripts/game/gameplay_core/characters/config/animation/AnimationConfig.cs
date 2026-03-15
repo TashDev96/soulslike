@@ -23,6 +23,7 @@ namespace game.gameplay_core.characters.config.animation
 		public List<AnimationFlagEvent> FlagEvents = new();
 		public List<AnimationEventHit> HitEvents = new();
 		public List<AnimationEventSound> SoundEvents = new();
+		public List<AnimationEventCameraShake> CameraShakeEvents = new();
 		public List<string> LayerNames = new() { "Default" };
 
 		public int MaxFrame => (Duration * EditorPrecisionFps).RoundToInt();
@@ -74,6 +75,26 @@ namespace game.gameplay_core.characters.config.animation
 			}
 			soundName = null;
 			normalizedHearDistance = 0;
+			return false;
+		}
+
+		public bool CheckCameraShakeBegin(float startTime, float endTime, out float duration, out float strength, out float vertMultiplier, out float horMultiplier)
+		{
+			foreach(var evt in CameraShakeEvents)
+			{
+				if(evt.StartTimeNormalized >= startTime && evt.StartTimeNormalized <= endTime)
+				{
+					duration = (evt.EndTimeNormalized - evt.StartTimeNormalized) * Duration;
+					strength = evt.Strength;
+					vertMultiplier = evt.VertMultiplier;
+					horMultiplier = evt.HorMultiplier;
+					return true;
+				}
+			}
+			duration = 0;
+			strength = 0;
+			vertMultiplier = 0;
+			horMultiplier = 0;
 			return false;
 		}
 

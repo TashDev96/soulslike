@@ -143,5 +143,10 @@ namespace game.gameplay_core.camera
 		{
 			//TODO: fix rotation
 		}
+
+		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

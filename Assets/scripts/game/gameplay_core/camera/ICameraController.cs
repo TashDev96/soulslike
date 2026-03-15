@@ -11,5 +11,7 @@ namespace game.gameplay_core.camera
 		public Vector3 ConvertScreenSpaceDirectionToWorld(Vector3 screenSpaceInput);
 		public bool OverrideAttackDirectionOnClick(out Vector3 newDirectionWorld);
 		void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration);
+		void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f);
 	}
 }
+

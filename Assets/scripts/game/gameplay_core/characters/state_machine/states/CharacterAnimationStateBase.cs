@@ -33,6 +33,10 @@ namespace game.gameplay_core.characters.state_machine.states
 				{
 					EmitNoise(hearDistance);
 				}
+				if(AnimationConfig.CheckCameraShakeBegin(previousNormalizedTime, NormalizedTime, out var duration, out var strength, out var vertMultiplier, out var horMultiplier))
+				{
+					LocationStaticContext.Instance.CameraController.Shake(duration, strength, vertMultiplier, horMultiplier);
+				}
 			}
 		}
 

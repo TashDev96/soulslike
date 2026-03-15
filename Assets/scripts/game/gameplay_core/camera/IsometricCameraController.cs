@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using UnityEngine;
+using DG.Tweening;
 
 namespace game.gameplay_core.camera
 {
@@ -25,6 +26,9 @@ namespace game.gameplay_core.camera
 		private float _criticalAttackAnimationTimeLeft;
 		private float _criticalAttackAnimationDuration;
 		private readonly float _defaultSize;
+
+		private Vector3 _shakeOffset;
+		private Tweener _shakeTweener;
 
 		public Camera Camera => _context.Camera.Value;
 
@@ -68,6 +72,9 @@ namespace game.gameplay_core.camera
 
 			var distance = -altitude / forward.y;
 			var newPosition = targetPosition - forward * distance;
+
+			//newPosition += cameraTransform.right * _shakeOffset.x + cameraTransform.up * _shakeOffset.y;
+			newPosition += cameraTransform.up * _shakeOffset.y;
 			cameraTransform.position = newPosition;
 			UpdateOcclusionSphere(targetPosition, deltaTime);
 		}
@@ -102,6 +109,20 @@ namespace game.gameplay_core.camera
 		{
 			_criticalAttackAnimationTimeLeft = expectedDuration;
 			_criticalAttackAnimationDuration = expectedDuration;
+		}
+
+		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
+		{
+			_shakeTweener?.Kill();
+			_shakeOffset = Vector3.zero;
+
+			var randomOffset = Random.value * 100f;
+			_shakeTweener = DOVirtual.Float(strength, 0f, duration, value =>
+			{
+				var t = Time.time * 20f + randomOffset;
+				_shakeOffset.x = (Mathf.PerlinNoise(t, 0f) - 0.5f) * 2f * value * horMultiplier;
+				_shakeOffset.y = (Mathf.PerlinNoise(0f, t) - 0.5f) * 2f * value * vertMultiplier;
+			}).OnComplete(() => _shakeOffset = Vector3.zero);
 		}
 
 		private void UpdateOcclusionSphere(Vector3 targetPosition, float deltaTime)

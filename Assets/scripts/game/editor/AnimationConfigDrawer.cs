@@ -27,6 +27,7 @@ namespace game.editor
 		private const int TypeFlag = 0;
 		private const int TypeHit = 1;
 		private const int TypeSound = 2;
+		private const int TypeCameraShake = 3;
 
 		private static readonly Dictionary<string, Vector2> _scrollPositions = new();
 		private static readonly Dictionary<string, bool> _showSecondsMap = new();
@@ -57,6 +58,7 @@ namespace game.editor
 			var flagEventsProp = property.FindPropertyRelative("FlagEvents");
 			var hitEventsProp = property.FindPropertyRelative("HitEvents");
 			var soundEventsProp = property.FindPropertyRelative("SoundEvents");
+			var cameraShakeEventsProp = property.FindPropertyRelative("CameraShakeEvents");
 			var layerNamesProp = property.FindPropertyRelative("LayerNames");
 
 			_config = GetValue(property) as AnimationConfig;
@@ -78,7 +80,7 @@ namespace game.editor
 			var maxFrame = Mathf.RoundToInt(duration * AnimationConfig.EditorPrecisionFps);
 			var path = property.propertyPath;
 
-			DrawLayerManagement(layerNamesProp, path, flagEventsProp, hitEventsProp, soundEventsProp);
+			DrawLayerManagement(layerNamesProp, path, flagEventsProp, hitEventsProp, soundEventsProp, cameraShakeEventsProp);
 
 			EditorGUILayout.Space();
 
@@ -93,7 +95,7 @@ namespace game.editor
 			var previewDrawer = GetPreviewDrawer(uniquePath, clip);
 
 			// Timeline UI
-			DrawTimeline(path, maxFrame, flagEventsProp, hitEventsProp, soundEventsProp, layerNamesProp, clip.name, previewDrawer);
+			DrawTimeline(path, maxFrame, flagEventsProp, hitEventsProp, soundEventsProp, cameraShakeEventsProp, layerNamesProp, clip.name, previewDrawer);
 
 			// Preview
 			EditorGUILayout.Space();
@@ -101,7 +103,7 @@ namespace game.editor
 			previewDrawer.Draw();
 
 			// Draw Selected Event Inspector
-			DrawSelectedEventInspector(flagEventsProp, hitEventsProp, soundEventsProp, path);
+			DrawSelectedEventInspector(flagEventsProp, hitEventsProp, soundEventsProp, cameraShakeEventsProp, path);
 
 			EditorGUI.EndProperty();
 		}
@@ -144,7 +146,7 @@ namespace game.editor
 			return true;
 		}
 
-		private void DrawLayerManagement(SerializedProperty layerNamesProp, string path, SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp)
+		private void DrawLayerManagement(SerializedProperty layerNamesProp, string path, SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp, SerializedProperty cameraShakeEventsProp)
 		{
 			EditorGUILayout.Space();
 			EditorGUILayout.BeginHorizontal();
@@ -183,7 +185,7 @@ namespace game.editor
 			}
 		}
 
-		private void DrawSelectedEventInspector(SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp, string path)
+		private void DrawSelectedEventInspector(SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp, SerializedProperty cameraShakeEventsProp, string path)
 		{
 			var packedId = _selectedEventMap.ContainsKey(path) ? _selectedEventMap[path] : -1;
 			if(packedId == -1)
@@ -211,6 +213,11 @@ namespace game.editor
 			{
 				eventProp = soundEventsProp.GetArrayElementAtIndex(index);
 				activeListChangeCheck = soundEventsProp;
+			}
+			else if(typeId == TypeCameraShake && index < cameraShakeEventsProp.arraySize)
+			{
+				eventProp = cameraShakeEventsProp.GetArrayElementAtIndex(index);
+				activeListChangeCheck = cameraShakeEventsProp;
 			}
 
 			if(eventProp != null)
@@ -296,7 +303,7 @@ namespace game.editor
 			return null;
 		}
 
-		private void DrawTimeline(string path, int maxFrame, SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp, SerializedProperty layerNamesProp, string clipName, PreviewAnimationDrawer previewDrawer)
+		private void DrawTimeline(string path, int maxFrame, SerializedProperty flagEventsProp, SerializedProperty hitEventsProp, SerializedProperty soundEventsProp, SerializedProperty cameraShakeEventsProp, SerializedProperty layerNamesProp, string clipName, PreviewAnimationDrawer previewDrawer)
 		{
 			if(!_scrollPositions.ContainsKey(path))
 			{
@@ -353,6 +360,10 @@ namespace game.editor
 					{
 						AddEvent(soundEventsProp, layer, 0, 0.1f, typeof(AnimationEventSound), AnimationEventLayer.Sounds);
 					}
+					else if(layerName == AnimationEventLayer.CameraShakes.ToString())
+					{
+						AddEvent(cameraShakeEventsProp, layer, 0, 0.1f, typeof(AnimationEventCameraShake), AnimationEventLayer.CameraShakes);
+					}
 					else if(layerName == AnimationEventLayer.Combo.ToString())
 					{
 						var menu = new GenericMenu();
@@ -389,6 +400,7 @@ namespace game.editor
 							menu.AddItem(new GUIContent("Flag"), false, () => AddEvent(flagEventsProp, l, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Hits)); // Hits is dummy here
 							menu.AddItem(new GUIContent("Hit"), false, () => AddEvent(hitEventsProp, l, 0, 0.1f, typeof(AnimationEventHit), AnimationEventLayer.Hits));
 							menu.AddItem(new GUIContent("Sound"), false, () => AddEvent(soundEventsProp, l, 0, 0.1f, typeof(AnimationEventSound), AnimationEventLayer.Sounds));
+							menu.AddItem(new GUIContent("Camera Shake"), false, () => AddEvent(cameraShakeEventsProp, l, 0, 0.1f, typeof(AnimationEventCameraShake), AnimationEventLayer.CameraShakes));
 							menu.ShowAsContext();
 						}
 					}
@@ -406,7 +418,7 @@ namespace game.editor
 			DrawGrid(path, maxFrame, timelineViewHeight, frameWidth);
 
 			// Events
-			HandleEventsInteraction(path, flagEventsProp, hitEventsProp, soundEventsProp, layerNamesProp.arraySize, frameWidth, maxFrame);
+			HandleEventsInteraction(path, flagEventsProp, hitEventsProp, soundEventsProp, cameraShakeEventsProp, layerNamesProp.arraySize, frameWidth, maxFrame);
 
 			// Timeline Playhead Handle
 			DrawTimelineHandle(previewDrawer, totalTimelineWidth, timelineViewHeight, frameWidth, maxFrame);
@@ -418,6 +430,7 @@ namespace game.editor
 				flagEventsProp.serializedObject.ApplyModifiedProperties();
 				hitEventsProp.serializedObject.ApplyModifiedProperties();
 				soundEventsProp.serializedObject.ApplyModifiedProperties();
+				cameraShakeEventsProp.serializedObject.ApplyModifiedProperties();
 			}
 		}
 
@@ -566,7 +579,7 @@ namespace game.editor
 			}
 		}
 
-		private void HandleEventsInteraction(string path, SerializedProperty flagsProp, SerializedProperty hitsProp, SerializedProperty soundsProp, int layerCount, float frameWidth, int totalEditorFrames)
+		private void HandleEventsInteraction(string path, SerializedProperty flagsProp, SerializedProperty hitsProp, SerializedProperty soundsProp, SerializedProperty cameraShakesProp, int layerCount, float frameWidth, int totalEditorFrames)
 		{
 			var e = Event.current;
 			var hoveredPackedId = -1;
@@ -585,7 +598,7 @@ namespace game.editor
 				{
 					var typeId = selectedPackedId >> 16;
 					var index = selectedPackedId & 0xFFFF;
-					var targetProp = typeId == TypeFlag ? flagsProp : typeId == TypeHit ? hitsProp : soundsProp;
+					var targetProp = typeId == TypeFlag ? flagsProp : typeId == TypeHit ? hitsProp : typeId == TypeSound ? soundsProp : cameraShakesProp;
 
 					if(index < targetProp.arraySize)
 					{
@@ -666,6 +679,7 @@ namespace game.editor
 					var baseColor = isSelected || isDragged ? new Color(0.3f, 0.6f, 1f, 0.8f) :
 						typeId == TypeHit ? new Color(0.8f, 0.3f, 0.3f, 0.8f) :
 						typeId == TypeSound ? new Color(0.3f, 0.8f, 0.6f, 0.8f) :
+						typeId == TypeCameraShake ? new Color(0.8f, 0.8f, 0.3f, 0.8f) :
 						new Color(0.2f, 0.2f, 0.2f, 0.8f);
 
 					var earColor = isSelected || isDragged ? new Color(0.5f, 0.8f, 1f, 1f) : new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -752,13 +766,14 @@ namespace game.editor
 			DrawAndCheckIter(flagsProp, TypeFlag);
 			DrawAndCheckIter(hitsProp, TypeHit);
 			DrawAndCheckIter(soundsProp, TypeSound);
+			DrawAndCheckIter(cameraShakesProp, TypeCameraShake);
 
 			// Cursor for hovered
 			if(hoveredPackedId != -1)
 			{
 				var t = hoveredPackedId >> 16;
 				var idx = hoveredPackedId & 0xFFFF;
-				var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : soundsProp;
+				var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : t == TypeSound ? soundsProp : cameraShakesProp;
 				if(idx < list.arraySize)
 				{
 					var p = list.GetArrayElementAtIndex(idx);
@@ -796,7 +811,7 @@ namespace game.editor
 					{
 						var t = hoveredPackedId >> 16;
 						var idx = hoveredPackedId & 0xFFFF;
-						var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : soundsProp;
+						var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : t == TypeSound ? soundsProp : cameraShakesProp;
 						var p = list.GetArrayElementAtIndex(idx);
 						var targetElement = GetValue(p) as AnimationEventBase;
 						if(targetElement != null && targetElement.IsSingleFrame && hoveredType != 0)
@@ -838,7 +853,7 @@ namespace game.editor
 					{
 						var t = _draggedEventPackedId >> 16;
 						var idx = _draggedEventPackedId & 0xFFFF;
-						var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : soundsProp;
+						var list = t == TypeFlag ? flagsProp : t == TypeHit ? hitsProp : t == TypeSound ? soundsProp : cameraShakesProp;
 
 						if(idx >= list.arraySize)
 						{
@@ -928,9 +943,28 @@ namespace game.editor
 			var endProp = newEvent.FindPropertyRelative("EndTimeNormalized");
 			var isSingleFrameProp = newEvent.FindPropertyRelative("IsSingleFrame");
 
-			if(isSingleFrameProp != null && type == typeof(AnimationEventSound))
+			if(isSingleFrameProp != null)
 			{
-				isSingleFrameProp.boolValue = true;
+				isSingleFrameProp.boolValue = type == typeof(AnimationEventSound);
+			}
+
+			if(type == typeof(AnimationEventCameraShake))
+			{
+				var strengthProp = newEvent.FindPropertyRelative("Strength");
+				if(strengthProp != null)
+				{
+					strengthProp.floatValue = 0.45f;
+				}
+				var vertProp = newEvent.FindPropertyRelative("VertMultiplier");
+				if(vertProp != null)
+				{
+					vertProp.floatValue = 1f;
+				}
+				var horProp = newEvent.FindPropertyRelative("HorMultiplier");
+				if(horProp != null)
+				{
+					horProp.floatValue = 1f;
+				}
 			}
 
 			if(nameProp != null)
