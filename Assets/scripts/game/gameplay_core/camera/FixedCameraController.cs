@@ -1,3 +1,4 @@
+using System;
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
@@ -116,12 +117,12 @@ namespace game.gameplay_core.camera
 
 		public void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		private void UpdateCameraBehavior(Transform cameraTransform, Vector3 playerPosition, float deltaTime)

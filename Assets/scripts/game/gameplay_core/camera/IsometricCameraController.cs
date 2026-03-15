@@ -1,9 +1,9 @@
+using DG.Tweening;
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using UnityEngine;
-using DG.Tweening;
 
 namespace game.gameplay_core.camera
 {

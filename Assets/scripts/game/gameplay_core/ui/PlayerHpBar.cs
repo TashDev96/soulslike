@@ -28,7 +28,7 @@ namespace game.gameplay_core.ui
 		private Slider _slider;
 		[SerializeField]
 		private Image _topper;
-		
+
 		[SerializeField]
 		private Color _blinkColor = Color.white;
 
@@ -55,11 +55,6 @@ namespace game.gameplay_core.ui
 		private Color _defaultSlowColor;
 		private Coroutine _blinkCoroutine;
 
-		private void Awake()
-		{
-			_defaultSlowColor = _fillerSlow.color;
-		}
-
 		public void SetContext(Context context)
 		{
 			_context = context;
@@ -82,7 +77,11 @@ namespace game.gameplay_core.ui
 				_context.RecoverableAmount.OnChanged += HandleRecoverableValueChanged;
 			}
 			_context.CustomUpdate.OnExecute += CustomUpdate;
+		}
 
+		private void Awake()
+		{
+			_defaultSlowColor = _fillerSlow.color;
 		}
 
 		public void Reset()
@@ -145,12 +144,12 @@ namespace game.gameplay_core.ui
 				HandleAutoShow();
 			}
 		}
-		
+
 		private IEnumerator BlinkCoroutine()
 		{
 			var singleBlinkDuration = _blinkDuration / _blinkCount;
 			var halfBlinkDuration = singleBlinkDuration * 0.5f;
-			
+
 			for(var i = 0; i < _blinkCount; i++)
 			{
 				_fillerSlow.color = _blinkColor;
@@ -162,7 +161,6 @@ namespace game.gameplay_core.ui
 			_fillerSlow.color = _defaultSlowColor;
 			_blinkCoroutine = null;
 		}
-
 
 		private void RefreshUI()
 		{

@@ -29,6 +29,13 @@ namespace game.gameplay_core.characters.ai.utility
 			return 0;
 		}
 
+		public override void Reset()
+		{
+			base.Reset();
+			_lastTarget = null;
+			_lastVectorToTarget = default;
+		}
+
 		protected override bool TryPerformAction(UtilityAction action)
 		{
 			if(base.TryPerformAction(action))
@@ -43,13 +50,6 @@ namespace game.gameplay_core.characters.ai.utility
 			}
 
 			return false;
-		}
-
-		public override void Reset()
-		{
-			base.Reset();
-			_lastTarget = null;
-			_lastVectorToTarget = default;
 		}
 
 		private CharacterObservation GetOptimalTarget()

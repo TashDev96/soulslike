@@ -14,4 +14,3 @@ namespace game.gameplay_core.camera
 		void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f);
 	}
 }
-

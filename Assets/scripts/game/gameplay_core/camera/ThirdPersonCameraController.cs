@@ -1,3 +1,4 @@
+using System;
 using ControlFreak2;
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
@@ -146,7 +147,7 @@ namespace game.gameplay_core.camera
 
 		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

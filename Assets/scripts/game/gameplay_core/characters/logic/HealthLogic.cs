@@ -1,6 +1,4 @@
-using System.Collections;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -10,8 +8,6 @@ namespace game.gameplay_core.characters.logic
 		public const float RecoverableFadeDelayMax = 0.618f;
 
 		private CharacterContext _context;
-		
-	
 
 		public float RecoverableFadeDelay { get; private set; }
 
@@ -57,8 +53,7 @@ namespace game.gameplay_core.characters.logic
 				_context.CharacterStats.RecoverableHp.Value = 0;
 			}
 		}
-		
-	
+
 		private void ApplyDamage(DamageInfo damageInfo)
 		{
 			_context.CharacterStats.Hp.Value -= damageInfo.DamageAmount;

@@ -99,7 +99,6 @@ namespace game.gameplay_core.characters
 			_poiseLogic = new PoiseLogic();
 			_statsLogic = new StatsLogic();
 			_healthLogic = new HealthLogic();
-			
 
 			InventoryLogic = new CharacterInventoryLogic();
 
@@ -200,7 +199,6 @@ namespace game.gameplay_core.characters
 			{
 				_context.ParryReceiver.Initialize(_context);
 			}
-
 
 			_poiseLogic.SetContext(_context);
 
