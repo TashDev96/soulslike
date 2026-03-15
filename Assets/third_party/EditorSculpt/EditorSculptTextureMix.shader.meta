@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b99a8456b8fb13a4cbc17c4defb79929
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/EditorSculptTextureMix.shader
+  uploadId: 803956

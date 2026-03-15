@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4b7c78c4d9af60b45aaa3b708a7d444c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/EditorSculptPref.cs
+  uploadId: 803956

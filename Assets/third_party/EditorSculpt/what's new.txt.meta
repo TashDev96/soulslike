@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eca149ed449ba434fb3befa6d5ad79fc
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/what's new.txt
+  uploadId: 803956

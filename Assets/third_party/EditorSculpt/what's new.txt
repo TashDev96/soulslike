@@ -1,0 +1,507 @@
+EditorSculpt
+
+What's New:
+<v1.70>
+-Fixed bug that EditorSculpt does'nt work in Unity 6000.3 beta.
+ And to fix that, I decide not to use ".dll" file, and unvail Editor Sculpt's source code.
+ So now, Editor Sculpt becomes open source software with MIT license.
+
+-Add new display mode "Rendered". It shows rendered model even if "Vertex Color" Brush or "Vertex Weight" brush.
+
+-Add ability to create new material for texture paint. You can do that with press "Create New Material" button that appears when you use "Texture Paint" brush.
+
+
+<v1.68>
+Immediate update for bug fix too.
+-Fixed bug that you cann't save a texture when you change a target material to paint.
+
+-fixed bug that texture error occurs in some case.
+
+-Fixed bug that the Scene Camera lost your model in some case when you record sculpt as blendshape with "Animation/Start Record BlendShape" button.
+
+-Fixed bug that Editor Sculpt gets error when you rename blendshape with exist blendshape name with "RenameBlendShape".
+
+-Fixed bug that Editor Sculpt shows unnecessary save mesh dialog in some case.
+
+
+<v1.67>
+Immediate update for bug fix.
+-Fixed bug that some models with animations gets error.
+ (Mesh made by MIXAMO and accuRIG etc.)
+
+-Fixed bug that Editor sculpt select incorrect mesh when you load mesh with the  "Select Asset Mesh" button in some case with Editor Sculpt 1.66.
+
+-Fixed bug that you cann't sculpt scene mesh in Unity 2019.4 in some case.
+
+-Fixed bug that "Animation Move" brush does'nt work in Unity 2019.4
+
+
+<v1.66>
+-More and more Improve comaptibity of model import.
+ Now, more and more meshes works fine that cann't sculpt with the previous version of Editor Sculpt.
+
+-Now Editor Sculpt support FBX 7.5 or above.
+
+-Now Editor Sculpt support MIXAMO and accuRIG with rigs and animations.
+
+-Fixed bug that model misalign when you load model with animations.
+
+-I decide to copy model importer and use copied one for Editor Sculpt.
+ This improve compatibility of model import with animations a lot.
+
+-Added new import setting option item in the "Import setting" foldout. "Save in importer folder".
+ When you set this option item on, Editor Sculpt saves assets in the same folder as Model Importer.
+
+-Added new import setting option item in the "Import setting" foldout."Import Material Animation".
+ When you enable it, Fixes bug that Material Transparent lost in Animation Move brush in some case.
+ (MToon material for VRoid Studio etc).
+
+-Adjust camera distance for models.
+
+-Add new option item for the Animation Move brush, "Use KeyFrame Animation".
+ When you enable this option item, three save button appears. "Save to a new KeyFrame", "Save to Previous KeyFrame", "Save to Next KeyFrame".
+ You can save pose to the keyframe with the these buttons.
+
+
+<v1.65>
+-Add ability to save the original mesh in the memory and you can revert it freely.
+ You can do that with "RestoreChanges" button in the "Save/Export" foldout in the Editor Sculpt window.
+
+ -I decide to show the save mesh dialog when you close Editor Sculpt Window similarly to other 2D paint /3D modeling application.
+ Now Editor sculpt save the sculpted mesh or painted texture only if you select "OK" in that dialog.
+ If not, Editor Sculpt revert original meshfilter completely.
+ It preserve the mesh and you can work more safely, but if you dislike this change,
+ you can revert it with enabling "Skip the mesh save Dialog" checkbox in the "Show Advanced Options" foldoutin the Editoer Ssculpt window.
+
+-Also you can save meshs and textures manually, with press "Save" button in the "Save/Export" Editor Sculpt window.
+
+-Fixed bug that the material transparent doesn't work with existing model in some case(The Hair of the VRoid Studio imported models etc).
+
+-Fixed crash when you make a primitive mesh with "Tools/EditorSculpt/Create Primitive" menu in the Unity's ediotr menu.
+
+-Rebuild animation move brush. Now, Editor Sculpt saves animation clips only if you press "Save Animation" button whitch appear 
+ in the Scene View of Unity Editor when you move bones.
+ And, add "Animation save start time(sec)" slider and "Animation save end time(sec)" slider.
+ With these changes, you can control the timeline for animation more meticulously.
+ But, if you dislike that changes, you can revert it with enable "Legacy Animation" checkbox in the Unity Editor's scene view.
+
+-Add new brush "Move2D". This brush is similar to the "Move" brush, but it locks direction axis.
+ You can locks Z axis (Move2D Direction:XY Plane), or X axis(Move2D Direction:YZ Plane)
+ ,or Y axis(Move2D Direction:ZX Plane), or Y & Z axis(Move2D Direction:X Direction), or Z & X axis(Move2D Direction:Y Direction) or X & Y axis(Move2D Direction:Z Direction).
+
+-Add ability to copy/paste pose in the animation brush. You can do that with pressing "Copy Pose" button and "Paste Pose" button 
+ that appears when you select "Animation Move" brush.
+
+-Add new animation move mode "Paste". It's similar to "Paste Pose" button, but it use the brush and only affect to the bones with brush over.
+
+-Fixed bug that "Add a new Bone" button does'nt work since Editor Sculpt 1.63.
+
+-Fixed bug that animation clip crashes when material has error in some time.
+
+<v1.64>
+Immediate update for bug fix.
+-Fixed bug that you cann't sculpt some models.
+
+-Fixed bug that the scale for the mesh changes and you become less sculpt when you close the EditorSculpt window and reopen mesh in some case.
+
+-Added safety code to get rid of conflict to other Editor Extensions.  
+
+<v1.63>
+-Improve comaptibity of model import a lot.
+ Now, most meshes works fine that get's cann't sculpt with the previous version of Editor Sculpt.
+
+-I raise supported Unity Versions to Unity 2019.4 LTS.
+ Sorry, for Unity 2019.1 user, but it nessally for improve compatibility for model import.
+
+-Fixed bug that the brush blinking when you sculpt mesh with huge polygons.
+
+-Improve brush display to draw brush even if a mouse is out of the mesh. 
+
+-Improve sculpt speed a bit.
+
+-Editor Sculpt assign Universal Render Pipeline compatible shaders for primitives if your project uses Universal Render Pipeline.
+
+-Fixed bug that "Bake Animation to a mesh" button does'nt work in some case.
+
+
+<v1.62>
+-Fixed bug that EditorSculpt does'nt load the texture of the models with custom Scripted Importer.
+ It means now EditorSculpt has compatibale with many extensions that support various file format of model such as UniVRM, Unity glTFast etc.
+
+-Improve speed of Texture Paint a lot. At least over 2x speedup.
+
+-Fixed slowdown when you paint the texture with the low poly mesh.
+
+-Improve quality of Texture Paint a lot. Now you can draw a thin line easily.
+ 
+-I decide to stop brush stroke if mouse button is up. This
+ prevent unexpected line with Stroke Delay.
+
+-Add new option item to advaced option menu,"Smooth Stroke". It improve brush stroke quality of "Texture Paint" brush, "Draw"/"Lower" brush,
+ "Vertex Color" brush, "Draw Mask"/"Erase Mask" brush, "Vertex Weight"/"Erase Weight" brush a lot.
+ But, it ignores "Brush Shapes" option.
+ (Default value is "On").
+
+-Fixed slowdown of Editor Window GUI such as change color or change Brush radius value.
+
+-Fixed slowdown when you use EditorSculpt with the project that has huge mount of models.
+
+-Fixed bug that Reference Image does'nt work in Unity 6000.0.
+
+<v1.61>
+-Fixed bug that a source model and  the instance of that model overlap when EditorSculpt make the instance of the imported model.
+ I decide to this fix to be optional, to support  special cases when you want to place some models in fixed position.
+ If you want to ignore this fix(Unsafe!), uncheck "Move overlap model(safe)" checkbox in the "Import Settins"
+ foldout in the EditorSculpt window.
+
+-Fixed bug that a mesh crashes when you use the Animation Move brush in some case.
+ Sorry, if this bug crash your mesh. In this case simply open that model
+ with latest vertsion of EditorSculpt to fix. 
+
+-Fixed bug that a mesh become black with Unity2019 in some case.
+
+-Improve speed of UNDO operations (CTRL+Z after sculpting) a lot. At least over 2x speedup.
+
+-Fixed slowdown of UNDO operations when you do UNDO operations for many times.
+
+-Fixed bug that Uinty shows error message when you load EditorSculpt.
+
+-Various small bug fix and sppedup.
+
+<v1.60>
+-Improve Mesh loading speed alot.At least over 2x speedup.
+ Maximum go well over 10x speedup depends on your project's contents.
+
+-Add "Import setting" foldout. you can find many option for Load/Save mesh in that.
+ EditorSculpt automatically save this options.
+
+-Now EditorSculpt make a instance of a model and sculpt that,
+ So,it never touches the original model.
+ In this way, it preserve the model completely not only the asset model but also scene model that has not serialized.
+ If you dislike that, you can revert that with checking "Don't Instantiate(Unsafe)" checkbox in the "Import Settins"
+ foldout in the EditorSculpt window.
+
+-Now EditorSculpt rename the model name from original name to the name with "_EditorSculpt" to
+ work safely and get rid of destructive.
+
+-Add the Enable/Disable button that appear when the EditorSculpt window is docked.
+ In this way, you can disable EditorSculpt to get rid of the case that you can't select stuff anymore.
+
+-Add ability to disable save prefab of each concerned mesh with option.
+ You can do that with unchecking the "Import dependencies" checkbox in the "Import Settins" foldout in the EditorSculpt window.
+
+-Add ability to diable "Save Prefab" dialog with option.
+ You can do that with unchecking the "Show Save PrefabDialog" checkbox in the "Import Settins" foldout in the EditorSculpt window.
+
+-Add ability to remove caution dialog when you use the AutoRemesh Sculpt.
+ You can do that with unchecking the "Hide AutoRemesh Warning" checkbox in the "Show Advanced Options" foldout
+ in the EditorSculpt window.
+
+-Fixed bug that EditorSculpt make empty material and as a result, vail the model in some case.
+
+-Fixed bug that you cann't save the animation clip in some case.
+
+-Removed "Animation Tips" brush, because it's now completely integrated with "Animation Move" brush.
+ You can do the same thing with "Animation Move" brush with select "Tips" int the SculptBoneFilter popup.
+
+-Fixed bug that Animation Move brush does'nt work in some case.
+
+-Improve GUI for add a blendshape to a model.
+
+-Fixed bug that EditorSculpt changes mesh name when you add a blendshape.
+
+-Add ability to rename blendshapes. You can do that with openning "Animation" foldout in the EditorSculpt window.
+ And you can find "RenameBlendShape" foldout in that.
+ Then, you can select a blendshape you want to rename with "Rename Blendshape:" popup,
+ and you can rename blendshape with entering new name in the "Blend Shape Name" field.
+
+-Various small bug fix and speedup.
+
+<v1.59>
+-Fixed bug that if you import the EditorSculpt to your project tiggers a re-import of all assets.
+
+-Fixed slowdown when you use EditorSculpt with project that has many Assets.
+
+-Fixed bug that EditorSculpt garble or destroy a model in some cases.
+
+-Even previous version of EditorSculpt, it use the prefab of the model and does'nt change the model Asset as much as possible.
+ Now it go ahead and  never change the original model, and it preserve the model completely.
+
+-In previous version of EditorSculpt, it has ability to fix missing Asset if prefab has missing asset.
+ But now it becomes now optional. Because recently version of Unity fix that automatelly.
+ You can enable that again with checking the checkbox of "Fix misssing import" when you press the "Load Asset Mesh" button.
+
+-Fixed bug that EditorSculpt gets error message when you sculpt the model that has material with no texture.
+
+-Update "Readme.txt" and "Readme_Japanese.txt" to update with recently version of Unity and EditorSculpt.
+
+<v1.58>
+Immediate update for bug fix.
+
+-Fixed bug that Editor Sculpt shows its Supported Unity Versions too heigh(Unity 2022.1).
+
+-I raise Supported Unity Versions to Unity 2019.4 LTS. This means only "support"
+ for Asset Strore and Package Manager and you can still use Editor Sculpt with Unity 2019.1. 
+
+-Fixed wrong caution dialog when you delete animation bone for model with humanoid avatar.
+
+-Fixed bug that Ediotor Sculpt make wrong animation clip when you use "Animation Move" brush
+ with model with humanoid avatar.
+
+<1.57>
+-Fixed bug that when you trying to dock windows, Editor Sculpt window take the whole editor screen
+ and you cann't even close it.
+ Sorry, if this bug put your project or meshes to trouble.
+ In this case you can fix that with chosing "Window/Layouts/Revert Factory Settings" in the Unity's menu.
+
+-Improve compatibility with Unity 2022.1 a lot.
+
+-Fixed bug that "Animation Move" brush does'nt work in Unity 2022.1.
+
+-Fixed bug that "Animator Setup" does'nt work in Unity 2022.1.
+
+-Fixed bug that symmetry sculpt does'nt work with the "Draw" or "Lower" brush.
+
+-Fixed bug that the mask disappear when you add a reference image to the model.
+
+-I unite "Animation Move" brush and "Animation Tips" brush.
+ That is to say, you can move the bone tips with "Animation Move" brush.
+
+-Added new bone select filter "Tips". With this filter , you can select tips of the bones.
+
+<v1.56>
+Improve compatibility with Unity 2021.2 a lot.
+
+-Fixed bug that "Texture Paint" brush goes wrong when you paint the texture with the mesh that has both low poly part and heigh poly part in th same mesh.
+
+-Fixed bug that Unity Editor goes wrong when you press "Preview Animation" button int the "Animation" foldout in th Editor Sculpt window with Unity 2021.2.
+
+-Fixed bug that Unity Editor goes wrong when you import a Animation Clip.
+
+-Fixed bug that the brush disappear in some case in Unity 2021.2.
+
+-Fixed bug that Ediot Sculpt's message in the SceneView become unreadable in Unity 2021.2.
+
+-Add new button "Import Animation". This button aviable when you select "Animation Move" brush or "Animation Tip" brush.
+
+-Add new button "Reset All Advanced Option setting" in the "Show Advanced Options" foldout.
+ This button reset all advanced option setting value to default value.
+
+-Fixed bug that you see a wrong dialog when you select image with Open File Panel and cancel select.
+
+-Add new option item to advaced option menu,"Accurate Brush Sample".
+ If you turn this on, Improve quality of the painting-ish brushes such as "Texture Paint" brush,
+ "Vertex Color" brush, "Vertex Weight" brush, "Erase Weight" brush, but slow down.
+
+-Improve "BETA_Decal" brush and "BETA_Spline" brush a lot. But, still it's in work in progress beta brush.
+
+<v1.55>
+Immediate update for bug fix.
+-Fixed bug that "Texture Paint" brush goes wrong when you paint the texture with the low poly mesh in EditorScult v1.54.
+
+-Add new option item to advaced option menu, "Boost Texture Paint".
+ With disabling this checkbox , you can revert the "Texture Paint" brush stroke's behaviour to previous version of Editor Sculpt.
+ I certainly fixed bug for the new texture paint feature for EditorSculpt v1.54.
+ but, even so, if you still troubled with that, turn this off.
+
+-Fixed bug that "BETA_Decal" brush goes wrong in EditorSculpt 1.54.
+
+-Fixed bug that "BETA_Texture" brush goes wrong in EditorSculpt 1.54.
+
+<v1.54>
+-A good deal of speed improvement of sculpting. Almost 30-40% of speed-up.
+
+-Improve quality of the "Texture Paint" brush a lot.
+ It improve brush stroke especially free-hand line drawing.
+
+-Also improve quality of the painting-ish brushes such as "Vertex Color" brush, "Vertex Weight" brush, "Erase Weight" brush,
+ "Draw Mask" brush, "Erase Mask" brush, "Draw" brush , "lower" brush.
+
+-Also improve quality of the not working beta version of the painting-ish brushes such as "BETA_Texture" brush,
+ and "BEAT_Decal" brush.
+
+-Add a new option item for the painting-ish brushes, "Stroke Delay".
+ Increase this value to enables brushes paint more accurately even if brush stroke delay occur, 
+ So if the painting position and the mouse position are too far, ignoring that.
+ decrease this value to wait until painting position reaches mouse position.
+
+-Add new option item to advaced option menu, "Improve brush stroke".
+ Disable this item to revert the painting-ish brushes behaviour to previous version of Editor Sculpt.
+ You find this option item with opening "Show Advanced Options" foldout in the EditorSculpt window. 
+
+-Add new option item to advanced option menu, "Brush Stroke Samples".
+ Icrease this value to improve quality of painting-ish brushes, but slow down the speed of painting.
+
+-Various small bug fix.
+
+-Improve "BETA_Decal" brush a lot.But, still it's in work in progress beta brush.
+
+<v1.53>
+-Add ability to add a reference image that help sculpting the model.
+ You can add a reference image with openning "Reference Image" foldout in the Editor Sculpt window.
+ Then you see the "Create New Reference Image" dropdown button in the foldout.
+ Pressing this button and select the axis for the reference image with popupmenu(i.e. "XY_Back").
+ Then select the ".jpg" or ".png" image file for reference image on your PC or other devices.
+
+-You can switch show/hide the reference image with opening/closing the "Reference Image" foldout 
+ in the Editor Sculpt window.
+
+-When openning the "Reference Image" foldout, you see "Edit Reference Image" foldout.
+ Then opening this foldout to customize the reference image.
+
+-In that "Edit Reference Image" foldout you see the "Delete Reference Image" button, and you can delete a Reference Image
+ with pressing that button.
+ 
+-You can transparent model to make reference image easy to see with checking the "Transparent Mesh" checkbox.
+
+-Added "Clear Mask" button and "Invert Mask" button  they are available  when you select the "Draw Mask" or "Erase Mask" brush.
+
+-Add a new option item for"Animation Move" brush, "Animation Move Mode" popup menu.
+ Selecting this popup menu to switch the "Animation Move" brush's behavour.
+ "Rotate" mode is the standard mode. This mode works same as the animation move brush of previous version of Editor Sculpt.
+ "Transform" mode enable to translate position of the bone.
+ "Scale" mode enables to extend/shorten the bone length.
+ "Revert" mode enables to revert bone position to the default position.
+
+-Add ability to save the model's animation pose as mesh.
+ You can do that with pressing "Bake Animation to a mesh" button in the Editor Sculpt window.
+
+-Changed method for delete a bone. Now you can select the bone for delete with the mouse. 
+
+-Fixed bug that "BETA_Spline" brush and "BETA_Decal" brush does'nt work with Unity 2021.
+ Also, I decide to use no additional MonoBehaviour script of that.
+
+-Improve "BETA_Spline" brush and "BETA_Decal" brush a lot. But, still it's in work in progress beta brush.
+ You can try that with select "Tools/EditorSculpt/Extra/TryBetaBrushes" in the Unity menu,
+ then select "BETA_Spline" brush or "BETA_Decal" brush.
+
+-Fiexed bug that Frame the model in the Scene View works too much.
+
+-Fixed bug that you cann't select a bone correctly in some case. 
+
+-Various small bug fix.
+
+-Improve "BETA_BoneSpike" brush a lot.But, still it's in work in progress beta brush.
+ You can test this brush with selecting "Tools/EditorSculpt/Extra/Try Beta Brushes(Auto Remesh)/BETA_BoneSpike" in the menu.
+
+<v1.52>
+-Now, you can use "Animation Move" brush in the AutoRemesh Sculpt mode with Dynamic tessellation.
+
+-Fixed bug that the model lose Bone Weights when you subdivide a mesh with  pressing "Subdivide Mesh" button.
+
+-Fixed bug that the model lose Bone Weights when you merge vertices with pressing "Merge Doubled Vertex"button.
+
+-Fixed bug that the model lose Bone Weights when you sculpt a mesh with the AutoRemesh Sculpt.
+
+-Fixed bug that Materials and Textures  gets error when you select the mesh asset in the hierarchy window and open the Editor Sculpt window.
+
+-I decide to add the caution dialog when you close the mesh without saving.
+
+-Removed "EditorSculpt-Editor.pdb" file and "EditorSculpt-Editor.dll.mdb" file taht was legacy format and unnecessary for recent version of the Unity.
+
+-Improve the speed of Sculpt a bit (5-10%).
+
+-Add new not working beta brush "BETA_BoneSpike".
+ This brush add spikes on your mesh.
+ For now, this brush add only spikes, but I plan to add ability to add various kids of shapes such as tubes, leaves , Japanese Anime charactor's hairs,
+ glass, tentacles and so on.
+ Also I plan to add bones to the sikes and animate spikes without setting up the animations.
+ This brush is only aviable for AutoRemesh Sculpt, and not for Standard Sculpt. 
+ You can test this brush with selecting "Tools/EditorSculpt/Extra/Try Beta Brushes(Auto Remesh)/BETA_BoneSpike" in the menu.
+
+-Various small bug fix.
+
+<v1.51>
+-Fixed bug that you cann't UNDO with the edit/UNDO menu in Editor Sculpt 1.50.
+
+-Fixed bug that a animation clip goes wrong when you cancel "save animation clip" SaveFilePanel.
+
+-Added the "Override without dialog" checkbox int the Editor Sculpt Window.
+ If you turn this on, you can add a bone with "Add a new Bone" button without showing the dialog.
+
+-Fixed bug that "Animation tip" brush shows wrong bones when you sculpt a model with Generic Avatar.
+
+<v1.50>
+-Now, Editor Sculpt can sculpt not only the mesh vertices but also sculpt the bones for the animations!
+ 2 new brushes enables you to do that.
+
+-Add the new brush "Animation Move" brush.
+ This brush is the released version of "BETA_BoneMove" brush in Editor Sculpt1.42 or before.
+ This brush is similar to "Move" brush, but it moves the bones for animation, not the meshe vertices.
+
+-You see the "Animation Time" slider in the left top of the scene view when you select the "Animation Move" brush.
+ You can select the time of animation with changing the value of the slider.
+
+-Editor Sculpt saves the bones for animation to the animation clip automatically 
+ when you sculpt and change the value of the "Animation Time" slider.
+ The animation clip has compatibility to Unity's Mecanim Animation System, so you can edit that animation clip with Unity's
+ Animation tools.
+
+-"Animation Move" brush supports both Generic and Humanoid animations. But, for the best performance,
+ I recommend that you should use humanoid animation bones.
+ Because you can sculpt with additional feature such as the bone angle limitation or the bone symmetry.
+
+-"Animation Move" brush has ability to edit the pose of the existing animation clip too.
+ You see the "Select Aniamtions" popup in the Editor Sculpt window when you select "Animation Move" brush.
+ Then you can select animation clip to edit with selecting the "[Import a Aniamtion]" option in the popup.
+
+-Add th new brush "Animation Tip" brush. this brush is similar to "Animation Move" brush, but it can only move 
+the tips of the models, such as the tips of the finger or tips of the foot.
+
+-Fixed bug that UNDO the painting Vertex Color with "CTRL+Z" key go wrong.
+
+-Fixed bug that "Add a new bone" button go wrong.
+
+-Editor Sculpt now recreate RuntimeAnimatorController when you press "Add a new bone" button.
+ This will fix many bugs.
+
+-Fixed bug that "Import Animation" button does'nt work with the generic animation clips.
+
+-Add new button "Reset Bindpose" to the animation foldout in the Editor Sculpt window.
+
+-Change "Ok" and "Cancel" button position of some of the dialog.
+
+-Bring the "Readme" text up to date with the recently version of Editor Sculpt.
+
+-Various small bug fix.
+
+<v1.42>
+-Fixed bug that you cann't sculpt meshes that has Skinned Meshrender in Editor Sculpt1.40 or 1.41.
+
+-Fixed bug that blendshapes gets wrong when that contains blend shape frames if you press "Merge Verts" button
+ or, if you press "Subdivide Standard" button.
+
+-Improve "BETA_BoneMove" brush a lot.But, still it's in work in progress beta brush.
+ You can try that with select "Tools/EditorSculpt/Extra/TryBetaBrushes" in the Unity menu,
+ then select "BETA_BoneMove" brush.
+
+<v1.41>
+-Fixed slowdown in Editor Sculpt 1.40.
+
+-Fixed bug that "Draw"/"Lower" brush get's wrong when you sculpt meshes with sumeshes.
+
+-Fixed bug that "Add a new bone" button get's wrong when you sculpt with sumeshes.
+
+-Fixed bug that some polygons gets black temporary when you sculpt with AutoRemesh sculpt.
+
+-Add new advanced option menu "Calc Mesh Normals".It slowdown sculpt speed, but fixes some issues with mesh normals.
+
+<v1.40>
+Improve compatibility of the mesh with FBX format and  the mesh in Unity Asset store a lot.
+Now, most of the mesh works fine that get's error with previous version of Editor Sculpt.
+
+-Fixed bug that Editor Sculpt turns existing models black if the model has submeshes.
+
+-Fixed bug that Editor Sculpt gets existing model wrong if the model has Skinned Meshrender in some case.
+
+-Fixed bug that a mesh gets wrong when you smoothen a mesh with "Smooth Mesh" button in "Edit Mesh" foldout in the Editor Sculpt window.
+
+-Fixed bug that blendshapes gets wrong when that contains blend shape frames.
+
+-Fixed bug taht mesh gets black when you press the "Merge Vertices" button.
+
+-Fixed bug that Editor Sculpt delete Blend Shape when you press "Merge Vertices" button in "Edit Mesh" foldout in the Editor Sculpt window.
+
+-Fixed bug that Editor Sculpt change a mesh to small when you do Undo action with Auto Remesh Sculpt.
+
+-Fixed bug that advanced option "Realtime AutoRemesh" does'nt work with symmetry on.

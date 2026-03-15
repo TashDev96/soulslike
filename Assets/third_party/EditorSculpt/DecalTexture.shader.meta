@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f29d7175ac65ed540a327defd17d758f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/DecalTexture.shader
+  uploadId: 803956

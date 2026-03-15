@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eac090e1ddfabb54d8095223615ea878
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/Readme.txt
+  uploadId: 803956

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cab0fc8d1bd38ec429995d1d2ed42554
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 63320
+  packageName: EditorSculpt
+  packageVersion: 1.70
+  assetPath: Assets/EditorSculpt/EditorSculpt.shader
+  uploadId: 803956
