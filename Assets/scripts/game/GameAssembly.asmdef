@@ -11,7 +11,9 @@
         "GUID:4a77df0d0bc040568282eba3005e7348",
         "GUID:1d265d98f49aeaf4583bcf1673f2d8a8",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:84651a3751eca9349aac36a66bba901b"
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "DOTween.Assembly",
+        "GUID:20b6da7132d54473c82d735d5ba7aaff"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
