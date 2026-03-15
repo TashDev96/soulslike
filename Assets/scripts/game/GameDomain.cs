@@ -42,9 +42,8 @@ namespace game
 				UiDomain = _uiDomain,
 				InventoryDomain = _inventoryDomain,
 				ReloadLocation = new ReactiveCommand(),
-				SavePlayerAndLocationState = new ReactiveCommand(),
+				SavePlayerAndLocationState = new ReactiveCommand()
 			};
-
 
 			await _uiDomain.Initialize();
 
@@ -75,6 +74,5 @@ namespace game
 
 			//TODO: open main menu
 		}
-
 	}
 }

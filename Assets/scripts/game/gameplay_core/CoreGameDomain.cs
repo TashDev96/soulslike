@@ -18,10 +18,9 @@ namespace game.gameplay_core
 
 			_locationDomain = new LocationDomain();
 			_locationDomain.Initialize(saveData);
-			
+
 			GameStaticContext.Instance.ReloadLocation.OnExecute += RespawnAndReloadLocation;
 			GameStaticContext.Instance.SavePlayerAndLocationState.OnExecute += SaveCurrentLocation;
-			
 		}
 
 		public async UniTask PlayOnDebugLocation(string locationId, bool resetState)

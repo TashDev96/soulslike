@@ -28,7 +28,7 @@ public static class AddressableManager
 	public static async UniTask PreloadAssetsListAsync(string[] addresses, AssetOwner owner)
 	{
 		var tasks = new UniTask[addresses.Length];
-		for(int i = 0; i < addresses.Length; i++)
+		for(var i = 0; i < addresses.Length; i++)
 		{
 			tasks[i] = LoadAssetAsync<Object>(addresses[i], owner);
 		}
@@ -55,7 +55,7 @@ public static class AddressableManager
 			_assetOwners[owner].Add(address);
 
 			await handle.ToUniTask();
-			return (T)handle.Result;
+			return handle.Result;
 		}
 		catch(Exception e)
 		{

@@ -65,6 +65,11 @@ namespace game.gameplay_core.characters.ai.sensors
 			}
 		}
 
+		public void Reset()
+		{
+			_characterObservations.Clear();
+		}
+
 		private void OnDrawGizmosSelected()
 		{
 			if(_drawVisualPoints)
@@ -90,11 +95,6 @@ namespace game.gameplay_core.characters.ai.sensors
 					ear.DrawGizmosSelected();
 				}
 			}
-		}
-
-		public void Reset()
-		{
-			_characterObservations.Clear();
 		}
 	}
 }
