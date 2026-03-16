@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1061198897868547314}
   - component: {fileID: 3631834086448819696}
   - component: {fileID: 5505268899904223148}
+  - component: {fileID: 2340131325865328291}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -58,9 +59,6 @@ MonoBehaviour:
   _slider: {fileID: 0}
   _topper: {fileID: 0}
   _alphaAppearDuration: 0.15
-  _slowFillerDelayMax: 1
-  _slowFillerStickPercentThreshold: 0.034
-  _slowFillerSpeed: 0.25
   _autoHide: 1
   _notLockedShowDuration: 10
 --- !u!225 &5505268899904223148
@@ -75,6 +73,29 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2340131325865328291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2435182936768590336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d4b2cdabde4e239eaea5981bf3046a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.ui.PlayerHpBar
+  _fillerFast: {fileID: 7453291688238749499}
+  _fillerSlow: {fileID: 8600816388891440771}
+  _alphaContainer: {fileID: 5505268899904223148}
+  _slider: {fileID: 0}
+  _topper: {fileID: 0}
+  _blinkColor: {r: 1, g: 1, b: 1, a: 1}
+  _blinkDuration: 0.3
+  _blinkCount: 3
+  _alphaAppearDuration: 0.15
+  _autoHide: 1
+  _notLockedShowDuration: 0
 --- !u!1 &4523438497679990703
 GameObject:
   m_ObjectHideFlags: 0

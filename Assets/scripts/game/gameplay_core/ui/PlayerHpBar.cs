@@ -23,8 +23,6 @@ namespace game.gameplay_core.ui
 		[SerializeField]
 		private Image _fillerSlow;
 		[SerializeField]
-		private CanvasGroup _alphaContainer;
-		[SerializeField]
 		private Slider _slider;
 		[SerializeField]
 		private Image _topper;
@@ -38,33 +36,15 @@ namespace game.gameplay_core.ui
 		[SerializeField]
 		private int _blinkCount = 3;
 
-		[Header("Settings - Animation")]
-		[SerializeField]
-		private float _alphaAppearDuration = 1f;
-
-		[Header("Settings - Visibility")]
-		[SerializeField]
-		private bool _autoHide;
-		[SerializeField]
-		private float _notLockedShowDuration;
 		private Context _context;
 		private float _currentTargetValue = 1f;
 		private float _slowFillerValue = 1f;
-		private float _showTime;
-		private bool _isAppearing;
 		private Color _defaultSlowColor;
 		private Coroutine _blinkCoroutine;
 
 		public void SetContext(Context context)
 		{
 			_context = context;
-
-			if(_autoHide)
-			{
-				gameObject.SetActive(false);
-			}
-
-			_showTime = _notLockedShowDuration;
 
 			_currentTargetValue = Mathf.Clamp01(_context.Current.Value / _context.Max.Value);
 			_slowFillerValue = _context.RecoverableAmount != null
@@ -89,21 +69,10 @@ namespace game.gameplay_core.ui
 			StopAllCoroutines();
 			_currentTargetValue = 1f;
 			_slowFillerValue = 1f;
-			if(_autoHide)
-			{
-				_isAppearing = false;
-				_showTime = 2;
-				_alphaContainer.alpha = 0;
-			}
 		}
 
 		private void CustomUpdate(float deltaTime)
 		{
-			if(_autoHide)
-			{
-				UpdateVisibility(deltaTime);
-			}
-
 			RefreshUI();
 		}
 
@@ -112,14 +81,6 @@ namespace game.gameplay_core.ui
 			var prevValue = _currentTargetValue;
 			_currentTargetValue = Mathf.Clamp01(value / _context.Max.Value);
 
-			if(_currentTargetValue < prevValue)
-			{
-				if(_blinkCoroutine != null)
-				{
-					StopCoroutine(_blinkCoroutine);
-				}
-				_blinkCoroutine = StartCoroutine(BlinkCoroutine());
-			}
 			if(_context.RecoverableAmount != null)
 			{
 				_slowFillerValue = Mathf.Clamp01((value + _context.RecoverableAmount.Value) / _context.Max.Value);
@@ -129,20 +90,24 @@ namespace game.gameplay_core.ui
 				_slowFillerValue = _currentTargetValue;
 			}
 
-			if(_autoHide)
+			if(_currentTargetValue < prevValue)
 			{
-				HandleAutoShow();
+				if(_blinkCoroutine != null)
+				{
+					StopCoroutine(_blinkCoroutine);
+				}
+				if(gameObject.activeInHierarchy)
+				{
+					_blinkCoroutine = StartCoroutine(BlinkCoroutine());
+				}
 			}
+			
+			
 		}
 
 		private void HandleRecoverableValueChanged(float value)
 		{
 			_slowFillerValue = Mathf.Clamp01((_context.Current.Value + value) / _context.Max.Value);
-
-			if(_autoHide)
-			{
-				HandleAutoShow();
-			}
 		}
 
 		private IEnumerator BlinkCoroutine()
@@ -173,59 +138,6 @@ namespace game.gameplay_core.ui
 				if(_topper != null)
 				{
 					_topper.enabled = _currentTargetValue > 0;
-				}
-			}
-		}
-
-		private void HandleAutoShow()
-		{
-			var hasValue = _currentTargetValue < 1 && _currentTargetValue > 0;
-			if(hasValue && !gameObject.activeSelf)
-			{
-				if(_alphaContainer != null)
-				{
-					_alphaContainer.alpha = 0;
-				}
-				gameObject.SetActive(true);
-			}
-
-			_isAppearing = true;
-			_showTime = 0f;
-		}
-
-		private void UpdateVisibility(float deltaTime)
-		{
-			if(_alphaContainer == null)
-			{
-				return;
-			}
-
-			var isVisible = _showTime < _notLockedShowDuration && _currentTargetValue > 0;
-			isVisible |= _currentTargetValue <= 0f && _slowFillerValue > 0f;
-
-			var step = deltaTime / Mathf.Max(0.001f, _alphaAppearDuration);
-
-			if(isVisible)
-			{
-				if(_isAppearing)
-				{
-					_alphaContainer.alpha = Mathf.MoveTowards(_alphaContainer.alpha, 1f, step);
-					if(_alphaContainer.alpha >= 1f)
-					{
-						_isAppearing = false;
-					}
-				}
-				else
-				{
-					_showTime += deltaTime;
-				}
-			}
-			else
-			{
-				_alphaContainer.alpha = Mathf.MoveTowards(_alphaContainer.alpha, 0f, step);
-				if(_alphaContainer.alpha <= 0f)
-				{
-					gameObject.SetActive(false);
 				}
 			}
 		}

@@ -239,10 +239,6 @@ namespace game.gameplay_core.characters
 
 			_context.ApplyDamage.Subscribe(info =>
 			{
-				if(_context.IsDead.Value)
-				{
-					return;
-				}
 				if(info.DamageAmount <= 0)
 				{
 					return;
