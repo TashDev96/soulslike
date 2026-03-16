@@ -21,7 +21,8 @@ namespace game.gameplay_core.characters.ai.utility
 			GetIntoAttackDistance,
 			Strafe,
 			Heal,
-			Block
+			Block,
+			Stay,
 		}
 
 		public string Id;

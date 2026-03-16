@@ -213,7 +213,9 @@ namespace game.gameplay_core.characters.ai.utility
 					break;
 				case UtilityAction.ActionType.Block:
 					InputData.Command = _context.BlackboardValues[BlackboardValues.HasShield] > 0 ? CharacterCommand.StayBlock : CharacterCommand.None;
-
+					break;
+				case UtilityAction.ActionType.Stay:
+					InputData.Command = CharacterCommand.None;
 					break;
 				default:
 					return false;
@@ -262,14 +264,7 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.InventoryLogic.RightWeapon.Config.RegularAttacks[0].Range;
 			var leftWeapon = _context.CharacterContext.InventoryLogic.LeftWeapon;
-			if(leftWeapon != null && leftWeapon.Config.BlockDeflectionRating > 0)
-			{
-				_context.BlackboardValues[BlackboardValues.HasShield] = 1;
-			}
-			else
-			{
-				_context.BlackboardValues[BlackboardValues.HasShield] = 0;
-			}
+			_context.BlackboardValues[BlackboardValues.HasShield] = leftWeapon?.Config.BlockDeflectionRating > 0 ? 1 : 0;
 		}
 
 		private void HandleCharacterStateChanged(CharacterStateBase oldState, CharacterStateBase newState)
