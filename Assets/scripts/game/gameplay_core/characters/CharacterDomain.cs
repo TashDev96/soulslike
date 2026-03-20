@@ -243,7 +243,10 @@ namespace game.gameplay_core.characters
 				{
 					return;
 				}
-				GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(info.DamageAmount.RoundFormat(), FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
+				if(_context.IsPlayer.Value)
+				{
+					GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(info.DamageAmount.RoundFormat(), FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
+				}
 			});
 
 			void CreateCharacterUi()
