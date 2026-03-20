@@ -107,6 +107,7 @@ namespace game.gameplay_core.characters
 			_characterStats = new CharacterStats();
 
 			var characterCollider = GetComponent<CapsuleCharacterCollider>();
+			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
 
 			_context = new CharacterContext
 			{
@@ -137,6 +138,7 @@ namespace game.gameplay_core.characters
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
+				BodyView = _characterBodyView,
 
 				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
 				RunSpeed = new ReactiveProperty<float>(_config.Locomotion.RunSpeed),
@@ -148,6 +150,7 @@ namespace game.gameplay_core.characters
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = isDead,
+				FlyingMode = new ReactiveProperty<bool>(),
 				TriggerStagger = new ReactiveCommand<StaggerReason>(),
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
 
@@ -230,7 +233,6 @@ namespace game.gameplay_core.characters
 				CreateCharacterUi();
 			}
 
-			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
 			_characterBodyView.Initialize(_context.ApplyDamage);
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
@@ -340,6 +342,7 @@ namespace game.gameplay_core.characters
 			{
 				transform.position = data.Position;
 				transform.eulerAngles = data.Euler;
+				transform.up = Vector3.up;
 				if(!ignoreStats)
 				{
 					_context.CharacterStats.Hp.Value = data.Hp;

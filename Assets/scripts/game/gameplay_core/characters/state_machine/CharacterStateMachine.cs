@@ -27,6 +27,8 @@ namespace game.gameplay_core.characters.state_machine
 		private CharacterCommand _nextCommand;
 		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
 
+		private float _transformCooldown;
+
 		private CharacterCommand NextCommand
 		{
 			get => _nextCommand;
@@ -87,6 +89,11 @@ namespace game.gameplay_core.characters.state_machine
 			{
 				TryRememberNextCommand();
 				CalculateChangeState();
+			}
+
+			if(_transformCooldown > 0)
+			{
+				_transformCooldown -= deltaTime;
 			}
 		}
 
@@ -205,6 +212,11 @@ namespace game.gameplay_core.characters.state_machine
 				return;
 			}
 
+			if(TryTransformFlyingMode())
+			{
+				return;
+			}
+
 			if(_currentState.Value.CheckIsReadyToChangeState(NextCommand))
 			{
 				switch(NextCommand)
@@ -273,11 +285,43 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.Interact:
 						break;
+
+					case CharacterCommand.Transform:
+						break;
+					case CharacterCommand.FlapWings:
+						break;
+
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 				NextCommand = CharacterCommand.None;
 			}
+		}
+
+		private bool TryTransformFlyingMode()
+		{
+			if(_transformCooldown > 0)
+			{
+				return false;
+			}
+
+			if(_context.InputData.Command != CharacterCommand.Transform)
+			{
+				return false;
+			}
+
+			_transformCooldown = 3f;
+			if(_currentState.Value is FlyState)
+			{
+				SetState(_idleState);
+				_context.SelfLink.transform.up = Vector3.up;
+			}
+			else
+			{
+				SetState(new FlyState(_context));
+			}
+
+			return true;
 		}
 
 		private bool TryEnterRollAfterFall()

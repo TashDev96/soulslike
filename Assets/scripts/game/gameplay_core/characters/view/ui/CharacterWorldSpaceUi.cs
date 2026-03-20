@@ -1,7 +1,6 @@
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.ui;
-using game.gameplay_core.characters.runtime_data.bindings;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui
@@ -19,7 +18,7 @@ namespace game.gameplay_core.characters.view.ui
 		private UiBar _healthBar;
 		[SerializeField]
 		private CharacterDamageCounterUi _damageCounter;
-		
+
 		private CharacterWorldSpaceUiContext _context;
 		private Transform _transform;
 
@@ -35,7 +34,7 @@ namespace game.gameplay_core.characters.view.ui
 				RecoverableAmount = context.CharacterContext.CharacterStats.RecoverableHp,
 				CustomUpdate = context.LocationUiUpdate
 			});
-			
+
 			_damageCounter.SetContext(context.CharacterContext);
 
 			context.LocationUiUpdate.OnExecute += CustomUpdate;

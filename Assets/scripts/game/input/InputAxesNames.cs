@@ -2,6 +2,8 @@ namespace game.input
 {
 	public enum InputAxesNames
 	{
+		Transform,
+		Flap,
 		Inventory,
 		CameraVertical,
 		CameraHorizontal,

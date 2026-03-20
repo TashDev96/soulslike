@@ -7,10 +7,15 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.view
 {
-	public class CharacterBodyView : MonoBehaviour
+	public class CharacterFlyingBodyView : MonoBehaviour
 	{
 		[SerializeField]
 		private MeshRenderer _bodyMesh;
+
+		[SerializeField]
+		private Transform _wingRPivot;
+		[SerializeField]
+		private Transform _wingLPivot;
 
 		[SerializeField]
 		private Color _blinkColor = Color.white;
@@ -26,9 +31,6 @@ namespace game.gameplay_core.characters.view
 		private IDisposable _damageSub;
 		private static readonly int BlinkIntensityId = Shader.PropertyToID("_BlinkIntensity");
 		private static readonly int BlinkColorId = Shader.PropertyToID("_BlinkColor");
-
-		[field: SerializeField]
-		public CharacterFlyingBodyView FlyingBodyView { get; private set; }
 
 		public void Initizlie()
 		{
@@ -61,7 +63,6 @@ namespace game.gameplay_core.characters.view
 		public void SetFlyingMode(bool flying)
 		{
 			gameObject.SetActive(!flying);
-			FlyingBodyView.gameObject.SetActive(flying);
 		}
 
 		private IEnumerator BlinkCoroutine()

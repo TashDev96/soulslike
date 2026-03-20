@@ -1,0 +1,34 @@
+using System;
+using UnityEngine;
+
+namespace game.gameplay_core.characters.config
+{
+	[Serializable]
+	public class FlyingConfig
+	{
+		[field: SerializeField]
+		public float BaseSpeed { get; private set; } = 10f;
+		[field: SerializeField]
+		public float MaxSpeed { get; private set; } = 30f;
+		[field: SerializeField]
+		public float Friction { get; private set; } = 0.5f;
+		[field: SerializeField]
+		public float PitchSpeed { get; private set; } = 40f;
+		[field: SerializeField]
+		public float YawSpeed { get; private set; } = 60f;
+		[field: SerializeField]
+		public float MaxRollAngle { get; private set; } = 45f;
+		[field: SerializeField]
+		public float RollSpeed { get; private set; } = 5f;
+		[field: SerializeField]
+		public float AltitudeSpeedGain { get; private set; } = 2f;
+		[field: SerializeField]
+		public float FlapForce { get; private set; } = 5f;
+		[field: SerializeField]
+		public float FlapStaminaCost { get; private set; } = 10f;
+		[field: SerializeField]
+		public float FlapCooldown { get; private set; } = 0.5f;
+		[field: SerializeField]
+		public float MaxUpPitchWithNoEnergy { get; private set; } = 15f;
+	}
+}

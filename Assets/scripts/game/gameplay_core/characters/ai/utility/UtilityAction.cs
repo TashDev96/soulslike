@@ -22,7 +22,7 @@ namespace game.gameplay_core.characters.ai.utility
 			Strafe,
 			Heal,
 			Block,
-			Stay,
+			Stay
 		}
 
 		public string Id;

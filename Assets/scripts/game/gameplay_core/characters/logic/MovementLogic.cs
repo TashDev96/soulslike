@@ -28,7 +28,6 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _groundNormal;
 
 		private Vector3 _prevPos;
-		private bool _isGroundedCache;
 		private bool _prevIsGrounded;
 
 		private Vector3 _fallVelocity;
@@ -38,7 +37,10 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _virtualForward;
 		private bool _rotationMovementLocked;
 		private Transform _transform;
+
 		public Vector3 LastUpdateVelocity { get; private set; }
+		public bool IsGrounded { get; private set; }
+
 		public bool RotationIsControlledByCamera { get; set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
@@ -56,37 +58,44 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			_prevIsGrounded = _isGroundedCache;
-			_isGroundedCache = false;
+			_prevIsGrounded = IsGrounded;
+			IsGrounded = false;
 
-			if(_context.IsDead.Value)
+			if(_context.FlyingMode.Value)
 			{
-				return;
-			}
-
-			if(_rotationMovementLocked)
-			{
-				return;
-			}
-
-			_debugFlags = _context.CharacterCollider.Flags;
-
-			_context.CharacterCollider.CustomUpdate(deltaTime);
-
-			UpdateFalling(deltaTime);
-
-			if(_isGroundedCache)
-			{
-				UpdateSliding(deltaTime);
-			}
-
-			if(_hadAcceleratedMovement)
-			{
-				_hadAcceleratedMovement = false;
+				UpdateFlyingMode(deltaTime);
 			}
 			else
 			{
-				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.Config.Locomotion.WalkDeceleration);
+				if(_context.IsDead.Value)
+				{
+					return;
+				}
+
+				if(_rotationMovementLocked)
+				{
+					return;
+				}
+
+				_debugFlags = _context.CharacterCollider.Flags;
+
+				_context.CharacterCollider.CustomUpdate(deltaTime);
+
+				UpdateFalling(deltaTime);
+
+				if(IsGrounded)
+				{
+					UpdateSliding(deltaTime);
+				}
+
+				if(_hadAcceleratedMovement)
+				{
+					_hadAcceleratedMovement = false;
+				}
+				else
+				{
+					_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.Config.Locomotion.WalkDeceleration);
+				}
 			}
 
 			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
@@ -101,7 +110,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
-			if(_isGroundedCache)
+			if(IsGrounded)
 			{
 				if(CharacterCollider.HasStableGround)
 				{
@@ -180,7 +189,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
+			sb.Append("grounded ").Append(IsGrounded).Append("/").Append(CharacterCollider.IsGrounded)
 				.Append(", stable: ").Append(CharacterCollider.HasStableGround)
 				.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
 
@@ -199,6 +208,15 @@ namespace game.gameplay_core.characters.logic
 			_context.SelfLink.transform.eulerAngles = respawnTransform.EulerAngles;
 		}
 
+		public void SetFlyingMode(bool on)
+		{
+			_context.FlyingMode.Value = on;
+		}
+
+		private void UpdateFlyingMode(float deltaTime)
+		{
+		}
+
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
 		{
 			_hadAcceleratedMovement = true;
@@ -207,7 +225,7 @@ namespace game.gameplay_core.characters.logic
 			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.Config.Locomotion.WalkAcceleration);
 			var resultMovement = _acceleratedMovement;
 
-			if(_isGroundedCache)
+			if(IsGrounded)
 			{
 				if(CharacterCollider.HasStableGround)
 				{
@@ -225,7 +243,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(_context.CharacterCollider.IsFakeGrounded)
 			{
-				_isGroundedCache = true;
+				IsGrounded = true;
 			}
 			else
 			{
@@ -233,7 +251,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			_debugFlags = _context.CharacterCollider.Flags;
 
-			if(_isGroundedCache)
+			if(IsGrounded)
 			{
 				_context.IsFalling.Value = false;
 				_fallVelocity = Vector3.zero;
@@ -305,7 +323,7 @@ namespace game.gameplay_core.characters.logic
 			CharacterCollider.Move(vector, disableIterations);
 
 			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
-			_isGroundedCache |= CharacterCollider.IsGrounded;
+			IsGrounded |= CharacterCollider.IsGrounded;
 		}
 
 		private void HandleDeath(bool isDead)

@@ -49,6 +49,7 @@ namespace game.gameplay_core.characters
 		public IReadOnlyReactiveProperty<bool> IsPlayer;
 		public ApplyDamageCommand ApplyDamage;
 		public IsDead IsDead;
+		public ReactiveProperty<bool> FlyingMode;
 		public ReactiveCommand<StaggerReason> TriggerStagger;
 
 		public ReactiveProperty<bool> IsFalling;
@@ -60,6 +61,7 @@ namespace game.gameplay_core.characters
 
 		public BodyAttackView BodyAttackView;
 		public ParryReceiver ParryReceiver;
+		public CharacterBodyView BodyView;
 
 		public ReactiveCommand DeflectCurrentAttack;
 

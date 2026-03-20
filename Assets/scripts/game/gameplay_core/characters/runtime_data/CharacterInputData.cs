@@ -17,5 +17,6 @@ namespace game.gameplay_core.characters.runtime_data
 		public int SpecialAttackIndex;
 		public AttackConfig ForcedAttackConfig;
 		public bool HasDirectionInput => DirectionWorld.sqrMagnitude > 0;
+		public Vector2 InputScreenSpace { get; set; }
 	}
 }

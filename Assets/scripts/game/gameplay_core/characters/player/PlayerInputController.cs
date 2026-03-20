@@ -38,6 +38,8 @@ namespace game.gameplay_core.characters.player
 			_directionInputScreenSpace.y += InputAdapter.GetAxisRaw(InputAxesNames.Vertical);
 			_directionInputScreenSpace = _directionInputScreenSpace.normalized;
 
+			_inputData.InputScreenSpace = _directionInputScreenSpace;
+
 			if(_directionInputScreenSpace.sqrMagnitude > 0)
 			{
 				_inputData.DirectionWorld = _cameraController.ConvertScreenSpaceDirectionToWorld(_directionInputScreenSpace);
@@ -145,6 +147,19 @@ namespace game.gameplay_core.characters.player
 			if(InputAdapter.GetButtonDown(InputAxesNames.Interact))
 			{
 				return CharacterCommand.Interact;
+			}
+
+			if(_characterContext.FlyingMode.Value)
+			{
+				if(InputAdapter.GetButton(InputAxesNames.Flap))
+				{
+					return CharacterCommand.FlapWings;
+				}
+			}
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.Transform))
+			{
+				return CharacterCommand.Transform;
 			}
 
 			if(hasDirectionInput)
