@@ -30,5 +30,11 @@ namespace game.gameplay_core.characters.config
 		public float FlapCooldown { get; private set; } = 0.5f;
 		[field: SerializeField]
 		public float MaxUpPitchWithNoEnergy { get; private set; } = 15f;
+		[field: SerializeField]
+		public AnimationCurve StallPitchDownSpeedCurve { get; private set; } = AnimationCurve.Linear(0, 0, 10, 60);
+		[field: SerializeField]
+		public AnimationCurve MinPitchPerSpeed { get; private set; } = AnimationCurve.Linear(0, 0, 10, 60);
+		[field: SerializeField]
+		public float StallRecoveryPitch { get; private set; } = 20f;
 	}
 }

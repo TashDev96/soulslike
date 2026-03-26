@@ -1,3 +1,5 @@
+using dream_lib.src.extensions;
+using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.commands;
 using UnityEngine;
 
@@ -42,13 +44,23 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.BodyView.SetFlyingMode(false);
 		}
 
+		public override string GetDebugString()
+		{
+			return $"{_flyingSpeed.RoundFormat()} {_currentPitch.RoundFormat()}";
+
+		}
+
 		public override void Update(float deltaTime)
 		{
+			
+			
+			
 			var config = _context.Config.Flying;
 			if(config == null)
 			{
 				return;
 			}
+			
 			var input = _context.InputData.InputScreenSpace;
 			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
 
@@ -56,13 +68,28 @@ namespace game.gameplay_core.characters.state_machine.states
 			_currentYaw += input.x * config.YawSpeed * deltaTime;
 
 			// Pitch
-			var targetPitch = _currentPitch - input.y * config.PitchSpeed * deltaTime;
+			var targetPitch = _currentPitch + input.y * config.PitchSpeed * deltaTime;
 
 			// Pitch correction if no energy to fly up
 			if(targetPitch < 0 && _context.CharacterStats.Stamina.Value <= 0)
 			{
 				targetPitch = Mathf.MoveTowards(targetPitch, 0, config.PitchSpeed * deltaTime);
 			}
+
+			// Stall prevention: force nose down if speed is too low
+
+			var minPitch = config.MinPitchPerSpeed.Evaluate(_flyingSpeed);
+			if(targetPitch < minPitch)
+			{
+				targetPitch = minPitch;
+			}
+			
+			// var missingSpeed = Mathf.Max(0, config.BaseSpeed - _flyingSpeed);
+			// var stallCorrectionSpeed = config.StallPitchDownSpeedCurve.Evaluate(missingSpeed);
+			// if(stallCorrectionSpeed > 0 && targetPitch < config.StallRecoveryPitch)
+			// {
+			// 	targetPitch = Mathf.MoveTowards(targetPitch, config.StallRecoveryPitch, stallCorrectionSpeed * deltaTime);
+			// }
 
 			_currentPitch = Mathf.Clamp(targetPitch, -85f, 85f);
 
@@ -74,7 +101,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_transform.rotation = Quaternion.Euler(_currentPitch, _currentYaw, _currentRoll);
 
 			// Friction
-			_flyingSpeed = Mathf.MoveTowards(_flyingSpeed, config.BaseSpeed, config.Friction * deltaTime);
+			var frictionForce = _flyingSpeed * _flyingSpeed * config.Friction;
+			Debug.DrawLine(_transform.position, _transform.position - _transform.forward* frictionForce*2, Color.green);
+			_flyingSpeed = Mathf.MoveTowards(_flyingSpeed, 0, frictionForce*deltaTime);
 
 			// Speed gain/loss by altitude
 			var pitchRad = _currentPitch * Mathf.Deg2Rad;

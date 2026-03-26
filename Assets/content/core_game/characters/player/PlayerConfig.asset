@@ -47,6 +47,8 @@ MonoBehaviour:
         ClipDuration: 0.93333334
         Flag: 0
       HitEvents: []
+      SoundEvents: []
+      CameraShakeEvents: []
       LayerNames:
       - Invincible
       - Attack
@@ -94,6 +96,68 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
+  <Flying>k__BackingField:
+    <BaseSpeed>k__BackingField: 10
+    <MaxSpeed>k__BackingField: 30
+    <Friction>k__BackingField: 0.01
+    <PitchSpeed>k__BackingField: 40
+    <YawSpeed>k__BackingField: 60
+    <MaxRollAngle>k__BackingField: 45
+    <RollSpeed>k__BackingField: 5
+    <AltitudeSpeedGain>k__BackingField: 2
+    <FlapForce>k__BackingField: 5
+    <FlapStaminaCost>k__BackingField: 10
+    <FlapCooldown>k__BackingField: 0.5
+    <MaxUpPitchWithNoEnergy>k__BackingField: 15
+    <StallPitchDownSpeedCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 6
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 10
+        value: 60
+        inSlope: 6
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <MinPitchPerSpeed>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.09813309
+        value: 13
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 20
+        value: -90
+        inSlope: -1.3209538
+        outSlope: -1.3209538
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.18333335
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <StallRecoveryPitch>k__BackingField: 20
   <ParentConfig>k__BackingField: {fileID: 0}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
