@@ -99,7 +99,7 @@ MonoBehaviour:
   <Flying>k__BackingField:
     <BaseSpeed>k__BackingField: 10
     <MaxSpeed>k__BackingField: 30
-    <Friction>k__BackingField: 0.01
+    <Friction>k__BackingField: {x: 0, y: 0.5, z: 0.01}
     <PitchSpeed>k__BackingField: 40
     <YawSpeed>k__BackingField: 60
     <MaxRollAngle>k__BackingField: 45
@@ -137,7 +137,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.09813309
+        time: 3.3321857
         value: 13
         inSlope: 0
         outSlope: 0
@@ -145,6 +145,15 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0
         outWeight: 0
+      - serializedVersion: 3
+        time: 7.1978226
+        value: 6.6666737
+        inSlope: -4.268469
+        outSlope: -4.268469
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 20
         value: -90
@@ -158,6 +167,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <StallRecoveryPitch>k__BackingField: 20
+    <LiftForceCoeff>k__BackingField: 0.1
   <ParentConfig>k__BackingField: {fileID: 0}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}

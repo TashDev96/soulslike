@@ -208,9 +208,10 @@ namespace game.gameplay_core.characters.logic
 			_context.SelfLink.transform.eulerAngles = respawnTransform.EulerAngles;
 		}
 
-		public void SetFlyingMode(bool on)
+		public void SetFlyingMode(bool on, Vector3 fallVelocity)
 		{
 			_context.FlyingMode.Value = on;
+			_fallVelocity = fallVelocity;
 		}
 
 		private void UpdateFlyingMode(float deltaTime)
@@ -320,7 +321,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false)
 		{
-			CharacterCollider.Move(vector, disableIterations);
+			CharacterCollider.MoveWithStepUp(vector, disableIterations);
 
 			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
 			IsGrounded |= CharacterCollider.IsGrounded;

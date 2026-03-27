@@ -63,7 +63,17 @@ namespace game.gameplay_core.characters.logic
 		{
 		}
 
-		public void Move(Vector3 motion, bool disableIterations)
+		public void MoveFlying(Vector3 motion, out CollisionFlags collisionFlags)
+		{
+
+			var moveStartPosition = transform.position;
+
+			CalculateMovement(moveStartPosition, motion, true, out var normalResultPosition, out collisionFlags);
+			transform.position = normalResultPosition;
+			 
+		}
+		
+		public void MoveWithStepUp(Vector3 motion, bool disableIterations)
 		{
 			var wasGrounded = IsGrounded;
 

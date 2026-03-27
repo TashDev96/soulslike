@@ -11,7 +11,7 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public float MaxSpeed { get; private set; } = 30f;
 		[field: SerializeField]
-		public float Friction { get; private set; } = 0.5f;
+		public Vector3 Friction { get; private set; } = new Vector3(0.005f, 0.1f, 0.01f);
 		[field: SerializeField]
 		public float PitchSpeed { get; private set; } = 40f;
 		[field: SerializeField]
@@ -36,5 +36,7 @@ namespace game.gameplay_core.characters.config
 		public AnimationCurve MinPitchPerSpeed { get; private set; } = AnimationCurve.Linear(0, 0, 10, 60);
 		[field: SerializeField]
 		public float StallRecoveryPitch { get; private set; } = 20f;
+		[field: SerializeField]
+		public float LiftForceCoeff { get; set; } = 0.1f;
 	}
 }
