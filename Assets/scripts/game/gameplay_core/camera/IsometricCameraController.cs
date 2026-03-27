@@ -25,7 +25,6 @@ namespace game.gameplay_core.camera
 
 		private float _criticalAttackAnimationTimeLeft;
 		private float _criticalAttackAnimationDuration;
-		private readonly float _defaultSize;
 
 		private Vector3 _shakeOffset;
 		private Tweener _shakeTweener;
@@ -35,12 +34,22 @@ namespace game.gameplay_core.camera
 		public IsometricCameraController(Context context)
 		{
 			_context = context;
-			_context.Camera.Value.orthographic = true;
-			_defaultSize = _context.Camera.Value.orthographicSize;
+			switch(_context.CameraSettings.Mode)
+			{
+				case IsometricCameraSettings.PerspectiveMode.Orthographic:
+					_context.Camera.Value.orthographic = true;
+					_context.Camera.Value.orthographicSize = _context.CameraSettings.OrthoSize;
+					break;
+				case IsometricCameraSettings.PerspectiveMode.Perspective:
+					_context.Camera.Value.orthographic = false;
+					_context.Camera.Value.fieldOfView = _context.CameraSettings.FOV;
+					break;
+			}
 		}
 
 		public void Update(float deltaTime)
 		{
+			var settings = _context.CameraSettings;
 			var cameraTransform = _context.Camera.Value.transform;
 			var targetPosition = _context.Player.Value.ExternalData.Transform.Position;
 			var forward = cameraTransform.forward;
@@ -55,7 +64,15 @@ namespace game.gameplay_core.camera
 				{
 					curve = 1;
 				}
-				_context.Camera.Value.orthographicSize = _defaultSize * curve;
+				switch(_context.CameraSettings.Mode)
+				{
+					case IsometricCameraSettings.PerspectiveMode.Orthographic:
+						_context.Camera.Value.orthographicSize = settings.OrthoSize  * curve;
+						break;
+					case IsometricCameraSettings.PerspectiveMode.Perspective:
+						_context.Camera.Value.fieldOfView = settings.FOV  * curve;
+						break;
+				}
 			}
 
 			if(forward.y > -1e-3f && forward.y < 1e-3f)
