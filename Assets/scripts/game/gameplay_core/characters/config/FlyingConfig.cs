@@ -15,7 +15,7 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public float PitchSpeed { get; private set; } = 40f;
 		[field: SerializeField]
-		public float YawSpeed { get; private set; } = 60f;
+		public AnimationCurve YawSpeedByForwardSpeed { get; private set; }
 		[field: SerializeField]
 		public float MaxRollAngle { get; private set; } = 45f;
 		[field: SerializeField]

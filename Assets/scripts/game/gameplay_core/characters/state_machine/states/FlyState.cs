@@ -61,7 +61,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
 
 			// Yaw
-			_currentYaw += input.x * config.YawSpeed * deltaTime;
+			_currentYaw += input.x * config.YawSpeedByForwardSpeed.Evaluate(_localVelocity.z) * deltaTime;
 
 			// Pitch
 			var targetPitch = _currentPitch + input.y * config.PitchSpeed * deltaTime;
@@ -91,7 +91,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			// Friction
 			var frictionForce = config.Friction;
 
-			//frictionForce.x *= _localVelocity.x * _localVelocity.x;
+			frictionForce.x *= _localVelocity.x * _localVelocity.x;
 			frictionForce.y *= _localVelocity.y * _localVelocity.y;
 			frictionForce.z *= _localVelocity.z * _localVelocity.z;
 			_localVelocity = _localVelocity.MoveTowardsSeparate(Vector3.zero, frictionForce * deltaTime);
@@ -104,7 +104,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var xCache = _localVelocity.x;
 			_localVelocity += _transform.InverseTransformVector(Physics.gravity) * deltaTime;
 			_localVelocity.y += _localVelocity.z * _localVelocity.z * config.LiftForceCoeff * deltaTime;
-			_localVelocity.x = xCache;
+			_localVelocity.x = xCache; //disable sliding to the side with gravity TODO: try enable a little for realism
 
 			// Flaps
 			if(flap && Time.time > _lastFlapTime + config.FlapCooldown)
@@ -112,7 +112,13 @@ namespace game.gameplay_core.characters.state_machine.states
 				if(_context.CharacterStats.Stamina.Value >= config.FlapStaminaCost)
 				{
 					_context.StaminaLogic.SpendStamina(config.FlapStaminaCost);
-					_localVelocity.z += config.FlapForce;
+					var flapDirection = Vector3.forward;
+					var inputPitchUp = Mathf.Clamp01(-input.y);
+					if(inputPitchUp>0)
+					{
+						flapDirection = Vector3.RotateTowards(flapDirection, Vector3.up, inputPitchUp * 70 * Mathf.Deg2Rad, 0);
+					}
+					_localVelocity += flapDirection * config.FlapForce;
 					_lastFlapTime = Time.time;
 				}
 			}

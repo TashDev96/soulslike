@@ -211,6 +211,7 @@ namespace game.gameplay_core.characters.logic
 		public void SetFlyingMode(bool on, Vector3 fallVelocity)
 		{
 			_context.FlyingMode.Value = on;
+			_context.IsFalling.Value = !on;
 			_fallVelocity = fallVelocity;
 		}
 
