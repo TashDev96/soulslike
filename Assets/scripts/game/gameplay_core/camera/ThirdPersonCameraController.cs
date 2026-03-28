@@ -34,6 +34,9 @@ namespace game.gameplay_core.camera
 			var cameraTransform = _context.Camera.Value.transform;
 			_currentRotation = cameraTransform.eulerAngles;
 
+			_context.Camera.Value.orthographic = false;
+			_context.Camera.Value.fieldOfView = 60;
+
 			CFCursor.lockState = CursorLockMode.Locked;
 			CFCursor.visible = false;
 		}
