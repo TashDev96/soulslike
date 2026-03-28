@@ -39,7 +39,7 @@ namespace game.gameplay_core.characters.ai.sensors
 
 			foreach(var eye in _eyes)
 			{
-				eye.Initialize(_characterObservations);
+				eye.Initialize(_characterObservations, characterDomain);
 			}
 
 			foreach(var ear in _ears)

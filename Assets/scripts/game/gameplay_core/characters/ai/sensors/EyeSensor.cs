@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using dream_lib.src.extensions;
 using dream_lib.src.utils;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai.world_reflection;
@@ -29,6 +30,7 @@ namespace game.gameplay_core.characters.ai.sensors
 
 		private List<CharacterObservation> _characterVisualObservations;
 		private int _layerMask;
+		private CharacterDomain _self;
 
 		private static List<VisualInfoPoint> _validVisualPointsCache = new(1000);
 		public Vector3 Position => _rootTransform.TransformPoint(_localPosition);
@@ -36,9 +38,10 @@ namespace game.gameplay_core.characters.ai.sensors
 		public Vector3 Right => _rootTransform.TransformDirection(Quaternion.Euler(_localEuler) * Vector3.right);
 		public Vector3 Up => _rootTransform.TransformDirection(Quaternion.Euler(_localEuler) * Vector3.up);
 
-		public void Initialize(List<CharacterObservation> characterVisualObservations)
+		public void Initialize(List<CharacterObservation> characterVisualObservations, CharacterDomain self)
 		{
 			_characterVisualObservations = characterVisualObservations;
+			_self = self;
 
 			foreach(var cone in _viewCones)
 			{
@@ -104,6 +107,11 @@ namespace game.gameplay_core.characters.ai.sensors
 
 			foreach(var visualPoint in allVisualPoints)
 			{
+				if(visualPoint.Character == _self)
+				{
+					continue;
+				}
+
 				var vecToPoint = visualPoint.Position - position;
 				var distanceToPointSqr = vecToPoint.sqrMagnitude;
 
@@ -158,6 +166,8 @@ namespace game.gameplay_core.characters.ai.sensors
 			public float UpdatePeriodSec;
 
 			public Color Color;
+
+			public bool EnableDebugLog;
 
 			[NonSerialized]
 			public float LastUpdateTime;

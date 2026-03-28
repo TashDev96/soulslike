@@ -260,7 +260,7 @@ namespace game.gameplay_core.characters.ai.utility
 			}
 		}
 
-		private void UpdateBlackboardValues()
+		protected void UpdateBlackboardValues()
 		{
 			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.InventoryLogic.RightWeapon.Config.RegularAttacks[0].Range;
 			var leftWeapon = _context.CharacterContext.InventoryLogic.LeftWeapon;
