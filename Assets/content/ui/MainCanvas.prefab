@@ -1015,15 +1015,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.ui.PlayerHpBar
   _fillerFast: {fileID: 9020343758691224472}
   _fillerSlow: {fileID: 2923982536294831868}
-  _alphaContainer: {fileID: 3771079590493155284}
   _slider: {fileID: 0}
   _topper: {fileID: 0}
   _blinkColor: {r: 1, g: 1, b: 1, a: 1}
   _blinkDuration: 0.3
   _blinkCount: 3
-  _alphaAppearDuration: 0.15
-  _autoHide: 0
-  _notLockedShowDuration: 0
 --- !u!225 &3771079590493155284
 CanvasGroup:
   m_ObjectHideFlags: 0

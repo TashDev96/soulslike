@@ -11,31 +11,29 @@ namespace game.gameplay_core.camera
 	}
 
 	[Serializable]
-	public class FixedCameraZone
+	public class FixedCameraZone : MonoBehaviour
 	{
-		[SerializeField]
-		private BoxCollider _trigger;
+		[field: SerializeField]
+		public BoxCollider Trigger { get; private set; }
+		[field: SerializeField]
+		public Transform CameraTransform { get; private set; }
+		[field: SerializeField]
+		public CameraZoneBehavior Behavior { get; private set; }
+		[field: SerializeField]
+		public float FollowSmoothness { get; private set; }
+		[field: SerializeField]
+		public float RotationSmoothness { get; private set; }
+		[field: SerializeField]
+		public Vector3 LookAtOffset { get; private set; }
+		[field: SerializeField]
+		public int Priority { get; private set; } = 1;
 
-		[SerializeField]
-		private Transform _cameraTransform;
-
-		[SerializeField]
-		private CameraZoneBehavior _behavior;
-
-		[SerializeField]
-		private float _followSmoothness = 5f;
-
-		[SerializeField]
-		private float _rotationSmoothness = 5f;
-
-		[SerializeField]
-		private Vector3 _lookAtOffset = new(0, 1.5f, 0);
-
-		public BoxCollider Trigger => _trigger;
-		public Transform CameraTransform => _cameraTransform;
-		public CameraZoneBehavior Behavior => _behavior;
-		public float FollowSmoothness => _followSmoothness;
-		public float RotationSmoothness => _rotationSmoothness;
-		public Vector3 LookAtOffset => _lookAtOffset;
+		private void OnValidate()
+		{
+			if(this.Trigger == null)
+			{
+				Trigger = GetComponentInChildren<BoxCollider>();
+			}
+		}
 	}
 }

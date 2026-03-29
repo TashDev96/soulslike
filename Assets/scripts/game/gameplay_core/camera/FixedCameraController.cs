@@ -1,5 +1,6 @@
 using System;
 using dream_lib.src.camera;
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
@@ -33,6 +34,8 @@ namespace game.gameplay_core.camera
 		{
 			_context = context;
 			_transitionProgress = 1f;
+			context.Camera.Value.orthographic = false;
+			context.Camera.Value.fieldOfView = 60;
 		}
 
 		public void Update(float deltaTime)
@@ -51,7 +54,7 @@ namespace game.gameplay_core.camera
 
 			if(newZone != _currentZone && newZone != null)
 			{
-				StartTransitionToZone(cameraTransform.position, cameraTransform.rotation, newZone, playerPosition);
+				//StartTransitionToZone(cameraTransform.position, cameraTransform.rotation, newZone, playerPosition);
 				_currentZone = newZone;
 			}
 
@@ -62,7 +65,9 @@ namespace game.gameplay_core.camera
 					_currentZone = settings.Zones[0];
 					var targetPos = GetTargetPositionForZone(_currentZone, playerPosition);
 					var targetRot = GetTargetRotationForZone(_currentZone, playerPosition, targetPos);
-					StartTransitionToZone(cameraTransform.position, cameraTransform.rotation, _currentZone, playerPosition);
+					cameraTransform.position = targetPos;
+					cameraTransform.rotation = targetRot;
+					//StartTransitionToZone(cameraTransform.position, cameraTransform.rotation, _currentZone, playerPosition);
 				}
 				return;
 			}
@@ -128,24 +133,24 @@ namespace game.gameplay_core.camera
 		private void UpdateCameraBehavior(Transform cameraTransform, Vector3 playerPosition, float deltaTime)
 		{
 			var zone = _currentZone;
-			var zoneTransform = zone.CameraTransform;
+			var zoneCameraTransform = zone.CameraTransform;
 
 			switch(zone.Behavior)
 			{
 				case CameraZoneBehavior.Fixed:
-					cameraTransform.position = zoneTransform.position;
-					cameraTransform.rotation = zoneTransform.rotation;
+					cameraTransform.position = zoneCameraTransform.position;
+					cameraTransform.rotation = zoneCameraTransform.rotation;
 					break;
 
 				case CameraZoneBehavior.LookAtPlayer:
-					cameraTransform.position = zoneTransform.position;
-					var targetLookAt = Quaternion.LookRotation(playerPosition + zone.LookAtOffset - zoneTransform.position);
+					cameraTransform.position = zoneCameraTransform.position;
+					var targetLookAt = Quaternion.LookRotation(playerPosition + zone.LookAtOffset - zoneCameraTransform.position);
 					_currentLookAtRotation = Quaternion.Slerp(_currentLookAtRotation, targetLookAt, zone.RotationSmoothness * deltaTime);
 					cameraTransform.rotation = _currentLookAtRotation;
 					break;
 
 				case CameraZoneBehavior.FollowPlayer:
-					var offset = zoneTransform.position - zoneTransform.parent.position;
+					var offset = zoneCameraTransform.position - zoneCameraTransform.parent.position;
 					var targetFollowPos = playerPosition + offset;
 					_currentFollowPosition = Vector3.Lerp(_currentFollowPosition, targetFollowPos, zone.FollowSmoothness * deltaTime);
 					cameraTransform.position = _currentFollowPosition;
@@ -159,14 +164,18 @@ namespace game.gameplay_core.camera
 
 		private FixedCameraZone FindCameraZoneForPosition(Vector3 position)
 		{
+			var maxPriority = 0;
+			FixedCameraZone result = null;
 			foreach(var zone in _context.CameraSettings.Zones)
 			{
-				if(zone.Trigger != null && zone.Trigger.bounds.Contains(position))
+				if(zone.Trigger.ContainsPoint(position) && maxPriority <= zone.Priority)
 				{
-					return zone;
+					maxPriority = zone.Priority;
+					result = zone;
 				}
 			}
-			return _currentZone;
+
+			return result != null ? result : _currentZone;
 		}
 
 		private void StartTransitionToZone(Vector3 currentPosition, Quaternion currentRotation, FixedCameraZone zone, Vector3 playerPosition)
