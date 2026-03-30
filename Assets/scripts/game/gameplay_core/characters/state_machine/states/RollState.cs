@@ -22,7 +22,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
-		public bool CanSwitchToAttack => _context.Config.Roll.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.TimingExitToAttack, NormalizedTime);
+		public bool CanSwitchToAttack => _context.Config.Roll.AnimationConfig.HasFlag(AnimationFlags.TimingExitToAttack, NormalizedTime);
 
 		public RollState(CharacterContext context) : base(context)
 		{
@@ -103,7 +103,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_context.LockOnLogic.DisableRotationForThisFrame = true;
 
-				if(!_config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime))
+				if(!_config.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime))
 				{
 					var lockOnTarget = _context.LockOnLogic.LockOnTarget.Value;
 					var lookVector = (lockOnTarget.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
@@ -122,7 +122,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				IsComplete = true;
 			}
 
-			var isInvulnerable = _config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.Invulnerability, NormalizedTime);
+			var isInvulnerable = _config.AnimationConfig.HasFlag(AnimationFlags.Invulnerability, NormalizedTime);
 
 			if(isInvulnerable)
 			{
@@ -139,7 +139,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
 			}
 
-			if(_config.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.BodyAttack, NormalizedTime))
+			if(_config.AnimationConfig.HasFlag(AnimationFlags.BodyAttack, NormalizedTime))
 			{
 				_context.BodyAttackView.CastRollAttack();
 			}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
@@ -23,23 +24,23 @@ namespace game.gameplay_core.characters.logic
 
 		private CharacterContext _context;
 
-		private Vector3 _slidingVelocity;
-
-		private Vector3 _groundNormal;
-
 		private Vector3 _prevPos;
 		private bool _isGroundedCache;
 		private bool _prevIsGrounded;
+		private Vector3 _groundNormal;
 
+		private bool _rotationAndMovementLocked;
+		private readonly HashSet<string> _rotationLockReasons = new();
+
+		private Vector3 _slidingVelocity;
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
 		private Vector3 _acceleratedMovement;
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
-		private bool _rotationMovementLocked;
 		private Transform _transform;
-		public Vector3 LastUpdateVelocity { get; private set; }
 		public bool RotationIsControlledByCamera { get; set; }
+		public Vector3 LastUpdateVelocity { get; private set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
@@ -64,7 +65,7 @@ namespace game.gameplay_core.characters.logic
 				return;
 			}
 
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 			{
 				return;
 			}
@@ -95,7 +96,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 			{
 				return;
 			}
@@ -122,7 +123,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked || _rotationLockReasons.Count > 0)
 			{
 				return;
 			}
@@ -132,6 +133,7 @@ namespace game.gameplay_core.characters.logic
 				_virtualForward = _context.InputData.DirectionWorld;
 				return;
 			}
+
 			var degreesPerSecond = 180f / halfTurnDurationSeconds;
 
 			toDirection.y = 0;
@@ -148,7 +150,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 			{
 				return;
 			}
@@ -190,7 +192,19 @@ namespace game.gameplay_core.characters.logic
 
 		public void SetRotationAndMovementLocked(bool value)
 		{
-			_rotationMovementLocked = value;
+			_rotationAndMovementLocked = value;
+		}
+
+		public void SetRotationLockedBy(string source, bool locked)
+		{
+			if(locked)
+			{
+				_rotationLockReasons.Add(source);
+			}
+			else
+			{
+				_rotationLockReasons.Remove(source);
+			}
 		}
 
 		public void Teleport(TransformCache respawnTransform)

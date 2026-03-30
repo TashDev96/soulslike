@@ -6,6 +6,8 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public abstract class CharacterAnimationStateBase : CharacterStateBase
 	{
+		private const string RotationLockKey = "by_animation";
+
 		protected AnimationConfig AnimationConfig;
 		private float _forwardMovementDone;
 		public abstract float Time { get; protected set; }
@@ -29,6 +31,19 @@ namespace game.gameplay_core.characters.state_machine.states
 			Time += deltaTime;
 			if(AnimationConfig != null)
 			{
+				var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
+				if(rotationDisabled)
+				{
+					if(AnimationConfig.CheckFlagBegin(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedTime))
+					{
+						_context.MovementLogic.SetRotationLockedBy(RotationLockKey, true);
+					}
+				}
+				else if(AnimationConfig.CheckFlagEnded(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedTime))
+				{
+					_context.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
+				}
+
 				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedTime, out var soundName, out var hearDistance))
 				{
 					EmitNoise(hearDistance);

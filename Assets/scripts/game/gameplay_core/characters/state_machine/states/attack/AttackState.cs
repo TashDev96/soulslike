@@ -50,7 +50,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			base.Update(deltaTime);
 
-			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
@@ -138,7 +138,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			var deflectedByHandleCast = false;
-			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.StartHandleObstacleCast) ?? 0;
+			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.StartHandleObstacleCast) ?? 0;
 			if(_stage == AttackStage.Windup && NormalizedTime > handleCastTime)
 			{
 				var interpolatedHandleCaster = _weaponView.StartInterpolatedCast(WeaponColliderType.Handle);
@@ -164,7 +164,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				IsComplete = true;
 			}
 
-			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime))
 			{
 				_framesToUnlockWalk = FramesToUnlockWalkAfterStateUnlocked;
 			}
@@ -174,7 +174,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			void UpdateStaminaRegenLock()
 			{
-				var disableRegen = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled, NormalizedTime);
+				var disableRegen = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StaminaRegenDisabled, NormalizedTime);
 
 				if(!_staminaRegenDisabled)
 				{
@@ -212,7 +212,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			//_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
 
-			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.TimingExitToNextCombo, NormalizedTime))
 			{
 				_comboCounter++;
 				SetEnterParams(nextCommand is CharacterCommand.StrongAttack ? AttackType.Strong : AttackType.Regular);
@@ -239,7 +239,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				}
 			}
 
-			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
+			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime);
 		}
 
 		public void SetEnterParams(AttackType attackType)
@@ -273,14 +273,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			if(_attackType.IsRollAttack())
 			{
-				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromRoll) ?? 0;
+				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.TimingEnterFromRoll) ?? 0;
 				SetAttackInitialTime(startTime);
 			}
 			else
 			{
 				if(_comboCounter > 0)
 				{
-					var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromCombo) ?? 0;
+					var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.TimingEnterFromCombo) ?? 0;
 					SetAttackInitialTime(startTime);
 				}
 				else

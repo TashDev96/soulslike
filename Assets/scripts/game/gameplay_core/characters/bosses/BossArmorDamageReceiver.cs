@@ -27,6 +27,11 @@ namespace game.gameplay_core.characters.bosses
 		public override void ApplyDamage(DamageInfo damageInfo)
 		{
 			var damageToArmor = damageInfo.DamageAmount * _damageMultiplier;
+			if(damageToArmor <= 0)
+			{
+				return;
+			}
+
 			_armorAmount -= damageToArmor;
 			if(_armorAmount > 0)
 			{

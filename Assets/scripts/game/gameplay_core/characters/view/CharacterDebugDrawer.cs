@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters.view
 			var line = _graphDrawer.AddLine(_attackIndex.ToString());
 
 			float start = 0, end = 0;
-			currentAttackConfig.AnimationConfig.GetEventRange(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, out start, out end);
+			currentAttackConfig.AnimationConfig.GetEventRange(AnimationFlags.TimingExitToNextCombo, out start, out end);
 
 			line.AddRange(new[]
 			{
