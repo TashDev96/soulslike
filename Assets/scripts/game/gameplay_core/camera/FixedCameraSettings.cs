@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +16,7 @@ namespace game.gameplay_core.camera
 
 		private void Awake()
 		{
-			_zones = GameObject.FindObjectsByType<FixedCameraZone>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
+			_zones = FindObjectsByType<FixedCameraZone>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
 		}
 	}
 }

@@ -67,10 +67,10 @@ namespace game.gameplay_core.camera
 				switch(_context.CameraSettings.Mode)
 				{
 					case IsometricCameraSettings.PerspectiveMode.Orthographic:
-						_context.Camera.Value.orthographicSize = settings.OrthoSize  * curve;
+						_context.Camera.Value.orthographicSize = settings.OrthoSize * curve;
 						break;
 					case IsometricCameraSettings.PerspectiveMode.Perspective:
-						_context.Camera.Value.fieldOfView = settings.FOV  * curve;
+						_context.Camera.Value.fieldOfView = settings.FOV * curve;
 						break;
 				}
 			}

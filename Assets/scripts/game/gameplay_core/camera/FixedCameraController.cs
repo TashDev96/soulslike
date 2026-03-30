@@ -67,6 +67,7 @@ namespace game.gameplay_core.camera
 					var targetRot = GetTargetRotationForZone(_currentZone, playerPosition, targetPos);
 					cameraTransform.position = targetPos;
 					cameraTransform.rotation = targetRot;
+
 					//StartTransitionToZone(cameraTransform.position, cameraTransform.rotation, _currentZone, playerPosition);
 				}
 				return;

@@ -101,8 +101,6 @@ namespace game.gameplay_core.ui
 					_blinkCoroutine = StartCoroutine(BlinkCoroutine());
 				}
 			}
-			
-			
 		}
 
 		private void HandleRecoverableValueChanged(float value)

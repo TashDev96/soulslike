@@ -30,7 +30,7 @@ namespace game.gameplay_core.camera
 
 		private void OnValidate()
 		{
-			if(this.Trigger == null)
+			if(Trigger == null)
 			{
 				Trigger = GetComponentInChildren<BoxCollider>();
 			}

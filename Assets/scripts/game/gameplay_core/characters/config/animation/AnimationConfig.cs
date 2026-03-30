@@ -61,7 +61,7 @@ namespace game.gameplay_core.characters.config.animation
 			}
 			return false;
 		}
-		
+
 		public bool CheckFlagEnded(AnimationFlags flag, float startTime, float endTime)
 		{
 			foreach(var evt in FlagEvents)
