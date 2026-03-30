@@ -287,6 +287,15 @@ namespace game.gameplay_core.characters
 			SetWeapon(EquipmentSlotType.RightHand, InventoryLogic.GetEquipment(EquipmentSlotType.RightHand));
 		}
 
+		private void Awake()
+		{
+			if(Application.isPlaying)
+			{
+				//destroy weapon views added while editing animations
+				ArmSockets[EquipmentSlotType.RightHand]?.DestroyAllChildren();
+			}
+		}
+
 		[Button]
 		public void GenerateUniqueId()
 		{
