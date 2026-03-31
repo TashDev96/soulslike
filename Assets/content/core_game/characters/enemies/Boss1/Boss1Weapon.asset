@@ -15,10 +15,10 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Description>k__BackingField: 
   <EquipmentSlotType>k__BackingField: 1
-  <WeaponPrefabName>k__BackingField: DebugWeapon
+  <WeaponPrefabName>k__BackingField: Boss_1_WeaponView
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: DebugWeapon
+      WeaponForPreview: Boss_1_WeaponView
       Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
       Speed: 1
       FlagEvents:
@@ -129,7 +129,7 @@ MonoBehaviour:
     <Range>k__BackingField: 4
   <StrongAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: DebugWeapon
+      WeaponForPreview: Boss_1_WeaponView
       Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
       Speed: 1
       FlagEvents:
