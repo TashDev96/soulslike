@@ -15,10 +15,7 @@ namespace game.gameplay_core.damage_system
 	{
 		[field: SerializeField]
 		public AnimationConfig AnimationConfig { get; private set; } = new();
-
-		[field: SerializeField]
-		public ClipTransition Animation { get; private set; }
-
+		
 		[field: SerializeField]
 		public bool IsRangedAttack { get; private set; }
 
@@ -38,7 +35,7 @@ namespace game.gameplay_core.damage_system
 		public int AttackDeflectionRatingBonus { get; private set; }
 
 		[ShowInInspector]
-		public float Duration => Animation.Clip ? Animation.Clip.length / Animation.Speed : 0.1f;
+		public float Duration => AnimationConfig.Clip ? AnimationConfig.Clip.length / AnimationConfig.Speed : 1f;
 
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }

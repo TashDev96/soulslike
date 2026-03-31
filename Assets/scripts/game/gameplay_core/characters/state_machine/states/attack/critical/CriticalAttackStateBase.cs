@@ -48,7 +48,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 				});
 			}
 
-			_context.Animator.Play(_attackConfig.Animation, 0.1f, FadeMode.FromStart);
+			_context.Animator.Play(_attackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			var camera = LocationStaticContext.Instance.CameraController;
 			var lockedFlag = AnimationConfig.GetFlag(AnimationFlags.StateLocked);

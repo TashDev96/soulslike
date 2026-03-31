@@ -269,7 +269,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			if(_attackType.IsRollAttack())
 			{
