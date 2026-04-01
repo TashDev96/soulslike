@@ -19,6 +19,8 @@ MonoBehaviour:
       Speed: 1
       FlagEvents: []
       HitEvents: []
+      SoundEvents: []
+      CameraShakeEvents: []
       LayerNames:
       - Default
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
@@ -70,7 +72,6 @@ MonoBehaviour:
   <RipostedAnimation>k__BackingField: {fileID: 7400000, guid: 2c5fcd12c60c44d4ca38e00ca98c9f0f, type: 2}
   <DeathAnimation>k__BackingField: {fileID: 7400000, guid: 11669775ec6454cfba8de2c91f147eaa, type: 2}
   <FallAnimation>k__BackingField: {fileID: 0}
-  <WalkAnimation>k__BackingField: {fileID: 7400000, guid: 765b4fc7e775c43649ff4ab445d0ffc3, type: 2}
   <RunAnimation>k__BackingField: {fileID: 7400000, guid: f20ed00c7ce344848b522e5dcf56b325, type: 2}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.5
@@ -103,6 +104,16 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    <WalkAnimation>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 765b4fc7e775c43649ff4ab445d0ffc3, type: 2}
+      Speed: 1
+      FlagEvents: []
+      HitEvents: []
+      SoundEvents: []
+      CameraShakeEvents: []
+      LayerNames:
+      - Default
   <BaseStats>k__BackingField:
     HpMax: 4
     StaminaMax: 60

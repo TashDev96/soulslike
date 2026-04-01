@@ -73,6 +73,14 @@ MonoBehaviour:
     Considerations:
     - rid: 8163169196350373992
     - rid: 8163169418539172003
+    HasInertia: 0
+    InertiaDuration: 0
+    InertiaCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 1, g: 0.19999999, b: 0.19999999, a: 1}
   - Id: Heal
     Type: 8
@@ -80,6 +88,14 @@ MonoBehaviour:
     Distance: 0
     Considerations:
     - rid: 8163169196350373995
+    HasInertia: 0
+    InertiaDuration: 0
+    InertiaCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 0.84, g: 1, b: 0.19999999, a: 1}
   - Id: Get Into Attack Distance
     Type: 6
@@ -88,6 +104,14 @@ MonoBehaviour:
     Considerations:
     - rid: 8163169196350373998
     - rid: 8163169418539171999
+    HasInertia: 0
+    InertiaDuration: 0
+    InertiaCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 0.19999999, g: 1, b: 0.52000004, a: 1}
   - Id: Keep Safe Distance
     Type: 5
@@ -96,6 +120,14 @@ MonoBehaviour:
     Considerations:
     - rid: 8163169196350374001
     - rid: 8163169418539171929
+    HasInertia: 0
+    InertiaDuration: 0
+    InertiaCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 0.19999999, g: 0.51999986, b: 1, a: 1}
   - Id: WaitBlock
     Type: 9
@@ -105,6 +137,14 @@ MonoBehaviour:
     - rid: 8163169418539171992
     - rid: 8163169418539171995
     - rid: 8163169418539172010
+    HasInertia: 0
+    InertiaDuration: 0
+    InertiaCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 0.84000015, g: 0.19999999, b: 1, a: 1}
   DebugString: "\ngoal:Attack -1 \nHeal -1 \nGet Into Attack Distance 1 \nKeep Safe
     Distance 0.86478 \nWaitBlock 0.2146273 \n"

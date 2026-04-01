@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: b011c7077da0981468e9c8e98d8d4472
   m_SerializeEntries:
+  - m_GUID: 0375b597253b2439b83ee0178b707e7f
+    m_Address: Boss_1_WeaponView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ebb6f5a860463c4fa01ca3ca1ab0130
     m_Address: PlayerMaterial
     m_ReadOnly: 0

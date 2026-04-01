@@ -592,7 +592,7 @@ namespace game.editor
 			var selectedPackedId = _selectedEventMap[path];
 
 			// Key handling
-			if(e.type == EventType.KeyDown && (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace))
+			if(e.type == EventType.KeyDown && (e.keyCode == KeyCode.Delete || (e.keyCode == KeyCode.Backspace && e.shift)))
 			{
 				if(selectedPackedId != -1)
 				{

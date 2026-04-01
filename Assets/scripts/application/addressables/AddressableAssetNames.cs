@@ -1,5 +1,4 @@
 // This file is auto-generated. Do not modify.
-
 public static class AddressableAssetNames
 {
 	public const string PlayerMaterial = "PlayerMaterial";
@@ -23,9 +22,9 @@ public static class AddressableAssetNames
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
 	public const string Boss1Weapon = "Boss1Weapon";
+	public const string Boss_1_WeaponView = "Boss_1_WeaponView";
 
-	public static readonly string[] ItemConfigs =
-	{
+	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
 		"EmptyHandConfig",
 		"DebugWeaponConfig",
@@ -37,13 +36,11 @@ public static class AddressableAssetNames
 		"Boss1Weapon"
 	};
 
-	public static readonly string[] ProjectilePrefabs =
-	{
+	public static readonly string[] ProjectilePrefabs = new[] {
 		"DebugArrow"
 	};
 
-	public static readonly string[] WeaponConfigs =
-	{
+	public static readonly string[] WeaponConfigs = new[] {
 		"ZombieSwordConfig",
 		"EmptyHandConfig",
 		"DebugWeaponConfig",
@@ -54,13 +51,13 @@ public static class AddressableAssetNames
 		"Boss1Weapon"
 	};
 
-	public static readonly string[] WeaponPrefabNames =
-	{
+	public static readonly string[] WeaponPrefabNames = new[] {
 		"EmptyHand",
 		"DebugWeapon",
 		"DebugBow",
 		"SimpleSword",
 		"ZombieSword",
-		"DebugShield"
+		"DebugShield",
+		"Boss_1_WeaponView"
 	};
 }

@@ -1,3 +1,4 @@
+using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.config.animation;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private float _forwardMovementDone;
 		public abstract float Time { get; protected set; }
 		protected float NormalizedTime => Time / Duration;
+		protected float NormalizedAnimationTime => Time % Duration / Duration;
 		protected float TimeLeft => Duration - Time;
 		protected abstract float Duration { get; set; }
 
@@ -27,28 +29,32 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			var previousNormalizedTime = NormalizedTime;
+			if(Duration == 0)
+			{
+				throw new Exception($"duration not set for {GetType().Name} of {_context.SelfLink.transform.GetFullPathInScene()}");
+			}
+			var previousNormalizedTime = NormalizedAnimationTime;
 			Time += deltaTime;
 			if(AnimationConfig != null)
 			{
-				var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
+				var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
 				if(rotationDisabled)
 				{
-					if(AnimationConfig.CheckFlagBegin(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedTime))
+					if(AnimationConfig.CheckFlagBegin(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
 					{
 						_context.MovementLogic.SetRotationLockedBy(RotationLockKey, true);
 					}
 				}
-				else if(AnimationConfig.CheckFlagEnded(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedTime))
+				else if(AnimationConfig.CheckFlagEnded(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
 				{
 					_context.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
 				}
 
-				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedTime, out var soundName, out var hearDistance))
+				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedAnimationTime, out var soundName, out var hearDistance))
 				{
 					EmitNoise(hearDistance);
 				}
-				if(AnimationConfig.CheckCameraShakeBegin(previousNormalizedTime, NormalizedTime, out var duration, out var strength, out var vertMultiplier, out var horMultiplier))
+				if(AnimationConfig.CheckCameraShakeBegin(previousNormalizedTime, NormalizedAnimationTime, out var duration, out var strength, out var vertMultiplier, out var horMultiplier))
 				{
 					LocationStaticContext.Instance.CameraController.Shake(duration, strength, vertMultiplier, horMultiplier);
 				}
@@ -79,7 +85,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected bool CheckTiming(Vector2 timing)
 		{
-			return timing.Contains(NormalizedTime);
+			return timing.Contains(NormalizedAnimationTime);
 		}
 	}
 }
