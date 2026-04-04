@@ -182,12 +182,16 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
-				.Append(", stable: ").Append(CharacterCollider.HasStableGround)
-				.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
+			sb.Append("Rotation Locked").Append(_rotationLockReasons.Count).AppendLine();
+			var target = _context.LockOnLogic.LockOnTarget.Value;
+			sb.Append("Target Locked").Append(target.name).AppendLine();
 
-			sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
-			sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
+			//sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
+			//	.Append(", stable: ").Append(CharacterCollider.HasStableGround)
+			//	.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
+//
+			//sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
+			//sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
 		}
 
 		public void SetRotationAndMovementLocked(bool value)

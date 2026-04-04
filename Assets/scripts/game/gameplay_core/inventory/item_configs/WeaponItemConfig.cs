@@ -21,7 +21,10 @@ namespace game.gameplay_core.inventory.item_configs
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] StrongAttacks { get; private set; }
+		[field: SerializeField]
+		public AttackConfig[] SpecialAttacks { get; private set; }
 
+		
 		[field: FoldoutGroup("Roll")]
 		[field: SerializeField]
 		public AttackConfig RollAttack { get; private set; }

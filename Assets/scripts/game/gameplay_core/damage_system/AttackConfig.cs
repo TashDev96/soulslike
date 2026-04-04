@@ -51,7 +51,6 @@ namespace game.gameplay_core.damage_system
 		{
 			var weaponKey = GetWeaponPrefabKeyFromSelection();
 
-			//TODO: use weapon in animationpewview
 			AnimationConfig.WeaponForPreview = weaponKey;
 		}
 

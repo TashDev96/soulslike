@@ -118,7 +118,7 @@ MonoBehaviour:
         LayerIndex: 0
         IsSingleFrame: 0
         ClipDuration: 0.93333334
-        Strength: 0.3
+        Strength: 0.38
         VertMultiplier: 1
         HorMultiplier: 0
       LayerNames:

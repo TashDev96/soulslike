@@ -6,6 +6,7 @@ using System.Reflection;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ namespace game.editor
 			var soundEventsProp = property.FindPropertyRelative("SoundEvents");
 			var cameraShakeEventsProp = property.FindPropertyRelative("CameraShakeEvents");
 			var layerNamesProp = property.FindPropertyRelative("LayerNames");
+			var weaponPreview =  property.FindPropertyRelative("WeaponForPreview");
 
 			_config = GetValue(property) as AnimationConfig;
 
@@ -75,6 +77,9 @@ namespace game.editor
 				EditorGUI.EndProperty();
 				return;
 			}
+
+			
+			EditorGUILayout.PropertyField(weaponPreview);
 
 			var duration = clip.length / speed;
 			var maxFrame = Mathf.RoundToInt(duration * AnimationConfig.EditorPrecisionFps);

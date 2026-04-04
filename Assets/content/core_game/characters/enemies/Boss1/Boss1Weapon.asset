@@ -87,15 +87,6 @@ MonoBehaviour:
       - Markers
       - Hits
       - New Layer
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -202,15 +193,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
-      _Speed: NaN
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -278,6 +260,200 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <Range>k__BackingField: 1
+  <SpecialAttacks>k__BackingField:
+  - <AnimationConfig>k__BackingField:
+      WeaponForPreview: Boss_1_WeaponView
+      Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.27222222
+        EndTimeNormalized: 0.86210185
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.22777778
+        EndTimeNormalized: 0.7722222
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.86311674
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.9
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.0055555557
+        EndTimeNormalized: 0.006589682
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 4.8333335
+        Flag: 7
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.45555556
+        EndTimeNormalized: 0.48055556
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 0
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
+      CameraShakeEvents:
+      - Name: New CameraShake
+        StartTimeNormalized: 0.45556125
+        EndTimeNormalized: 0.551207
+        LayerIndex: 6
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Strength: 1
+        VertMultiplier: 1
+        HorMultiplier: 1
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
+      - New Layer
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <BaseDamage>k__BackingField: 1
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <Range>k__BackingField: 4
+  - <AnimationConfig>k__BackingField:
+      WeaponForPreview: Boss_1_WeaponView
+      Clip: {fileID: 7400000, guid: 6974265dc099c480795114a27b8042bc, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.27222222
+        EndTimeNormalized: 0.86210185
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.22777778
+        EndTimeNormalized: 0.7722222
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.86311674
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.9
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.0055555557
+        EndTimeNormalized: 0.008258259
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 4.8333335
+        Flag: 7
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.46285284
+        EndTimeNormalized: 0.5319069
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 1.85
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+      SoundEvents: []
+      CameraShakeEvents: []
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
+      - New Layer
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <BaseDamage>k__BackingField: 1
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <Range>k__BackingField: 4
   <RollAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -353,15 +529,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -450,15 +617,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -547,15 +705,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: 0.1125
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -671,15 +820,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -811,15 +951,6 @@ MonoBehaviour:
       - StateLocked
       - Combo
       - Markers
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 0}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -909,15 +1040,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -1026,15 +1148,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0

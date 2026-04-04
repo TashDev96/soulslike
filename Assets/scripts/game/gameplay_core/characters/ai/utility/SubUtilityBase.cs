@@ -315,6 +315,10 @@ namespace game.gameplay_core.characters.ai.utility
 #if UNITY_EDITOR
 		private bool ValidateActions(List<UtilityAction> actions, ref string errorMessage)
 		{
+			if(actions == null)
+			{
+				return false;
+			}
 			if(actions.HasDuplicates(a => a.Id, out var duplicateId))
 			{
 				errorMessage = $"duplicate id {duplicateId}";
@@ -326,6 +330,10 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private bool ValidateGoals(List<GoalsChain> goals, ref string errorMessage)
 		{
+			if(goals == null)
+			{
+				return false;
+			}
 			if(goals.HasDuplicates(a => a.Id, out var duplicateId))
 			{
 				errorMessage = $"duplicate id {duplicateId}";

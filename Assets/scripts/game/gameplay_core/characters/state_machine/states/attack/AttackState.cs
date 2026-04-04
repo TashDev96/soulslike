@@ -234,6 +234,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				if(_framesToUnlockWalk > 0)
 				{
+					//TODO: move to update as check can be called multiple times per frame?
+					//TODO or keep it, perhaps can be interesting bug to be abused by pro players
 					_framesToUnlockWalk--;
 					return false;
 				}
@@ -242,18 +244,28 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime);
 		}
 
+		
 		public void SetEnterParams(AttackType attackType)
 		{
 			_attackType = attackType;
 		}
+		
+		public void SetEnterParams(AttackType attackType, int attackIndex)
+		{
+			_attackType = attackType;
+			_currentAttackIndex = attackIndex;
+		}
 
 		private void LaunchAttack()
 		{
+			
+			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
+			
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 
 			AnimationConfig = _currentAttackConfig.AnimationConfig;
 
-			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
+			
 			Duration = _currentAttackConfig.Duration;
 
 			_stage = AttackStage.Windup;
@@ -405,6 +417,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					newAttackIndex = 0;
 					attackConfig = _weaponView.Config.RunAttackStrong;
 					return;
+				
+				case AttackType.Special:
+					newAttackIndex = _currentAttackIndex;
+					//TODO: why we are getting config from view ???
+					attackConfig = _weaponView.Config.SpecialAttacks[newAttackIndex];
+					break;
 
 				default:
 					throw new ArgumentOutOfRangeException();

@@ -252,6 +252,10 @@ namespace game.gameplay_core.characters.state_machine
 						_attackState.SetEnterParams(_currentState.Value is RunState ? AttackType.RunAttackStrong : AttackType.Strong);
 						SetState(_attackState);
 						break;
+					case CharacterCommand.AttackByIndex:
+						_attackState.SetEnterParams(AttackType.Special, _context.InputData.SpecialAttackIndex);
+						SetState(_attackState);
+						break;
 					case CharacterCommand.StayBlock:
 						SetState(_stayBlockState);
 						break;
@@ -509,5 +513,7 @@ namespace game.gameplay_core.characters.state_machine
 			Debug.DrawLine(victimPos, victimPos + victimConeLeft * debugDistance, debugColor, debugDuration);
 			Debug.DrawLine(victimPos, victimPos + victimConeRight * debugDistance, debugColor, debugDuration);
 		}
+
+		 
 	}
 }
