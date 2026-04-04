@@ -17,16 +17,6 @@ namespace game.gameplay_core.characters.ai.utility
 		[SerializeField]
 		private SerializableDictionary<int, List<int>> _attackSequencesSecondPhase;
 
-
-		private struct RuntimeData
-		{
-			public int Phase;
-			public int AttackSequenceKey;
-			public int AttackIndex;
-			public CharacterDomain Target;
-			public bool IsAttackInProcess;
-		}
-
 		private RuntimeData _data;
 
 		public override void Think(float deltaTime)
@@ -71,6 +61,12 @@ namespace game.gameplay_core.characters.ai.utility
 			return 0;
 		}
 
+		public override void Reset()
+		{
+			base.Reset();
+			_data = default;
+		}
+
 		private void ThinkFirstPhase()
 		{
 			if(_data.IsAttackInProcess)
@@ -88,8 +84,7 @@ namespace game.gameplay_core.characters.ai.utility
 			var nextAttackConfig = weaponConfig.SpecialAttacks[nextAttackIndex];
 
 			var range = nextAttackConfig.Range;
-			
-			
+
 			var vecToTarget = _data.Target.transform.position - _context.CharacterContext.Transform.Position;
 			var distanceToTarget = vecToTarget.magnitude;
 
@@ -114,10 +109,13 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 		}
 
-		public override void Reset()
+		private struct RuntimeData
 		{
-			base.Reset();
-			_data = default;
+			public int Phase;
+			public int AttackSequenceKey;
+			public int AttackIndex;
+			public CharacterDomain Target;
+			public bool IsAttackInProcess;
 		}
 	}
 }

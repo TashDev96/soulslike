@@ -10,7 +10,7 @@ namespace game.gameplay_core.characters.ai.navigation
 		private const float ArrivalThreshold = 0.2f;
 
 		public Vector3 TargetPosition;
-		private readonly ReadOnlyTransform _characterTransform;
+		private readonly CharacterTransform _characterTransform;
 
 		private readonly NavMeshPath _navMeshPath;
 
@@ -18,7 +18,7 @@ namespace game.gameplay_core.characters.ai.navigation
 
 		public PathWrapper Path { get; }
 
-		public AiNavigationModule(ReadOnlyTransform characterTransform)
+		public AiNavigationModule(CharacterTransform characterTransform)
 		{
 			Path = new PathWrapper();
 			_navMeshPath = new NavMeshPath();

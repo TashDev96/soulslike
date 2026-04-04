@@ -38,7 +38,6 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _acceleratedMovement;
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
-		private Transform _transform;
 		public bool RotationIsControlledByCamera { get; set; }
 		public Vector3 LastUpdateVelocity { get; private set; }
 
@@ -46,10 +45,9 @@ namespace game.gameplay_core.characters.logic
 
 		private Vector3 CurrentPosition => _context.Transform.Position;
 
-		public void SetContext(CharacterContext context, Transform transform)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			_transform = transform;
 			_context.IsDead.OnChanged += HandleDeath;
 			_prevPos = CurrentPosition;
 			_virtualForward = _context.Transform.Forward;
@@ -141,7 +139,7 @@ namespace game.gameplay_core.characters.logic
 			var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
-			_transform.rotation *= rotationStep;
+			_context.Transform.Rotation *= rotationStep;
 			if(!_context.LockOnLogic.LockOnTarget.HasValue)
 			{
 				_virtualForward = _context.Transform.Forward;
@@ -182,9 +180,10 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.Append("Rotation Locked").Append(_rotationLockReasons.Count).AppendLine();
+			sb.Append("Rotation Locked: ").Append(_rotationLockReasons.Count).AppendLine();
 			var target = _context.LockOnLogic.LockOnTarget.Value;
-			sb.Append("Target Locked").Append(target.name).AppendLine();
+
+			sb.Append("Target Locked: ").Append(target != null ? target.name : "None").AppendLine();
 
 			//sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
 			//	.Append(", stable: ").Append(CharacterCollider.HasStableGround)
@@ -213,8 +212,8 @@ namespace game.gameplay_core.characters.logic
 
 		public void Teleport(TransformCache respawnTransform)
 		{
-			_context.SelfLink.transform.position = respawnTransform.Position;
-			_context.SelfLink.transform.eulerAngles = respawnTransform.EulerAngles;
+			_context.Transform.SetPosition(respawnTransform.Position);
+			_context.Transform.SetRotation(respawnTransform.EulerAngles);
 		}
 
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)

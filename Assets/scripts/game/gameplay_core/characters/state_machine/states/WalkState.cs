@@ -1,5 +1,4 @@
 using game.gameplay_core.characters.commands;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
@@ -9,14 +8,14 @@ namespace game.gameplay_core.characters.state_machine.states
 		private const float NoiseEmitPeriod = 0.33f;
 		private float _noiseTimer;
 
+		public override float Time { get; protected set; }
+
+		protected override float Duration { get; set; }
+
 		public WalkState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
 		}
-
-		public override float Time { get; protected set; }
-
-		protected override float Duration { get; set; }
 
 		public override void OnEnter()
 		{

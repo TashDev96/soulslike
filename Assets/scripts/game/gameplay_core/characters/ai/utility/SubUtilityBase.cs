@@ -42,7 +42,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 		protected UtilityBrainContext _context;
 		protected UtilityAction _lastAction;
-		private ReadOnlyTransform _transform;
+		private CharacterTransform _transform;
 
 		private bool _hasMovedByPathThisFrame;
 		private bool _needRecalculatePath;

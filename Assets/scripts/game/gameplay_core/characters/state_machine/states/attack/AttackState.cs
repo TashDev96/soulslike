@@ -51,6 +51,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			base.Update(deltaTime);
 
 			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
+			rotationDisabled |= _context.LockOnLogic.IsLockedOn;
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
@@ -244,12 +245,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime);
 		}
 
-		
 		public void SetEnterParams(AttackType attackType)
 		{
 			_attackType = attackType;
 		}
-		
+
 		public void SetEnterParams(AttackType attackType, int attackIndex)
 		{
 			_attackType = attackType;
@@ -258,14 +258,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void LaunchAttack()
 		{
-			
 			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
-			
+
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 
 			AnimationConfig = _currentAttackConfig.AnimationConfig;
 
-			
 			Duration = _currentAttackConfig.Duration;
 
 			_stage = AttackStage.Windup;
@@ -417,9 +415,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					newAttackIndex = 0;
 					attackConfig = _weaponView.Config.RunAttackStrong;
 					return;
-				
+
 				case AttackType.Special:
 					newAttackIndex = _currentAttackIndex;
+
 					//TODO: why we are getting config from view ???
 					attackConfig = _weaponView.Config.SpecialAttacks[newAttackIndex];
 					break;

@@ -1,5 +1,4 @@
 using System;
-using Animancer;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.inventory.item_configs;
 using Sirenix.OdinInspector;
@@ -15,7 +14,7 @@ namespace game.gameplay_core.damage_system
 	{
 		[field: SerializeField]
 		public AnimationConfig AnimationConfig { get; private set; } = new();
-		
+
 		[field: SerializeField]
 		public bool IsRangedAttack { get; private set; }
 

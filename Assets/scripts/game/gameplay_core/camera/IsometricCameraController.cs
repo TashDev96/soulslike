@@ -122,7 +122,7 @@ namespace game.gameplay_core.camera
 			return false;
 		}
 
-		public void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration)
+		public void ShowCriticalAttackAnimation(CharacterTransform contextTransform, float expectedDuration)
 		{
 			_criticalAttackAnimationTimeLeft = expectedDuration;
 			_criticalAttackAnimationDuration = expectedDuration;

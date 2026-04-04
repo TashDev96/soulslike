@@ -26,7 +26,6 @@ namespace game.gameplay_core.characters.view
 		private bool _initialized;
 		private CharacterContext _context;
 		private ICharacterBrain _brain;
-		private Transform _transform;
 		private CharacterStateMachine _stateMachine;
 		private GUIStyle _textStyle;
 
@@ -35,12 +34,12 @@ namespace game.gameplay_core.characters.view
 		private bool _comboTriggered;
 
 		private StringBuilder _debugStringBuilder = new();
+		private string _lastTransformLog;
 		private float AttackGraphY => _attackIndex / 10f;
 
 		[Conditional("UNITY_EDITOR")]
-		public void Initialize(Transform transform, CharacterContext context, CharacterStateMachine stateMachine, ICharacterBrain brain)
+		public void Initialize(CharacterContext context, CharacterStateMachine stateMachine, ICharacterBrain brain)
 		{
-			_transform = transform;
 			_context = context;
 			_stateMachine = stateMachine;
 			_brain = brain;
@@ -91,6 +90,16 @@ namespace game.gameplay_core.characters.view
 			}
 		}
 
+		public void CustomUpdate(float deltaTime)
+		{
+#if UNITY_EDITOR
+			if(DrawMovementInfo)
+			{
+				_lastTransformLog = $"frame: {Time.frameCount}\n" + _context.Transform.GetLog();
+			}
+#endif
+		}
+
 #if UNITY_EDITOR
 
 		[OnInspectorGUI]
@@ -132,13 +141,14 @@ namespace game.gameplay_core.characters.view
 			if(DrawMovementInfo)
 			{
 				_context.MovementLogic.GetDebugString(sb);
+				sb.Append(_lastTransformLog);
 			}
 
-			Handles.Label(_transform.position + Vector3.up * 3f, sb.ToString(), _textStyle);
+			Handles.Label(_context.Transform.Position + Vector3.up * 3f, sb.ToString(), _textStyle);
 
 			if(DrawAttacksInfo)
 			{
-				_graphDrawer.Draw(_transform.position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_transform.position)));
+				_graphDrawer.Draw(_context.Transform.Position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_context.Transform.Position)));
 
 				if(_stateMachine.CurrentState.Value is AttackState attackState)
 				{
