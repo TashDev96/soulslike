@@ -35,7 +35,7 @@ namespace game.gameplay_core.characters.config.animation
 			return (percent * Duration * EditorPrecisionFps).RoundToInt();
 		}
 
-		public bool HasFlag(AnimationFlagEvent.AnimationFlags flag, float timeNormalized)
+		public bool HasFlag(AnimationFlags flag, float timeNormalized)
 		{
 			foreach(var evt in FlagEvents)
 			{
@@ -50,11 +50,23 @@ namespace game.gameplay_core.characters.config.animation
 			return false;
 		}
 
-		public bool CheckFlagBegin(AnimationFlagEvent.AnimationFlags flag, float startTime, float endTime)
+		public bool CheckFlagBegin(AnimationFlags flag, float startTime, float endTime)
 		{
 			foreach(var evt in FlagEvents)
 			{
 				if(evt.Flag == flag && evt.StartTimeNormalized >= startTime && evt.StartTimeNormalized <= endTime)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public bool CheckFlagEnded(AnimationFlags flag, float startTime, float endTime)
+		{
+			foreach(var evt in FlagEvents)
+			{
+				if(evt.Flag == flag && evt.EndTimeNormalized > startTime && evt.EndTimeNormalized <= endTime)
 				{
 					return true;
 				}
@@ -98,7 +110,7 @@ namespace game.gameplay_core.characters.config.animation
 			return false;
 		}
 
-		public bool GetFlagTime(AnimationFlagEvent.AnimationFlags flag, float timeNormalized, out float start, out float end)
+		public bool GetFlagTime(AnimationFlags flag, float timeNormalized, out float start, out float end)
 		{
 			foreach(var evt in FlagEvents)
 			{
@@ -117,7 +129,7 @@ namespace game.gameplay_core.characters.config.animation
 			return false;
 		}
 
-		public bool GetEventRange(AnimationFlagEvent.AnimationFlags flag, out float start, out float end)
+		public bool GetEventRange(AnimationFlags flag, out float start, out float end)
 		{
 			foreach(var evt in FlagEvents)
 			{
@@ -133,7 +145,7 @@ namespace game.gameplay_core.characters.config.animation
 			return false;
 		}
 
-		public float? GetMarkerTime(AnimationFlagEvent.AnimationFlags flag)
+		public float? GetMarkerTime(AnimationFlags flag)
 		{
 			foreach(var evt in FlagEvents)
 			{
@@ -150,7 +162,7 @@ namespace game.gameplay_core.characters.config.animation
 			return HitEvents;
 		}
 
-		public AnimationFlagEvent GetFlag(AnimationFlagEvent.AnimationFlags flag)
+		public AnimationFlagEvent GetFlag(AnimationFlags flag)
 		{
 			foreach(var animationFlagEvent in FlagEvents)
 			{

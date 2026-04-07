@@ -15,7 +15,7 @@ namespace game.gameplay_core.characters
 		private readonly CharacterContext _context;
 
 		public string Id => _context.CharacterId.Value;
-		public ReadOnlyTransform Transform => _context.Transform;
+		public CharacterTransform Transform => _context.Transform;
 		public LockOnPointView[] LockOnPoints => _context.LockOnPoints;
 		public bool IsDead => _context.IsDead.Value;
 		public Team Team => _context.Team.Value;

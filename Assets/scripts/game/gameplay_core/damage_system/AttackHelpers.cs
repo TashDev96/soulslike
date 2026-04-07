@@ -28,9 +28,15 @@ namespace game.gameplay_core.damage_system
 			{
 				var center = (point0 + point1) / 2;
 				var direction = hitCaster.SampleMoveDirection(center, false);
-
-				DebugDrawUtils.DrawArrow(center, center + direction, Color.red, 0.05f);
-
+				if(direction == default)
+				{
+					//TODO why it is default though? seems like a bug
+					return false;
+				}
+				if(drawDebug)
+				{
+					DebugDrawUtils.DrawArrow(center, center + direction, Color.red, 0.05f);
+				}
 				var offsetPoint0 = point0 - direction;
 				var offsetPoint1 = point1 - direction;
 				var count = Physics.CapsuleCastNonAlloc(offsetPoint0, offsetPoint1, radius, direction.normalized, HitResults, direction.magnitude, LayerMaskWalls);
@@ -45,10 +51,12 @@ namespace game.gameplay_core.damage_system
 					{
 						continue;
 					}
+
+#if UNITY_EDITOR
 					Debug.DrawLine(hitPoint, hitPoint + direction.normalized, Color.red, 3f);
 					Debug.DrawLine(hitPoint, hitPoint + (hitPoint - center).normalized, Color.green, 3f);
-
 					DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.blue, 1f);
+#endif
 					return true;
 				}
 			}

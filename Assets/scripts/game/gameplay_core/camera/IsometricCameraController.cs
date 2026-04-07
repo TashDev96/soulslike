@@ -122,7 +122,7 @@ namespace game.gameplay_core.camera
 			return false;
 		}
 
-		public void ShowCriticalAttackAnimation(ReadOnlyTransform contextTransform, float expectedDuration)
+		public void ShowCriticalAttackAnimation(CharacterTransform contextTransform, float expectedDuration)
 		{
 			_criticalAttackAnimationTimeLeft = expectedDuration;
 			_criticalAttackAnimationDuration = expectedDuration;
@@ -136,9 +136,9 @@ namespace game.gameplay_core.camera
 			var randomOffset = Random.value * 100f;
 			_shakeTweener = DOVirtual.Float(strength, 0f, duration, value =>
 			{
-				var t = Time.time * 20f + randomOffset;
-				_shakeOffset.x = (Mathf.PerlinNoise(t, 0f) - 0.5f) * 2f * value * horMultiplier;
-				_shakeOffset.y = (Mathf.PerlinNoise(0f, t) - 0.5f) * 2f * value * vertMultiplier;
+				var seed = strength < 0.5f ? value * 20f : Time.time * 20f + randomOffset;
+				_shakeOffset.x = (Mathf.PerlinNoise(seed, 0f) - 0.5f) * 2f * value * horMultiplier;
+				_shakeOffset.y = (Mathf.PerlinNoise(0f, seed) - 0.5f) * 2f * value * vertMultiplier;
 			}).OnComplete(() => _shakeOffset = Vector3.zero);
 		}
 

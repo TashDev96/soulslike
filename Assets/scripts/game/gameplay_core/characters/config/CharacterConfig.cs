@@ -26,8 +26,6 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public AnimationClip FallAnimation { get; set; }
 		[field: SerializeField]
-		public AnimationClip WalkAnimation { get; set; }
-		[field: SerializeField]
 		public AnimationClip RunAnimation { get; set; }
 
 		[field: SerializeField]

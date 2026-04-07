@@ -79,7 +79,6 @@ namespace game.gameplay_core.characters.ai.utility
 				 
 				//Debug.DrawLine(_context.CharacterContext.Transform.Position, _lastTarget.Position, Color.red);
 				return result;
-
 			}
 
 			return 0;

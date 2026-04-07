@@ -1,4 +1,5 @@
 using System;
+using game.gameplay_core.characters.config.animation;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.config
@@ -24,5 +25,8 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public AnimationCurve WalkAccelerationCurve { get; private set; } = new(new Keyframe(0, 0), new Keyframe(0.33f, 1));
+
+		[field: SerializeField]
+		public AnimationConfig WalkAnimation { get; private set; }
 	}
 }

@@ -26,8 +26,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 				return;
 			}
 
-			_target.transform.rotation = Quaternion.LookRotation((_target.transform.position - _context.Transform.Position).SetY(0));
-			_target.transform.position = _context.Transform.Position + _target.transform.forward * 1.5f;
+			_target.Context.Transform.SetRotation(Quaternion.LookRotation((_target.transform.position - _context.Transform.Position).SetY(0)));
+			_target.Context.Transform.SetPosition(_context.Transform.Position + _target.transform.forward * 1.5f);
 			_target.CharacterStateMachine.LockInAnimation(_weaponView.Config.BackstabbedEnemyAnimation);
 		}
 	}

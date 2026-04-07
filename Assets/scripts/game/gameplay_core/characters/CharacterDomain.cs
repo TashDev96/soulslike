@@ -49,7 +49,7 @@ namespace game.gameplay_core.characters
 
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
-		private ReadOnlyTransform _transform;
+		private CharacterTransform _transform;
 
 		private HealthLogic _healthLogic;
 		private PoiseLogic _poiseLogic;
@@ -86,7 +86,7 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
-			_transform = new ReadOnlyTransform(transform);
+			_transform = new CharacterTransform(transform);
 
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
@@ -173,7 +173,7 @@ namespace game.gameplay_core.characters
 
 			_deathLogic = new DeathLogic(_context);
 
-			_movementLogic.SetContext(_context, transform);
+			_movementLogic.SetContext(_context);
 			_blockLogic.SetContext(_context);
 			_fallDamageLogic.SetContext(_context);
 			_staminaLogic.Initialize(_context);
@@ -236,7 +236,7 @@ namespace game.gameplay_core.characters
 			_characterBodyView.Initialize(_context.ApplyDamage);
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
-			_debugDrawer.Initialize(transform, _context, CharacterStateMachine, _brain);
+			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
 
 			_context.ApplyDamage.Subscribe(info =>
@@ -287,6 +287,15 @@ namespace game.gameplay_core.characters
 
 			SetWeapon(EquipmentSlotType.LeftHand, InventoryLogic.GetEquipment(EquipmentSlotType.LeftHand));
 			SetWeapon(EquipmentSlotType.RightHand, InventoryLogic.GetEquipment(EquipmentSlotType.RightHand));
+		}
+
+		private void Awake()
+		{
+			if(Application.isPlaying)
+			{
+				//destroy weapon views added while editing animations
+				ArmSockets[EquipmentSlotType.RightHand]?.DestroyAllChildren();
+			}
 		}
 
 		[Button]
@@ -426,6 +435,11 @@ namespace game.gameplay_core.characters
 
 				calculateInputLogic = false;
 			}
+
+#if UNITY_EDITOR
+			_debugDrawer.CustomUpdate(deltaTime);
+			_context.Transform.ClearLog();
+#endif
 		}
 
 #if UNITY_EDITOR

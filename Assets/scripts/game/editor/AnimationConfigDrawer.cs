@@ -6,6 +6,7 @@ using System.Reflection;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector.Editor;
+using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ namespace game.editor
 			var soundEventsProp = property.FindPropertyRelative("SoundEvents");
 			var cameraShakeEventsProp = property.FindPropertyRelative("CameraShakeEvents");
 			var layerNamesProp = property.FindPropertyRelative("LayerNames");
+			var weaponPreview =  property.FindPropertyRelative("WeaponForPreview");
 
 			_config = GetValue(property) as AnimationConfig;
 
@@ -75,6 +77,9 @@ namespace game.editor
 				EditorGUI.EndProperty();
 				return;
 			}
+
+			
+			EditorGUILayout.PropertyField(weaponPreview);
 
 			var duration = clip.length / speed;
 			var maxFrame = Mathf.RoundToInt(duration * AnimationConfig.EditorPrecisionFps);
@@ -370,19 +375,19 @@ namespace game.editor
 						menu.AddItem(new GUIContent("Exit To Next Combo"), false, () =>
 						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
-							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo;
+							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlags.TimingExitToNextCombo;
 							evt.serializedObject.ApplyModifiedProperties();
 						});
 						menu.AddItem(new GUIContent("Enter From Combo"), false, () =>
 						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
-							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingEnterFromCombo;
+							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlags.TimingEnterFromCombo;
 							evt.serializedObject.ApplyModifiedProperties();
 						});
 						menu.AddItem(new GUIContent("Enter From Roll"), false, () =>
 						{
 							var evt = AddEvent(flagEventsProp, layer, 0, 0.1f, typeof(AnimationFlagEvent), AnimationEventLayer.Combo);
-							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingEnterFromRoll;
+							evt.FindPropertyRelative("Flag").enumValueIndex = (int)AnimationFlags.TimingEnterFromRoll;
 							evt.serializedObject.ApplyModifiedProperties();
 						});
 						menu.ShowAsContext();
@@ -592,7 +597,7 @@ namespace game.editor
 			var selectedPackedId = _selectedEventMap[path];
 
 			// Key handling
-			if(e.type == EventType.KeyDown && (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace))
+			if(e.type == EventType.KeyDown && (e.keyCode == KeyCode.Delete || (e.keyCode == KeyCode.Backspace && e.shift)))
 			{
 				if(selectedPackedId != -1)
 				{
@@ -991,14 +996,14 @@ namespace game.editor
 				{
 					switch(layerCategory)
 					{
-						case AnimationEventLayer.RotationLocked: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.RotationLocked; break;
-						case AnimationEventLayer.StateLocked: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.StateLocked; break;
-						case AnimationEventLayer.StaminaRegenDisabled: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled; break;
-						case AnimationEventLayer.BodyAttack: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.BodyAttack; break;
-						case AnimationEventLayer.TimingExitToAttack: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingExitToAttack; break;
-						case AnimationEventLayer.Invulnerability: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.Invulnerability; break;
-						case AnimationEventLayer.Combo: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo; break;
-						case AnimationEventLayer.Markers: flagProp.enumValueIndex = (int)AnimationFlagEvent.AnimationFlags.StartHandleObstacleCast; break;
+						case AnimationEventLayer.RotationLocked: flagProp.enumValueIndex = (int)AnimationFlags.RotationLocked; break;
+						case AnimationEventLayer.StateLocked: flagProp.enumValueIndex = (int)AnimationFlags.StateLocked; break;
+						case AnimationEventLayer.StaminaRegenDisabled: flagProp.enumValueIndex = (int)AnimationFlags.StaminaRegenDisabled; break;
+						case AnimationEventLayer.BodyAttack: flagProp.enumValueIndex = (int)AnimationFlags.BodyAttack; break;
+						case AnimationEventLayer.TimingExitToAttack: flagProp.enumValueIndex = (int)AnimationFlags.TimingExitToAttack; break;
+						case AnimationEventLayer.Invulnerability: flagProp.enumValueIndex = (int)AnimationFlags.Invulnerability; break;
+						case AnimationEventLayer.Combo: flagProp.enumValueIndex = (int)AnimationFlags.TimingExitToNextCombo; break;
+						case AnimationEventLayer.Markers: flagProp.enumValueIndex = (int)AnimationFlags.StartHandleObstacleCast; break;
 					}
 				}
 			}

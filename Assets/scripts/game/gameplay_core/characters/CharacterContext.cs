@@ -31,7 +31,7 @@ namespace game.gameplay_core.characters
 		public HealthLogic HealthLogic;
 
 		public CharacterConfig Config;
-		public ReadOnlyTransform Transform;
+		public CharacterTransform Transform;
 		public AnimancerComponent Animator;
 		public GameObject DeadStateRoot;
 		public LockOnPointView[] LockOnPoints;

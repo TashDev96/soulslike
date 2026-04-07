@@ -48,10 +48,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 				});
 			}
 
-			_context.Animator.Play(_attackConfig.Animation, 0.1f, FadeMode.FromStart);
+			_context.Animator.Play(_attackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			var camera = LocationStaticContext.Instance.CameraController;
-			var lockedFlag = AnimationConfig.GetFlag(AnimationFlagEvent.AnimationFlags.StateLocked);
+			var lockedFlag = AnimationConfig.GetFlag(AnimationFlags.StateLocked);
 			var expectedDuration = lockedFlag.EndTimeNormalized * AnimationConfig.Duration;
 			camera.ShowCriticalAttackAnimation(_context.Transform, expectedDuration);
 
@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		{
 			base.Update(deltaTime);
 
-			var rotationDisabled = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+			var rotationDisabled = _attackConfig.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
 
 			if(rotationDisabled)
 			{
@@ -106,7 +106,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			void UpdateStaminaRegenLock()
 			{
-				var disableRegen = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled, NormalizedTime);
+				var disableRegen = _attackConfig.AnimationConfig.HasFlag(AnimationFlags.StaminaRegenDisabled, NormalizedTime);
 				if(!_staminaRegenDisabled)
 				{
 					if(disableRegen)
@@ -136,7 +136,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
 		{
-			var stateLocked = _attackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
+			var stateLocked = _attackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime);
 			return !stateLocked;
 		}
 

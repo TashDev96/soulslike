@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
@@ -23,13 +24,14 @@ namespace game.gameplay_core.characters.logic
 
 		private CharacterContext _context;
 
-		private Vector3 _slidingVelocity;
-
-		private Vector3 _groundNormal;
-
 		private Vector3 _prevPos;
 		private bool _prevIsGrounded;
+		private Vector3 _groundNormal;
 
+		private bool _rotationAndMovementLocked;
+		private readonly HashSet<string> _rotationLockReasons = new();
+
+		private Vector3 _slidingVelocity;
 		private Vector3 _fallVelocity;
 		private CollisionFlags _debugFlags;
 		private Vector3 _acceleratedMovement;
@@ -47,10 +49,9 @@ namespace game.gameplay_core.characters.logic
 
 		private Vector3 CurrentPosition => _context.Transform.Position;
 
-		public void SetContext(CharacterContext context, Transform transform)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			_transform = transform;
 			_context.IsDead.OnChanged += HandleDeath;
 			_prevPos = CurrentPosition;
 			_virtualForward = _context.Transform.Forward;
@@ -72,7 +73,7 @@ namespace game.gameplay_core.characters.logic
 					return;
 				}
 
-				if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 				{
 					return;
 				}
@@ -104,7 +105,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 			{
 				return;
 			}
@@ -131,7 +132,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked || _rotationLockReasons.Count > 0)
 			{
 				return;
 			}
@@ -141,6 +142,7 @@ namespace game.gameplay_core.characters.logic
 				_virtualForward = _context.InputData.DirectionWorld;
 				return;
 			}
+
 			var degreesPerSecond = 180f / halfTurnDurationSeconds;
 
 			toDirection.y = 0;
@@ -148,7 +150,7 @@ namespace game.gameplay_core.characters.logic
 			var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
-			_transform.rotation *= rotationStep;
+			_context.Transform.Rotation *= rotationStep;
 			if(!_context.LockOnLogic.LockOnTarget.HasValue)
 			{
 				_virtualForward = _context.Transform.Forward;
@@ -157,7 +159,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
 		{
-			if(_rotationMovementLocked)
+			if(_rotationAndMovementLocked)
 			{
 				return;
 			}
@@ -189,23 +191,40 @@ namespace game.gameplay_core.characters.logic
 
 		public void GetDebugString(StringBuilder sb)
 		{
-			sb.Append("grounded ").Append(IsGrounded).Append("/").Append(CharacterCollider.IsGrounded)
-				.Append(", stable: ").Append(CharacterCollider.HasStableGround)
-				.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
+			sb.Append("Rotation Locked: ").Append(_rotationLockReasons.Count).AppendLine();
+			var target = _context.LockOnLogic.LockOnTarget.Value;
 
-			sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
-			sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
+			sb.Append("Target Locked: ").Append(target != null ? target.name : "None").AppendLine();
+
+			//sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
+			//	.Append(", stable: ").Append(CharacterCollider.HasStableGround)
+			//	.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
+//
+			//sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
+			//sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
 		}
 
 		public void SetRotationAndMovementLocked(bool value)
 		{
-			_rotationMovementLocked = value;
+			_rotationAndMovementLocked = value;
+		}
+
+		public void SetRotationLockedBy(string source, bool locked)
+		{
+			if(locked)
+			{
+				_rotationLockReasons.Add(source);
+			}
+			else
+			{
+				_rotationLockReasons.Remove(source);
+			}
 		}
 
 		public void Teleport(TransformCache respawnTransform)
 		{
-			_context.SelfLink.transform.position = respawnTransform.Position;
-			_context.SelfLink.transform.eulerAngles = respawnTransform.EulerAngles;
+			_context.Transform.SetPosition(respawnTransform.Position);
+			_context.Transform.SetRotation(respawnTransform.EulerAngles);
 		}
 
 		public void SetFlyingMode(bool on, Vector3 fallVelocity)

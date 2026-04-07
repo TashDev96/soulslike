@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.inventory.item_configs;
@@ -17,7 +18,18 @@ namespace game.gameplay_core.damage_system
 
 		private Context _context;
 
-		public Team OwnerTeam => _context.Team.Value;
+		public Team OwnerTeam
+		{
+			get
+			{
+				if(_context.Team == null)
+				{
+					Debug.LogError(transform.GetFullPathInScene());
+				}
+				return _context.Team.Value;
+			}
+		}
+
 		public string CharacterId => _context.CharacterId.Value;
 
 		public void Initialize(Context context)

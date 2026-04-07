@@ -50,7 +50,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		{
 			base.Update(deltaTime);
 
-			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.RotationLocked, NormalizedTime);
+			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
+			rotationDisabled |= _context.LockOnLogic.IsLockedOn;
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
 				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
@@ -138,7 +139,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			}
 
 			var deflectedByHandleCast = false;
-			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.StartHandleObstacleCast) ?? 0;
+			var handleCastTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.StartHandleObstacleCast) ?? 0;
 			if(_stage == AttackStage.Windup && NormalizedTime > handleCastTime)
 			{
 				var interpolatedHandleCaster = _weaponView.StartInterpolatedCast(WeaponColliderType.Handle);
@@ -164,7 +165,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				IsComplete = true;
 			}
 
-			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime))
 			{
 				_framesToUnlockWalk = FramesToUnlockWalkAfterStateUnlocked;
 			}
@@ -174,7 +175,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			void UpdateStaminaRegenLock()
 			{
-				var disableRegen = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StaminaRegenDisabled, NormalizedTime);
+				var disableRegen = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StaminaRegenDisabled, NormalizedTime);
 
 				if(!_staminaRegenDisabled)
 				{
@@ -212,7 +213,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 			//_context.DebugDrawer.Value.AddAttackComboAttempt(Time);
 
-			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.TimingExitToNextCombo, NormalizedTime))
+			if(_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.TimingExitToNextCombo, NormalizedTime))
 			{
 				_comboCounter++;
 				SetEnterParams(nextCommand is CharacterCommand.StrongAttack ? AttackType.Strong : AttackType.Regular);
@@ -234,12 +235,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			{
 				if(_framesToUnlockWalk > 0)
 				{
+					//TODO: move to update as check can be called multiple times per frame?
+					//TODO or keep it, perhaps can be interesting bug to be abused by pro players
 					_framesToUnlockWalk--;
 					return false;
 				}
 			}
 
-			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlagEvent.AnimationFlags.StateLocked, NormalizedTime);
+			return !_currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.StateLocked, NormalizedTime);
 		}
 
 		public void SetEnterParams(AttackType attackType)
@@ -247,13 +250,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			_attackType = attackType;
 		}
 
+		public void SetEnterParams(AttackType attackType, int attackIndex)
+		{
+			_attackType = attackType;
+			_currentAttackIndex = attackIndex;
+		}
+
 		private void LaunchAttack()
 		{
+			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
+
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 
 			AnimationConfig = _currentAttackConfig.AnimationConfig;
 
-			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
 			Duration = _currentAttackConfig.Duration;
 
 			_stage = AttackStage.Windup;
@@ -269,18 +279,18 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.Animation, 0.1f, FadeMode.FromStart);
+			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			if(_attackType.IsRollAttack())
 			{
-				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromRoll) ?? 0;
+				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.TimingEnterFromRoll) ?? 0;
 				SetAttackInitialTime(startTime);
 			}
 			else
 			{
 				if(_comboCounter > 0)
 				{
-					var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlagEvent.AnimationFlags.TimingEnterFromCombo) ?? 0;
+					var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.TimingEnterFromCombo) ?? 0;
 					SetAttackInitialTime(startTime);
 				}
 				else
@@ -405,6 +415,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					newAttackIndex = 0;
 					attackConfig = _weaponView.Config.RunAttackStrong;
 					return;
+
+				case AttackType.Special:
+					newAttackIndex = _currentAttackIndex;
+
+					//TODO: why we are getting config from view ???
+					attackConfig = _weaponView.Config.SpecialAttacks[newAttackIndex];
+					break;
 
 				default:
 					throw new ArgumentOutOfRangeException();
