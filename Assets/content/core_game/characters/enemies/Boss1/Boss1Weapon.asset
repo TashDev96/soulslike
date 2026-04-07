@@ -267,7 +267,7 @@ MonoBehaviour:
       Speed: 1
       FlagEvents:
       - Name: Rotation Disabled
-        StartTimeNormalized: 0.27222222
+        StartTimeNormalized: 0.42113638
         EndTimeNormalized: 0.86210185
         LayerIndex: 0
         IsSingleFrame: 0
@@ -307,8 +307,8 @@ MonoBehaviour:
         EndTimeNormalized: 0.48055556
         LayerIndex: 5
         IsSingleFrame: 0
-        ClipDuration: 0
-        <InvolvedColliders>k__BackingField: 010000
+        ClipDuration: 4.8333335
+        <InvolvedColliders>k__BackingField: 010100
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
@@ -368,11 +368,11 @@ MonoBehaviour:
       Speed: 1
       FlagEvents:
       - Name: Rotation Disabled
-        StartTimeNormalized: 0.27222222
-        EndTimeNormalized: 0.86210185
+        StartTimeNormalized: 0.30735737
+        EndTimeNormalized: 0.76480454
         LayerIndex: 0
         IsSingleFrame: 0
-        ClipDuration: 4.8333335
+        ClipDuration: 1.85
         Flag: 0
       - Name: Stamina Regen Disabled
         StartTimeNormalized: 0.22777778
@@ -409,7 +409,7 @@ MonoBehaviour:
         LayerIndex: 5
         IsSingleFrame: 0
         ClipDuration: 1.85
-        <InvolvedColliders>k__BackingField: 010000
+        <InvolvedColliders>k__BackingField: 010100
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
