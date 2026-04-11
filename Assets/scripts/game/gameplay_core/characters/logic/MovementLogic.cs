@@ -43,6 +43,8 @@ namespace game.gameplay_core.characters.logic
 		public Vector3 LastUpdateVelocity { get; private set; }
 		public bool IsGrounded { get; private set; }
 
+		public Vector3 FallVelocity => _fallVelocity;
+
 		public bool RotationIsControlledByCamera { get; set; }
 
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
@@ -73,7 +75,7 @@ namespace game.gameplay_core.characters.logic
 					return;
 				}
 
-			if(_rotationAndMovementLocked)
+				if(_rotationAndMovementLocked)
 				{
 					return;
 				}
@@ -234,6 +236,12 @@ namespace game.gameplay_core.characters.logic
 			_fallVelocity = fallVelocity;
 		}
 
+		public static Vector3 GetAirDampingForceFalling(Vector3 velocity)
+		{
+			var velocityMagnitude = velocity.magnitude;
+			return -velocity.normalized * (velocityMagnitude * AirDamping);
+		}
+
 		private void UpdateFlyingMode(float deltaTime)
 		{
 		}
@@ -274,8 +282,11 @@ namespace game.gameplay_core.characters.logic
 
 			if(IsGrounded)
 			{
-				_context.IsFalling.Value = false;
-				_fallVelocity = Vector3.zero;
+				if(_context.IsFalling.Value)
+				{
+					_context.IsFalling.Value = false;
+					_fallVelocity = Vector3.zero;
+				}
 			}
 			else
 			{
@@ -293,13 +304,10 @@ namespace game.gameplay_core.characters.logic
 				{
 					if(AirDamping > 0f && _fallVelocity.sqrMagnitude > 0.0001f)
 					{
-						var velocityMagnitude = _fallVelocity.magnitude;
-						var dampingForce = -_fallVelocity.normalized * velocityMagnitude * AirDamping;
-						_fallVelocity += dampingForce * deltaTime;
+						_fallVelocity += GetAirDampingForceFalling(_fallVelocity) * deltaTime;
 					}
 
 					_fallVelocity += Physics.gravity * deltaTime;
-
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
 				}
 

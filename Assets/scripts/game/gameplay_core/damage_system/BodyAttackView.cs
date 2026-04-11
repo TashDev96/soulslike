@@ -57,11 +57,11 @@ namespace game.gameplay_core.damage_system
 			};
 		}
 
-		public void CastFallAttack(float fallDistance)
+		public void CastFallAttack(float fallSpeed)
 		{
-			_fallHitConfig.PoiseDamage = fallDistance;
+			_fallHitConfig.PoiseDamage = fallSpeed;
 			_fallHitConfig.DamageMultiplier = 1; //todo depends on armor weight and spikes
-			_fallDamage = fallDistance;
+			_fallDamage = fallSpeed;
 
 			_fallHitData = new HitData
 			{
