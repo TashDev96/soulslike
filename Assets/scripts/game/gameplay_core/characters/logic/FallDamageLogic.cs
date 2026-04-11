@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
@@ -10,9 +11,13 @@ namespace game.gameplay_core.characters.logic
 		private const float PROTECTION_COOLDOWN = 0.5f;
 		private const float PROTECTION_DURATION = 1.5f;
 
-		private const float MinimumFallDamageHeight = 8.0f;
-		private const float LethalFallHeight = 18.0f;
-		private const float StaggerThreshold = 5.0f;
+		private const float MinimumFallDamageAltitude = 8.0f;
+		private const float LethalFallAltitude = 18.0f;
+		private const float StaggerThresholdAltitude = 5.0f;
+
+		private float _minimumFallDamageSpeed;
+		private float _lethalFallSpeed;
+		private float _staggerThresholdSpeed;
 
 		private readonly float _minFallDamagePercent = 0.1f;
 
@@ -28,6 +33,12 @@ namespace game.gameplay_core.characters.logic
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
+
+			_minimumFallDamageSpeed = CalculateFallDamageSpeed(MinimumFallDamageAltitude);
+			_lethalFallSpeed = CalculateFallDamageSpeed(LethalFallAltitude);
+			_staggerThresholdSpeed = CalculateFallDamageSpeed(StaggerThresholdAltitude);
+
+			Debug.LogError(CalculateFallDamageSpeed(12.1f));
 
 			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
 			_lastProtectionActivationTime = -PROTECTION_COOLDOWN;
@@ -87,22 +98,30 @@ namespace game.gameplay_core.characters.logic
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
 			{
 				var fallDistance = _fallStartY - _context.Transform.Position.y;
+				var fallSpeed = Mathf.Abs(Mathf.Min(0, _context.MovementLogic.FallVelocity.y));
 
-				if(fallDistance > MinimumFallDamageHeight)
+				if(fallSpeed > _minimumFallDamageSpeed)
 				{
 					var damagePercentage = Mathf.Lerp(
 						_minFallDamagePercent,
 						_maxFallDamagePercent,
-						Mathf.InverseLerp(MinimumFallDamageHeight, LethalFallHeight, fallDistance)
+						Mathf.InverseLerp(_minimumFallDamageSpeed, _lethalFallSpeed, fallSpeed)
+					);
+
+					var damagePercentageOld = Mathf.Lerp(
+						_minFallDamagePercent,
+						_maxFallDamagePercent,
+						Mathf.InverseLerp(MinimumFallDamageAltitude, LethalFallAltitude, fallDistance)
 					);
 
 					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
+					var damageOld = damagePercentageOld * _context.CharacterStats.HpMax.Value;
 					var staminaDamage = damagePercentage * _context.CharacterStats.StaminaMax.Value;
 
 					var damageInfo = new DamageInfo
 					{
 						DamageAmount = damage,
-						PoiseDamageAmount = fallDistance > StaggerThreshold ? _context.CharacterStats.PoiseMax.Value : 0f,
+						PoiseDamageAmount = fallSpeed > _staggerThresholdSpeed ? _context.CharacterStats.PoiseMax.Value : 0f,
 						WorldPos = _context.Transform.Position,
 						Direction = Vector3.down,
 						DoneByPlayer = false,
@@ -110,21 +129,47 @@ namespace game.gameplay_core.characters.logic
 					};
 
 					_context.ApplyDamage.Execute(damageInfo);
-					_context.BodyAttackView.CastFallAttack(fallDistance);
+					_context.BodyAttackView.CastFallAttack(fallSpeed);
 					_context.StaminaLogic.SpendStamina(staminaDamage);
 
-					if(fallDistance > StaggerThreshold)
+					if(fallSpeed > _staggerThresholdSpeed)
 					{
 						_context.TriggerStagger.Execute(StaggerReason.Fall);
 					}
 
-					Debug.Log($"Fall damage applied: {damage} from height {fallDistance}m");
+					Debug.Log($"Fall damage applied: {damage}/{damageOld} from speed {fallSpeed.RoundFormat(100)}, fall distance {fallDistance.RoundFormat()}m");
 				}
 			}
 			else if(FallDamageProtectionActive.Value)
 			{
 				Debug.Log("Fall damage prevented by perfectly timed roll!");
 			}
+		}
+
+		private float CalculateFallDamageSpeed(float altitude)
+		{
+			var fallTime = 0f;
+			Vector3 currentPosition = default;
+			Vector3 velocity = default;
+
+			const float deltaTime = 1f / 90f;
+
+			while(currentPosition.y > -altitude)
+			{
+				velocity += Physics.gravity * deltaTime;
+				var dampingForce = MovementLogic.GetAirDampingForceFalling(velocity);
+				velocity += dampingForce * deltaTime;
+
+				currentPosition += velocity * deltaTime;
+				fallTime += deltaTime;
+
+				if(fallTime > 100f)
+				{
+					Debug.LogError("Simulation likely stuck. Possible precision issues.  Increase tolerance or check air damping settings.");
+					return 10f;
+				}
+			}
+			return velocity.magnitude;
 		}
 	}
 }
