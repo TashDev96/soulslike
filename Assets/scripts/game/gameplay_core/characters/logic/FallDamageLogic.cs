@@ -1,5 +1,6 @@
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
+using dream_lib.src.utils;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -38,8 +39,6 @@ namespace game.gameplay_core.characters.logic
 			_lethalFallSpeed = CalculateFallDamageSpeed(LethalFallAltitude);
 			_staggerThresholdSpeed = CalculateFallDamageSpeed(StaggerThresholdAltitude);
 
-			Debug.LogError(CalculateFallDamageSpeed(12.1f));
-
 			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
 			_lastProtectionActivationTime = -PROTECTION_COOLDOWN;
 		}
@@ -52,7 +51,6 @@ namespace game.gameplay_core.characters.logic
 				if(timeSinceActivation > PROTECTION_DURATION)
 				{
 					FallDamageProtectionActive.Value = false;
-					Debug.Log("Fall damage protection expired");
 				}
 			}
 		}
@@ -66,7 +64,6 @@ namespace game.gameplay_core.characters.logic
 			{
 				FallDamageProtectionActive.Value = true;
 				_lastProtectionActivationTime = currentTime;
-				Debug.Log("Fall damage protection activated");
 				return true;
 			}
 
@@ -97,25 +94,17 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
 			{
-				var fallDistance = _fallStartY - _context.Transform.Position.y;
 				var fallSpeed = Mathf.Abs(Mathf.Min(0, _context.MovementLogic.FallVelocity.y));
 
 				if(fallSpeed > _minimumFallDamageSpeed)
 				{
-					var damagePercentage = Mathf.Lerp(
+					var damagePercentage = Mathf.LerpUnclamped(
 						_minFallDamagePercent,
 						_maxFallDamagePercent,
-						Mathf.InverseLerp(_minimumFallDamageSpeed, _lethalFallSpeed, fallSpeed)
-					);
-
-					var damagePercentageOld = Mathf.Lerp(
-						_minFallDamagePercent,
-						_maxFallDamagePercent,
-						Mathf.InverseLerp(MinimumFallDamageAltitude, LethalFallAltitude, fallDistance)
+						MathUtils.InverseLerpUnclamped(_minimumFallDamageSpeed, _lethalFallSpeed, fallSpeed)
 					);
 
 					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
-					var damageOld = damagePercentageOld * _context.CharacterStats.HpMax.Value;
 					var staminaDamage = damagePercentage * _context.CharacterStats.StaminaMax.Value;
 
 					var damageInfo = new DamageInfo
@@ -137,7 +126,7 @@ namespace game.gameplay_core.characters.logic
 						_context.TriggerStagger.Execute(StaggerReason.Fall);
 					}
 
-					Debug.Log($"Fall damage applied: {damage}/{damageOld} from speed {fallSpeed.RoundFormat(100)}, fall distance {fallDistance.RoundFormat()}m");
+					Debug.Log($"Fall damage applied: {damage} from speed {fallSpeed.RoundFormat(100)}m");
 				}
 			}
 			else if(FallDamageProtectionActive.Value)
