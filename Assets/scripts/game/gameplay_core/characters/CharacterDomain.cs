@@ -245,7 +245,8 @@ namespace game.gameplay_core.characters
 				}
 				if(_context.IsPlayer.Value)
 				{
-					GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(info.DamageAmount.RoundFormat(), FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
+					var damageString = info.DamageAmount < 20 ? info.DamageAmount.RoundFormat() : info.DamageAmount.RoundFormat(1);
+					GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(damageString, FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
 				}
 			});
 
