@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace game.gameplay_core.characters.logic
 	public class MovementLogic
 	{
 		private const float AirDamping = 0.33f;
+		//private const float AirDamping2 = 0.06f; //TODO: more realistic gravity?
 		[SerializeField]
 		private float _slidingAcceleration;
 		[SerializeField]
@@ -236,10 +238,22 @@ namespace game.gameplay_core.characters.logic
 			_fallVelocity = fallVelocity;
 		}
 
-		public static Vector3 GetAirDampingForceFalling(Vector3 velocity)
+		public static Vector3 GetAirDampingForceFalling(Vector3 velocity, float height, float radius)
 		{
-			var velocityMagnitude = velocity.magnitude;
-			return -velocity.normalized * (velocityMagnitude * AirDamping);
+			return -velocity.normalized * (velocity.magnitude * AirDamping); // linear damping
+			//TODO: more realistic gravity and damping
+			//var result = Vector3.zero;
+			
+			//var areaVertical = radius * radius * 3.14f;
+			//var cylinderWidth = radius * 2;
+			//var cylinderHeight = height - radius * 2;
+			//var areaHorizontal = cylinderHeight * cylinderWidth + radius * radius * 3.14f;
+
+			//var velocityH = velocity.x0z();
+			//result -= velocityH.normalized * (velocityH.sqrMagnitude * AirDamping2 * areaHorizontal);
+			//result.y -= velocity.y * velocity.y * AirDamping2 * areaVertical;
+
+			//return result;
 		}
 
 		private void UpdateFlyingMode(float deltaTime)
@@ -304,7 +318,7 @@ namespace game.gameplay_core.characters.logic
 				{
 					if(AirDamping > 0f && _fallVelocity.sqrMagnitude > 0.0001f)
 					{
-						_fallVelocity += GetAirDampingForceFalling(_fallVelocity) * deltaTime;
+						_fallVelocity += GetAirDampingForceFalling(_fallVelocity, _context.CharacterCollider.Height, _context.CharacterCollider.Radius) * deltaTime;
 					}
 
 					_fallVelocity += Physics.gravity * deltaTime;

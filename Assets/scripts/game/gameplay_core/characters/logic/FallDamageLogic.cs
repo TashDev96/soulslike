@@ -157,7 +157,7 @@ namespace game.gameplay_core.characters.logic
 			while(currentPosition.y > -altitude)
 			{
 				velocity += Physics.gravity * deltaTime;
-				var dampingForce = MovementLogic.GetAirDampingForceFalling(velocity);
+				var dampingForce = MovementLogic.GetAirDampingForceFalling(velocity, _context.CharacterCollider.Height, _context.CharacterCollider.Radius);
 				velocity += dampingForce * deltaTime;
 
 				currentPosition += velocity * deltaTime;
