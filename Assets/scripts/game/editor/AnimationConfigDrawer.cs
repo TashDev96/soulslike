@@ -49,11 +49,16 @@ namespace game.editor
 		private bool _dragIsVerticalLock;
 
 		private AnimationConfig _config;
+		private bool _unfold;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
+			
+			EditorGUILayout.LabelField(label.text, new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.MiddleLeft });
 
+			
+			
 			var clipProp = property.FindPropertyRelative("Clip");
 			var speedProp = property.FindPropertyRelative("Speed");
 			var flagEventsProp = property.FindPropertyRelative("FlagEvents");
@@ -132,9 +137,23 @@ namespace game.editor
 		private bool DrawHeader(SerializedProperty clipProp, SerializedProperty speedProp, out AnimationClip clip, out float speed)
 		{
 			EditorGUILayout.PropertyField(clipProp);
+			clip = clipProp.objectReferenceValue as AnimationClip;
+
+			speed = 0;
+
+			if(clip == null)
+			{
+				return false;
+			}
+			_unfold = EditorGUILayout.Foldout(_unfold, "Timeline");
+			if(!_unfold)
+			{
+				
+				return false;
+			}
+			
 			EditorGUILayout.PropertyField(speedProp);
 
-			clip = clipProp.objectReferenceValue as AnimationClip;
 			speed = speedProp.floatValue;
 
 			if(clip == null)
