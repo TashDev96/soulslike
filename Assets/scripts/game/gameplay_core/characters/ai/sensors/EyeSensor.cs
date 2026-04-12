@@ -12,6 +12,7 @@ namespace game.gameplay_core.characters.ai.sensors
 	[Serializable]
 	public class EyeSensor
 	{
+		private static List<VisualInfoPoint> _validVisualPointsCache = new(1000);
 		[SerializeField]
 		private string _name;
 		[SerializeField]
@@ -30,8 +31,6 @@ namespace game.gameplay_core.characters.ai.sensors
 		private List<CharacterObservation> _characterVisualObservations;
 		private int _layerMask;
 		private CharacterDomain _self;
-
-		private static List<VisualInfoPoint> _validVisualPointsCache = new(1000);
 		public Vector3 Position => _rootTransform.TransformPoint(_localPosition);
 		public Vector3 Forward => _rootTransform.TransformDirection(Quaternion.Euler(_localEuler) * Vector3.forward);
 		public Vector3 Right => _rootTransform.TransformDirection(Quaternion.Euler(_localEuler) * Vector3.right);

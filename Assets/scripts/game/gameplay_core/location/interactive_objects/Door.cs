@@ -10,6 +10,8 @@ namespace game.gameplay_core.location.interactive_objects
 {
 	public class Door : SavableSceneObjectGeneric<DoorSaveData>
 	{
+		private static readonly int IsOpen = Animator.StringToHash("IsOpen");
+		private static readonly int Immediate = Animator.StringToHash("Immediate");
 		[SerializeField]
 		private bool _isClosedByDefault = true;
 		[SerializeField]
@@ -27,9 +29,6 @@ namespace game.gameplay_core.location.interactive_objects
 		[ShowIf(nameof(_openWithKey))]
 		[SerializeField]
 		private KeyId[] _keys;
-
-		private static readonly int IsOpen = Animator.StringToHash("IsOpen");
-		private static readonly int Immediate = Animator.StringToHash("Immediate");
 
 		public override void InitializeFirstTime()
 		{

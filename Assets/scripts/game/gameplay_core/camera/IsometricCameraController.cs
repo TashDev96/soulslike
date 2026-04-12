@@ -9,16 +9,16 @@ namespace game.gameplay_core.camera
 {
 	public class IsometricCameraController : ICameraController
 	{
+		private static readonly int OcclusionSphereCenterId = Shader.PropertyToID("_OcclusionSphereCenter");
+		private static readonly int OcclusionSphereRadiusId = Shader.PropertyToID("_OcclusionSphereRadius");
+		private static readonly int OcclusionCircleOffsetId = Shader.PropertyToID("_OcclusionCircleOffset");
+
 		public struct Context
 		{
 			public IReadOnlyReactiveProperty<Camera> Camera;
 			public ReactiveProperty<CharacterDomain> Player;
 			public IsometricCameraSettings CameraSettings;
 		}
-
-		private static readonly int OcclusionSphereCenterId = Shader.PropertyToID("_OcclusionSphereCenter");
-		private static readonly int OcclusionSphereRadiusId = Shader.PropertyToID("_OcclusionSphereRadius");
-		private static readonly int OcclusionCircleOffsetId = Shader.PropertyToID("_OcclusionCircleOffset");
 
 		private readonly Context _context;
 		private float _currentOcclusionRadius;

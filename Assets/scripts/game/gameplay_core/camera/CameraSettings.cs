@@ -4,16 +4,15 @@ namespace game.gameplay_core.camera
 {
 	public abstract class CameraSettings : MonoBehaviour
 	{
+		public static Vector3 GizmoCircleCenter;
+		public static Vector3 GizmoCircleNormal;
+		public static float GizmoCircleRadius;
 		[SerializeField]
 		private float _occlusionSphereRadius = 1.5f;
 		[SerializeField]
 		private float _occlusionSphereHeightOffset = 1.0f;
 		[SerializeField]
 		private float _occlusionCircleOffset = 0.5f;
-
-		public static Vector3 GizmoCircleCenter;
-		public static Vector3 GizmoCircleNormal;
-		public static float GizmoCircleRadius;
 
 		public float OcclusionSphereRadius => _occlusionSphereRadius;
 		public float OcclusionSphereHeightOffset => _occlusionSphereHeightOffset;

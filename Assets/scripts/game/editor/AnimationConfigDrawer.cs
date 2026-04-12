@@ -6,7 +6,6 @@ using System.Reflection;
 using dream_lib.src.utils.editor;
 using game.gameplay_core.characters.config.animation;
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,6 +14,13 @@ namespace game.editor
 	[CustomPropertyDrawer(typeof(AnimationConfig))]
 	public class AnimationConfigDrawer : PropertyDrawer
 	{
+		private static readonly Dictionary<string, Vector2> _scrollPositions = new();
+		private static readonly Dictionary<string, bool> _showSecondsMap = new();
+		private static readonly Dictionary<string, int> _selectedEventMap = new(); // Packed ID: (type << 16) | index. -1 is none.
+		private static readonly Dictionary<string, float> _frameWidths = new();
+		private static readonly Dictionary<string, PropertyTree> _propertyTreeMap = new();
+		private static readonly Dictionary<string, object> _targetObjectMap = new();
+		private static readonly Dictionary<string, PreviewAnimationDrawer> _previewDrawers = new();
 		private const float LayerHeaderWidth = 120;
 		private const float LayerHeight = 35;
 		private const float TimelineHeaderHeight = 25;
@@ -29,14 +35,6 @@ namespace game.editor
 		private const int TypeHit = 1;
 		private const int TypeSound = 2;
 		private const int TypeCameraShake = 3;
-
-		private static readonly Dictionary<string, Vector2> _scrollPositions = new();
-		private static readonly Dictionary<string, bool> _showSecondsMap = new();
-		private static readonly Dictionary<string, int> _selectedEventMap = new(); // Packed ID: (type << 16) | index. -1 is none.
-		private static readonly Dictionary<string, float> _frameWidths = new();
-		private static readonly Dictionary<string, PropertyTree> _propertyTreeMap = new();
-		private static readonly Dictionary<string, object> _targetObjectMap = new();
-		private static readonly Dictionary<string, PreviewAnimationDrawer> _previewDrawers = new();
 
 		private bool _isDragging;
 		private bool _isTimelineHandleDragging;
@@ -61,7 +59,7 @@ namespace game.editor
 			var soundEventsProp = property.FindPropertyRelative("SoundEvents");
 			var cameraShakeEventsProp = property.FindPropertyRelative("CameraShakeEvents");
 			var layerNamesProp = property.FindPropertyRelative("LayerNames");
-			var weaponPreview =  property.FindPropertyRelative("WeaponForPreview");
+			var weaponPreview = property.FindPropertyRelative("WeaponForPreview");
 
 			_config = GetValue(property) as AnimationConfig;
 
@@ -78,7 +76,6 @@ namespace game.editor
 				return;
 			}
 
-			
 			EditorGUILayout.PropertyField(weaponPreview);
 
 			var duration = clip.length / speed;

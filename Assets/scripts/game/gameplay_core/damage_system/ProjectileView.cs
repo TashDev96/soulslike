@@ -10,6 +10,10 @@ namespace game.gameplay_core.damage_system
 	[AddressableAssetTag(nameof(AddressableCollections.ProjectilePrefabs))]
 	public class ProjectileView : MonoBehaviour
 	{
+		private static int _layerMaskDamageReceivers;
+		private static int _layerMaskWalls;
+		private static bool _layerMasksInitialized;
+		private static readonly Collider[] Results = new Collider[40];
 		private const float StuckInWallDuration = 60f;
 		[SerializeField]
 		private CapsuleCaster[] _hitCasters;
@@ -32,11 +36,6 @@ namespace game.gameplay_core.damage_system
 		private readonly List<CapsuleCaster> _castCollidersCache = new();
 
 		private IDisposable _updateSubscription;
-
-		private static int _layerMaskDamageReceivers;
-		private static int _layerMaskWalls;
-		private static bool _layerMasksInitialized;
-		private static readonly Collider[] Results = new Collider[40];
 
 		public void Initialize(ProjectileData data)
 		{

@@ -223,8 +223,6 @@ namespace game.gameplay_core.characters.logic
 			_context.Transform.SetRotation(respawnTransform.EulerAngles);
 		}
 
-	 
-
 		public static Vector3 GetAirDampingForceFalling(Vector3 velocity)
 		{
 			var velocityMagnitude = velocity.magnitude;

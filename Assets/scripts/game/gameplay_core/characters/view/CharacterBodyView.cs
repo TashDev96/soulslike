@@ -9,6 +9,8 @@ namespace game.gameplay_core.characters.view
 {
 	public class CharacterBodyView : MonoBehaviour
 	{
+		private static readonly int BlinkIntensityId = Shader.PropertyToID("_BlinkIntensity");
+		private static readonly int BlinkColorId = Shader.PropertyToID("_BlinkColor");
 		[SerializeField]
 		private MeshRenderer _bodyMesh;
 
@@ -24,8 +26,6 @@ namespace game.gameplay_core.characters.view
 		private MaterialPropertyBlock _propertyBlock;
 		private Coroutine _blinkCoroutine;
 		private IDisposable _damageSub;
-		private static readonly int BlinkIntensityId = Shader.PropertyToID("_BlinkIntensity");
-		private static readonly int BlinkColorId = Shader.PropertyToID("_BlinkColor");
 
 		public void Initizlie()
 		{
