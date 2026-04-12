@@ -315,14 +315,14 @@ namespace game.gameplay_core.characters.state_machine
 			}
 
 			_transformCooldown = 3f;
-			if(_currentState.Value is FlyState)
+			if(_currentState.Value is BirdState)
 			{
 				SetState(_idleState);
 				_context.SelfLink.transform.up = Vector3.up;
 			}
 			else
 			{
-				SetState(new FlyState(_context));
+				SetState(new BirdState(_context));
 			}
 
 			return true;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
-	public class FlyState : CharacterStateBase
+	public class BirdState : CharacterStateBase
 	{
 		private Vector3 _flyingVelocity;
 		private float _currentPitch;
@@ -19,7 +19,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private SubState _subState;
 		private CharacterFlyingBodyView _view;
 
-		public FlyState(CharacterContext context) : base(context)
+		public BirdState(CharacterContext context) : base(context)
 		{
 			IsReadyToRememberNextCommand = true;
 			_transform = context.SelfLink.transform;
