@@ -1,5 +1,7 @@
+using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.view;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -13,6 +15,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		private float _lastFlapTime;
 		private readonly Transform _transform;
 		private Vector3 _localVelocity;
+
+		private SubState _subState;
+		private CharacterFlyingBodyView _view;
 
 		public FlyState(CharacterContext context) : base(context)
 		{
@@ -33,8 +38,23 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			_context.MovementLogic.SetFlyingMode(true, Vector3.zero);
+
 			_context.BodyView.SetFlyingMode(true);
+
+			_view = _context.BodyView.FlyingBodyView;
+			
+			if(_context.MovementLogic.IsGrounded)
+			{
+				_subState = SubState.SitOnTheGround;
+				_view.PlaySitAnimation();
+			}
+			else
+			{
+				_subState = SubState.Fly;
+			}
+			
+			_context.MovementLogic.SetFlyingMode(true, Vector3.zero);
+			
 		}
 
 		public override void OnExit()
@@ -51,11 +71,24 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
-			var config = _context.Config.Flying;
-			if(config == null)
+			switch(_subState)
 			{
-				return;
+				case SubState.SitOnTheGround:
+					UpdateSitOnTheGround(deltaTime);
+
+					break;
+				case SubState.Fly:
+					UpdateFlying(deltaTime);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private void UpdateFlying(float deltaTime)
+		{
+			var config = _context.Config.Flying;
 
 			var input = _context.InputData.InputScreenSpace;
 			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
@@ -114,7 +147,7 @@ namespace game.gameplay_core.characters.state_machine.states
 					_context.StaminaLogic.SpendStamina(config.FlapStaminaCost);
 					var flapDirection = Vector3.forward;
 					var inputPitchUp = Mathf.Clamp01(-input.y);
-					if(inputPitchUp>0)
+					if(inputPitchUp > 0)
 					{
 						flapDirection = Vector3.RotateTowards(flapDirection, Vector3.up, inputPitchUp * 70 * Mathf.Deg2Rad, 0);
 					}
@@ -136,6 +169,16 @@ namespace game.gameplay_core.characters.state_machine.states
 				//_flyingVelocity.x = 0;
 				//_flyingVelocity.z = 0;
 			}
+		}
+
+		private void UpdateSitOnTheGround(float deltaTime)
+		{
+		}
+
+		private enum SubState
+		{
+			SitOnTheGround,
+			Fly
 		}
 	}
 }

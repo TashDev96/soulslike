@@ -233,7 +233,7 @@ namespace game.gameplay_core.characters
 				CreateCharacterUi();
 			}
 
-			_characterBodyView.Initialize(_context.ApplyDamage);
+			_characterBodyView.Initialize(_context);
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);

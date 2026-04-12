@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,49 +9,33 @@ namespace game.gameplay_core.characters.view
 	public class CharacterFlyingBodyView : MonoBehaviour
 	{
 		[SerializeField]
-		private MeshRenderer _bodyMesh;
-
-		[SerializeField]
 		private Transform _wingRPivot;
 		[SerializeField]
 		private Transform _wingLPivot;
 
 		[SerializeField]
-		private Color _blinkColor = Color.white;
+		private Animations _animations;
 
 		[SerializeField]
-		private float _blinkDuration = 0.5f;
+		private BlinkView _blinkView;
 
-		[SerializeField]
-		private int _blinkCount = 3;
-
-		private MaterialPropertyBlock _propertyBlock;
-		private Coroutine _blinkCoroutine;
 		private IDisposable _damageSub;
-		private static readonly int BlinkIntensityId = Shader.PropertyToID("_BlinkIntensity");
-		private static readonly int BlinkColorId = Shader.PropertyToID("_BlinkColor");
+		private CharacterContext _context;
 
-		public void Initizlie()
+		public void Initialize(CharacterContext context)
 		{
-		}
-
-		public void Initialize(ApplyDamageCommand applyDamage)
-		{
-			_damageSub = applyDamage.Subscribe(HandleDamageApplied);
+			_context = context;
+			_damageSub = _context.ApplyDamage.Subscribe(HandleDamageApplied);
+			_blinkView.Initialize();
 		}
 
 		private void Awake()
 		{
-			_propertyBlock = new MaterialPropertyBlock();
 		}
 
 		public void PlayDamageBlink()
 		{
-			if(_blinkCoroutine != null)
-			{
-				StopCoroutine(_blinkCoroutine);
-			}
-			_blinkCoroutine = StartCoroutine(BlinkCoroutine());
+			_blinkView.PlayDamageBlink();
 		}
 
 		public Vector3 GetTopPos()
@@ -60,33 +43,8 @@ namespace game.gameplay_core.characters.view
 			return transform.position + Vector3.up * 3f;
 		}
 
-		public void SetFlyingMode(bool flying)
+		public void PlaySitAnimation()
 		{
-			gameObject.SetActive(!flying);
-		}
-
-		private IEnumerator BlinkCoroutine()
-		{
-			var singleBlinkDuration = _blinkDuration / _blinkCount;
-			var halfBlinkDuration = singleBlinkDuration * 0.5f;
-
-			_bodyMesh.GetPropertyBlock(_propertyBlock);
-			_propertyBlock.SetColor(BlinkColorId, _blinkColor);
-
-			for(var i = 0; i < _blinkCount; i++)
-			{
-				_propertyBlock.SetFloat(BlinkIntensityId, 1.2f);
-				_bodyMesh.SetPropertyBlock(_propertyBlock);
-				yield return new WaitForSeconds(halfBlinkDuration);
-
-				_propertyBlock.SetFloat(BlinkIntensityId, 0f);
-				_bodyMesh.SetPropertyBlock(_propertyBlock);
-				yield return new WaitForSeconds(halfBlinkDuration);
-			}
-
-			_propertyBlock.SetFloat(BlinkIntensityId, 0f);
-			_bodyMesh.SetPropertyBlock(_propertyBlock);
-			_blinkCoroutine = null;
 		}
 
 		private void HandleDamageApplied(DamageInfo damageInfo)
@@ -100,6 +58,7 @@ namespace game.gameplay_core.characters.view
 		private void OnDestroy()
 		{
 			_damageSub?.Dispose();
+			_blinkView.Dispose();
 		}
 
 #if UNITY_EDITOR
@@ -109,5 +68,15 @@ namespace game.gameplay_core.characters.view
 			PlayDamageBlink();
 		}
 #endif
+
+		[Serializable]
+		private struct Animations
+		{
+			public AnimationConfig Sit;
+			public AnimationConfig Walk;
+			public AnimationConfig TakeOff;
+			public AnimationConfig Plane;
+			public AnimationConfig Flap;
+		}
 	}
 }
