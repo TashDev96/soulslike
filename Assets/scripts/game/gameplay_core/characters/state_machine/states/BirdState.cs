@@ -1,6 +1,8 @@
 using System;
+using Animancer;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.view;
 using UnityEngine;
 
@@ -18,6 +20,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private SubState _subState;
 		private CharacterFlyingBodyView _view;
+
+		private AnimationConfig _currentAnimation;
 
 		public BirdState(CharacterContext context) : base(context)
 		{
@@ -46,11 +50,12 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_context.MovementLogic.IsGrounded)
 			{
 				_subState = SubState.SitOnTheGround;
-				_view.PlaySitAnimation();
+				_context.Animator.Play(_view.Animations.Sit.Clip);
 			}
 			else
 			{
 				_subState = SubState.Fly;
+				_context.Animator.Play(_view.Animations.Glide.Clip);
 			}
 			
 			_context.MovementLogic.SetFlyingMode(true, Vector3.zero);
@@ -173,6 +178,40 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private void UpdateSitOnTheGround(float deltaTime)
 		{
+			var input = _context.InputData.InputScreenSpace;
+			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
+
+			if(flap)
+			{
+				_subState = SubState.Fly;
+				_currentAnimation = _view.Animations.TakeOff;
+				_context.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				return;
+			}
+			 
+			//walk
+			if(_context.InputData.Command == CharacterCommand.Walk)
+			{
+				if(_currentAnimation != _view.Animations.Walk)
+				{
+					_currentAnimation = _view.Animations.Walk;
+					_context.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				}
+				
+				_context.MovementLogic.ApplyInputMovement(_context.InputData.DirectionWorld, 2f, deltaTime);
+				Debug.LogError(_context.MovementLogic.IsGrounded);
+			}
+			else
+			{
+				if(_currentAnimation != _view.Animations.Sit)
+				{
+					_currentAnimation = _view.Animations.Sit;
+					_context.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				}
+			}
+			
+						
+
 		}
 
 		private enum SubState

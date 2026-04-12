@@ -15,6 +15,8 @@ namespace game.gameplay_core.characters.view
 
 		[SerializeField]
 		private Animations _animations;
+		
+		public Animations Animations => _animations; 
 
 		[SerializeField]
 		private BlinkView _blinkView;
@@ -43,10 +45,6 @@ namespace game.gameplay_core.characters.view
 			return transform.position + Vector3.up * 3f;
 		}
 
-		public void PlaySitAnimation()
-		{
-		}
-
 		private void HandleDamageApplied(DamageInfo damageInfo)
 		{
 			if(damageInfo.DamageAmount > 0)
@@ -69,14 +67,16 @@ namespace game.gameplay_core.characters.view
 		}
 #endif
 
-		[Serializable]
-		private struct Animations
-		{
-			public AnimationConfig Sit;
-			public AnimationConfig Walk;
-			public AnimationConfig TakeOff;
-			public AnimationConfig Plane;
-			public AnimationConfig Flap;
-		}
+		
+	}
+	
+	[Serializable]
+	public struct Animations
+	{
+		public AnimationConfig Sit;
+		public AnimationConfig Walk;
+		public AnimationConfig TakeOff;
+		public AnimationConfig Glide;
+		public AnimationConfig Flap;
 	}
 }

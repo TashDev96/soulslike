@@ -1060,6 +1060,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingMeshRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 5973788030984395909, guid: 60ea182ba679d43c0ba0de8a2ac3d85d, type: 3}
+      propertyPath: _animations.Sit.Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: c6fb84f6be60c4aa0968094f3030b4bb, type: 2}
+    - target: {fileID: 5973788030984395909, guid: 60ea182ba679d43c0ba0de8a2ac3d85d, type: 3}
+      propertyPath: _animations.Walk.Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 5d6d1cb5cbe1848d8b4b89818c0f0196, type: 2}
+    - target: {fileID: 5973788030984395909, guid: 60ea182ba679d43c0ba0de8a2ac3d85d, type: 3}
+      propertyPath: _animations.Glide.Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 0653d6c5770d64dc1ab25eb577966986, type: 2}
     - target: {fileID: 7409452873982340941, guid: 60ea182ba679d43c0ba0de8a2ac3d85d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
