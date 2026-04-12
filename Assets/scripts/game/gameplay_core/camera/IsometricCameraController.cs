@@ -166,10 +166,11 @@ namespace game.gameplay_core.camera
 			Shader.SetGlobalVector(OcclusionSphereCenterId, new Vector4(center.x, center.y, center.z, 1));
 			Shader.SetGlobalFloat(OcclusionSphereRadiusId, _currentOcclusionRadius);
 			Shader.SetGlobalFloat(OcclusionCircleOffsetId, settings.OcclusionCircleOffset);
-
+#if UNITY_EDITOR
 			CameraSettings.GizmoCircleCenter = center - viewDir * settings.OcclusionCircleOffset;
 			CameraSettings.GizmoCircleNormal = viewDir;
 			CameraSettings.GizmoCircleRadius = _currentOcclusionRadius;
+#endif
 		}
 	}
 }

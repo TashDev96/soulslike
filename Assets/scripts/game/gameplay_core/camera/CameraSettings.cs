@@ -4,9 +4,6 @@ namespace game.gameplay_core.camera
 {
 	public abstract class CameraSettings : MonoBehaviour
 	{
-		public static Vector3 GizmoCircleCenter;
-		public static Vector3 GizmoCircleNormal;
-		public static float GizmoCircleRadius;
 		[SerializeField]
 		private float _occlusionSphereRadius = 1.5f;
 		[SerializeField]
@@ -17,6 +14,12 @@ namespace game.gameplay_core.camera
 		public float OcclusionSphereRadius => _occlusionSphereRadius;
 		public float OcclusionSphereHeightOffset => _occlusionSphereHeightOffset;
 		public float OcclusionCircleOffset => _occlusionCircleOffset;
+
+#if UNITY_EDITOR
+
+		public static Vector3 GizmoCircleCenter;
+		public static Vector3 GizmoCircleNormal;
+		public static float GizmoCircleRadius;
 
 		private void OnDrawGizmos()
 		{
@@ -44,5 +47,7 @@ namespace game.gameplay_core.camera
 				prevPoint = nextPoint;
 			}
 		}
+
+#endif
 	}
 }
