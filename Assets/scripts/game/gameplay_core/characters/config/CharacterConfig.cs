@@ -37,9 +37,12 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public bool CanDoBackstabs { get; private set; }
+		[field: SerializeField]
+		public bool CanReceiveBackstabs { get; private set; }
 
 		[field: ValueDropdown("@AddressableAssetNames.WeaponConfigs")]
 		[field: SerializeField]
 		public string EmptyHandItemConfigId { get; private set; }
+		
 	}
 }

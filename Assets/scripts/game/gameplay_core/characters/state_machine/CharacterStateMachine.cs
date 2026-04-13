@@ -386,6 +386,11 @@ namespace game.gameplay_core.characters.state_machine
 					continue;
 				}
 
+				if(!character.Config.CanReceiveBackstabs)
+				{
+					continue;
+				}
+
 				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
 				{
 					continue;
