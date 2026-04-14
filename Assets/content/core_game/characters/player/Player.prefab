@@ -93,7 +93,7 @@ MonoBehaviour:
   DrawStateMachineInfo: 0
   DrawBrainInfo: 0
   DrawAttacksInfo: 0
-  DrawMovementInfo: 0
+  DrawMovementInfo: 1
 --- !u!114 &1937557130125307911
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -27,6 +27,19 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 		}
 
+		public override void OnExit()
+		{
+			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
+			base.OnExit();
+		}
+
+		protected void RecalculateFlagsImmediate()
+		{
+			var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
+			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, rotationDisabled);
+			
+		}
+
 		public override void Update(float deltaTime)
 		{
 			if(Duration == 0)

@@ -309,6 +309,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				Time = time * CurrentAttackAnimation.Duration;
 				CurrentAttackAnimation.Time = time * CurrentAttackAnimation.Duration;
 				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
+				RecalculateFlagsImmediate();
 			}
 		}
 

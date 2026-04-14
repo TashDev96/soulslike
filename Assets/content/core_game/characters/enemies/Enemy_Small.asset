@@ -120,4 +120,5 @@ MonoBehaviour:
     PoiseMax: 0
     PoiseRestoreTimerMax: 5
   <CanDoBackstabs>k__BackingField: 0
+  <CanReceiveBackstabs>k__BackingField: 1
   <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig
