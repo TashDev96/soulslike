@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui
 {
-	public class CharacterWorldSpaceUi : MonoBehaviour
+	public class CharacterWorldSpaceUi : MonoBehaviour, ICharacterWorldSpaceUi
 	{
 		public struct CharacterWorldSpaceUiContext
 		{

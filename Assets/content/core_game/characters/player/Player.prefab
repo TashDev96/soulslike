@@ -44,6 +44,7 @@ Transform:
   - {fileID: 5318633997349167403}
   - {fileID: 8372784585337061101}
   - {fileID: 2665517980631180922}
+  - {fileID: 2320358234568469763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &618884517016294189
@@ -213,6 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.ai.sensors.CharacterSensorsDomain
   _drawEyes: 1
+  _drawEars: 0
   _drawObservations: 0
   _eyes:
   - _name: Left
@@ -225,11 +227,13 @@ MonoBehaviour:
       Angle: 60
       UpdatePeriodSec: 1
       Color: {r: 0, g: 0.16084719, b: 1, a: 1}
+      EnableDebugLog: 0
     - Name: Side
       Distance: 10
       Angle: 121.7
       UpdatePeriodSec: 3
       Color: {r: 0, g: 0.78302, b: 1, a: 1}
+      EnableDebugLog: 0
     _disableDebugDraw: 0
   - _name: Right
     _rootTransform: {fileID: 3197410386829480636}
@@ -241,11 +245,13 @@ MonoBehaviour:
       Angle: 60
       UpdatePeriodSec: 1
       Color: {r: 0, g: 0.16084719, b: 1, a: 1}
+      EnableDebugLog: 0
     - Name: Side
       Distance: 10
       Angle: 121.7
       UpdatePeriodSec: 3
       Color: {r: 0, g: 0.78302, b: 1, a: 1}
+      EnableDebugLog: 0
     _disableDebugDraw: 0
   _ears:
   - _sensitivityMultiplier: 1
@@ -961,6 +967,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3919925399006202490}
   m_LocalEulerAnglesHint: {x: 7.466, y: -77.207, z: -64.021}
+--- !u!1 &8598655498953298674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2320358234568469763}
+  - component: {fileID: 7089649045720612826}
+  m_Layer: 0
+  m_Name: LockOnPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2320358234568469763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8598655498953298674}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.97, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3919925399006202490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7089649045720612826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8598655498953298674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3dcfdea743421abc6abf6230fbb6d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.view.LockOnPointView
 --- !u!1001 &4073073474766327944
 PrefabInstance:
   m_ObjectHideFlags: 0

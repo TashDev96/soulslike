@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07f9d2bae1de74673813be1e488e12d9
+    m_Address: PlayerWorldSpaceUi
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ebb6f5a860463c4fa01ca3ca1ab0130
     m_Address: PlayerMaterial
     m_ReadOnly: 0
@@ -106,7 +111,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de32b7b91d5785f429f704b49cd19da7
-    m_Address: CharacterUi
+    m_Address: CharacterWorldSpaceUi
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

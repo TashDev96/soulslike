@@ -45,7 +45,7 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		private MovementLogic _movementLogic;
 
-		private CharacterWorldSpaceUi _worldSpaceUi;
+		private ICharacterWorldSpaceUi _worldSpaceUi;
 
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
@@ -213,6 +213,8 @@ namespace game.gameplay_core.characters
 			{
 				_brain = new PlayerInputController(LocationStaticContext.Instance.CameraController);
 				_brain.Initialize(_context);
+
+				CreatePlayerWorldspaceUi();
 			}
 			else
 			{
@@ -227,7 +229,7 @@ namespace game.gameplay_core.characters
 					return;
 				}
 
-				CreateCharacterUi();
+				CreateNpcUi();
 			}
 
 			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
@@ -250,16 +252,25 @@ namespace game.gameplay_core.characters
 				}
 			});
 
-			void CreateCharacterUi()
+			void CreateNpcUi()
 			{
-				var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterUi);
-				_worldSpaceUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
-				_worldSpaceUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
+				var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.CharacterWorldSpaceUi);
+				var worldUi = Instantiate(uiPrefab).GetComponent<CharacterWorldSpaceUi>();
+				worldUi.Initialize(new CharacterWorldSpaceUi.CharacterWorldSpaceUiContext
 				{
 					CharacterContext = _context,
 					UiPivotWorld = _uiPivot,
 					LocationUiUpdate = LocationStaticContext.Instance.LocationUiUpdate
 				});
+				_worldSpaceUi = worldUi;
+			}
+
+			void CreatePlayerWorldspaceUi()
+			{
+				var uiPrefab = AddressableManager.GetPreloadedAsset<GameObject>(AddressableAssetNames.PlayerWorldSpaceUi);
+				var worldUi = Instantiate(uiPrefab).GetComponent<PlayerWorldSpaceUi>();
+				worldUi.Initialize(_context);
+				_worldSpaceUi = worldUi;
 			}
 		}
 

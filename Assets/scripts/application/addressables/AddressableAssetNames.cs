@@ -1,6 +1,7 @@
 // This file is auto-generated. Do not modify.
 public static class AddressableAssetNames
 {
+	public const string Boss_1_WeaponView = "Boss_1_WeaponView";
 	public const string PlayerMaterial = "PlayerMaterial";
 	public const string FloatingTextView = "FloatingTextView";
 	public const string ZombieSwordConfig = "ZombieSwordConfig";
@@ -18,11 +19,11 @@ public static class AddressableAssetNames
 	public const string SimpleSword = "SimpleSword";
 	public const string MainHealingItemConfig = "MainHealingItemConfig";
 	public const string ZombieSword = "ZombieSword";
-	public const string CharacterUi = "CharacterUi";
+	public const string CharacterWorldSpaceUi = "CharacterWorldSpaceUi";
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
 	public const string Boss1Weapon = "Boss1Weapon";
-	public const string Boss_1_WeaponView = "Boss_1_WeaponView";
+	public const string PlayerWorldSpaceUi = "PlayerWorldSpaceUi";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
@@ -52,12 +53,12 @@ public static class AddressableAssetNames
 	};
 
 	public static readonly string[] WeaponPrefabNames = new[] {
+		"Boss_1_WeaponView",
 		"EmptyHand",
 		"DebugWeapon",
 		"DebugBow",
 		"SimpleSword",
 		"ZombieSword",
-		"DebugShield",
-		"Boss_1_WeaponView"
+		"DebugShield"
 	};
 }
