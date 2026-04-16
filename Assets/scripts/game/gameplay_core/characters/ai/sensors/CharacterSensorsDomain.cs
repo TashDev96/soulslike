@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai.world_reflection;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.sensors
@@ -61,6 +62,20 @@ namespace game.gameplay_core.characters.ai.sensors
 				foreach(var characterVisualObservation in _characterObservations)
 				{
 					Debug.DrawLine(_characterDomain.transform.position + Vector3.up, characterVisualObservation.Position + Vector3.up, Color.green, 0.1f, false);
+				}
+			}
+
+			if(_characterDomain.Context.Team.Value == Team.HostileNPC)
+			{
+				if(_characterDomain.IsBoss)
+				{
+					foreach(var characterVisualObservation in _characterObservations)
+					{
+						if(characterVisualObservation.Character.Context.IsPlayer.Value)
+						{
+							LocationStaticContext.Instance.CurrentlyFightingBoss.Value = _characterDomain;
+						}
+					}
 				}
 			}
 		}

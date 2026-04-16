@@ -27,9 +27,6 @@ namespace game.gameplay_core.characters.view
 		private Coroutine _blinkCoroutine;
 		private IDisposable _damageSub;
 
-		public void Initizlie()
-		{
-		}
 
 		public void Initialize(ApplyDamageCommand applyDamage)
 		{

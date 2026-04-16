@@ -43,6 +43,5 @@ namespace game.gameplay_core.characters.config
 		[field: ValueDropdown("@AddressableAssetNames.WeaponConfigs")]
 		[field: SerializeField]
 		public string EmptyHandItemConfigId { get; private set; }
-		
 	}
 }

@@ -14,6 +14,7 @@ namespace game.gameplay_core
 		public LocationSaveData LocationSaveData { get; set; }
 
 		public CharacterDomain Player { get; set; }
+		public ReactiveProperty<CharacterDomain> CurrentlyFightingBoss { get; set; } = new();
 
 		public SceneSavableObjectBase[] SceneSavableObjects { get; set; }
 

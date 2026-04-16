@@ -33,13 +33,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnExit();
 		}
 
-		protected void RecalculateFlagsImmediate()
-		{
-			var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
-			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, rotationDisabled);
-			
-		}
-
 		public override void Update(float deltaTime)
 		{
 			if(Duration == 0)
@@ -77,6 +70,12 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override string GetDebugString()
 		{
 			return $"{Time.RoundFormat()}/{Duration.RoundFormat()}";
+		}
+
+		protected void RecalculateFlagsImmediate()
+		{
+			var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
+			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, rotationDisabled);
 		}
 
 		protected void ResetForwardMovement(float initialValue = 0f)

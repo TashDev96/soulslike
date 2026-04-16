@@ -72,6 +72,8 @@ namespace game.gameplay_core.characters
 
 		[field: SerializeField]
 		public string UniqueId { get; private set; }
+		[field: SerializeField]
+		public bool IsBoss { get; private set; }
 
 		[field: SerializeField]
 		private SerializableDictionary<EquipmentSlotType, Transform> ArmSockets { get; set; }
@@ -229,7 +231,10 @@ namespace game.gameplay_core.characters
 					return;
 				}
 
-				CreateNpcUi();
+				if(!IsBoss)
+				{
+					CreateNpcUi();
+				}
 			}
 
 			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
@@ -418,6 +423,13 @@ namespace game.gameplay_core.characters
 
 		private void CustomUpdate(float deltaTime)
 		{
+			if(_context.IsDead.Value)
+			{
+				CharacterStateMachine.Update(deltaTime, true);
+				_context.Animator.Playable.Graph.Evaluate(deltaTime);
+				return;
+			}
+			
 			var personalDeltaTime = deltaTime * _context.DeltaTimeMultiplier.Value;
 
 			if(_sensorsDomain != null)

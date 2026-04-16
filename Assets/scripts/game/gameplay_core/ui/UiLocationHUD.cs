@@ -22,6 +22,8 @@ namespace game.gameplay_core.ui
 		private UiInteractionPrompt _uiInteractionPrompt;
 		[SerializeField]
 		private UiEquippedItems _equippedItems;
+		[SerializeField]
+		private BossHpBar _bossHealthBar;
 
 		public void SetContext(Context context)
 		{
@@ -52,6 +54,21 @@ namespace game.gameplay_core.ui
 			{
 				Player = context.Player
 			});
+
+			LocationStaticContext.Instance.CurrentlyFightingBoss.OnChanged += HandleBossStarted;
+			_bossHealthBar.gameObject.SetActive(false);
+		}
+
+		private void HandleBossStarted(CharacterDomain boss)
+		{
+			if(boss != null)
+			{
+				_bossHealthBar.SetContext(boss);
+			}
+			else
+			{
+				_bossHealthBar.gameObject.SetActive(false);
+			}
 		}
 	}
 }
