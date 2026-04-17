@@ -47,6 +47,8 @@ namespace game.gameplay_core.characters.ai.sensors
 			{
 				ear.Initialize(_characterObservations);
 			}
+
+			characterDomain.Context.ApplyDamage.OnExecute += HandleDamage;
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -83,6 +85,33 @@ namespace game.gameplay_core.characters.ai.sensors
 		public void Reset()
 		{
 			_characterObservations.Clear();
+		}
+
+		private void HandleDamage(DamageInfo info)
+		{
+			var damageDealer = info.DamageDealer;
+			if(damageDealer != null)
+			{
+				foreach(var characterVisualObservation in _characterObservations)
+				{
+					if(characterVisualObservation.Character == damageDealer)
+					{
+						if(characterVisualObservation.TimePassed > 1.1f)
+						{
+							characterVisualObservation.TimePassed = 0;
+							characterVisualObservation.Position = info.WorldPos;
+						}
+						return;
+					}
+				}
+			}
+
+			_characterObservations.Add(new CharacterObservation
+			{
+				Character = damageDealer,
+				Position = info.WorldPos,
+				TimePassed = 0
+			});
 		}
 
 		private void OnDrawGizmosSelected()
