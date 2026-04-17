@@ -404,8 +404,8 @@ MonoBehaviour:
         Flag: 7
       HitEvents:
       - Name: Hit
-        StartTimeNormalized: 0.46285284
-        EndTimeNormalized: 0.5319069
+        StartTimeNormalized: 0.69258255
+        EndTimeNormalized: 0.7616366
         LayerIndex: 5
         IsSingleFrame: 0
         ClipDuration: 1.85
