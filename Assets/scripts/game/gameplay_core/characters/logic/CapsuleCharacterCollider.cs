@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
-	public class CapsuleCharacterCollider : CapsuleCaster
+	public class CapsuleCharacterCollider : CapsuleCasterMonoBehavior
 	{
 		[SerializeField]
 		private int _maxIterations = 4;
@@ -82,7 +82,7 @@ namespace game.gameplay_core.characters.logic
 					CalculateMovement(moveStartPosition + Vector3.up * StepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
 					stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
 
-					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + Center, Height, Radius, stepUpSuccess ? Color.green : Color.red);
+					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + _capsuleCaster.Center, _capsuleCaster.Height, Radius, stepUpSuccess ? Color.green : Color.red);
 
 					if(stepUpSuccess)
 					{
@@ -168,7 +168,7 @@ namespace game.gameplay_core.characters.logic
 
 			var targetPos = transform.position + moveDirection.normalized * checkDistance;
 
-			GetCapsulePoints(targetPos, out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(targetPos, out var p1, out var p2);
 
 			var isSafe = false;
 
@@ -239,7 +239,7 @@ namespace game.gameplay_core.characters.logic
 			//it may probably skip small triggers when moving fast.
 			//consider implementing CapsuleCast if last frame move vector is larger than capsule radius
 
-			GetCapsulePoints(endPos, out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(endPos, out var p1, out var p2);
 			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius, _castResults, LayerMask.GetMask("Triggers"), QueryTriggerInteraction.Collide);
 
 			for(var i = 0; i < count; i++)
@@ -377,7 +377,7 @@ namespace game.gameplay_core.characters.logic
 				return false;
 			}
 
-			GetCapsulePoints(position, out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(position, out var p1, out var p2);
 			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius + _characterToCharacterOffset, _castResults, _charactersCollisionMask, QueryTriggerInteraction.Ignore);
 
 			for(var i = 0; i < count; i++)
@@ -403,7 +403,7 @@ namespace game.gameplay_core.characters.logic
 
 		private bool CastCapsule(Vector3 resultPosition, Vector3 remainingMovement, out RaycastHit hit)
 		{
-			GetCapsulePoints(resultPosition, out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(resultPosition, out var p1, out var p2);
 			var castDistance = remainingMovement.magnitude + SkinWidth;
 			var minDist = float.MaxValue;
 			hit = default;

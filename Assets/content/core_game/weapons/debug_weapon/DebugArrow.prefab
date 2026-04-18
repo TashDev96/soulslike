@@ -45,16 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
-  _useRotationConstraints: 0
-  _fixXRotation: 1
-  _fixYRotation: 1
-  _fixZRotation: 1
-  _fixedRotation: {x: 0, y: 0, z: 0}
+  _drawSelected: 1
   _movementDirectionResolution: 5
+  _capsuleCaster:
+    Transform: {fileID: 2281710899546052467}
+    Radius: 1
+    Height: 1
+    Center: {x: 0, y: 0, z: 0.0000002384186}
+    CapsuleDirection: 1
   Radius: 1
   Height: 1
   Center: {x: 0, y: 0, z: 0.0000002384186}
-  CapsuleDirection: 1
 --- !u!1 &3137265367719182347
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,16 +101,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
-  _useRotationConstraints: 0
-  _fixXRotation: 1
-  _fixYRotation: 1
-  _fixZRotation: 1
-  _fixedRotation: {x: 0, y: 0, z: 0}
+  _drawSelected: 1
   _movementDirectionResolution: 5
+  _capsuleCaster:
+    Transform: {fileID: 4015594465508287896}
+    Radius: 0.31
+    Height: 0.66
+    Center: {x: 0, y: 0, z: 0.0000002384186}
+    CapsuleDirection: 1
   Radius: 0.31
   Height: 0.66
   Center: {x: 0, y: 0, z: 0.0000002384186}
-  CapsuleDirection: 1
 --- !u!1 &6233457781682735608
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +200,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6791534876128164284
 GameObject:

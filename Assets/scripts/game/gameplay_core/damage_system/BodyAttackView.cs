@@ -8,10 +8,10 @@ namespace game.gameplay_core.damage_system
 	public class BodyAttackView : MonoBehaviour
 	{
 		[SerializeField]
-		private CapsuleCaster[] _rollColliders;
+		private CapsuleCasterMonoBehavior[] _rollColliders;
 
 		[SerializeField]
-		private CapsuleCaster[] _fallColliders;
+		private CapsuleCasterMonoBehavior[] _fallColliders;
 
 		private CharacterContext _context;
 

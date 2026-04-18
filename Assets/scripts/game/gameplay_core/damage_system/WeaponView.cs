@@ -12,13 +12,13 @@ namespace game.gameplay_core.damage_system
 	public class WeaponView : MonoBehaviour
 	{
 		[SerializeField]
-		private CapsuleCaster[] _hitColliders;
+		private CapsuleCasterMonoBehavior[] _hitColliders;
 
 		[SerializeField]
-		private CapsuleCaster[] _preciseHitColliders;
+		private CapsuleCasterMonoBehavior[] _preciseHitColliders;
 
 		[SerializeField]
-		private CapsuleCaster[] _handleColliders;
+		private CapsuleCasterMonoBehavior[] _handleColliders;
 
 		[SerializeField]
 		private BlockReceiver[] _blockColliders;
@@ -32,7 +32,7 @@ namespace game.gameplay_core.damage_system
 		private readonly InterpolatedCapsuleCaster _interpolatedCaster = new();
 
 		private CharacterContext _context;
-		private readonly List<CapsuleCaster> _castCollidersCache = new();
+		private readonly List<CapsuleCasterMonoBehavior> _castCollidersCache = new();
 
 		public Vector3 ProjectileSpawnPosition => _projectileSpawnPoint != null ? _projectileSpawnPoint.position : transform.position;
 

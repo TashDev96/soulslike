@@ -14,7 +14,7 @@ namespace game.gameplay_core.damage_system
 		private static readonly Collider[] Results = new Collider[40];
 		private static readonly RaycastHit[] HitResults = new RaycastHit[40];
 
-		public static bool CastAttackObstacles(CapsuleCaster hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
+		public static bool CastAttackObstacles(CapsuleCasterMonoBehavior hitCaster, bool checkBlockReceivers, bool checkWalls, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
 			hitCaster.GetCapsulePoints(out var point0, out var point1);
@@ -81,7 +81,7 @@ namespace game.gameplay_core.damage_system
 			return false;
 		}
 
-		public static void CastAttack(float baseDamage, HitData hitData, CapsuleCaster hitCaster, CharacterContext casterContext, int deflectionRating = 0, bool drawDebug = false)
+		public static void CastAttack(float baseDamage, HitData hitData, CapsuleCasterMonoBehavior hitCaster, CharacterContext casterContext, int deflectionRating = 0, bool drawDebug = false)
 		{
 			var radius = hitCaster.Radius;
 
@@ -180,7 +180,7 @@ namespace game.gameplay_core.damage_system
 			}
 		}
 
-		private static DamageInfo CreateDamageInfo(float baseDamage, HitData hitData, Collider targetCollider, CharacterContext casterContext, CapsuleCaster hitCaster, int deflectionRating = 0)
+		private static DamageInfo CreateDamageInfo(float baseDamage, HitData hitData, Collider targetCollider, CharacterContext casterContext, CapsuleCasterMonoBehavior hitCaster, int deflectionRating = 0)
 		{
 			hitCaster.GetCapsulePoints(out var point0, out var point1);
 			var hitCapsuleCenter = (point0 + point1) / 2f;

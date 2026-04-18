@@ -16,7 +16,7 @@ namespace game.gameplay_core.damage_system
 		private static readonly Collider[] Results = new Collider[40];
 		private const float StuckInWallDuration = 60f;
 		[SerializeField]
-		private CapsuleCaster[] _hitCasters;
+		private CapsuleCasterMonoBehavior[] _hitCasters;
 		[SerializeField]
 		private float _maxLifetime = 10f;
 
@@ -33,7 +33,7 @@ namespace game.gameplay_core.damage_system
 		private readonly HashSet<Collider> _impactedTargets = new();
 
 		private readonly InterpolatedCapsuleCaster _interpolatedCaster = new();
-		private readonly List<CapsuleCaster> _castCollidersCache = new();
+		private readonly List<CapsuleCasterMonoBehavior> _castCollidersCache = new();
 
 		private IDisposable _updateSubscription;
 
@@ -137,8 +137,10 @@ namespace game.gameplay_core.damage_system
 
 			return HitResult.None;
 		}
+		
+		
 
-		private HitResult CastDamage(CapsuleCaster caster)
+		private HitResult CastDamage(CapsuleCasterMonoBehavior caster)
 		{
 			var radius = caster.Radius;
 			caster.GetCapsulePoints(out var point0, out var point1);
@@ -216,7 +218,7 @@ namespace game.gameplay_core.damage_system
 			return HitResult.None;
 		}
 
-		private DamageInfo CreateDamageInfo(Collider targetCollider, CapsuleCaster caster)
+		private DamageInfo CreateDamageInfo(Collider targetCollider, CapsuleCasterMonoBehavior caster)
 		{
 			caster.GetCapsulePoints(out var point0, out var point1);
 			var hitCapsuleCenter = (point0 + point1) / 2f;

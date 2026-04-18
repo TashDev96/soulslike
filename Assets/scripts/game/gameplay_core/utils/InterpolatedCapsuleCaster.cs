@@ -8,14 +8,14 @@ namespace game.gameplay_core.utils
 		private const float MaxPosStep = 0.2f;
 		private const float MaxAngleStep = 20f;
 
-		private List<CapsuleCaster> _colliders;
+		private List<CapsuleCasterMonoBehavior> _colliders;
 
 		private int _currentStep;
 		private int _stepsCount;
 
 		public bool Terminated { get; private set; }
 
-		public void Start(List<CapsuleCaster> colliders)
+		public void Start(List<CapsuleCasterMonoBehavior> colliders)
 		{
 			Terminated = false;
 			_colliders = colliders;
@@ -76,7 +76,7 @@ namespace game.gameplay_core.utils
 			return true;
 		}
 
-		public IEnumerable<CapsuleCaster> GetActiveColliders()
+		public IEnumerable<CapsuleCasterMonoBehavior> GetActiveColliders()
 		{
 			for(var i = 0; i < _colliders.Count; i++)
 			{

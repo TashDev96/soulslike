@@ -69,6 +69,7 @@ MonoBehaviour:
     _slidingStopDamping: 2
     _drawDebug: 1
   <UniqueId>k__BackingField: Player
+  <IsBoss>k__BackingField: 0
   <ArmSockets>k__BackingField:
     _list:
     - Key: 1
@@ -144,16 +145,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
   _drawDebug: 0
   _drawSelected: 0
-  _useRotationConstraints: 0
-  _fixXRotation: 1
-  _fixYRotation: 0
-  _fixZRotation: 1
-  _fixedRotation: {x: 0, y: 0, z: 0}
   _movementDirectionResolution: 5
+  _capsuleCaster:
+    Transform: {fileID: 3919925399006202490}
+    Radius: 0.75
+    Height: 2
+    Center: {x: 0, y: 1, z: 0}
+    CapsuleDirection: 1
   Radius: 0.75
   Height: 2
   Center: {x: 0, y: 1, z: 0}
-  CapsuleDirection: 1
   _maxIterations: 4
   _characterToCharacterOffset: 0.5
   _collisionMask:
@@ -471,16 +472,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
   _drawSelected: 0
-  _useRotationConstraints: 0
-  _fixXRotation: 0
-  _fixYRotation: 0
-  _fixZRotation: 0
-  _fixedRotation: {x: 0, y: 0, z: 0}
   _movementDirectionResolution: 5
+  _capsuleCaster:
+    Transform: {fileID: 2002501397304002300}
+    Radius: 1.21
+    Height: 1
+    Center: {x: 0, y: 1.25, z: 0}
+    CapsuleDirection: 1
   Radius: 1.21
   Height: 1
   Center: {x: 0, y: 1.25, z: 0}
-  CapsuleDirection: 1
 --- !u!1 &4250895368124824289
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,16 +528,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
   _drawSelected: 0
-  _useRotationConstraints: 0
-  _fixXRotation: 0
-  _fixYRotation: 0
-  _fixZRotation: 0
-  _fixedRotation: {x: 0, y: 0, z: 0}
   _movementDirectionResolution: 5
+  _capsuleCaster:
+    Transform: {fileID: 6437028680974528111}
+    Radius: 0.58
+    Height: 1.41
+    Center: {x: 0, y: 0.23, z: 0}
+    CapsuleDirection: 1
   Radius: 0.58
   Height: 1.41
   Center: {x: 0, y: 0.23, z: 0}
-  CapsuleDirection: 1
 --- !u!1 &4392791978299802602
 GameObject:
   m_ObjectHideFlags: 0
