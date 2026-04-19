@@ -153,11 +153,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _capsule: {fileID: 1275262306807060881}
+  _drawDebug: 0
   SkinWidth: 0.05
   SlopeLimit: 45
   StepOffset: 0.55
   MinStepOffset: 0.01
-  _drawDebug: 0
 --- !u!136 &1275262306807060881
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -470,7 +470,7 @@ Transform:
   m_GameObject: {fileID: 3767315977462634513}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.514}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -489,7 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.utils.FakeCapsuleCollider
   _drawDebug: 0
-  _drawSelected: 0
+  _drawSelected: 1
   _movementDirectionResolution: 5
   _capsuleCaster:
     Transform: {fileID: 2002501397304002300}

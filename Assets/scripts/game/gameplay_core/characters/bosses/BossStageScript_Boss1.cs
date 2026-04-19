@@ -12,8 +12,7 @@ namespace game.gameplay_core.characters.bosses
 
 		[SerializeField]
 		private float _rotationSpeedUpPhase2 = 2f;
-		
-		
+
 		[SerializeField]
 		private float _walkSpeedUpPhase2 = 1.5f;
 

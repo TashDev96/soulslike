@@ -48,7 +48,7 @@ namespace game.gameplay_core.damage_system
 		public void PrepareRollBodyAttack()
 		{
 			_rollHitConfig.DamageMultiplier = 1;
-			_rollHitConfig.PoiseDamage = 1; //todo depends on armor weight
+			_rollHitConfig.PoiseDamage = 0.1f; //todo depends on armor weight
 			_rollDamage = 0; //todo spiked armor
 
 			_rollHitData = new HitData
