@@ -12,19 +12,14 @@ namespace game.gameplay_core.utils
 			YAxis = 1,
 			ZAxis = 2
 		}
-
 		
 		public Transform Transform;
 		public float Radius = 0.2f;
 		public float Height = 2f;
 		public Vector3 Center = Vector3.zero;
 		public Direction CapsuleDirection = Direction.YAxis;
-		
 
-		public void GetCapsulePoints(out Vector3 p1, out Vector3 p2)
-		{
-			GetCapsulePoints(Transform.position, out p1, out p2);
-		}
+		 
 
 		public void GetCapsulePoints(Vector3 position, out Vector3 p1, out Vector3 p2)
 		{
@@ -46,21 +41,6 @@ namespace game.gameplay_core.utils
 			p2 = position - direction * half + rotation * scaledCenter;
 		}
 
-		protected Vector3 GetDirectionVector()
-		{
-			switch(CapsuleDirection)
-			{
-				case Direction.XAxis:
-					return Vector3.right;
-				case Direction.YAxis:
-					return Vector3.up;
-				case Direction.ZAxis:
-					return Vector3.forward;
-				default:
-					return Vector3.up;
-			}
-		}
-
 		public float GetScaledRadius()
 		{
 			var scale = Transform.lossyScale;
@@ -75,6 +55,21 @@ namespace game.gameplay_core.utils
 					return Radius * Mathf.Max(scale.x, scale.y);
 				default:
 					return Radius * Mathf.Max(scale.x, scale.z);
+			}
+		}
+
+		protected Vector3 GetDirectionVector()
+		{
+			switch(CapsuleDirection)
+			{
+				case Direction.XAxis:
+					return Vector3.right;
+				case Direction.YAxis:
+					return Vector3.up;
+				case Direction.ZAxis:
+					return Vector3.forward;
+				default:
+					return Vector3.up;
 			}
 		}
 
@@ -94,7 +89,7 @@ namespace game.gameplay_core.utils
 					return Height * scale.y;
 			}
 		}
-		
+
 		private Vector3 GetScaledCenter()
 		{
 			return Vector3.Scale(Center, Transform.lossyScale);

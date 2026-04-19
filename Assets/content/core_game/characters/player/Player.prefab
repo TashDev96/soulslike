@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1275262306807060881}
   - component: {fileID: 4081949895489720870}
   - component: {fileID: 101471508821587220}
+  - component: {fileID: 1172505125350443285}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -143,18 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bd17a1d0161428bb0252213eac8128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::CapsuleCharacterController
-  _drawDebug: 0
-  _drawSelected: 0
-  _movementDirectionResolution: 5
-  _capsuleCaster:
-    Transform: {fileID: 3919925399006202490}
-    Radius: 0.75
-    Height: 2
-    Center: {x: 0, y: 1, z: 0}
-    CapsuleDirection: 1
-  Radius: 0.75
-  Height: 2
-  Center: {x: 0, y: 1, z: 0}
   _maxIterations: 4
   _characterToCharacterOffset: 0.5
   _collisionMask:
@@ -163,10 +152,12 @@ MonoBehaviour:
   _charactersCollisionMask:
     serializedVersion: 2
     m_Bits: 256
+  _capsule: {fileID: 1275262306807060881}
   SkinWidth: 0.05
   SlopeLimit: 45
   StepOffset: 0.55
   MinStepOffset: 0.01
+  _drawDebug: 0
 --- !u!136 &1275262306807060881
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -186,7 +177,7 @@ CapsuleCollider:
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.6
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -269,6 +260,33 @@ MonoBehaviour:
   - _name: Legs
     _parentTransform: {fileID: 3197410386829480636}
     _localPosition: {x: 0, y: 0.38, z: 0}
+--- !u!54 &1172505125350443285
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163829566012686365}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 100
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!1 &1333606136359217733
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,9 +497,6 @@ MonoBehaviour:
     Height: 1
     Center: {x: 0, y: 1.25, z: 0}
     CapsuleDirection: 1
-  Radius: 1.21
-  Height: 1
-  Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &4250895368124824289
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,9 +550,6 @@ MonoBehaviour:
     Height: 1.41
     Center: {x: 0, y: 0.23, z: 0}
     CapsuleDirection: 1
-  Radius: 0.58
-  Height: 1.41
-  Center: {x: 0, y: 0.23, z: 0}
 --- !u!1 &4392791978299802602
 GameObject:
   m_ObjectHideFlags: 0

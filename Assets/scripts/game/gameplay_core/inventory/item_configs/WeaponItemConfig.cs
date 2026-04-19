@@ -116,6 +116,11 @@ namespace game.gameplay_core.inventory.item_configs
 				case AttackType.Regular:
 					return RegularAttacks;
 				case AttackType.Strong:
+					if(StrongAttacks == null || StrongAttacks.Length == 0)
+					{
+						Debug.LogError($"fallback to regular attacks as strong attacks empty {name}");
+						return RegularAttacks;
+					}
 					return StrongAttacks;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(attackType), attackType, null);

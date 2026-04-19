@@ -32,6 +32,7 @@ namespace game.gameplay_core.utils
 		private void Awake()
 		{
 			_transform = transform;
+			_capsuleCaster.Transform = _transform;
 			_triggersLayerMask = LayerMask.GetMask("Triggers");
 			if(_previousPositions == null || _previousPositions.Length != _movementDirectionResolution)
 			{
@@ -42,7 +43,7 @@ namespace game.gameplay_core.utils
 
 		public void GetCapsulePoints(out Vector3 p1, out Vector3 p2)
 		{
-			_capsuleCaster.GetCapsulePoints(out p1, out p2);
+			_capsuleCaster.GetCapsulePoints(transform.position, out p1, out p2);
 		}
 
 		public void GetCapsulePoints(Vector3 position, out Vector3 p1, out Vector3 p2)
@@ -52,7 +53,7 @@ namespace game.gameplay_core.utils
 
 		public void DrawCollider(float duration, Color color)
 		{
-			_capsuleCaster.GetCapsulePoints(out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(transform.position, out var p1, out var p2);
 			DebugDrawUtils.DrawWireCapsulePersistent(p1, p2, _capsuleCaster.GetScaledRadius(), color, duration);
 		}
 
@@ -63,7 +64,7 @@ namespace game.gameplay_core.utils
 				_previousPositions[i] = _currentPositions[i];
 			}
 
-			_capsuleCaster.GetCapsulePoints(out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(transform.position, out var p1, out var p2);
 			var axisDirection = (p2 - p1).normalized;
 			var axisLength = (p2 - p1).magnitude;
 
@@ -142,7 +143,7 @@ namespace game.gameplay_core.utils
 			{
 				_transform = transform;
 			}
-			_capsuleCaster.GetCapsulePoints(out var p1, out var p2);
+			_capsuleCaster.GetCapsulePoints(transform.position, out var p1, out var p2);
 			DebugDrawUtils.DrawWireCapsule(p1, p2, _capsuleCaster.GetScaledRadius(), Color.white);
 		}
 

@@ -367,6 +367,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				newAttackIndex = _currentAttackIndex;
 				attackConfig = _context.InputData.ForcedAttackConfig;
 			}
+			
+			
 
 			switch(_attackType)
 			{

@@ -419,6 +419,7 @@ namespace game.gameplay_core.characters
 		private void HandleDeath(bool isDead)
 		{
 			gameObject.GetComponent<CapsuleCollider>().enabled = !isDead;
+			gameObject.GetComponent<Rigidbody>().isKinematic = isDead;
 		}
 
 		private void CustomUpdate(float deltaTime)

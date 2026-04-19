@@ -66,6 +66,11 @@ namespace game.gameplay_core.characters.ai.sensors
 			foreach(var observation in _characterVisualObservations)
 			{
 				observation.TimePassed += deltaTime;
+
+				if(observation.Character == null)
+				{
+					continue;
+				}
 				var currentCharPos = observation.Character.Context.Transform.Position;
 
 				foreach(var cone in _viewCones)
