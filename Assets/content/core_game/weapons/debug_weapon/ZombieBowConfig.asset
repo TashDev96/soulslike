@@ -91,15 +91,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 594e1566368b24fc08c1b67a0090d422, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 1
     <ProjectilePrefabNames>k__BackingField: DebugArrow
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -121,8 +112,11 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 40
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 33
+      <Sector>k__BackingField: 90
   <StrongAttacks>k__BackingField: []
+  <SpecialAttacks>k__BackingField: []
   <RollAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -198,15 +192,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 555f697ff0bc646ba89da156d298fe82, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 1
     <ProjectilePrefabNames>k__BackingField: DebugArrow
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -273,7 +258,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 10
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RollAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -349,15 +336,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 555f697ff0bc646ba89da156d298fe82, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 1
     <ProjectilePrefabNames>k__BackingField: DebugArrow
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -424,7 +402,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 10
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -500,15 +480,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 28e5b5447cb7bdf479e1d04a84641e1d, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: 0.1125
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -548,7 +519,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -624,15 +597,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: e80642978aad2493ea21bbdf82d31dd2, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -672,7 +636,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <ProjectileSpeed>k__BackingField: 20
   <BlockStability>k__BackingField: 15.8
   <DamageReduction>k__BackingField: 0.609
@@ -764,15 +730,6 @@ MonoBehaviour:
       - StateLocked
       - Combo
       - Markers
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 0}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -785,7 +742,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <CanRiposte>k__BackingField: 0
   <RiposteAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -862,15 +821,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -901,7 +851,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <CanBackstab>k__BackingField: 0
   <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
   <BackstabAttack>k__BackingField:
@@ -979,15 +931,6 @@ MonoBehaviour:
       - Combo
       - Markers
       - Hits
-    <Animation>k__BackingField:
-      _FadeDuration: 0.25
-      _Events:
-        _NormalizedTimes: []
-        _Callbacks: []
-        _Names: []
-      _Clip: {fileID: 7400000, guid: 4c264e486354744ee892538846db6192, type: 2}
-      _Speed: 1
-      _NormalizedStartTime: NaN
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
@@ -1018,7 +961,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0

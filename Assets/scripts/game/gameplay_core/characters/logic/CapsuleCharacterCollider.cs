@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.drawers;
-using game.gameplay_core.utils;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -23,6 +22,9 @@ namespace game.gameplay_core.characters.logic
 		[SerializeField]
 		private CapsuleCollider _capsule;
 
+		[SerializeField]
+		private bool _drawDebug;
+
 		public float SkinWidth = 0.05f;
 		public float SlopeLimit = 30f;
 		public float StepOffset = 0.55f;
@@ -39,18 +41,15 @@ namespace game.gameplay_core.characters.logic
 		private CharacterContext _context;
 		private CapsuleCollider _myCapsuleCollider;
 		private readonly List<Collider> _exitedTriggersCache = new();
+		private Rigidbody _rigidBody;
 
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
 		public CollisionFlags Flags { get; private set; }
 		public Vector3 GroundNormal { get; private set; } = Vector3.up;
 		public bool IsOnStableSlope { get; private set; }
 		public bool IsFakeGrounded => _stepGravityDisableTimer > 0;
-		
+
 		private float Radius => _capsule.radius;
-		
-		[SerializeField]
-		private bool _drawDebug;
-		private Rigidbody _rigidBody;
 
 		public void SetContext(CharacterContext context)
 		{
@@ -179,7 +178,6 @@ namespace game.gameplay_core.characters.logic
 
 			var targetPos = transform.position + moveDirection.normalized * checkDistance;
 
-			
 			_capsule.GetCapsulePoints(targetPos, out var p1, out var p2);
 
 			var isSafe = false;

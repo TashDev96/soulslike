@@ -92,7 +92,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			else
 			{
-				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.Config.Locomotion.WalkDeceleration);
+				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.CharacterStats.Locomotion.WalkDeceleration);
 			}
 
 			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
@@ -123,7 +123,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float deltaTime)
 		{
-			RotateCharacter(toDirection, _context.Config.Locomotion.HalfTurnDurationSeconds, deltaTime);
+			RotateCharacter(toDirection, _context.CharacterStats.Locomotion.HalfTurnDurationSeconds, deltaTime);
 		}
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
@@ -172,7 +172,7 @@ namespace game.gameplay_core.characters.logic
 					var targetForward = inputDirection.normalized;
 					targetForward.y = 0;
 					targetForward = targetForward.normalized;
-					var degreesPerSecond = 180f / _context.Config.Locomotion.HalfTurnDurationSeconds;
+					var degreesPerSecond = 180f / _context.CharacterStats.Locomotion.HalfTurnDurationSeconds;
 					var angleDifference = Vector3.SignedAngle(_virtualForward, targetForward, Vector3.up);
 					var clampedAngle = Mathf.Clamp(angleDifference, -degreesPerSecond * deltaTime, degreesPerSecond * deltaTime);
 					var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
@@ -238,7 +238,7 @@ namespace game.gameplay_core.characters.logic
 			_hadAcceleratedMovement = true;
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
-			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.Config.Locomotion.WalkAcceleration);
+			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.CharacterStats.Locomotion.WalkAcceleration);
 			var resultMovement = _acceleratedMovement;
 
 			if(_isGroundedCache)

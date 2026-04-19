@@ -18,6 +18,8 @@ namespace game.gameplay_core.characters.bosses
 		[SerializeField]
 		private float _armorAmount;
 
+		public bool IsBroken => _armorAmount <= 0;
+
 		public override void Initialize(DamageReceiverContext damageReceiverContext)
 		{
 			base.Initialize(damageReceiverContext);

@@ -12,14 +12,12 @@ namespace game.gameplay_core.utils
 			YAxis = 1,
 			ZAxis = 2
 		}
-		
+
 		public Transform Transform;
 		public float Radius = 0.2f;
 		public float Height = 2f;
 		public Vector3 Center = Vector3.zero;
 		public Direction CapsuleDirection = Direction.YAxis;
-
-		 
 
 		public void GetCapsulePoints(Vector3 position, out Vector3 p1, out Vector3 p2)
 		{

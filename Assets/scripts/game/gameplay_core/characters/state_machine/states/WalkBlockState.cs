@@ -63,7 +63,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			}
 
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
-			var velocity = inputWorld * (directionMultiplier * _context.WalkSpeed.Value * 0.5f * acceleration);
+			var velocity = inputWorld * (directionMultiplier * _context.CharacterStats.Locomotion.WalkSpeed * 0.5f * acceleration);
 			if(slowDownWalk)
 			{
 				velocity *= 0.3f;

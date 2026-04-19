@@ -107,7 +107,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				{
 					var lockOnTarget = _context.LockOnLogic.LockOnTarget.Value;
 					var lookVector = (lockOnTarget.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
-					_context.MovementLogic.RotateCharacter(lookVector, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn * 3, deltaTime);
+					_context.MovementLogic.RotateCharacter(lookVector, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn * 3, deltaTime);
 				}
 				UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _context.Transform.TransformDirection(_localMovementDirection), deltaTime);
 			}

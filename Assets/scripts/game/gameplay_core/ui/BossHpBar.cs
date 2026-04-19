@@ -26,7 +26,7 @@ namespace game.gameplay_core.ui
 			gameObject.SetActive(true);
 			_bossName.text = bossDomain.name;
 			_boss = bossDomain;
-			
+
 			_bar.SetContext(new UiBar.Context
 			{
 				Current = bossDomain.Context.CharacterStats.Hp,
@@ -34,10 +34,9 @@ namespace game.gameplay_core.ui
 				RecoverableAmount = bossDomain.Context.CharacterStats.RecoverableHp,
 				CustomUpdate = LocationStaticContext.Instance.LocationUiUpdate
 			});
-			
+
 			_damageCounterUi.SetContext(_boss.Context);
 
-			
 			bossDomain.Context.CharacterStats.Hp.OnChanged += HandleBossHpChanged;
 		}
 

@@ -7,11 +7,13 @@ using dream_lib.src.utils.serialization;
 using game.enums;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.ai.sensors;
+using game.gameplay_core.characters.bosses;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.runtime_data.stats;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
@@ -62,7 +64,7 @@ namespace game.gameplay_core.characters
 		private DeathLogic _deathLogic;
 
 		[ShowInInspector]
-		private CharacterStats _characterStats;
+		private CharacterStatsData _characterStats;
 
 		private readonly Dictionary<EquipmentSlotType, WeaponView> _equippedWeaponsViews = new();
 		private CharacterBodyView _characterBodyView;
@@ -106,7 +108,7 @@ namespace game.gameplay_core.characters
 
 			var isFalling = new ReactiveProperty<bool>();
 
-			_characterStats = new CharacterStats();
+			_characterStats = new CharacterStatsData();
 
 			var characterCollider = GetComponent<CapsuleCharacterCollider>();
 
@@ -140,9 +142,6 @@ namespace game.gameplay_core.characters
 				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
 
-				WalkSpeed = new ReactiveProperty<float>(_config.Locomotion.WalkSpeed),
-				RunSpeed = new ReactiveProperty<float>(_config.Locomotion.RunSpeed),
-				RotationSpeed = new ReactiveProperty<RotationSpeedData>(_config.RotationSpeed),
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
 				CharacterId = new ReactiveProperty<string>(UniqueId),
@@ -183,6 +182,10 @@ namespace game.gameplay_core.characters
 			_context.Animator.Animator.enabled = true;
 			_context.Animator.Animator.runtimeAnimatorController = null;
 
+			if(_context.BodyAttackView == null)
+			{
+				Debug.LogError($"{transform.GetFullPathInScene()}");
+			}
 			_context.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
@@ -243,6 +246,12 @@ namespace game.gameplay_core.characters
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);
 			_context.DebugDrawer.Value = _debugDrawer;
+
+			var customScripts = GetComponentsInChildren<AbstractCharacterScript>();
+			foreach(var customScript in customScripts)
+			{
+				customScript.SetContext(_context);
+			}
 
 			_context.ApplyDamage.Subscribe(info =>
 			{
@@ -430,7 +439,7 @@ namespace game.gameplay_core.characters
 				_context.Animator.Playable.Graph.Evaluate(deltaTime);
 				return;
 			}
-			
+
 			var personalDeltaTime = deltaTime * _context.DeltaTimeMultiplier.Value;
 
 			if(_sensorsDomain != null)

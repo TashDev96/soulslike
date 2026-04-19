@@ -1,4 +1,3 @@
-using game.gameplay_core.characters.runtime_data;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -28,9 +27,6 @@ namespace game.gameplay_core.characters.config
 
 		[field: SerializeField]
 		public LocomotionConfig Locomotion { get; private set; }
-
-		[field: SerializeField]
-		public RotationSpeedData RotationSpeed { get; private set; }
 
 		[field: SerializeField]
 		public BaseStats BaseStats { get; private set; }

@@ -54,7 +54,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			rotationDisabled |= _context.LockOnLogic.IsLockedOn;
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
-				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.Config.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
+				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
@@ -367,8 +367,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				newAttackIndex = _currentAttackIndex;
 				attackConfig = _context.InputData.ForcedAttackConfig;
 			}
-			
-			
 
 			switch(_attackType)
 			{

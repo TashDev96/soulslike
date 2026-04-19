@@ -142,6 +142,7 @@ namespace game.gameplay_core.utils
 			if(!_transform)
 			{
 				_transform = transform;
+				_capsuleCaster.Transform = _transform;
 			}
 			_capsuleCaster.GetCapsulePoints(transform.position, out var p1, out var p2);
 			DebugDrawUtils.DrawWireCapsule(p1, p2, _capsuleCaster.GetScaledRadius(), Color.white);
@@ -157,6 +158,7 @@ namespace game.gameplay_core.utils
 			if(!_transform)
 			{
 				_transform = transform;
+				_capsuleCaster.Transform = _transform;
 			}
 
 			OnDrawGizmosSelected();

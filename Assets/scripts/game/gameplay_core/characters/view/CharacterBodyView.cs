@@ -27,7 +27,6 @@ namespace game.gameplay_core.characters.view
 		private Coroutine _blinkCoroutine;
 		private IDisposable _damageSub;
 
-
 		public void Initialize(ApplyDamageCommand applyDamage)
 		{
 			_damageSub = applyDamage.Subscribe(HandleDamageApplied);

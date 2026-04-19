@@ -38,10 +38,9 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public AnimationCurve ForwardMovement { get; private set; }
-
-		[field: BoxGroup("Ai Data")]
+		
 		[field: SerializeField]
-		public float Range { get; set; } = 1f;
+		public AttackAiConfig AiData { get; set; } 
 
 #if UNITY_EDITOR
 

@@ -2,8 +2,8 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
-using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.runtime_data.stats;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace game.gameplay_core.characters
 		public bool IsDead => _context.IsDead.Value;
 		public Team Team => _context.Team.Value;
 
-		public CharacterStats Stats => _context.CharacterStats;
+		public CharacterStatsData Stats => _context.CharacterStats;
 		public CharacterConfig Config => _context.Config;
 		public ApplyDamageCommand ApplyDamage => _context.ApplyDamage;
 

@@ -137,8 +137,6 @@ namespace game.gameplay_core.damage_system
 
 			return HitResult.None;
 		}
-		
-		
 
 		private HitResult CastDamage(CapsuleCasterMonoBehavior caster)
 		{

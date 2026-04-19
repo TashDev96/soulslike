@@ -53,7 +53,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_time += deltaTime;
 			var inputWorld = _context.InputData.DirectionWorld.normalized;
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
-			var speed = _context.RunSpeed.Value * acceleration;
+			var speed = _context.CharacterStats.Locomotion.RunSpeed * acceleration;
 
 			_context.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
 

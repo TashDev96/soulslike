@@ -117,7 +117,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <StrongAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: Boss_1_WeaponView
@@ -259,7 +261,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <SpecialAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: Boss_1_WeaponView
@@ -361,7 +365,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 4
+      <Sector>k__BackingField: 45
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: Boss_1_WeaponView
       Clip: {fileID: 7400000, guid: 6974265dc099c480795114a27b8042bc, type: 2}
@@ -453,7 +459,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 3
+      <Sector>k__BackingField: 90
   <RollAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -541,7 +549,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RollAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -629,7 +639,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: ZombieSword
@@ -744,7 +756,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: ZombieSword
@@ -859,7 +873,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <ProjectileSpeed>k__BackingField: 20
   <BlockStability>k__BackingField: 15.8
   <DamageReduction>k__BackingField: 0.609
@@ -963,7 +979,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <CanRiposte>k__BackingField: 1
   <RiposteAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -1070,7 +1088,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <CanBackstab>k__BackingField: 1
   <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
   <BackstabAttack>k__BackingField:
@@ -1178,7 +1198,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 1
+      <Sector>k__BackingField: 90
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0

@@ -13,18 +13,28 @@ namespace game.gameplay_core.characters.logic
 		private void InitializeStats()
 		{
 			var baseStats = _context.Config.BaseStats;
+			var data = _context.CharacterStats;
 
-			_context.CharacterStats.HpMax.Value = baseStats.HpMax;
-			_context.CharacterStats.Hp.Value = baseStats.HpMax;
+			data.HpMax.Value = baseStats.HpMax;
+			data.Hp.Value = baseStats.HpMax;
 
-			_context.CharacterStats.StaminaMax.Value = baseStats.StaminaMax;
-			_context.CharacterStats.Stamina.Value = baseStats.StaminaMax;
+			data.StaminaMax.Value = baseStats.StaminaMax;
+			data.Stamina.Value = baseStats.StaminaMax;
 
-			_context.CharacterStats.PoiseMax.Value = baseStats.PoiseMax;
-			_context.CharacterStats.Poise.Value = baseStats.PoiseMax;
+			data.PoiseMax.Value = baseStats.PoiseMax;
+			data.Poise.Value = baseStats.PoiseMax;
 
-			_context.CharacterStats.PoiseRestoreTimerMax.Value = baseStats.PoiseRestoreTimerMax;
-			_context.CharacterStats.PoiseRestoreTimer.Value = 0f;
+			data.PoiseRestoreTimerMax.Value = baseStats.PoiseRestoreTimerMax;
+			data.PoiseRestoreTimer.Value = 0f;
+
+			data.Locomotion.HalfTurnDurationSeconds = _context.Config.Locomotion.HalfTurnDurationSeconds;
+			data.Locomotion.HalfTurnDurationSecondsLockOn = _context.Config.Locomotion.HalfTurnDurationSecondsLockOn;
+			data.Locomotion.RunSpeed = _context.Config.Locomotion.RunSpeed;
+			data.Locomotion.WalkAcceleration = _context.Config.Locomotion.WalkAcceleration;
+			data.Locomotion.WalkDeceleration = _context.Config.Locomotion.WalkDeceleration;
+			data.Locomotion.WalkSpeed = _context.Config.Locomotion.WalkSpeed;
 		}
+
+		//TODO: solid stats increment logic, with multipliers paired with string ids or smh
 	}
 }

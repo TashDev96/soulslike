@@ -19,6 +19,8 @@ namespace game.gameplay_core.characters.ai.utility
 
 		private RuntimeData _data;
 
+		private float _findingAttackAngleDeadlineTimer = 0;
+
 		public override void Think(float deltaTime)
 		{
 			base.Think(deltaTime);
@@ -27,7 +29,7 @@ namespace game.gameplay_core.characters.ai.utility
 			{
 				case 0:
 
-					ThinkFirstPhase();
+					ThinkFirstPhase(deltaTime);
 					break;
 				case 1:
 
@@ -67,7 +69,7 @@ namespace game.gameplay_core.characters.ai.utility
 			_data = default;
 		}
 
-		private void ThinkFirstPhase()
+		private void ThinkFirstPhase(float deltaTime)
 		{
 			if(_data.IsAttackInProcess)
 			{
@@ -83,7 +85,8 @@ namespace game.gameplay_core.characters.ai.utility
 			var nextAttackIndex = _attackSequencesFirstPhase[_data.AttackSequenceKey][_data.AttackIndex];
 			var nextAttackConfig = weaponConfig.SpecialAttacks[nextAttackIndex];
 
-			var range = nextAttackConfig.Range;
+			var range = nextAttackConfig.AiData.Range;
+			var maxAngle = nextAttackConfig.AiData.Sector/2;
 
 			var vecToTarget = _data.Target.transform.position - _context.CharacterContext.Transform.Position;
 			var distanceToTarget = vecToTarget.magnitude;
@@ -94,7 +97,19 @@ namespace game.gameplay_core.characters.ai.utility
 				_context.CharacterContext.InputData.DirectionWorld = vecToTarget;
 				return;
 			}
-
+			
+			var angle = Vector3.Angle(_context.CharacterContext.Transform.Forward, vecToTarget);
+			if(angle > maxAngle)
+			{
+				_findingAttackAngleDeadlineTimer += deltaTime;
+				if(_findingAttackAngleDeadlineTimer < 2)
+				{
+					_context.CharacterContext.InputData.Command = CharacterCommand.None;
+					return;				
+				}
+				_findingAttackAngleDeadlineTimer = 0;
+			}
+			
 			_context.CharacterContext.InputData.Command = CharacterCommand.AttackByIndex;
 			_context.CharacterContext.InputData.SpecialAttackIndex = nextAttackIndex;
 			_data.AttackIndex++;

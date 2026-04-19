@@ -8,6 +8,7 @@ using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters.runtime_data.stats;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.characters.view;
@@ -35,13 +36,10 @@ namespace game.gameplay_core.characters
 		public AnimancerComponent Animator;
 		public GameObject DeadStateRoot;
 		public LockOnPointView[] LockOnPoints;
-		public CharacterStats CharacterStats;
+		public CharacterStatsData CharacterStats;
 		public CharacterInputData InputData;
 		public CapsuleCharacterCollider CharacterCollider;
 
-		public ReactiveProperty<float> WalkSpeed;
-		public ReactiveProperty<float> RunSpeed;
-		public ReactiveProperty<RotationSpeedData> RotationSpeed;
 		public ReactiveProperty<float> DeltaTimeMultiplier;
 		public ReactiveProperty<float> MaxDeltaTime;
 		public ReactiveProperty<Team> Team;
