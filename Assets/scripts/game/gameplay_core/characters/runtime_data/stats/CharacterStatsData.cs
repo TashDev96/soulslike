@@ -29,6 +29,8 @@ namespace game.gameplay_core.characters.runtime_data.stats
 		[ShowInInspector]
 		public ReactiveProperty<float> PoiseRestoreTimerMax { get; private set; }
 
+		public float KnockBackMultiplier { get; set; } = 1f;
+
 		public LocomotionStatsData Locomotion { get; private set; }
 
 		public CharacterStatsData()

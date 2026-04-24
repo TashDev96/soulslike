@@ -1,14 +1,12 @@
 using Animancer;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.damage_system;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
 {
 	public class LockedInAnimationState : CharacterAnimationStateBase
 	{
 		private AnimancerState _animation;
-		private readonly AnimationClip _animationClip;
-		private readonly float _animationDuration;
 		private readonly bool _canInterruptByStagger;
 		private DamageReceiver[] _damageReceivers;
 
@@ -16,10 +14,9 @@ namespace game.gameplay_core.characters.state_machine.states
 		protected override float Duration { get; set; }
 		public override bool CanInterruptByStagger => _canInterruptByStagger;
 
-		public LockedInAnimationState(CharacterContext context, AnimationClip animationClip, bool canInterruptByStagger = false) : base(context)
+		public LockedInAnimationState(CharacterContext context, AnimationConfig animationClip, bool canInterruptByStagger = false) : base(context)
 		{
-			_animationClip = animationClip;
-			_animationDuration = animationClip.length;
+			AnimationConfig = animationClip;
 			_canInterruptByStagger = canInterruptByStagger;
 			IsReadyToRememberNextCommand = false;
 		}
@@ -27,10 +24,10 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-
-			_animation = _context.Animator.Play(_animationClip, 0.1f, FadeMode.FromStart);
+			_context.MovementLogic.ResetVelocity();
+			_animation = _context.Animator.Play(AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 			_context.MovementLogic.SetRotationAndMovementLocked(true);
-			Duration = _animationDuration;
+			Duration = AnimationConfig.Duration;
 		}
 
 		public override void OnExit()
@@ -51,7 +48,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override string GetDebugString()
 		{
-			return $"Locked animation: {Time:F2}/{Duration:F2}  ({NormalizedTime}), Animation: {_animationClip?.name ?? "None"}";
+			return $"Locked animation: {Time:F2}/{Duration:F2}  ({NormalizedTime}), Animation: {AnimationConfig.Clip?.name ?? "None"}";
 		}
 	}
 }

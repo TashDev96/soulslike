@@ -33,6 +33,7 @@ namespace game.gameplay_core.characters
 
 		public CharacterConfig Config;
 		public CharacterTransform Transform;
+		public RigidBodyWrapper RigidBody;
 		public AnimancerComponent Animator;
 		public GameObject DeadStateRoot;
 		public LockOnPointView[] LockOnPoints;

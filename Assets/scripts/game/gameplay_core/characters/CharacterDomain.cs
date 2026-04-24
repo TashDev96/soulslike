@@ -51,12 +51,11 @@ namespace game.gameplay_core.characters
 
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
-		private CharacterTransform _transform;
 
 		private HealthLogic _healthLogic;
 		private PoiseLogic _poiseLogic;
 		private StaminaLogic _staminaLogic;
-		private StatsLogic _statsLogic;
+		private CharacterStatsLogic _statsLogic;
 		private LockOnLogic _lockOnLogic;
 		private InvulnerabilityLogic _invulnerabilityLogic;
 		private FallDamageLogic _fallDamageLogic;
@@ -90,8 +89,6 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
-			_transform = new CharacterTransform(transform);
-
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
 
@@ -101,7 +98,7 @@ namespace game.gameplay_core.characters
 			_fallDamageLogic = new FallDamageLogic();
 			_staminaLogic = new StaminaLogic();
 			_poiseLogic = new PoiseLogic();
-			_statsLogic = new StatsLogic();
+			_statsLogic = new CharacterStatsLogic();
 			_healthLogic = new HealthLogic();
 
 			InventoryLogic = new CharacterInventoryLogic();
@@ -129,7 +126,8 @@ namespace game.gameplay_core.characters
 				HealthLogic = _healthLogic,
 
 				Config = _config,
-				Transform = _transform,
+				Transform = new CharacterTransform(transform),
+				RigidBody = new RigidBodyWrapper(GetComponent<Rigidbody>()),
 				Animator = GetComponent<AnimancerComponent>(),
 				DeadStateRoot = _deadStateRoot,
 				CharacterStats = _characterStats,
@@ -436,6 +434,7 @@ namespace game.gameplay_core.characters
 			if(_context.IsDead.Value)
 			{
 				CharacterStateMachine.Update(deltaTime, true);
+				_movementLogic.Update(deltaTime);
 				_context.Animator.Playable.Graph.Evaluate(deltaTime);
 				return;
 			}

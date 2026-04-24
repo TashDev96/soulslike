@@ -2,6 +2,7 @@ using System;
 using Animancer;
 using dream_lib.src.utils.data_types;
 using game.enums;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
@@ -96,7 +97,7 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: FoldoutGroup("BackStab")]
 		[field: SerializeField]
 		[field: ShowIf("CanBackstab")]
-		public AnimationClip BackstabbedEnemyAnimation { get; set; }
+		public AnimationConfig BackstabbedEnemyAnimation { get; set; }
 		[field: FoldoutGroup("BackStab")]
 		[field: ShowIf("CanBackstab")]
 		[field: SerializeField]

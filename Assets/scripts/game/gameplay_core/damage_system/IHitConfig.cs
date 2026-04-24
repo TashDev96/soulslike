@@ -10,5 +10,6 @@ namespace game.gameplay_core.damage_system
 		bool FriendlyFire { get; }
 		float DamageMultiplier { get; }
 		float PoiseDamage { get; }
+		float KnockBackImpulse { get; }
 	}
 }

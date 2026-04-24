@@ -51,6 +51,7 @@ namespace game.editor
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
+			EditorGUI.indentLevel++;
 
 			var clipProp = property.FindPropertyRelative("Clip");
 			var speedProp = property.FindPropertyRelative("Speed");
@@ -67,12 +68,14 @@ namespace game.editor
 			{
 				EditorGUILayout.HelpBox("Could not retrieve AnimationConfig instance.", MessageType.Warning);
 				EditorGUI.EndProperty();
+				EditorGUI.indentLevel--;
 				return;
 			}
 
 			if(!DrawHeader(clipProp, speedProp, out var clip, out var speed))
 			{
 				EditorGUI.EndProperty();
+				EditorGUI.indentLevel--;
 				return;
 			}
 
@@ -108,6 +111,8 @@ namespace game.editor
 			DrawSelectedEventInspector(flagEventsProp, hitEventsProp, soundEventsProp, cameraShakeEventsProp, path);
 
 			EditorGUI.EndProperty();
+			EditorGUILayout.Space();
+			EditorGUI.indentLevel--;
 		}
 
 		private PreviewAnimationDrawer GetPreviewDrawer(string path, AnimationClip clip)

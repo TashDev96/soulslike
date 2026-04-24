@@ -82,6 +82,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -228,6 +229,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -372,6 +374,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -516,6 +519,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -633,6 +637,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -857,6 +862,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -900,7 +906,23 @@ MonoBehaviour:
       <Range>k__BackingField: 1
       <Sector>k__BackingField: 90
   <CanBackstab>k__BackingField: 0
-  <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+  <BackstabbedEnemyAnimation>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+    Speed: 1
+    FlagEvents:
+    - Name: New Flag
+      StartTimeNormalized: 0
+      EndTimeNormalized: 0.9090924
+      LayerIndex: 0
+      IsSingleFrame: 0
+      ClipDuration: 0
+      Flag: 0
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default
   <BackstabAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
@@ -967,6 +989,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:

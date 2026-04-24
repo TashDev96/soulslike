@@ -7,6 +7,7 @@ namespace game.gameplay_core.damage_system
 	{
 		public float DamageAmount;
 		public float PoiseDamageAmount;
+		public float KnockbackImpulse;
 		public Vector3 WorldPos;
 		public bool DoneByPlayer;
 		public CharacterDomain DamageDealer;

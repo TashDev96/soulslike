@@ -18,6 +18,8 @@ namespace game.gameplay_core.damage_system
 
 		[field: SerializeField]
 		public float PoiseDamage { get; set; } = 1;
+		[field: SerializeField]
+		public float KnockBackImpulse { get; set; } = 1f;
 
 		public float StartTime { get; set; }
 		public float EndTime { get; set; }

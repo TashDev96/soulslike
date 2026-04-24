@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -56,6 +57,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
+			_context.ApplyDamage.OnExecute += HandleDamage;
 			_prevPos = CurrentPosition;
 			_virtualForward = _context.Transform.Forward;
 		}
@@ -65,34 +67,23 @@ namespace game.gameplay_core.characters.logic
 			_prevIsGrounded = _isGroundedCache;
 			_isGroundedCache = false;
 
-			if(_context.IsDead.Value)
-			{
-				return;
-			}
-
-			if(_rotationAndMovementLocked)
-			{
-				return;
-			}
-
 			_debugFlags = _context.CharacterCollider.Flags;
 
 			_context.CharacterCollider.CustomUpdate(deltaTime);
 
 			UpdateFalling(deltaTime);
+			UpdateSliding(deltaTime);
 
-			if(_isGroundedCache)
+			if(!_rotationAndMovementLocked)
 			{
-				UpdateSliding(deltaTime);
-			}
-
-			if(_hadAcceleratedMovement)
-			{
-				_hadAcceleratedMovement = false;
-			}
-			else
-			{
-				_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.CharacterStats.Locomotion.WalkDeceleration);
+				if(_hadAcceleratedMovement)
+				{
+					_hadAcceleratedMovement = false;
+				}
+				else
+				{
+					_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.CharacterStats.Locomotion.WalkDeceleration);
+				}
 			}
 
 			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
@@ -229,6 +220,17 @@ namespace game.gameplay_core.characters.logic
 			return -velocity.normalized * (velocityMagnitude * AirDamping);
 		}
 
+		public void ResetVelocity()
+		{
+			_slidingVelocity = Vector3.zero;
+			_fallVelocity = Vector3.zero;
+		}
+
+		private void HandleDamage(DamageInfo info)
+		{
+			_slidingVelocity += info.Direction * info.KnockbackImpulse / _context.RigidBody.Mass;
+		}
+
 		private void UpdateFlyingMode(float deltaTime)
 		{
 		}
@@ -314,22 +316,28 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(CharacterCollider.HasStableGround || CharacterCollider.IsOnStableSlope)
+			if(_isGroundedCache)
 			{
-				_slidingVelocity.y = 0;
-				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
-				_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
-				MoveAndStoreFrameData(_slidingVelocity * deltaTime);
-				if(_slidingVelocity.sqrMagnitude < 0.001f)
+				if(CharacterCollider.HasStableGround || CharacterCollider.IsOnStableSlope)
 				{
-					_slidingVelocity = Vector3.zero;
+					_slidingVelocity.y = 0;
+					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
+					if(_slidingVelocity.sqrMagnitude < 0.001f)
+					{
+						_slidingVelocity = Vector3.zero;
+					}
+				}
+				else
+				{
+					var slideDirection = Vector3.ProjectOnPlane(Vector3.down, _groundNormal).normalized;
+					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingDamping);
+					_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
 				}
 			}
-			else
+
+			if(!_context.IsFalling.Value)
 			{
-				var slideDirection = Vector3.ProjectOnPlane(Vector3.down, _groundNormal).normalized;
-				_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingDamping);
-				_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
 				MoveAndStoreFrameData(_slidingVelocity * deltaTime);
 			}
 		}

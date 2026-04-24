@@ -83,6 +83,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -158,7 +159,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 2
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugWeapon
       Clip: {fileID: 7400000, guid: e8f71e52c23a3a94facf4b2923df9262, type: 2}
@@ -224,6 +227,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -281,7 +285,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <StrongAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugWeapon
@@ -343,11 +349,12 @@ MonoBehaviour:
         EndTimeNormalized: 0.35507247
         LayerIndex: 5
         IsSingleFrame: 0
-        ClipDuration: 0
+        ClipDuration: 2.3
         <InvolvedColliders>k__BackingField: 010000
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -423,7 +430,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 2
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <SpecialAttacks>k__BackingField: []
   <RollAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -491,6 +500,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -512,7 +522,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <RollAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugWeapon
@@ -579,6 +591,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -600,7 +613,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <RunAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: ZombieSword
@@ -667,6 +682,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -715,7 +731,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <RunAttackStrong>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: ZombieSword
@@ -782,6 +800,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -830,7 +849,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <ProjectileSpeed>k__BackingField: 20
   <BlockStability>k__BackingField: 15.8
   <DamageReduction>k__BackingField: 0.609
@@ -934,7 +955,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <CanRiposte>k__BackingField: 1
   <RiposteAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
@@ -1002,6 +1025,7 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
@@ -1041,9 +1065,27 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <CanBackstab>k__BackingField: 1
-  <BackstabbedEnemyAnimation>k__BackingField: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+  <BackstabbedEnemyAnimation>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 7400000, guid: 15ba37375ac524acc8dffecad21596b1, type: 2}
+    Speed: 1
+    FlagEvents:
+    - Name: New Flag
+      StartTimeNormalized: 0
+      EndTimeNormalized: 0.9090924
+      LayerIndex: 0
+      IsSingleFrame: 0
+      ClipDuration: 5.8333335
+      Flag: 0
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default
   <BackstabAttack>k__BackingField:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugWeapon
@@ -1110,6 +1152,18 @@ MonoBehaviour:
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
         <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 0
+      - Name: knock
+        StartTimeNormalized: 0.7423401
+        EndTimeNormalized: 0.7435124
+        LayerIndex: 5
+        IsSingleFrame: 1
+        ClipDuration: 4.266667
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 0
+        <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 10
       SoundEvents: []
       CameraShakeEvents:
       - Name: New CameraShake
@@ -1159,7 +1213,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Range>k__BackingField: 1
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0

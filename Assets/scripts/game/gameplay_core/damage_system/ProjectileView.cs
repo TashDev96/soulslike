@@ -232,7 +232,8 @@ namespace game.gameplay_core.damage_system
 				Direction = direction,
 				DoneByPlayer = _casterContext.IsPlayer.Value,
 				DamageDealer = _casterContext.SelfLink,
-				DeflectionRating = _deflectionRating
+				DeflectionRating = _deflectionRating,
+				KnockbackImpulse = _hitConfig.KnockBackImpulse
 			};
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
@@ -71,10 +72,10 @@ namespace game.gameplay_core.characters.state_machine
 			SetState(new ParryStunState(_context));
 		}
 
-		public void LockInAnimation(AnimationClip animationClip, bool canInterruptByStagger = false)
+		public void LockInAnimation(AnimationConfig animConfig, bool canInterruptByStagger = false)
 		{
 			_currentState.Value.OnInterrupt();
-			SetState(new LockedInAnimationState(_context, animationClip, canInterruptByStagger));
+			SetState(new LockedInAnimationState(_context, animConfig, canInterruptByStagger));
 		}
 
 		public void Update(float deltaTime, bool calculateInputLogic)

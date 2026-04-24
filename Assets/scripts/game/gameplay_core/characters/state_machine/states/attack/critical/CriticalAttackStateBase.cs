@@ -142,7 +142,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 		private void ApplyGuaranteedDamage(HitData hitData)
 		{
-			if(_target == null || _target.ExternalData.IsDead)
+			if(_target == null)
 			{
 				return;
 			}
@@ -157,7 +157,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 				WorldPos = _target.ExternalData.Transform.Position,
 				DoneByPlayer = _context.IsPlayer.Value,
 				DamageDealer = _context.SelfLink,
-				DeflectionRating = 0
+				DeflectionRating = 0,
+				KnockbackImpulse = hitConfig.KnockBackImpulse,
+				Direction = _context.Transform.Forward
 			};
 
 			_target.ExternalData.ApplyDamage.Execute(damageInfo);

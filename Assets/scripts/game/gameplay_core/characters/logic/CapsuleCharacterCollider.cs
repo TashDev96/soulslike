@@ -41,7 +41,6 @@ namespace game.gameplay_core.characters.logic
 		private CharacterContext _context;
 		private CapsuleCollider _myCapsuleCollider;
 		private readonly List<Collider> _exitedTriggersCache = new();
-		private Rigidbody _rigidBody;
 
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
 		public CollisionFlags Flags { get; private set; }
@@ -55,7 +54,6 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context = context;
 			_myCapsuleCollider = GetComponent<CapsuleCollider>();
-			_rigidBody = GetComponent<Rigidbody>();
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -66,7 +64,7 @@ namespace game.gameplay_core.characters.logic
 				_stepGravityDisableTimer -= deltaTime;
 				Flags |= CollisionFlags.Below;
 			}
-			_rigidBody.linearVelocity = Vector3.zero;
+			_context.RigidBody.LinearVelocity = Vector3.zero;
 		}
 
 		public void CalculateGravity()

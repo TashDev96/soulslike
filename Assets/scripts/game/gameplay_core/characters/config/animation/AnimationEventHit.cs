@@ -20,6 +20,9 @@ namespace game.gameplay_core.characters.config.animation
 		[field: SerializeField]
 		public float PoiseDamage { get; set; } = 1;
 
+		[field: SerializeField]
+		public float KnockBackImpulse { get; set; } = 1;
+
 		float IHitConfig.StartTime => StartTimeNormalized;
 		float IHitConfig.EndTime => EndTimeNormalized;
 	}
