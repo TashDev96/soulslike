@@ -7,6 +7,7 @@ using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.characters.state_machine.states.attack.critical;
 using game.gameplay_core.characters.state_machine.states.stagger;
+using game.gameplay_core.characters.view;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine
@@ -59,6 +60,8 @@ namespace game.gameplay_core.characters.state_machine
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
 			_context.Events.TriggerStagger.OnExecute += HandleTriggerStagger;
 			_context.Events.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
+			_context.Events.TriggerPlungeAttack.OnExecute += HandlePlungeAttackTriggered;
+
 			_context.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
@@ -109,6 +112,11 @@ namespace game.gameplay_core.characters.state_machine
 		public void ForceDeadStateOnLoad()
 		{
 			SetState(new DeadState(_context, true));
+		}
+
+		private void HandlePlungeAttackTriggered(CharacterDomain target, PlungeAttackTargetView pivot)
+		{
+			SetState(new PlungeAttackState(_context, target, pivot));
 		}
 
 		private void HandleParryFail()

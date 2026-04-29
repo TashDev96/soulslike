@@ -102,6 +102,10 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: ShowIf("CanBackstab")]
 		[field: SerializeField]
 		public AttackConfig BackstabAttack { get; private set; }
+		[field: SerializeField]
+		public AttackConfig PlungeAttack { get; private set; }
+		[field: SerializeField]
+		public AnimationConfig PlungedEnemyAnimation { get; set; }
 
 		[field: SerializeField]
 		public SerializableDictionary<int, int> RegularToRegularCustomOrder { get; private set; }
@@ -109,6 +113,12 @@ namespace game.gameplay_core.inventory.item_configs
 		public SerializableDictionary<int, int> RegularToStrongCustomOrder { get; private set; }
 		[field: SerializeField]
 		public SerializableDictionary<int, int> StrongToRegularCustomOrder { get; private set; }
+
+		[field: Space]
+		[field: SerializeField]
+		public AnimationClip FallAttackAnimation { get; private set; }
+		[field: SerializeField]
+		public float FallDamageMultiplier { get; private set; } = 1f;
 
 		public AttackConfig[] GetAttacksSequence(AttackType attackType)
 		{

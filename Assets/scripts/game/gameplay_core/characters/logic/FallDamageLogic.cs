@@ -9,8 +9,8 @@ namespace game.gameplay_core.characters.logic
 {
 	public class FallDamageLogic
 	{
-		private const float PROTECTION_COOLDOWN = 0.5f;
-		private const float PROTECTION_DURATION = 1.5f;
+		private const float ProtectionCooldown = 0.2f;
+		private const float ProtectionDuration = 1f;
 
 		private const float MinimumFallDamageAltitude = 8.0f;
 		private const float LethalFallAltitude = 18.0f;
@@ -29,7 +29,9 @@ namespace game.gameplay_core.characters.logic
 
 		private float _lastProtectionActivationTime;
 
-		public ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
+		private ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
+
+		public float FallSpeed => Mathf.Abs(Mathf.Min(0, _context.MovementLogic.FallVelocity.y));
 
 		public void SetContext(CharacterContext context)
 		{
@@ -40,7 +42,7 @@ namespace game.gameplay_core.characters.logic
 			_staggerThresholdSpeed = CalculateFallDamageSpeed(StaggerThresholdAltitude);
 
 			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
-			_lastProtectionActivationTime = -PROTECTION_COOLDOWN;
+			_lastProtectionActivationTime = -ProtectionCooldown;
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -48,7 +50,7 @@ namespace game.gameplay_core.characters.logic
 			if(FallDamageProtectionActive.Value)
 			{
 				var timeSinceActivation = Time.realtimeSinceStartup - _lastProtectionActivationTime;
-				if(timeSinceActivation > PROTECTION_DURATION)
+				if(timeSinceActivation > ProtectionDuration)
 				{
 					FallDamageProtectionActive.Value = false;
 				}
@@ -60,7 +62,7 @@ namespace game.gameplay_core.characters.logic
 			var currentTime = Time.realtimeSinceStartup;
 			var timeSinceLastActivation = currentTime - _lastProtectionActivationTime;
 
-			if(timeSinceLastActivation > PROTECTION_COOLDOWN)
+			if(timeSinceLastActivation > ProtectionCooldown)
 			{
 				FallDamageProtectionActive.Value = true;
 				_lastProtectionActivationTime = currentTime;
@@ -94,7 +96,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
 			{
-				var fallSpeed = Mathf.Abs(Mathf.Min(0, _context.MovementLogic.FallVelocity.y));
+				var fallSpeed = FallSpeed;
 
 				if(fallSpeed > _minimumFallDamageSpeed)
 				{

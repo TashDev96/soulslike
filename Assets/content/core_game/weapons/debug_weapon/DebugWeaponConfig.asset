@@ -1216,6 +1216,42 @@ MonoBehaviour:
     <AiData>k__BackingField:
       <Range>k__BackingField: 2
       <Sector>k__BackingField: 90
+  <PlungeAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 0}
+      Speed: 1
+      FlagEvents: []
+      HitEvents: []
+      SoundEvents: []
+      CameraShakeEvents: []
+      LayerNames:
+      - Default
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <BaseDamage>k__BackingField: 0
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
+  <PlungedEnemyAnimation>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 7400000, guid: c148d60d7173d4f858842468351dad2f, type: 2}
+    Speed: 1
+    FlagEvents: []
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0
@@ -1225,3 +1261,4 @@ MonoBehaviour:
   <StrongToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0
+  <FallAttackAnimation>k__BackingField: {fileID: 7400000, guid: c148d60d7173d4f858842468351dad2f, type: 2}

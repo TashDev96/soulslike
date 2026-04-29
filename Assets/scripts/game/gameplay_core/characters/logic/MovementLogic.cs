@@ -41,6 +41,7 @@ namespace game.gameplay_core.characters.logic
 		private Vector3 _virtualForward;
 		private bool _rotationMovementLocked;
 		private Transform _transform;
+		public bool LockedInAnimationSlot { get; set; }
 
 		public bool IsGrounded { get; private set; }
 
@@ -71,6 +72,13 @@ namespace game.gameplay_core.characters.logic
 
 			_context.CharacterCollider.CustomUpdate(deltaTime);
 
+			if(LockedInAnimationSlot)
+			{
+				LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
+				_prevPos = CurrentPosition;
+				return;
+			}
+
 			UpdateFalling(deltaTime);
 			UpdateSliding(deltaTime);
 
@@ -92,7 +100,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
 		{
-			if(_rotationAndMovementLocked)
+			if(_rotationAndMovementLocked || LockedInAnimationSlot)
 			{
 				return;
 			}
@@ -119,7 +127,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void RotateCharacter(Vector3 toDirection, float halfTurnDurationSeconds, float deltaTime)
 		{
-			if(_rotationAndMovementLocked || _rotationLockReasons.Count > 0)
+			if(_rotationAndMovementLocked || _rotationLockReasons.Count > 0 || LockedInAnimationSlot)
 			{
 				return;
 			}
@@ -146,7 +154,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
 		{
-			if(_rotationAndMovementLocked)
+			if(_rotationAndMovementLocked || LockedInAnimationSlot)
 			{
 				return;
 			}
@@ -186,7 +194,7 @@ namespace game.gameplay_core.characters.logic
 			//sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
 			//	.Append(", stable: ").Append(CharacterCollider.HasStableGround)
 			//	.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
-//
+
 			//sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
 			//sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
 		}
@@ -224,6 +232,16 @@ namespace game.gameplay_core.characters.logic
 		{
 			_slidingVelocity = Vector3.zero;
 			_fallVelocity = Vector3.zero;
+		}
+
+		public void AddFallImpulse(Vector3 impulse)
+		{
+			_fallVelocity += impulse;
+		}
+
+		public void SetFallVelocity(Vector3 value)
+		{
+			_fallVelocity = value;
 		}
 
 		private void HandleDamage(DamageInfo info)

@@ -7,7 +7,7 @@ using game.gameplay_core.damage_system;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {
-	public class CriticalAttackStateBase : CharacterAnimationStateBase
+	public abstract class CriticalAttackStateBase : CharacterAnimationStateBase
 	{
 		private const string StaminaRegenDisableKey = "CriticalAttackState";
 		protected readonly CharacterDomain _target;
@@ -21,14 +21,12 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; }
 
-		public CriticalAttackStateBase(CharacterContext context, CharacterDomain target) : base(context)
+		protected abstract float LogicDamageAdd { get; }
+		protected abstract float LogicDamageMultiply { get; }
+
+		protected CriticalAttackStateBase(CharacterContext context, CharacterDomain target) : base(context)
 		{
 			_target = target;
-		}
-
-		public void SetEnterParams(AttackConfig attackConfig)
-		{
-			_attackConfig = attackConfig;
 		}
 
 		public override void OnEnter()
@@ -140,6 +138,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 			return !stateLocked;
 		}
 
+		protected void SetEnterParams(AttackConfig attackConfig)
+		{
+			_attackConfig = attackConfig;
+		}
+
 		private void ApplyGuaranteedDamage(HitData hitData)
 		{
 			if(_target == null)
@@ -148,7 +151,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 			}
 
 			var hitConfig = hitData.Config;
-			var damageAmount = _attackConfig.BaseDamage * hitConfig.DamageMultiplier;
+			var damageAmount = (_attackConfig.BaseDamage + LogicDamageAdd) * hitConfig.DamageMultiplier * LogicDamageMultiply;
 
 			var damageInfo = new DamageInfo
 			{

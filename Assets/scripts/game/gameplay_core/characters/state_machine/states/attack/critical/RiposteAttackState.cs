@@ -9,6 +9,9 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 	{
 		private readonly WeaponView _weaponView;
 
+		protected override float LogicDamageAdd => 0;
+		protected override float LogicDamageMultiply => 1;
+
 		public RiposteAttackState(CharacterContext context, CharacterDomain target) : base(context, target)
 		{
 			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];

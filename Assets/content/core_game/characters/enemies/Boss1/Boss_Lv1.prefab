@@ -353,6 +353,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4020505768120305787, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}
   m_PrefabInstance: {fileID: 1358207457778217781}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8657464793235631033 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7709085180860471436, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}
+  m_PrefabInstance: {fileID: 1358207457778217781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf17f53ca51e4f94a13004b25b684cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.bosses.ArmorDamageReceiver
 --- !u!1001 &2771226769714987541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -991,6 +1002,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 987a6e7bdedee4a2994ffef3c8840243, type: 2}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <IsBoss>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <UniqueId>k__BackingField
       value: Boss0.8366338
       objectReference: {fileID: 0}
@@ -1009,6 +1024,38 @@ PrefabInstance:
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <DebugWeaponLeftConfig>k__BackingField
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].PivotBone
+      value: 
+      objectReference: {fileID: 6743316788867048785}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._drawDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._pivotBone
+      value: 
+      objectReference: {fileID: 6743316788867048785}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].ContactRadius
+      value: 5.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].LocalOffset.y
+      value: 4.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._contactRadius
+      value: 1.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localOffset.y
+      value: 2.29
       objectReference: {fileID: 0}
     - target: {fileID: 5463184190765401211, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_Enabled
@@ -1096,6 +1143,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1705418244455817611}
+    - targetCorrespondingSourceObject: {fileID: 2805140959445292629, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5090963025994265867}
   m_SourcePrefab: {fileID: 100100000, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
 --- !u!4 &851102292411039731 stripped
 Transform:
@@ -1110,6 +1160,11 @@ Transform:
 --- !u!4 &5886954574655793488 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1635893880519297269, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+  m_PrefabInstance: {fileID: 5116499500179825061}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6743316788867048785 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1915269866101114100, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
   m_PrefabInstance: {fileID: 5116499500179825061}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7056201602038511600 stripped
@@ -1131,6 +1186,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _subUtilities:
   - {fileID: 6821701491264209286}
+--- !u!114 &5090963025994265867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7056201602038511600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870143b785814c089af526935c5b83b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.bosses.BossStageScript_Boss1
+  _legArmors:
+  - {fileID: 8657464793235631033}
+  - {fileID: 3640182721784714219}
+  _rotationSpeedUpPhase2: 2
+  _walkSpeedUpPhase2: 3
 --- !u!1001 &5392739046168542018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1139,6 +1211,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 851102292411039731}
     m_Modifications:
+    - target: {fileID: 632287093824404096, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+      propertyPath: _capsuleCaster.Transform
+      value: 
+      objectReference: {fileID: 2293046084075950158}
+    - target: {fileID: 5566978087484401243, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+      propertyPath: _capsuleCaster.Transform
+      value: 
+      objectReference: {fileID: 9071233953915395583}
     - target: {fileID: 6537153962813336480, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1183,6 +1263,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_1_WeaponView
       objectReference: {fileID: 0}
+    - target: {fileID: 7394442961053861244, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+      propertyPath: _capsuleCaster.Transform
+      value: 
+      objectReference: {fileID: 6159965990476409905}
+    - target: {fileID: 7762097342137519820, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+      propertyPath: _capsuleCaster.Transform
+      value: 
+      objectReference: {fileID: 9037768371539828442}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1191,6 +1279,26 @@ PrefabInstance:
 --- !u!4 &1184017291147710690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6537153962813336480, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+  m_PrefabInstance: {fileID: 5392739046168542018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2293046084075950158 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6126112465826851596, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+  m_PrefabInstance: {fileID: 5392739046168542018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6159965990476409905 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2281710899546052467, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+  m_PrefabInstance: {fileID: 5392739046168542018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9037768371539828442 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4015594465508287896, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
+  m_PrefabInstance: {fileID: 5392739046168542018}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9071233953915395583 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3978266917727626941, guid: 0375b597253b2439b83ee0178b707e7f, type: 3}
   m_PrefabInstance: {fileID: 5392739046168542018}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6375033042155899751
@@ -1262,6 +1370,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}
+--- !u!114 &3640182721784714219 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7709085180860471436, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}
+  m_PrefabInstance: {fileID: 6375033042155899751}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf17f53ca51e4f94a13004b25b684cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.bosses.ArmorDamageReceiver
 --- !u!4 &8048810456752374556 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4020505768120305787, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}

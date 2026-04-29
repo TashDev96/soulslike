@@ -6,8 +6,10 @@ namespace game.gameplay_core.characters.state_machine.states
 {
 	public class FallState : CharacterAnimationStateBase
 	{
-		private const float LANDING_WINDOW_DURATION = 1.0f;
+		private const float PerfectLandingWindowSeconds = 0.7f;
 		public bool HasValidRollInput;
+
+		private bool _isAttacking;
 
 		private float _fallDuration;
 		private bool _hasPlayedFallAnimation;
@@ -32,6 +34,8 @@ namespace game.gameplay_core.characters.state_machine.states
 			_initialFallY = _context.Transform.Position.y;
 			HasValidRollInput = false;
 			_lastRollInputTime = -10f;
+			_isAttacking = false;
+			_hasPlayedFallAnimation = false;
 
 			PlayFallingAnimation();
 
@@ -57,6 +61,19 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				PlayFallingAnimation();
 				_hasPlayedFallAnimation = true;
+			}
+
+			if(_hasPlayedFallAnimation && !_isAttacking && _context.InputData.Command == CharacterCommand.RegularAttack)
+			{
+				_isAttacking = true;
+				var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+				_context.Animator.Play(weaponConfig.FallAttackAnimation, 0.2f, FadeMode.FromStart);
+			}
+
+			if(_isAttacking && _context.BodyAttackView.CheckPlungeAttackLanding(out var target, out var pivot))
+			{
+				_context.Events.TriggerPlungeAttack.Execute(target, pivot);
+				return;
 			}
 
 			if(_context.InputData.Command == CharacterCommand.Roll)
@@ -101,7 +118,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var currentTime = UnityEngine.Time.realtimeSinceStartup;
 			var timeSinceRollInput = currentTime - _lastRollInputTime;
 
-			if(timeSinceRollInput <= LANDING_WINDOW_DURATION)
+			if(timeSinceRollInput <= PerfectLandingWindowSeconds)
 			{
 				HasValidRollInput = true;
 

@@ -1,4 +1,5 @@
 using dream_lib.src.extensions;
+using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.worldspace_ui;
@@ -18,12 +19,22 @@ namespace game.gameplay_core.characters.bosses
 		[SerializeField]
 		private float _armorAmount;
 
+		[SerializeField]
+		private bool _listenPlungeDamage;
+		private int _selfLayerMask;
+
 		public bool IsBroken => _armorAmount <= 0;
 
 		public override void Initialize(DamageReceiverContext damageReceiverContext)
 		{
 			base.Initialize(damageReceiverContext);
 			_unarmoredReceiver.gameObject.SetActive(false);
+			_selfLayerMask = LayerMask.GetMask("DamageReceivers");
+
+			if(_listenPlungeDamage)
+			{
+				damageReceiverContext.ApplyDamage.OnExecute += HandlePlungeAttack;
+			}
 		}
 
 		public override void ApplyDamage(DamageInfo damageInfo)
@@ -46,11 +57,44 @@ namespace game.gameplay_core.characters.bosses
 
 			if(_armorAmount <= 0)
 			{
-				_unarmoredReceiver.gameObject.SetActive(true);
-				gameObject.SetActive(false);
-				_armorBreakParticles.gameObject.SetActive(true);
-				_armorBreakParticles.Play();
+				DestroyArmor();
 			}
+		}
+
+		private void HandlePlungeAttack(DamageInfo data)
+		{
+			if(_armorAmount <= 0)
+			{
+				return;
+			}
+
+			if(data.IsPlunge)
+			{
+				var colliders = Physics.OverlapSphere(data.WorldPos, 1.5f, _selfLayerMask);
+				DebugDrawUtils.DrawHandlesSphere(data.WorldPos, 1.5f, Color.red, 10f);
+				foreach(var collider in colliders)
+				{
+					if(collider.transform == transform)
+					{
+						_armorAmount -= data.DamageAmount * _damageMultiplier;
+
+						if(_armorAmount <= 0)
+						{
+							DestroyArmor();
+						}
+
+						return;
+					}
+				}
+			}
+		}
+
+		private void DestroyArmor()
+		{
+			_unarmoredReceiver.gameObject.SetActive(true);
+			gameObject.SetActive(false);
+			_armorBreakParticles.gameObject.SetActive(true);
+			_armorBreakParticles.Play();
 		}
 	}
 }

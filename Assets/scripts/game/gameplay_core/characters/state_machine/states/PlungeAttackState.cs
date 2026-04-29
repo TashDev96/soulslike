@@ -1,0 +1,94 @@
+using game.gameplay_core.characters.config.animation;
+using game.gameplay_core.characters.view;
+using game.gameplay_core.damage_system;
+using game.gameplay_core.inventory.item_configs;
+
+namespace game.gameplay_core.characters.state_machine.states
+{
+	public class PlungeAttackState : CharacterStateBase
+	{
+		private float _fallDamageBonus;
+		private readonly PlungeAttackTargetView _pivot;
+
+		private readonly CharacterDomain _target;
+		private AnimationConfig _targetAnimation;
+		private WeaponItemConfig _weaponConfig;
+
+		private float _time;
+
+		protected float TargetAnimNormalizedTime => _time / _targetAnimation.Duration;
+
+		public PlungeAttackState(CharacterContext context, CharacterDomain target, PlungeAttackTargetView pivot) : base(context)
+		{
+			_pivot = pivot;
+			_target = target;
+		}
+
+		public override void OnEnter()
+		{
+			_time = 0;
+			_target.CharacterStateMachine.LockInAnimation(_pivot.TargetAnimation);
+
+			_fallDamageBonus = _context.FallDamageLogic.FallSpeed;
+			_context.MovementLogic.ResetVelocity();
+			_context.MovementLogic.LockedInAnimationSlot = true;
+
+			_targetAnimation = _pivot.TargetAnimation;
+
+			_weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+			base.OnEnter();
+		}
+
+		public override void OnExit()
+		{
+			base.OnExit();
+			_context.MovementLogic.LockedInAnimationSlot = false;
+		}
+
+		public override void Update(float deltaTime)
+		{
+			var oldTime = TargetAnimNormalizedTime;
+			_time += deltaTime;
+			var newTime = TargetAnimNormalizedTime;
+
+			_context.Transform.Position = _pivot.WorldPos;
+
+			if(_targetAnimation.CheckFlagBegin(AnimationFlags.TakeDamage, oldTime, newTime))
+			{
+				ApplyGuaranteedDamage();
+			}
+
+			if(_targetAnimation.CheckFlagEnded(AnimationFlags.StateLocked, oldTime, newTime))
+			{
+				IsComplete = true;
+				_context.MovementLogic.LockedInAnimationSlot = false;
+				_context.MovementLogic.SetFallVelocity(_context.MovementLogic.LastUpdateVelocity * 2);
+			}
+		}
+
+		private void ApplyGuaranteedDamage()
+		{
+			if(_target == null)
+			{
+				return;
+			}
+
+			var damageAmount = _fallDamageBonus * _weaponConfig.FallDamageMultiplier;
+
+			var damageInfo = new DamageInfo
+			{
+				DamageAmount = damageAmount,
+				PoiseDamageAmount = 0.1f,
+				WorldPos = _context.Transform.Position,
+				DoneByPlayer = _context.IsPlayer.Value,
+				DamageDealer = _context.SelfLink,
+				DeflectionRating = 0,
+				KnockbackImpulse = 0,
+				Direction = _context.Transform.Forward,
+				IsPlunge = true
+			};
+
+			_target.ExternalData.ApplyDamage.Execute(damageInfo);
+		}
+	}
+}

@@ -39,10 +39,12 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		private CharacterConfig _config;
 
+		[BoxGroup("Pivots Setup")]
 		[SerializeField]
 		private GameObject _deadStateRoot;
 
 		[SerializeField]
+		[BoxGroup("Pivots Setup")]
 		private Transform _uiPivot;
 		[SerializeField]
 		private MovementLogic _movementLogic;
@@ -75,8 +77,12 @@ namespace game.gameplay_core.characters
 		public string UniqueId { get; private set; }
 		[field: SerializeField]
 		public bool IsBoss { get; private set; }
+		[field: SerializeField]
+		[field: BoxGroup("Pivots Setup")]
+		public List<PlungeAttackTargetView> PlungeAttackPivots { get; private set; }
 
 		[field: SerializeField]
+		[field: BoxGroup("Pivots Setup")]
 		private SerializableDictionary<EquipmentSlotType, Transform> ArmSockets { get; set; }
 
 		public CharacterExternalData ExternalData { get; private set; }
@@ -158,6 +164,7 @@ namespace game.gameplay_core.characters
 					DeflectCurrentAttack = new ReactiveCommand(),
 					OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
 					TriggerStagger = new ReactiveCommand<StaggerReason>(),
+					TriggerPlungeAttack = new ReactiveCommand<CharacterDomain, PlungeAttackTargetView>()
 				}
 			};
 
@@ -197,7 +204,7 @@ namespace game.gameplay_core.characters
 				{
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
-					ApplyDamage = _context.ApplyDamage,
+					ApplyDamage = _context.Events.ApplyDamage,
 					InvulnerabilityLogic = _context.InvulnerabilityLogic
 				});
 			}
@@ -243,7 +250,7 @@ namespace game.gameplay_core.characters
 			}
 
 			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
-			_characterBodyView.Initialize(_context.ApplyDamage);
+			_characterBodyView.Initialize(_context.Events.ApplyDamage);
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);
@@ -255,7 +262,7 @@ namespace game.gameplay_core.characters
 				customScript.SetContext(_context);
 			}
 
-			_context.ApplyDamage.Subscribe(info =>
+			_context.Events.ApplyDamage.Subscribe(info =>
 			{
 				if(info.DamageAmount <= 0)
 				{
@@ -480,6 +487,14 @@ namespace game.gameplay_core.characters
 		private void OnDrawGizmos()
 		{
 			_debugDrawer.OnDrawGizmos();
+		}
+
+		private void OnDrawGizmosSelected()
+		{
+			foreach(var plungeAttackPivot in PlungeAttackPivots)
+			{
+				plungeAttackPivot.DrawGizmos();
+			}
 		}
 #endif
 	}

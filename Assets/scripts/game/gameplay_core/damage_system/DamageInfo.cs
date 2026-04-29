@@ -13,5 +13,6 @@ namespace game.gameplay_core.damage_system
 		public CharacterDomain DamageDealer;
 		public int DeflectionRating;
 		public Vector3 Direction;
+		public bool IsPlunge;
 	}
 }

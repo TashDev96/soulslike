@@ -1,5 +1,6 @@
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.characters.view;
 using game.gameplay_core.utils;
 using UnityEngine;
 
@@ -74,6 +75,30 @@ namespace game.gameplay_core.damage_system
 			{
 				AttackHelpers.CastAttack(_fallDamage, _fallHitData, fallColliders, _context, 999, true);
 			}
+		}
+
+		public bool CheckPlungeAttackLanding(out CharacterDomain target, out PlungeAttackTargetView plungePivot)
+		{
+			target = null;
+			plungePivot = null;
+			foreach(var potentialTarget in LocationStaticContext.Instance.Characters)
+			{
+				if(potentialTarget.Context.Team.Value == _context.Team.Value || potentialTarget.PlungeAttackPivots.Count == 0)
+				{
+					continue;
+				}
+
+				foreach(var characterPlungeAttackPivot in potentialTarget.PlungeAttackPivots)
+				{
+					if(characterPlungeAttackPivot.CheckPointInTriggerZone(_context.Transform.Position))
+					{
+						target = potentialTarget;
+						plungePivot = characterPlungeAttackPivot;
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }
