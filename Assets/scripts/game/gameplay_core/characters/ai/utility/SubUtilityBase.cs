@@ -60,7 +60,7 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 			_context = context;
 			_transform = _context.CharacterContext.Transform;
-			_context.CharacterContext.OnStateChanged.OnExecute += HandleCharacterStateChanged;
+			_context.CharacterContext.Events.OnStateChanged.OnExecute += HandleCharacterStateChanged;
 
 			CharacterObservations = _context.CharacterContext.SensorsDomain.CharacterObservations;
 		}

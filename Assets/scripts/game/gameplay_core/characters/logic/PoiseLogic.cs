@@ -15,7 +15,7 @@ namespace game.gameplay_core.characters.logic
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			_context.ApplyDamage.OnExecute += ApplyDamage;
+			_context.Events.ApplyDamage.OnExecute += ApplyDamage;
 		}
 
 		public void Update(float deltaTime)
@@ -48,7 +48,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void ApplyStagger(StaggerReason reason)
 		{
-			_context.TriggerStagger.Execute(reason);
+			_context.Events.TriggerStagger.Execute(reason);
 			Poise.Value = PoiseMax.Value;
 		}
 	}

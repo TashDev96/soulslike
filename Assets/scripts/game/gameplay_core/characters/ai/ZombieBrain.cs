@@ -61,7 +61,7 @@ namespace game.gameplay_core.characters.ai
 		public void Initialize(CharacterContext context)
 		{
 			_context = context;
-			_context.ApplyDamage.OnExecute += HandleDamage;
+			_context.Events.ApplyDamage.OnExecute += HandleDamage;
 
 			foreach(var triggerListener in _aggroZones)
 			{

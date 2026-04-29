@@ -24,7 +24,7 @@ namespace game.gameplay_core.damage_system
 		public bool TryResolveParry(CharacterDomain damageDealer)
 		{
 			damageDealer.CharacterStateMachine.TriggerParryStun();
-			_context.OnParryTriggered.Execute(damageDealer);
+			_context.Events.OnParryTriggered.Execute(damageDealer);
 			return true;
 		}
 	}

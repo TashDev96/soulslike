@@ -28,9 +28,9 @@ namespace game.gameplay_core.characters.view.ui
 		{
 			_context = context;
 
-			if(_context.ApplyDamage != null)
+			if(_context.Events.ApplyDamage != null)
 			{
-				_context.ApplyDamage.OnExecute += HandleDamageApplied;
+				_context.Events.ApplyDamage.OnExecute += HandleDamageApplied;
 			}
 
 			_text.gameObject.SetActive(false);
@@ -81,9 +81,9 @@ namespace game.gameplay_core.characters.view.ui
 
 		private void OnDestroy()
 		{
-			if(_context.ApplyDamage != null)
+			if(_context.Events.ApplyDamage != null)
 			{
-				_context.ApplyDamage.OnExecute -= HandleDamageApplied;
+				_context.Events.ApplyDamage.OnExecute -= HandleDamageApplied;
 			}
 			_hideTween?.Kill();
 			_popTween?.Kill();

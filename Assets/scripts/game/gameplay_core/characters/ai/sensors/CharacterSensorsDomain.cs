@@ -48,7 +48,7 @@ namespace game.gameplay_core.characters.ai.sensors
 				ear.Initialize(_characterObservations);
 			}
 
-			characterDomain.Context.ApplyDamage.OnExecute += HandleDamage;
+			characterDomain.Context.Events.ApplyDamage.OnExecute += HandleDamage;
 		}
 
 		public void CustomUpdate(float deltaTime)

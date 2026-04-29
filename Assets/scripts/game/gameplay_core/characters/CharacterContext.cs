@@ -46,26 +46,31 @@ namespace game.gameplay_core.characters
 		public ReactiveProperty<Team> Team;
 		public IReadOnlyReactiveProperty<string> CharacterId;
 		public IReadOnlyReactiveProperty<bool> IsPlayer;
-		public ApplyDamageCommand ApplyDamage;
 		public IsDead IsDead;
-		public ReactiveCommand<StaggerReason> TriggerStagger;
 
 		public ReactiveProperty<bool> IsFalling;
 		public ReactiveHashSet<Collider> EnteredTriggers;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
-		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 
 		public BodyAttackView BodyAttackView;
 		public ParryReceiver ParryReceiver;
 
-		public ReactiveCommand DeflectCurrentAttack;
+		public Events Events;
 
-		public ReactiveCommand<CharacterDomain> OnParryTriggered;
 		public CharacterInventoryLogic InventoryLogic { get; set; }
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 		public CharacterSensorsDomain SensorsDomain { get; set; }
+	}
+
+	public struct Events
+	{
+		public ApplyDamageCommand ApplyDamage;
+		public ReactiveCommand<CharacterDomain> OnParryTriggered;
+		public ReactiveCommand DeflectCurrentAttack;
+		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
+		public ReactiveCommand<StaggerReason> TriggerStagger;
 	}
 }

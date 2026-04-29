@@ -57,7 +57,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context = context;
 			_context.IsDead.OnChanged += HandleDeath;
-			_context.ApplyDamage.OnExecute += HandleDamage;
+			_context.Events.ApplyDamage.OnExecute += HandleDamage;
 			_prevPos = CurrentPosition;
 			_virtualForward = _context.Transform.Forward;
 		}

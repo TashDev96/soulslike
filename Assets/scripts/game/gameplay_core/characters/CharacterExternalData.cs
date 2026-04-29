@@ -22,7 +22,7 @@ namespace game.gameplay_core.characters
 
 		public CharacterStatsData Stats => _context.CharacterStats;
 		public CharacterConfig Config => _context.Config;
-		public ApplyDamageCommand ApplyDamage => _context.ApplyDamage;
+		public ApplyDamageCommand ApplyDamage => _context.Events.ApplyDamage;
 
 		public ReactiveHashSet<Collider> EnteredTriggers => _context.EnteredTriggers;
 

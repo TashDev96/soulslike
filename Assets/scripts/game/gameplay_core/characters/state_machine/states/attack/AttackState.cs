@@ -150,7 +150,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						if(AttackHelpers.CastAttackObstacles(caster, false, true))
 						{
 							deflectedByHandleCast = true;
-							_context.DeflectCurrentAttack.Execute();
+							_context.Events.DeflectCurrentAttack.Execute();
 							interpolatedHandleCaster.ResetOnInterrupted();
 							break;
 						}

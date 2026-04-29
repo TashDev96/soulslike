@@ -57,8 +57,8 @@ namespace game.gameplay_core.characters.state_machine
 			_parryState = new ParryState(_context);
 
 			_context.IsDead.OnChanged += HandleIsDeadChanged;
-			_context.TriggerStagger.OnExecute += HandleTriggerStagger;
-			_context.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
+			_context.Events.TriggerStagger.OnExecute += HandleTriggerStagger;
+			_context.Events.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
 			_context.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
@@ -368,7 +368,7 @@ namespace game.gameplay_core.characters.state_machine
 
 			_currentState.Value = newState;
 			_currentState.Value.OnEnter();
-			_context.OnStateChanged.Execute(oldState, newState);
+			_context.Events.OnStateChanged.Execute(oldState, newState);
 			NextCommand = CharacterCommand.None;
 		}
 

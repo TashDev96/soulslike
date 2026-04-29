@@ -44,7 +44,7 @@ namespace game.gameplay_core.characters.logic
 
 			damageInfo.PoiseDamageAmount = 0;
 
-			_context.ApplyDamage.Execute(damageInfo);
+			_context.Events.ApplyDamage.Execute(damageInfo);
 			_onBlockTriggered.Execute();
 		}
 	}

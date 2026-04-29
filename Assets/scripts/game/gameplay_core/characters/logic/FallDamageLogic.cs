@@ -117,13 +117,13 @@ namespace game.gameplay_core.characters.logic
 						DamageDealer = null
 					};
 
-					_context.ApplyDamage.Execute(damageInfo);
+					_context.Events.ApplyDamage.Execute(damageInfo);
 					_context.BodyAttackView.CastFallAttack(fallSpeed);
 					_context.StaminaLogic.SpendStamina(staminaDamage);
 
 					if(fallSpeed > _staggerThresholdSpeed)
 					{
-						_context.TriggerStagger.Execute(StaggerReason.Fall);
+						_context.Events.TriggerStagger.Execute(StaggerReason.Fall);
 					}
 
 					Debug.Log($"Fall damage applied: {damage} from speed {fallSpeed.RoundFormat(100)}m");

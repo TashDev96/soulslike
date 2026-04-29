@@ -14,7 +14,7 @@ namespace game.gameplay_core.characters.logic
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			_context.ApplyDamage.OnExecute += ApplyDamage;
+			_context.Events.ApplyDamage.OnExecute += ApplyDamage;
 			_context.CharacterStats.Hp.OnChangedFromTo += HandleHpChanged;
 			RecoverableFadeDelay = RecoverableFadeDelayMax;
 		}

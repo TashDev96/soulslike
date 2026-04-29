@@ -145,7 +145,7 @@ namespace game.gameplay_core.damage_system
 						{
 							DebugDrawUtils.DrawWireCapsulePersistent(point0, point1, radius, Color.yellow, 1f);
 						}
-						casterContext.DeflectCurrentAttack.Execute();
+						casterContext.Events.DeflectCurrentAttack.Execute();
 						return;
 					}
 				}

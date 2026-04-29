@@ -145,16 +145,20 @@ namespace game.gameplay_core.characters
 				CharacterId = new ReactiveProperty<string>(UniqueId),
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
-				ApplyDamage = new ApplyDamageCommand(),
 				IsDead = isDead,
-				TriggerStagger = new ReactiveCommand<StaggerReason>(),
+
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
 
 				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-				OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
-				DeflectCurrentAttack = new ReactiveCommand(),
 
-				OnParryTriggered = new ReactiveCommand<CharacterDomain>()
+				Events =
+				{
+					ApplyDamage = new ApplyDamageCommand(),
+					OnStateChanged = new ReactiveCommand<CharacterStateBase, CharacterStateBase>(),
+					DeflectCurrentAttack = new ReactiveCommand(),
+					OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
+					TriggerStagger = new ReactiveCommand<StaggerReason>(),
+				}
 			};
 
 			_statsLogic.SetContext(_context);
