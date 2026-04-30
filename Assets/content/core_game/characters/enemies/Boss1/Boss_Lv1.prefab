@@ -460,6 +460,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7709085180860471436, guid: 259710b0be16147aca2aa5ad5ce8c494, type: 3}
+      propertyPath: _listenPlungeDamage
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1051,11 +1055,111 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._contactRadius
-      value: 1.59
+      value: 2.33
       objectReference: {fileID: 0}
     - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localOffset.y
       value: 2.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localRotation.w
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._anyRotationModeOffset
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localOffsetAttacker.y
+      value: 2.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._localOffsetAttacker.z
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._attackerOutSpeedLocal.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0]._attackerOutSpeedLocal.z
+      value: 2.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<AnyRotationMode>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: acd61c49f7e574ce3932a60ed2cd27e4, type: 2}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.Speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.LayerNames.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: '<PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.LayerNames.Array.data[0]'
+      value: Hits
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: '<PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.LayerNames.Array.data[1]'
+      value: LockAttacker
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].Flag
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].Name
+      value: Hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[1].Flag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[1].Name
+      value: Locked
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[1].LayerIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].ClipDuration
+      value: 0.81666666
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[1].ClipDuration
+      value: 0.81666666
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].IsSingleFrame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].EndTimeNormalized
+      value: 0.020858895
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[1].EndTimeNormalized
+      value: 0.69938654
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493928553482863973, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
+      propertyPath: <PlungeAttackPivots>k__BackingField.Array.data[0].<TargetAnimation>k__BackingField.FlagEvents.Array.data[0].StartTimeNormalized
+      value: 0.014723926
       objectReference: {fileID: 0}
     - target: {fileID: 5463184190765401211, guid: 0e2fe139c162ffd4f9daa82327cd9e0f, type: 3}
       propertyPath: m_Enabled
