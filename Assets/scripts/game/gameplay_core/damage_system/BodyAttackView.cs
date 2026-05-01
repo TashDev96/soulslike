@@ -1,6 +1,7 @@
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.view;
+using game.gameplay_core.location;
 using game.gameplay_core.utils;
 using UnityEngine;
 

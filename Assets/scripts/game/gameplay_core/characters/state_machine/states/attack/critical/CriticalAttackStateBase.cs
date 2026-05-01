@@ -4,6 +4,7 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.location;
 
 namespace game.gameplay_core.characters.state_machine.states.attack.critical
 {

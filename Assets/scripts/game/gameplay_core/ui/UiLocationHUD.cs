@@ -1,6 +1,7 @@
 using dream_lib.src.reactive;
 using dream_lib.src.ui;
 using game.gameplay_core.characters;
+using game.gameplay_core.location;
 using game.ui;
 using UnityEngine;
 

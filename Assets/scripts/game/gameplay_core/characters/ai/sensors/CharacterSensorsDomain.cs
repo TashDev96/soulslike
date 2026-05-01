@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.ai.sensors

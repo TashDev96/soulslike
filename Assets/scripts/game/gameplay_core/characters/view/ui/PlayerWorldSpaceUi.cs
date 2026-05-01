@@ -1,5 +1,6 @@
 using DG.Tweening;
 using dream_lib.src.extensions;
+using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui

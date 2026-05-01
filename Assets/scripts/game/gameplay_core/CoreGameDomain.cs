@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using game.gameplay_core.location;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
 using UnityEngine.SceneManagement;

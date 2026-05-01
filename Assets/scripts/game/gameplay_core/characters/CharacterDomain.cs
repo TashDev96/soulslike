@@ -23,6 +23,7 @@ using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
+using game.gameplay_core.location;
 using game.gameplay_core.worldspace_ui;
 using Sirenix.OdinInspector;
 using UnityEngine;

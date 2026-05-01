@@ -1,6 +1,7 @@
 using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.config.animation;
+using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states

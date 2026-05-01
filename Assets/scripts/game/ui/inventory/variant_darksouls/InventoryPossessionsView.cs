@@ -6,6 +6,7 @@ using game.gameplay_core;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
+using game.gameplay_core.location;
 using UnityEngine;
 using UnityEngine.UI;
 

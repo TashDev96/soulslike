@@ -16,7 +16,7 @@ using game.gameplay_core.worldspace_ui;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace game.gameplay_core
+namespace game.gameplay_core.location
 {
 	public class LocationDomain
 	{

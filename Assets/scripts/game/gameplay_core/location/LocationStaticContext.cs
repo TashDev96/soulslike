@@ -5,7 +5,7 @@ using game.gameplay_core.characters;
 using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.location.location_save_system;
 
-namespace game.gameplay_core
+namespace game.gameplay_core.location
 {
 	public class LocationStaticContext
 	{
