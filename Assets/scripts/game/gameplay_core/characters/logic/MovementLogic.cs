@@ -12,17 +12,11 @@ namespace game.gameplay_core.characters.logic
 	public class MovementLogic
 	{
 		private const float AirDamping = 0.33f;
-		[SerializeField]
-		private float _slidingAcceleration;
-		[SerializeField]
-		private float _slidingDamping;
-		[SerializeField]
-		private float _slidingStopDamping;
 
-		[Space]
-		[SerializeField]
-		private bool _drawDebug;
-
+		private const float SlidingAcceleration = 10;
+		private const float SlidingDamping = 0.7f;
+		private const float SlidingStopDamping = 2;
+		
 		private CharacterContext _context;
 
 		private Vector3 _prevPos;
@@ -339,7 +333,7 @@ namespace game.gameplay_core.characters.logic
 				if(CharacterCollider.HasStableGround || CharacterCollider.IsOnStableSlope)
 				{
 					_slidingVelocity.y = 0;
-					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingStopDamping);
+					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * SlidingStopDamping);
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
 					if(_slidingVelocity.sqrMagnitude < 0.001f)
 					{
@@ -349,8 +343,8 @@ namespace game.gameplay_core.characters.logic
 				else
 				{
 					var slideDirection = Vector3.ProjectOnPlane(Vector3.down, _groundNormal).normalized;
-					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * _slidingDamping);
-					_slidingVelocity += slideDirection * deltaTime * _slidingAcceleration;
+					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * SlidingDamping);
+					_slidingVelocity += slideDirection * deltaTime * SlidingAcceleration;
 				}
 			}
 

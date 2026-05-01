@@ -184,7 +184,7 @@ namespace game.gameplay_core.characters.player
 				return CharacterCommand.Parry;
 			}
 
-			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && _characterContext.InventoryLogic.CheckHasParryWeapon())
+			if(InputAdapter.GetButtonDown(InputAxesNames.Parry) && _characterContext.Logic.InventoryLogic.CheckHasParryWeapon())
 			{
 				return CharacterCommand.Parry;
 			}

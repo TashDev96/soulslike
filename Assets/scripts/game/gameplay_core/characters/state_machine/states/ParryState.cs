@@ -33,7 +33,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 
-			_context.InventoryLogic.TryGetParryWeapon(out _parryWeaponLogic, out var slot);
+			_context.Logic.InventoryLogic.TryGetParryWeapon(out _parryWeaponLogic, out var slot);
 			_parryWeaponView = _context.Views.EquippedWeaponViews[slot];
 			_parryConfig = _parryWeaponView?.Config.Parry;
 

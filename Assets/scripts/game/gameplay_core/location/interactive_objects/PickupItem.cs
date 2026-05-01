@@ -44,7 +44,7 @@ namespace game.gameplay_core.location.interactive_objects
 			SaveData.PickedUp = true;
 			gameObject.SetActive(false);
 
-			interactedCharacter.InventoryLogic.PickUpItem(_item);
+			interactedCharacter.Context.Logic.InventoryLogic.PickUpItem(_item);
 		}
 
 		protected override string GetInteractionTextHint()

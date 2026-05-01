@@ -36,7 +36,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_targetAnimation = _pivot.TargetAnimation;
 
-			_weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+			_weaponConfig = _context.Logic.InventoryLogic.RightWeapon.Config;
 			base.OnEnter();
 		}
 

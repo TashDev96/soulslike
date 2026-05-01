@@ -36,14 +36,14 @@ namespace game.ui.inventory
 
 		public void Refresh()
 		{
-			if(_context.InventoryLogic == null)
+			if(_context.Logic.InventoryLogic == null)
 			{
 				return;
 			}
 
 			foreach(var slotView in _slots)
 			{
-				var item = _context.InventoryLogic.GetEquipment(slotView.SlotType, slotView.SlotIndex);
+				var item = _context.Logic.InventoryLogic.GetEquipment(slotView.SlotType, slotView.SlotIndex);
 				slotView.SetItem(item);
 			}
 
@@ -65,7 +65,7 @@ namespace game.ui.inventory
 
 		private void OnSlotDoubleClicked(InventorySlotView slotView)
 		{
-			_context.InventoryLogic.UnequipItem(slotView.SlotType, slotView.SlotIndex);
+			_context.Logic.InventoryLogic.UnequipItem(slotView.SlotType, slotView.SlotIndex);
 			Refresh();
 		}
 
@@ -73,7 +73,7 @@ namespace game.ui.inventory
 		{
 			if(item.BaseConfig is BaseEquipmentItemConfig equippableConfig)
 			{
-				_context.InventoryLogic.EquipItemAuto(equippableConfig, item);
+				_context.Logic.InventoryLogic.EquipItemAuto(equippableConfig, item);
 				Refresh();
 			}
 		}

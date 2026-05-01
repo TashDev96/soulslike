@@ -226,7 +226,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		public override float GetEnterStaminaCost()
 		{
 			//TODO: make correct calculation
-			return _context.InventoryLogic.RightWeapon.Config.RegularAttacks[0].StaminaCost;
+			return _context.Logic.InventoryLogic.RightWeapon.Config.RegularAttacks[0].StaminaCost;
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
@@ -361,7 +361,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void GetCurrentAttackConfig(out AttackConfig attackConfig, out int newAttackIndex)
 		{
-			var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+			var weaponConfig = _context.Logic.InventoryLogic.RightWeapon.Config;
 			if(_context.InputData.ForcedAttackConfig != null)
 			{
 				newAttackIndex = _currentAttackIndex;

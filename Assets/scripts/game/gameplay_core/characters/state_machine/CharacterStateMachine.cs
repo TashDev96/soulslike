@@ -235,7 +235,7 @@ namespace game.gameplay_core.characters.state_machine
 						break;
 					case CharacterCommand.RegularAttack:
 
-						var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+						var weaponConfig = _context.Logic.InventoryLogic.RightWeapon.Config;
 
 						var canDoBackStabs = weaponConfig.CanBackstab && _context.Config.CanDoBackstabs;
 						var canRiposte = weaponConfig.CanRiposte;
@@ -272,7 +272,7 @@ namespace game.gameplay_core.characters.state_machine
 						SetState(_walkBlockState);
 						break;
 					case CharacterCommand.Parry:
-						if(_context.InventoryLogic.CheckHasParryWeapon())
+						if(_context.Logic.InventoryLogic.CheckHasParryWeapon())
 						{
 							SetState(_parryState);
 						}

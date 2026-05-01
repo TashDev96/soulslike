@@ -6,10 +6,10 @@ namespace game.gameplay_core.characters.logic
 {
 	public class DeathLogic
 	{
-		private readonly CharacterContext _context;
-		private readonly UnityEventsListener _unityEventsListener;
+		private CharacterContext _context;
+		private UnityEventsListener _unityEventsListener;
 
-		public DeathLogic(CharacterContext context)
+		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			if(_context.IsPlayer.Value)

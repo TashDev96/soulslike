@@ -35,7 +35,7 @@ namespace game.ui.inventory.variant_darksouls
 
 		public override void Initialize(Action<BaseItemLogic> autoEquipItem)
 		{
-			_inventoryLogic = LocationStaticContext.Instance.Player.InventoryLogic;
+			_inventoryLogic = LocationStaticContext.Instance.Player.Context.Logic.InventoryLogic;
 
 			var equippedItemsIds = _inventoryLogic.EquippedItems.Values
 				.Where(i => i != null)

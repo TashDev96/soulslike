@@ -66,7 +66,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_hasPlayedFallAnimation && !_isAttacking && _context.InputData.Command == CharacterCommand.RegularAttack)
 			{
 				_isAttacking = true;
-				var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
+				var weaponConfig = _context.Logic.InventoryLogic.RightWeapon.Config;
 				_context.Views.Animator.Play(weaponConfig.FallAttackAnimation, 0.2f, FadeMode.FromStart);
 			}
 

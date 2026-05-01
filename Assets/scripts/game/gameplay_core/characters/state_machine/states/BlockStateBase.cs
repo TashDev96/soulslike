@@ -27,7 +27,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_isBlocking = true;
 
-			var blockingSlot = _context.InventoryLogic.GetBlockingWeaponSlot();
+			var blockingSlot = _context.Logic.InventoryLogic.GetBlockingWeaponSlot();
 			BlockingWeaponView = _context.Views.EquippedWeaponViews[blockingSlot];
 
 			if(BlockingWeaponView != null)

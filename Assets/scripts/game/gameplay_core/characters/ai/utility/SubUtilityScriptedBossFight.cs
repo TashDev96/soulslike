@@ -81,7 +81,7 @@ namespace game.gameplay_core.characters.ai.utility
 				return;
 			}
 
-			var weaponConfig = _context.CharacterContext.InventoryLogic.GetEquipment(EquipmentSlotType.RightHand).BaseConfig as WeaponItemConfig;
+			var weaponConfig = _context.CharacterContext.Logic.InventoryLogic.GetEquipment(EquipmentSlotType.RightHand).BaseConfig as WeaponItemConfig;
 			var nextAttackIndex = _attackSequencesFirstPhase[_data.AttackSequenceKey][_data.AttackIndex];
 			var nextAttackConfig = weaponConfig.SpecialAttacks[nextAttackIndex];
 

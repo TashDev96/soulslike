@@ -27,7 +27,7 @@ namespace game.gameplay_core.characters
 		public ReactiveHashSet<Collider> EnteredTriggers => _context.EnteredTriggers;
 
 		public IReadOnlyReactiveProperty<CharacterDomain> LockOnTarget => _context.Logic.LockOnLogic.LockOnTarget;
-		public CharacterInventoryLogic InventoryLogic => _context.InventoryLogic;
+		public CharacterInventoryLogic InventoryLogic => _context.Logic.InventoryLogic;
 
 		public CharacterExternalData(CharacterContext context)
 		{

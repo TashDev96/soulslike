@@ -46,28 +46,15 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		[BoxGroup("Pivots Setup")]
 		private Transform _uiPivot;
-		[SerializeField]
-		private MovementLogic _movementLogic;
 
 		private ICharacterWorldSpaceUi _worldSpaceUi;
 
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
 
-		private HealthLogic _healthLogic;
-		private PoiseLogic _poiseLogic;
-		private StaminaLogic _staminaLogic;
-		private CharacterStatsLogic _statsLogic;
-		private LockOnLogic _lockOnLogic;
-		private InvulnerabilityLogic _invulnerabilityLogic;
-		private FallDamageLogic _fallDamageLogic;
-		private BlockLogic _blockLogic;
-		private DeathLogic _deathLogic;
-
 		[ShowInInspector]
 		private CharacterStatsData _characterStats;
 
-		private readonly Dictionary<EquipmentSlotType, WeaponView> _equippedWeaponsViews = new();
 		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
@@ -89,7 +76,6 @@ namespace game.gameplay_core.characters
 		public CharacterContext Context => _context;
 		public CharacterConfig Config => _config;
 		public CharacterStateMachine CharacterStateMachine { get; private set; }
-		public CharacterInventoryLogic InventoryLogic { get; private set; }
 
 		public void Initialize()
 		{
@@ -97,17 +83,6 @@ namespace game.gameplay_core.characters
 
 			var isDead = new IsDead();
 			isDead.OnChanged += HandleDeath;
-
-			_lockOnLogic = new LockOnLogic();
-			_blockLogic = new BlockLogic();
-			_invulnerabilityLogic = new InvulnerabilityLogic();
-			_fallDamageLogic = new FallDamageLogic();
-			_staminaLogic = new StaminaLogic();
-			_poiseLogic = new PoiseLogic();
-			_statsLogic = new CharacterStatsLogic();
-			_healthLogic = new HealthLogic();
-
-			InventoryLogic = new CharacterInventoryLogic();
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -121,8 +96,6 @@ namespace game.gameplay_core.characters
 				SelfLink = this,
 
 				IsFalling = isFalling,
-
-				InventoryLogic = InventoryLogic,
 
 				Config = _config,
 				Transform = new CharacterTransform(transform),
@@ -158,40 +131,42 @@ namespace game.gameplay_core.characters
 					Animator = GetComponent<AnimancerComponent>(),
 					DeadStateRoot = _deadStateRoot,
 					LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
-					EquippedWeaponViews = _equippedWeaponsViews,
+					EquippedWeaponViews = new Dictionary<EquipmentSlotType, WeaponView>(),
 					BodyAttackView = GetComponentInChildren<BodyAttackView>(),
 					ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
 					DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
 				},
 				Logic =
 				{
-					MovementLogic = _movementLogic,
-					LockOnLogic = _lockOnLogic,
-					InvulnerabilityLogic = _invulnerabilityLogic,
-					FallDamageLogic = _fallDamageLogic,
-					StaminaLogic = _staminaLogic,
-					PoiseLogic = _poiseLogic,
-					BlockLogic = _blockLogic,
-					HealthLogic = _healthLogic
+					MovementLogic = new MovementLogic(),
+					LockOnLogic = new LockOnLogic(),
+					InvulnerabilityLogic = new InvulnerabilityLogic(),
+					FallDamageLogic = new FallDamageLogic(),
+					StaminaLogic = new StaminaLogic(),
+					PoiseLogic = new PoiseLogic(),
+					BlockLogic = new BlockLogic(),
+					HealthLogic = new HealthLogic(),
+					StatsLogic = new CharacterStatsLogic(),
+					DeathLogic = new DeathLogic(),
+					InventoryLogic = new CharacterInventoryLogic()
 				}
 			};
 
-			_statsLogic.SetContext(_context);
-			_lockOnLogic.SetContext(_context);
-			_healthLogic.SetContext(_context);
+			_context.Logic.StatsLogic.SetContext(_context);
+			_context.Logic.LockOnLogic.SetContext(_context);
+			_context.Logic.HealthLogic.SetContext(_context);
+			_context.Logic.DeathLogic.SetContext(_context);
+			_context.Logic.MovementLogic.SetContext(_context);
+			_context.Logic.BlockLogic.SetContext(_context);
+			_context.Logic.FallDamageLogic.SetContext(_context);
+			_context.Logic.StaminaLogic.Initialize(_context);
+			_context.Logic.PoiseLogic.SetContext(_context);
 
 			InitializeInventory();
 
 			ExternalData = new CharacterExternalData(_context);
 
 			characterCollider.SetContext(_context);
-
-			_deathLogic = new DeathLogic(_context);
-
-			_movementLogic.SetContext(_context);
-			_blockLogic.SetContext(_context);
-			_fallDamageLogic.SetContext(_context);
-			_staminaLogic.Initialize(_context);
 
 			CharacterStateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = CharacterStateMachine.CurrentState;
@@ -221,8 +196,6 @@ namespace game.gameplay_core.characters
 			{
 				_context.Views.ParryReceiver.Initialize(_context);
 			}
-
-			_poiseLogic.SetContext(_context);
 
 			_sensorsDomain = GetComponent<CharacterSensorsDomain>();
 			if(_sensorsDomain != null)
@@ -309,25 +282,25 @@ namespace game.gameplay_core.characters
 		{
 			if(_context.IsPlayer.Value)
 			{
-				InventoryLogic.Initialize(_context, GameStaticContext.Instance.InventoryDomain.InventoryData);
+				_context.Logic.InventoryLogic.Initialize(_context, GameStaticContext.Instance.InventoryDomain.InventoryData);
 			}
 			else
 			{
 				var npcInventoryComponent = gameObject.GetComponent<NpcInventoryConfigView>();
 				if(npcInventoryComponent != null)
 				{
-					InventoryLogic.Initialize(_context, npcInventoryComponent.InventoryData);
+					_context.Logic.InventoryLogic.Initialize(_context, npcInventoryComponent.InventoryData);
 				}
 				else
 				{
-					InventoryLogic.Initialize(_context, new InventoryData());
+					_context.Logic.InventoryLogic.Initialize(_context, new InventoryData());
 				}
 			}
 
-			InventoryLogic.OnEquipChanged += HandleEquipChanged;
+			_context.Logic.InventoryLogic.OnEquipChanged += HandleEquipChanged;
 
-			SetWeapon(EquipmentSlotType.LeftHand, InventoryLogic.GetEquipment(EquipmentSlotType.LeftHand));
-			SetWeapon(EquipmentSlotType.RightHand, InventoryLogic.GetEquipment(EquipmentSlotType.RightHand));
+			SetWeapon(EquipmentSlotType.LeftHand, _context.Logic.InventoryLogic.GetEquipment(EquipmentSlotType.LeftHand));
+			SetWeapon(EquipmentSlotType.RightHand, _context.Logic.InventoryLogic.GetEquipment(EquipmentSlotType.RightHand));
 		}
 
 		private void Awake()
@@ -349,10 +322,10 @@ namespace game.gameplay_core.characters
 		{
 			if(logic == null)
 			{
-				if(_equippedWeaponsViews.TryGetValue(slot, out var view))
+				if(_context.Views.EquippedWeaponViews.TryGetValue(slot, out var view))
 				{
 					Destroy(view.gameObject);
-					_equippedWeaponsViews.Remove(slot);
+					_context.Views.EquippedWeaponViews.Remove(slot);
 				}
 				return;
 			}
@@ -366,7 +339,7 @@ namespace game.gameplay_core.characters
 
 			if(logic is WeaponItemLogic weaponLogic)
 			{
-				if(_equippedWeaponsViews.TryGetValue(slot, out var oldView))
+				if(_context.Views.EquippedWeaponViews.TryGetValue(slot, out var oldView))
 				{
 					Destroy(oldView.gameObject);
 				}
@@ -380,7 +353,7 @@ namespace game.gameplay_core.characters
 				weaponView.Config = config;
 				weaponView.Initialize(_context);
 
-				_equippedWeaponsViews[slot] = weaponView;
+				_context.Views.EquippedWeaponViews[slot] = weaponView;
 			}
 		}
 
@@ -420,9 +393,9 @@ namespace game.gameplay_core.characters
 		public void HandleLocationRespawn()
 		{
 			_context.CharacterStats.SetStatsToMax();
-			_context.InventoryLogic.HandleRespawn();
+			_context.Logic.InventoryLogic.HandleRespawn();
 			_context.IsDead.Value = false;
-			_movementLogic.Teleport(_respawnTransform);
+			_context.Logic.MovementLogic.Teleport(_respawnTransform);
 			CharacterStateMachine.Reset();
 			_brain.Reset();
 			_sensorsDomain.Reset();
@@ -453,7 +426,7 @@ namespace game.gameplay_core.characters
 			if(_context.IsDead.Value)
 			{
 				CharacterStateMachine.Update(deltaTime, true);
-				_movementLogic.Update(deltaTime);
+				_context.Logic.MovementLogic.Update(deltaTime);
 				_context.Views.Animator.Playable.Graph.Evaluate(deltaTime);
 				return;
 			}
@@ -472,15 +445,15 @@ namespace game.gameplay_core.characters
 				var deltaTimeStep = Mathf.Min(personalDeltaTime, _context.MaxDeltaTime.Value);
 				personalDeltaTime -= deltaTimeStep;
 				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
-				_movementLogic.Update(deltaTimeStep);
+				_context.Logic.MovementLogic.Update(deltaTimeStep);
 				_context.Views.BodyAttackView.CustomUpdate(deltaTimeStep);
 				_context.Views.Animator.Playable.Graph.Evaluate(deltaTimeStep);
-				_lockOnLogic.Update(deltaTimeStep);
-				_staminaLogic.Update(deltaTimeStep);
-				_poiseLogic.Update(deltaTimeStep);
-				_healthLogic.Update(deltaTimeStep);
+				_context.Logic.LockOnLogic.Update(deltaTimeStep);
+				_context.Logic.StaminaLogic.Update(deltaTimeStep);
+				_context.Logic.PoiseLogic.Update(deltaTimeStep);
+				_context.Logic.HealthLogic.Update(deltaTimeStep);
 
-				_fallDamageLogic.CustomUpdate(deltaTimeStep);
+				_context.Logic.FallDamageLogic.CustomUpdate(deltaTimeStep);
 
 				calculateInputLogic = false;
 			}

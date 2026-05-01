@@ -46,7 +46,7 @@ namespace game.gameplay_core.characters
 		public Views Views;
 		public Logics Logic;
 
-		public CharacterInventoryLogic InventoryLogic { get; set; }
+		 
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 		public CharacterSensorsDomain SensorsDomain { get; set; }
 	}
@@ -61,6 +61,9 @@ namespace game.gameplay_core.characters
 		public PoiseLogic PoiseLogic;
 		public BlockLogic BlockLogic;
 		public HealthLogic HealthLogic;
+		public CharacterStatsLogic StatsLogic;
+		public DeathLogic DeathLogic;
+		public CharacterInventoryLogic InventoryLogic;
 	}
 
 	public struct Views
