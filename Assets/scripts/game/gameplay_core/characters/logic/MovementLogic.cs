@@ -16,7 +16,7 @@ namespace game.gameplay_core.characters.logic
 		private const float SlidingAcceleration = 10;
 		private const float SlidingDamping = 0.7f;
 		private const float SlidingStopDamping = 2;
-		
+
 		private CharacterContext _context;
 
 		private Vector3 _prevPos;

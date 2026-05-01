@@ -42,7 +42,8 @@ namespace game.gameplay_core.location
 				LocationUpdate = new ReactiveCommand<float>(),
 				LocationUiUpdate = new ReactiveCommand<float>(),
 				LocationTime = new ReactiveProperty<float>(),
-				CameraController = _cameraController
+				CameraController = _cameraController,
+				LootLogic = new LocationLootLogic()
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;
@@ -217,15 +218,12 @@ namespace game.gameplay_core.location
 			foreach(var spawnedObjectSave in locationSave.SpawnedObjects)
 			{
 				var prefab = Resources.Load<GameObject>(spawnedObjectSave.PrefabName);
-				var instance = Object.Instantiate(prefab);
+				var instance = Object.Instantiate(prefab, spawnedObjectSave.Position, Quaternion.identity);
 
-				var spawnedObjectController = new SpawnedObjectController
-				{
-					SceneInstance = instance.GetComponent<SceneSavableObjectBase>()
-				};
+				var view = instance.GetComponent<SavableSceneObjectGeneric<SpawnedObjectSaveData>>();
+				view.LoadSave(spawnedObjectSave);
 
-				spawnedObjectController.LoadSave(spawnedObjectSave);
-				LocationStaticContext.Instance.SpawnedObjects.Add(spawnedObjectController);
+				LocationStaticContext.Instance.SpawnedObjects.Add(view);
 			}
 		}
 #if UNITY_EDITOR

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.location.location_save_system;
+using game.gameplay_core.location.view;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,6 +34,9 @@ namespace game.gameplay_core.location.interactive_objects
 
 		[SerializeField]
 		private Vector2 _randomDirectionForceRange = new(0f, 1f);
+
+		[SerializeField]
+		private List<LootConfig> _loot;
 
 		private ApplyDamageCommand _applyDamageCommand;
 		private float _currentHp;
@@ -103,8 +108,15 @@ namespace game.gameplay_core.location.interactive_objects
 
 					rb.AddForce(damageDirectionForce + randomDirectionForce, ForceMode.Acceleration);
 				}
+
+				if(_loot.Count > 0)
+				{
+					LocationStaticContext.Instance.LootLogic.TrySpawnLoot(transform.position, _loot);
+				}
 			}
 		}
+
+		 
 
 		private void SetVisualState(DestructibleVisualState state)
 		{

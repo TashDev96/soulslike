@@ -8,7 +8,7 @@ namespace game.gameplay_core.location.location_save_system
 	public abstract class SceneSavableObjectBase : MonoBehaviour, IOnSceneUniqueIdOwner
 	{
 		[field: SerializeField]
-		public string UniqueId { get; private set; }
+		public string UniqueId { get; protected set; }
 		public abstract void InitializeFirstTime();
 
 		public abstract void LoadSave(BaseSaveData data);

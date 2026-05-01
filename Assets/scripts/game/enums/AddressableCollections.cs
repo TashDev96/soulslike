@@ -5,6 +5,7 @@ namespace game.enums
 		WeaponPrefabNames,
 		WeaponConfigs,
 		ItemConfigs,
-		ProjectilePrefabs
+		ProjectilePrefabs,
+		LootVfxPrefabs,
 	}
 }

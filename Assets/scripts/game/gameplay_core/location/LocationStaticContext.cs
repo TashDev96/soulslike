@@ -19,12 +19,13 @@ namespace game.gameplay_core.location
 		public SceneSavableObjectBase[] SceneSavableObjects { get; set; }
 
 		public List<CharacterDomain> Characters { get; set; }
-		public List<SpawnedObjectController> SpawnedObjects { get; set; } = new();
+		public List<SceneSavableObjectBase> SpawnedObjects { get; set; } = new();
 		public ReactiveCommand<float> LocationUpdate { get; set; }
 		public ReactiveCommand<float> LocationUiUpdate { get; set; }
 		public ReactiveProperty<float> LocationTime { get; set; }
 		public ICameraController CameraController { get; set; }
 
 		public WorldObservableInfo WorldInfo { get; set; } = new();
+		public LocationLootLogic LootLogic { get; set; }
 	}
 }

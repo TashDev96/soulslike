@@ -104,6 +104,7 @@ namespace game.gameplay_core
 				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ItemConfigs, AssetOwner.CoreGame),
 				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.WeaponPrefabNames, AssetOwner.CoreGame),
 				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.ProjectilePrefabs, AssetOwner.CoreGame),
+				AddressableManager.PreloadAssetsListAsync(AddressableAssetNames.LootVfxPrefabs, AssetOwner.CoreGame),
 				AddressableManager.PreloadAssetAsync(AddressableAssetNames.Player, AssetOwner.CoreGame),
 				AddressableManager.PreloadAssetAsync(AddressableAssetNames.CharacterWorldSpaceUi, AssetOwner.CoreGame),
 				AddressableManager.PreloadAssetAsync(AddressableAssetNames.PlayerWorldSpaceUi, AssetOwner.CoreGame),

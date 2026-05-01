@@ -69,7 +69,10 @@ namespace game.gameplay_core.characters.logic
 				case MainHealingItemLogic mainHealingItemLogic:
 					HandleMainHealingItemPickup(itemSaveData, mainHealingItemLogic);
 					break;
-				case WeaponItemLogic weaponItemLogic:
+				default:
+					_items.Add(createdItemLogic);
+					createdItemLogic.InitializeForLocation(_context);
+					createdItemLogic.LoadData(itemSaveData);
 					break;
 			}
 		}

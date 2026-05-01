@@ -46,7 +46,6 @@ namespace game.gameplay_core.characters
 		public Views Views;
 		public Logics Logic;
 
-		 
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
 		public CharacterSensorsDomain SensorsDomain { get; set; }
 	}

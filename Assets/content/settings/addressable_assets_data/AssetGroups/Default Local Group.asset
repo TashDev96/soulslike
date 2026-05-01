@@ -35,6 +35,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ba994c82a6b74090963ee49e4435c81
+    m_Address: LootItemViewBasic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1cc72ed40ea14401d9bdc3bc4992c15a
     m_Address: ZombieSwordConfig
     m_ReadOnly: 0
