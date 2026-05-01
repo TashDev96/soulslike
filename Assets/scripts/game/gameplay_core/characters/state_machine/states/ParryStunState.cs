@@ -61,7 +61,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var animation = _context.Config.ParryStunAnimation;
 			if(animation != null)
 			{
-				_animation = _context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
+				_animation = _context.Views.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 				Duration = _animation.Length;
 			}
 		}

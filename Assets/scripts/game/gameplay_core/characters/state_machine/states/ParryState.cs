@@ -34,7 +34,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			base.OnEnter();
 
 			_context.InventoryLogic.TryGetParryWeapon(out _parryWeaponLogic, out var slot);
-			_parryWeaponView = _context.EquippedWeaponViews[slot];
+			_parryWeaponView = _context.Views.EquippedWeaponViews[slot];
 			_parryConfig = _parryWeaponView?.Config.Parry;
 
 			if(_parryConfig != null && _parryWeaponView.Config.CanParry)
@@ -50,8 +50,8 @@ namespace game.gameplay_core.characters.state_machine.states
 					});
 				}
 
-				_context.Animator.Play(_parryConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
-				_context.StaminaLogic.SpendStamina(_parryConfig.StaminaCost);
+				_context.Views.Animator.Play(_parryConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
+				_context.Logic.StaminaLogic.SpendStamina(_parryConfig.StaminaCost);
 				AnimationConfig = _parryConfig.AnimationConfig;
 			}
 			else
@@ -103,9 +103,9 @@ namespace game.gameplay_core.characters.state_machine.states
 				IsInRecoveryFrames = true;
 			}
 
-			if(wasInActiveFrames != IsInActiveFrames && _context.ParryReceiver != null)
+			if(wasInActiveFrames != IsInActiveFrames && _context.Views.ParryReceiver != null)
 			{
-				_context.ParryReceiver.SetActive(IsInActiveFrames);
+				_context.Views.ParryReceiver.SetActive(IsInActiveFrames);
 			}
 
 			if(Time >= _parryConfig.Duration)
@@ -126,9 +126,9 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void OnExit()
 		{
-			if(_context.ParryReceiver != null)
+			if(_context.Views.ParryReceiver != null)
 			{
-				_context.ParryReceiver.gameObject.SetActive(false);
+				_context.Views.ParryReceiver.gameObject.SetActive(false);
 			}
 
 			base.OnExit();

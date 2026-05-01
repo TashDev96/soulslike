@@ -46,7 +46,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 				});
 			}
 
-			_context.Animator.Play(_attackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
+			_context.Views.Animator.Play(_attackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			var camera = LocationStaticContext.Instance.CameraController;
 			var lockedFlag = AnimationConfig.GetFlag(AnimationFlags.StateLocked);
@@ -65,11 +65,11 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 
 			if(rotationDisabled)
 			{
-				_context.LockOnLogic.DisableRotationForThisFrame = true;
+				_context.Logic.LockOnLogic.DisableRotationForThisFrame = true;
 			}
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
-				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
+				_context.Logic.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
@@ -83,7 +83,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 					hitData.IsStarted = true;
 					if(!_staminaSpent)
 					{
-						_context.StaminaLogic.SpendStamina(_attackConfig.StaminaCost);
+						_context.Logic.StaminaLogic.SpendStamina(_attackConfig.StaminaCost);
 						_staminaSpent = true;
 					}
 					ApplyGuaranteedDamage(hitData);
@@ -110,20 +110,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 					if(disableRegen)
 					{
 						_staminaRegenDisabled = true;
-						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
+						_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
 				else if(!disableRegen)
 				{
 					_staminaRegenDisabled = false;
-					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+					_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
 				}
 			}
 		}
 
 		public override void OnExit()
 		{
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
 			base.OnExit();
 		}
 

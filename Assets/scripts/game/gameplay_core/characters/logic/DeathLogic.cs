@@ -31,7 +31,7 @@ namespace game.gameplay_core.characters.logic
 		{
 			yield return new WaitForSeconds(1);
 			GameStaticContext.Instance.ReloadLocation.Execute();
-			_context.MovementLogic.Teleport(GameStaticContext.Instance.PlayerSave.RespawnTransform);
+			_context.Logic.MovementLogic.Teleport(GameStaticContext.Instance.PlayerSave.RespawnTransform);
 			_context.IsDead.Value = false;
 		}
 	}

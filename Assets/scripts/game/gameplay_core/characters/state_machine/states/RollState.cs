@@ -40,9 +40,9 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			_staminaSpent = false;
 
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
 
-			_context.BodyAttackView.PrepareRollBodyAttack();
+			_context.Views.BodyAttackView.PrepareRollBodyAttack();
 
 			var animation = _config.ForwardAnimation;
 
@@ -50,7 +50,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_characterDirectionTarget = _rollDirectionWorld;
 			_localMovementDirection = _context.Transform.InverseTransformDirection(_rollDirectionWorld);
 
-			if(_context.LockOnLogic.IsLockedOn && _context.InputData.HasDirectionInput)
+			if(_context.Logic.LockOnLogic.IsLockedOn && _context.InputData.HasDirectionInput)
 			{
 				_localMovementDirection = _context.Transform.InverseTransformDirection(_context.InputData.DirectionWorld);
 				var directionType = _localMovementDirection.GetDirectionHor();
@@ -81,13 +81,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			ResetForwardMovement();
 
-			_context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
+			_context.Views.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
-			_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
+			_context.Logic.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
@@ -99,21 +99,21 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.Update(deltaTime);
 
-			if(_context.LockOnLogic.IsLockedOn)
+			if(_context.Logic.LockOnLogic.IsLockedOn)
 			{
-				_context.LockOnLogic.DisableRotationForThisFrame = true;
+				_context.Logic.LockOnLogic.DisableRotationForThisFrame = true;
 
 				if(!_config.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime))
 				{
-					var lockOnTarget = _context.LockOnLogic.LockOnTarget.Value;
+					var lockOnTarget = _context.Logic.LockOnLogic.LockOnTarget.Value;
 					var lookVector = (lockOnTarget.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
-					_context.MovementLogic.RotateCharacter(lookVector, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn * 3, deltaTime);
+					_context.Logic.MovementLogic.RotateCharacter(lookVector, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn * 3, deltaTime);
 				}
 				UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _context.Transform.TransformDirection(_localMovementDirection), deltaTime);
 			}
 			else
 			{
-				_context.MovementLogic.RotateCharacter(_characterDirectionTarget, deltaTime);
+				_context.Logic.MovementLogic.RotateCharacter(_characterDirectionTarget, deltaTime);
 				UpdateForwardMovement(_config.ForwardMovement.Evaluate(Time), _rollDirectionWorld, deltaTime);
 			}
 
@@ -128,20 +128,20 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				if(!_staminaSpent)
 				{
-					_context.StaminaLogic.SpendStamina(CalculateStaminaCost());
+					_context.Logic.StaminaLogic.SpendStamina(CalculateStaminaCost());
 					_staminaSpent = true;
-					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
+					_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
 				}
-				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, true);
+				_context.Logic.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, true);
 			}
 			else
 			{
-				_context.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
+				_context.Logic.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.Roll, false);
 			}
 
 			if(_config.AnimationConfig.HasFlag(AnimationFlags.BodyAttack, NormalizedTime))
 			{
-				_context.BodyAttackView.CastRollAttack();
+				_context.Views.BodyAttackView.CastRollAttack();
 			}
 		}
 

@@ -30,9 +30,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			_target.CharacterStateMachine.LockInAnimation(_pivot.TargetAnimation);
 			_pivot.SetAttackerLocalRotation(_context.Transform);
 
-			_fallDamageBonus = _context.FallDamageLogic.FallSpeed;
-			_context.MovementLogic.ResetVelocity();
-			_context.MovementLogic.LockedInAnimationSlot = true;
+			_fallDamageBonus = _context.Logic.FallDamageLogic.FallSpeed;
+			_context.Logic.MovementLogic.ResetVelocity();
+			_context.Logic.MovementLogic.LockedInAnimationSlot = true;
 
 			_targetAnimation = _pivot.TargetAnimation;
 
@@ -43,7 +43,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			base.OnExit();
-			_context.MovementLogic.LockedInAnimationSlot = false;
+			_context.Logic.MovementLogic.LockedInAnimationSlot = false;
 			_context.Transform.ResetRotationVertical();
 		}
 
@@ -64,8 +64,8 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_targetAnimation.CheckFlagEnded(AnimationFlags.StateLocked, oldTime, newTime))
 			{
 				IsComplete = true;
-				_context.MovementLogic.LockedInAnimationSlot = false;
-				_context.MovementLogic.SetFallVelocity(_pivot.AttackerOutSpeed);
+				_context.Logic.MovementLogic.LockedInAnimationSlot = false;
+				_context.Logic.MovementLogic.SetFallVelocity(_pivot.AttackerOutSpeed);
 				_context.Transform.ResetRotationVertical();
 			}
 		}

@@ -23,7 +23,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			AnimationConfig = _context.Config.Locomotion.WalkAnimation;
 			Duration = AnimationConfig.Duration;
 			_noiseTimer = 0;
-			_context.Animator.Play(AnimationConfig.Clip, 0.3f);
+			_context.Views.Animator.Play(AnimationConfig.Clip, 0.3f);
 		}
 
 		public override bool TryContinueWithCommand(CharacterCommand nextCommand)
@@ -45,7 +45,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(Time);
 			var speed = _context.CharacterStats.Locomotion.WalkSpeed * acceleration;
 
-			_context.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
+			_context.Logic.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
 
 			IsComplete = true;
 

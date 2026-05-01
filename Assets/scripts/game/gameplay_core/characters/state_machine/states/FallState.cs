@@ -67,10 +67,10 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_isAttacking = true;
 				var weaponConfig = _context.InventoryLogic.RightWeapon.Config;
-				_context.Animator.Play(weaponConfig.FallAttackAnimation, 0.2f, FadeMode.FromStart);
+				_context.Views.Animator.Play(weaponConfig.FallAttackAnimation, 0.2f, FadeMode.FromStart);
 			}
 
-			if(_isAttacking && _context.BodyAttackView.CheckPlungeAttackLanding(out var target, out var pivot))
+			if(_isAttacking && _context.Views.BodyAttackView.CheckPlungeAttackLanding(out var target, out var pivot))
 			{
 				_context.Events.TriggerPlungeAttack.Execute(target, pivot);
 				return;
@@ -82,9 +82,9 @@ namespace game.gameplay_core.characters.state_machine.states
 
 				_lastRollInputTime = currentTime;
 
-				if(_context.FallDamageLogic != null && _context.IsFalling.Value)
+				if(_context.Logic.FallDamageLogic != null && _context.IsFalling.Value)
 				{
-					_context.FallDamageLogic.TryActivateFallDamageProtection();
+					_context.Logic.FallDamageLogic.TryActivateFallDamageProtection();
 				}
 			}
 		}
@@ -122,9 +122,9 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				HasValidRollInput = true;
 
-				if(_context.FallDamageLogic != null)
+				if(_context.Logic.FallDamageLogic != null)
 				{
-					var success = _context.FallDamageLogic.TryActivateFallDamageProtection();
+					var success = _context.Logic.FallDamageLogic.TryActivateFallDamageProtection();
 					if(success)
 					{
 						Debug.Log("Perfectly timed roll will prevent fall damage!");
@@ -137,11 +137,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			if(_context.Config.FallAnimation != null)
 			{
-				_context.Animator.Play(_context.Config.FallAnimation, 0.2f, FadeMode.FromStart);
+				_context.Views.Animator.Play(_context.Config.FallAnimation, 0.2f, FadeMode.FromStart);
 			}
 			else
 			{
-				_context.Animator.Play(_context.Config.IdleAnimation, 0.2f, FadeMode.FromStart);
+				_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.2f, FadeMode.FromStart);
 			}
 		}
 	}

@@ -20,20 +20,20 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			if(_immediate)
 			{
-				var anim = _context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
+				var anim = _context.Views.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
 				anim.NormalizedTime = 1f;
 			}
 			else
 			{
-				_context.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
+				_context.Views.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
 			}
-			_context.DeadStateRoot.SetActive(true);
+			_context.Views.DeadStateRoot.SetActive(true);
 		}
 
 		public override void OnExit()
 		{
-			_context.Animator.Play(_context.Config.IdleAnimation, 0.1f, FadeMode.FromStart);
-			_context.DeadStateRoot.SetActive(false);
+			_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.1f, FadeMode.FromStart);
+			_context.Views.DeadStateRoot.SetActive(false);
 		}
 	}
 }

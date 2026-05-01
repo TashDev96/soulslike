@@ -49,7 +49,7 @@ namespace game.gameplay_core.characters.ai.utility
 				var doLockOn = _lastVectorToTarget.sqrMagnitude < attackRange * attackRange + 1f;
 				doLockOn |= _lastAction?.Type == UtilityAction.ActionType.KeepSafeDistance;
 
-				_context.CharacterContext.LockOnLogic.HandleLockOnSelectedByAI(doLockOn ? _lastTarget.Character : null);
+				_context.CharacterContext.Logic.LockOnLogic.HandleLockOnSelectedByAI(doLockOn ? _lastTarget.Character : null);
 				base.Think(deltaTime);
 			}
 		}

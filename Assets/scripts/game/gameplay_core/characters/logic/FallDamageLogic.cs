@@ -31,7 +31,7 @@ namespace game.gameplay_core.characters.logic
 
 		private ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
 
-		public float FallSpeed => Mathf.Abs(Mathf.Min(0, _context.MovementLogic.FallVelocity.y));
+		public float FallSpeed => Mathf.Abs(Mathf.Min(0, _context.Logic.MovementLogic.FallVelocity.y));
 
 		public void SetContext(CharacterContext context)
 		{
@@ -94,7 +94,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void HandleLanded()
 		{
-			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.InvulnerabilityLogic.IsInvulnerable)
+			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
 				var fallSpeed = FallSpeed;
 
@@ -120,8 +120,8 @@ namespace game.gameplay_core.characters.logic
 					};
 
 					_context.Events.ApplyDamage.Execute(damageInfo);
-					_context.BodyAttackView.CastFallAttack(fallSpeed);
-					_context.StaminaLogic.SpendStamina(staminaDamage);
+					_context.Views.BodyAttackView.CastFallAttack(fallSpeed);
+					_context.Logic.StaminaLogic.SpendStamina(staminaDamage);
 
 					if(fallSpeed > _staggerThresholdSpeed)
 					{

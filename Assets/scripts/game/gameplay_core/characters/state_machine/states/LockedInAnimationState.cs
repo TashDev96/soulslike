@@ -24,15 +24,15 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			_context.MovementLogic.ResetVelocity();
-			_animation = _context.Animator.Play(AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
-			_context.MovementLogic.SetRotationAndMovementLocked(true);
+			_context.Logic.MovementLogic.ResetVelocity();
+			_animation = _context.Views.Animator.Play(AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
+			_context.Logic.MovementLogic.SetRotationAndMovementLocked(true);
 			Duration = AnimationConfig.Duration;
 		}
 
 		public override void OnExit()
 		{
-			_context.MovementLogic.SetRotationAndMovementLocked(false);
+			_context.Logic.MovementLogic.SetRotationAndMovementLocked(false);
 			base.OnExit();
 		}
 

@@ -62,7 +62,7 @@ namespace game.gameplay_core.characters.state_machine
 			_context.Events.DeflectCurrentAttack.OnExecute += HnadleAttackDeflected;
 			_context.Events.TriggerPlungeAttack.OnExecute += HandlePlungeAttackTriggered;
 
-			_context.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
+			_context.Logic.BlockLogic.OnParryFail.OnExecute += HandleParryFail;
 
 			_context.IsFalling.OnChangedFromTo += HandleIsFallingChanged;
 
@@ -358,7 +358,7 @@ namespace game.gameplay_core.characters.state_machine
 			_currentState.Value?.OnExit();
 			var oldState = _currentState.Value;
 
-			if(!_context.StaminaLogic.CheckCanEnterState(newState))
+			if(!_context.Logic.StaminaLogic.CheckCanEnterState(newState))
 			{
 				if(newState is RunState)
 				{

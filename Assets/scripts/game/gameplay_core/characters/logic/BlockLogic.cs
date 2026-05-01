@@ -22,7 +22,7 @@ namespace game.gameplay_core.characters.logic
 		public void ResolveBlock(DamageInfo damageInfo, WeaponItemConfig blockingWeapon, out bool deflectAttack)
 		{
 			var blockStaminaCost = damageInfo.DamageAmount * (1 - blockingWeapon.BlockStability / 100f);
-			_context.StaminaLogic.SpendStaminaForBlock(blockStaminaCost, out var hadEnoughStamina);
+			_context.Logic.StaminaLogic.SpendStaminaForBlock(blockStaminaCost, out var hadEnoughStamina);
 
 			deflectAttack = false;
 
@@ -34,10 +34,10 @@ namespace game.gameplay_core.characters.logic
 			}
 			else
 			{
-				_context.PoiseLogic.TriggerStaggerFromBlockWithNoStamina();
+				_context.Logic.PoiseLogic.TriggerStaggerFromBlockWithNoStamina();
 			}
 
-			if(_context.InvulnerabilityLogic.IsInvulnerable)
+			if(_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
 				return;
 			}

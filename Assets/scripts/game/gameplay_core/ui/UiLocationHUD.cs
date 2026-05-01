@@ -29,7 +29,7 @@ namespace game.gameplay_core.ui
 		{
 			_healthBar.SetContext(new PlayerHpBar.Context
 			{
-				HealthLogic = context.Player.Context.HealthLogic,
+				HealthLogic = context.Player.Context.Logic.HealthLogic,
 				Current = context.Player.ExternalData.Stats.Hp,
 				Max = context.Player.ExternalData.Stats.HpMax,
 				RecoverableAmount = context.Player.ExternalData.Stats.RecoverableHp,

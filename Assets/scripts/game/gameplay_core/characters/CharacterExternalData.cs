@@ -16,7 +16,7 @@ namespace game.gameplay_core.characters
 
 		public string Id => _context.CharacterId.Value;
 		public CharacterTransform Transform => _context.Transform;
-		public LockOnPointView[] LockOnPoints => _context.LockOnPoints;
+		public LockOnPointView[] LockOnPoints => _context.Views.LockOnPoints;
 		public bool IsDead => _context.IsDead.Value;
 		public Team Team => _context.Team.Value;
 
@@ -26,7 +26,7 @@ namespace game.gameplay_core.characters
 
 		public ReactiveHashSet<Collider> EnteredTriggers => _context.EnteredTriggers;
 
-		public IReadOnlyReactiveProperty<CharacterDomain> LockOnTarget => _context.LockOnLogic.LockOnTarget;
+		public IReadOnlyReactiveProperty<CharacterDomain> LockOnTarget => _context.Logic.LockOnLogic.LockOnTarget;
 		public CharacterInventoryLogic InventoryLogic => _context.InventoryLogic;
 
 		public CharacterExternalData(CharacterContext context)

@@ -22,21 +22,10 @@ namespace game.gameplay_core.characters
 	{
 		public ReactiveProperty<float> LocationTime;
 		public CharacterDomain SelfLink;
-		public LockOnLogic LockOnLogic;
-		public MovementLogic MovementLogic;
-		public InvulnerabilityLogic InvulnerabilityLogic;
-		public FallDamageLogic FallDamageLogic;
-		public StaminaLogic StaminaLogic;
-		public PoiseLogic PoiseLogic;
-		public BlockLogic BlockLogic;
-		public HealthLogic HealthLogic;
 
 		public CharacterConfig Config;
 		public CharacterTransform Transform;
 		public RigidBodyWrapper RigidBody;
-		public AnimancerComponent Animator;
-		public GameObject DeadStateRoot;
-		public LockOnPointView[] LockOnPoints;
 		public CharacterStatsData CharacterStats;
 		public CharacterInputData InputData;
 		public CapsuleCharacterCollider CharacterCollider;
@@ -51,18 +40,40 @@ namespace game.gameplay_core.characters
 		public ReactiveProperty<bool> IsFalling;
 		public ReactiveHashSet<Collider> EnteredTriggers;
 
-		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState;
+
+		public Events Events;
+		public Views Views;
+		public Logics Logic;
+
+		public CharacterInventoryLogic InventoryLogic { get; set; }
+		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
+		public CharacterSensorsDomain SensorsDomain { get; set; }
+	}
+
+	public struct Logics
+	{
+		public LockOnLogic LockOnLogic;
+		public MovementLogic MovementLogic;
+		public InvulnerabilityLogic InvulnerabilityLogic;
+		public FallDamageLogic FallDamageLogic;
+		public StaminaLogic StaminaLogic;
+		public PoiseLogic PoiseLogic;
+		public BlockLogic BlockLogic;
+		public HealthLogic HealthLogic;
+	}
+
+	public struct Views
+	{
+		public AnimancerComponent Animator;
+		public GameObject DeadStateRoot;
+		public LockOnPointView[] LockOnPoints;
 
 		public BodyAttackView BodyAttackView;
 		public ParryReceiver ParryReceiver;
 
-		public Events Events;
-
-		public CharacterInventoryLogic InventoryLogic { get; set; }
+		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
-		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
-		public CharacterSensorsDomain SensorsDomain { get; set; }
 	}
 
 	public struct Events

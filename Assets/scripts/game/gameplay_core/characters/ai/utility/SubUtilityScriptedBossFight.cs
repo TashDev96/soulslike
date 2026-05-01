@@ -55,7 +55,7 @@ namespace game.gameplay_core.characters.ai.utility
 				if(observation.Character.Context.Team.Value == Team.Player)
 				{
 					_data.Target = observation.Character;
-					_context.CharacterContext.LockOnLogic.LockOnTarget.Value = _data.Target;
+					_context.CharacterContext.Logic.LockOnLogic.LockOnTarget.Value = _data.Target;
 					return 1;
 				}
 			}

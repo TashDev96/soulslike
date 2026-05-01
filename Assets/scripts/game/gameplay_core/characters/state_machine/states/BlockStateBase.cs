@@ -23,12 +23,12 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 
-			_context.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
+			_context.Logic.StaminaLogic.SetStaminaRegenMultiplier(StaminaRegenKey, 0.3f);
 
 			_isBlocking = true;
 
 			var blockingSlot = _context.InventoryLogic.GetBlockingWeaponSlot();
-			BlockingWeaponView = _context.EquippedWeaponViews[blockingSlot];
+			BlockingWeaponView = _context.Views.EquippedWeaponViews[blockingSlot];
 
 			if(BlockingWeaponView != null)
 			{
@@ -36,7 +36,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				PlayBlockAnimation();
 			}
 
-			_context.BlockLogic.OnBlockTriggered.OnExecute += HandleBlockTriggered;
+			_context.Logic.BlockLogic.OnBlockTriggered.OnExecute += HandleBlockTriggered;
 		}
 
 		public override void OnExit()
@@ -48,11 +48,11 @@ namespace game.gameplay_core.characters.state_machine.states
 				BlockingWeaponView.SetBlockColliderActive(false);
 			}
 
-			_context.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
+			_context.Logic.StaminaLogic.RemoveStaminaRegenMultiplier(StaminaRegenKey);
 
-			_context.BlockLogic.OnBlockTriggered.OnExecute -= HandleBlockTriggered;
+			_context.Logic.BlockLogic.OnBlockTriggered.OnExecute -= HandleBlockTriggered;
 
-			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
 
 			base.OnExit();
 		}
@@ -65,7 +65,7 @@ namespace game.gameplay_core.characters.state_machine.states
 				{
 					PlayBlockAnimation();
 					_receiveHitAnimation = null;
-					_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
+					_context.Logic.StaminaLogic.SetStaminaRegenLock(HitReactReason, false);
 				}
 				else
 				{
@@ -95,8 +95,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private void HandleBlockTriggered()
 		{
-			_receiveHitAnimation = _context.Animator.Play(BlockingWeaponView.Config.BlockHitAnimation);
-			_context.StaminaLogic.SetStaminaRegenLock(HitReactReason, true);
+			_receiveHitAnimation = _context.Views.Animator.Play(BlockingWeaponView.Config.BlockHitAnimation);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(HitReactReason, true);
 		}
 	}
 }

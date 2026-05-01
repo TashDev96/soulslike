@@ -49,7 +49,7 @@ namespace game.gameplay_core.characters.logic
 			if(!DisableRotationForThisFrame)
 			{
 				var lookVector = (LockOnTarget.Value.ExternalData.Transform.Position - _context.Transform.Position).SetY(0);
-				_context.MovementLogic.RotateCharacter(lookVector, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
+				_context.Logic.MovementLogic.RotateCharacter(lookVector, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			DisableRotationForThisFrame = false;

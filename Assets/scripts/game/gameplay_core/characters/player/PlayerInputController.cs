@@ -61,7 +61,7 @@ namespace game.gameplay_core.characters.player
 
 			if(InputAdapter.GetButtonDown(InputAxesNames.LockOn))
 			{
-				_characterContext.LockOnLogic.HandleLockOnTriggerInput();
+				_characterContext.Logic.LockOnLogic.HandleLockOnTriggerInput();
 			}
 
 			if(!InputAdapter.GetButton(InputAxesNames.RollDash))

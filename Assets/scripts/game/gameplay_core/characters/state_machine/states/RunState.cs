@@ -24,14 +24,14 @@ namespace game.gameplay_core.characters.state_machine.states
 			_time = 0;
 			_noiseTimer = 0;
 			IsComplete = false;
-			_context.Animator.Play(_context.Config.RunAnimation, 0.3f);
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
-			_context.LockOnLogic.LockOnTarget.Value = null;
+			_context.Views.Animator.Play(_context.Config.RunAnimation, 0.3f);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, true);
+			_context.Logic.LockOnLogic.LockOnTarget.Value = null;
 		}
 
 		public override void OnExit()
 		{
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
 			EmitNoise(NoiseDistance);
 			base.OnExit();
 		}
@@ -55,10 +55,10 @@ namespace game.gameplay_core.characters.state_machine.states
 			var acceleration = _context.Config.Locomotion.WalkAccelerationCurve.Evaluate(_time);
 			var speed = _context.CharacterStats.Locomotion.RunSpeed * acceleration;
 
-			_context.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
+			_context.Logic.MovementLogic.ApplyInputMovement(inputWorld, speed, deltaTime);
 
 			const float staminaCostPerSecond = 2f;
-			_context.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
+			_context.Logic.StaminaLogic.SpendStamina(staminaCostPerSecond * deltaTime);
 
 			IsComplete = true;
 

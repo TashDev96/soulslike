@@ -11,7 +11,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 			IsComplete = true;
-			_context.Animator.Play(_context.Config.IdleAnimation, 0.2f);
+			_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.2f);
 		}
 
 		public override void Update(float deltaTime)

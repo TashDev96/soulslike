@@ -70,7 +70,7 @@ namespace game.gameplay_core.camera
 
 			var player = _context.Player.Value;
 
-			player.Context.MovementLogic.RotationIsControlledByCamera = true;
+			player.Context.Logic.MovementLogic.RotationIsControlledByCamera = true;
 			_context.Camera.Value.fieldOfView = _context.CameraSettings.FOV;
 
 			var cameraTransform = _context.Camera.Value.transform;

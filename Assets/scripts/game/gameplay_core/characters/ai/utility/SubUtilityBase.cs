@@ -254,7 +254,7 @@ namespace game.gameplay_core.characters.ai.utility
 					_context.NavigationModule.DrawDebug(Color.green, 2f);
 					_needRecalculatePath = false;
 				}
-				_context.CharacterContext.LockOnLogic.LockOnTarget.Value = null;
+				_context.CharacterContext.Logic.LockOnLogic.LockOnTarget.Value = null;
 				InputData.DirectionWorld = _context.NavigationModule.CalculateMoveDirection(_transform.Position);
 				_hasMovedByPathThisFrame = true;
 			}

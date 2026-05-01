@@ -29,7 +29,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void OnExit()
 		{
-			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
+			_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
 			base.OnExit();
 		}
 
@@ -48,12 +48,12 @@ namespace game.gameplay_core.characters.state_machine.states
 				{
 					if(AnimationConfig.CheckFlagBegin(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
 					{
-						_context.MovementLogic.SetRotationLockedBy(RotationLockKey, true);
+						_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, true);
 					}
 				}
 				else if(AnimationConfig.CheckFlagEnded(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
 				{
-					_context.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
+					_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
 				}
 
 				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedAnimationTime, out var soundName, out var hearDistance))
@@ -75,7 +75,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		protected void RecalculateFlagsImmediate()
 		{
 			var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
-			_context.MovementLogic.SetRotationLockedBy(RotationLockKey, rotationDisabled);
+			_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, rotationDisabled);
 		}
 
 		protected void ResetForwardMovement(float initialValue = 0f)
@@ -85,13 +85,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected void UpdateForwardMovement(float currentForwardDistance, float deltaTime)
 		{
-			_context.MovementLogic.ApplyLocomotion(_context.Transform.Forward * (currentForwardDistance - _forwardMovementDone), deltaTime);
+			_context.Logic.MovementLogic.ApplyLocomotion(_context.Transform.Forward * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
 		}
 
 		protected void UpdateForwardMovement(float currentForwardDistance, Vector3 overrideDirection, float deltaTime)
 		{
-			_context.MovementLogic.ApplyLocomotion(overrideDirection * (currentForwardDistance - _forwardMovementDone), deltaTime);
+			_context.Logic.MovementLogic.ApplyLocomotion(overrideDirection * (currentForwardDistance - _forwardMovementDone), deltaTime);
 			_forwardMovementDone = currentForwardDistance;
 		}
 

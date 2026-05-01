@@ -43,7 +43,7 @@ namespace game.gameplay_core.characters.state_machine.states.stagger
 				case StaggerReason.BlockBreak:
 					if(_previousState is BlockStateBase blockStateBase)
 					{
-						_animation = _context.Animator.Play(blockStateBase.BlockingWeaponView.Config.BlockBreakAnimation, 0.1f, FadeMode.FromStart);
+						_animation = _context.Views.Animator.Play(blockStateBase.BlockingWeaponView.Config.BlockBreakAnimation, 0.1f, FadeMode.FromStart);
 						return;
 					}
 					break;
@@ -55,7 +55,7 @@ namespace game.gameplay_core.characters.state_machine.states.stagger
 					throw new ArgumentOutOfRangeException();
 			}
 
-			_animation = _context.Animator.Play(animation, 0.1f, FadeMode.FromStart);
+			_animation = _context.Views.Animator.Play(animation, 0.1f, FadeMode.FromStart);
 		}
 	}
 }

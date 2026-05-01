@@ -17,7 +17,7 @@ namespace game.gameplay_core.characters.view.ui
 			transform.parent = GameStaticContext.Instance.WorldToScreenUiParent.Value;
 			_lockOnMark.gameObject.SetActive(false);
 
-			_context.LockOnLogic.LockOnTarget.OnChanged += HandleLockOnChanged;
+			_context.Logic.LockOnLogic.LockOnTarget.OnChanged += HandleLockOnChanged;
 			LocationStaticContext.Instance.LocationUiUpdate.OnExecute += CustomUpdate;
 		}
 
@@ -44,7 +44,7 @@ namespace game.gameplay_core.characters.view.ui
 			{
 				return;
 			}
-			var worldPos = _target.Context.LockOnPoints[0].transform.position;
+			var worldPos = _target.Context.Views.LockOnPoints[0].transform.position;
 			var screenPos = GameStaticContext.Instance.MainCamera.Value.WorldToScreenPoint(worldPos).Round();
 			_lockOnMark.position = screenPos;
 		}

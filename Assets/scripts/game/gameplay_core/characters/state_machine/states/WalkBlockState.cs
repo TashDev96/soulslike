@@ -51,13 +51,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			var inputWorld = _context.InputData.DirectionWorld.normalized;
 
-			if(!_context.LockOnLogic.LockOnTarget.HasValue)
+			if(!_context.Logic.LockOnLogic.LockOnTarget.HasValue)
 			{
-				_context.MovementLogic.RotateCharacter(inputWorld, deltaTime);
+				_context.Logic.MovementLogic.RotateCharacter(inputWorld, deltaTime);
 			}
 
 			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_context.Transform.Forward, inputWorld));
-			if(_context.LockOnLogic.LockOnTarget.HasValue)
+			if(_context.Logic.LockOnLogic.LockOnTarget.HasValue)
 			{
 				directionMultiplier = 1;
 			}
@@ -69,14 +69,14 @@ namespace game.gameplay_core.characters.state_machine.states
 				velocity *= 0.3f;
 			}
 
-			_context.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
+			_context.Logic.MovementLogic.ApplyLocomotion(velocity * deltaTime, deltaTime);
 
 			IsComplete = true;
 		}
 
 		protected override void PlayBlockAnimation()
 		{
-			_context.Animator.Play(BlockingWeaponView.Config.BlockWalkAnimation);
+			_context.Views.Animator.Play(BlockingWeaponView.Config.BlockWalkAnimation);
 		}
 	}
 }

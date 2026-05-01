@@ -48,7 +48,7 @@ namespace game.gameplay_core.damage_system
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
 					WeaponConfig = Config,
-					BlockLogic = _context.BlockLogic
+					BlockLogic = _context.Logic.BlockLogic
 				});
 			}
 		}

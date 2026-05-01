@@ -146,7 +146,7 @@ namespace game.gameplay_core.characters.logic
 			var rotationStep = Quaternion.AngleAxis(clampedAngle, Vector3.up);
 
 			_context.Transform.Rotation *= rotationStep;
-			if(!_context.LockOnLogic.LockOnTarget.HasValue)
+			if(!_context.Logic.LockOnLogic.LockOnTarget.HasValue)
 			{
 				_virtualForward = _context.Transform.Forward;
 			}
@@ -158,7 +158,7 @@ namespace game.gameplay_core.characters.logic
 			{
 				return;
 			}
-			var hasLockOnTarget = _context.LockOnLogic.LockOnTarget.HasValue;
+			var hasLockOnTarget = _context.Logic.LockOnLogic.LockOnTarget.HasValue;
 
 			if(!hasLockOnTarget)
 			{
@@ -187,7 +187,7 @@ namespace game.gameplay_core.characters.logic
 		public void GetDebugString(StringBuilder sb)
 		{
 			sb.Append("Rotation Locked: ").Append(_rotationLockReasons.Count).AppendLine();
-			var target = _context.LockOnLogic.LockOnTarget.Value;
+			var target = _context.Logic.LockOnLogic.LockOnTarget.Value;
 
 			sb.Append("Target Locked: ").Append(target != null ? target.name : "None").AppendLine();
 

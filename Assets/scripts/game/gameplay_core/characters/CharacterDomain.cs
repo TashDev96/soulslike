@@ -120,31 +120,19 @@ namespace game.gameplay_core.characters
 				LocationTime = LocationStaticContext.Instance.LocationTime,
 				SelfLink = this,
 
-				MovementLogic = _movementLogic,
-				LockOnLogic = _lockOnLogic,
-				InvulnerabilityLogic = _invulnerabilityLogic,
 				IsFalling = isFalling,
-				FallDamageLogic = _fallDamageLogic,
-				StaminaLogic = _staminaLogic,
-				PoiseLogic = _poiseLogic,
-				BlockLogic = _blockLogic,
+
 				InventoryLogic = InventoryLogic,
-				HealthLogic = _healthLogic,
 
 				Config = _config,
 				Transform = new CharacterTransform(transform),
 				RigidBody = new RigidBodyWrapper(GetComponent<Rigidbody>()),
-				Animator = GetComponent<AnimancerComponent>(),
-				DeadStateRoot = _deadStateRoot,
+
 				CharacterStats = _characterStats,
-				LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
 				InputData = new CharacterInputData(),
 				CharacterCollider = characterCollider,
 
-				EquippedWeaponViews = _equippedWeaponsViews,
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
-				BodyAttackView = GetComponentInChildren<BodyAttackView>(),
-				ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
 
 				DeltaTimeMultiplier = new ReactiveProperty<float>(1),
 				MaxDeltaTime = new ReactiveProperty<float>(1),
@@ -155,8 +143,6 @@ namespace game.gameplay_core.characters
 
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
 
-				DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>(),
-
 				Events =
 				{
 					ApplyDamage = new ApplyDamageCommand(),
@@ -165,6 +151,28 @@ namespace game.gameplay_core.characters
 					OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
 					TriggerStagger = new ReactiveCommand<StaggerReason>(),
 					TriggerPlungeAttack = new ReactiveCommand<CharacterDomain, PlungeAttackTargetView>()
+				},
+
+				Views =
+				{
+					Animator = GetComponent<AnimancerComponent>(),
+					DeadStateRoot = _deadStateRoot,
+					LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
+					EquippedWeaponViews = _equippedWeaponsViews,
+					BodyAttackView = GetComponentInChildren<BodyAttackView>(),
+					ParryReceiver = GetComponentInChildren<ParryReceiver>(true),
+					DebugDrawer = new ReactiveProperty<CharacterDebugDrawer>()
+				},
+				Logic =
+				{
+					MovementLogic = _movementLogic,
+					LockOnLogic = _lockOnLogic,
+					InvulnerabilityLogic = _invulnerabilityLogic,
+					FallDamageLogic = _fallDamageLogic,
+					StaminaLogic = _staminaLogic,
+					PoiseLogic = _poiseLogic,
+					BlockLogic = _blockLogic,
+					HealthLogic = _healthLogic
 				}
 			};
 
@@ -187,15 +195,15 @@ namespace game.gameplay_core.characters
 
 			CharacterStateMachine = new CharacterStateMachine(_context);
 			_context.CurrentState = CharacterStateMachine.CurrentState;
-			_context.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
-			_context.Animator.Animator.enabled = true;
-			_context.Animator.Animator.runtimeAnimatorController = null;
+			_context.Views.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
+			_context.Views.Animator.Animator.enabled = true;
+			_context.Views.Animator.Animator.runtimeAnimatorController = null;
 
-			if(_context.BodyAttackView == null)
+			if(_context.Views.BodyAttackView == null)
 			{
 				Debug.LogError($"{transform.GetFullPathInScene()}");
 			}
-			_context.BodyAttackView.Initialize(_context);
+			_context.Views.BodyAttackView.Initialize(_context);
 
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
 			foreach(var damageReceiver in damageReceivers)
@@ -205,13 +213,13 @@ namespace game.gameplay_core.characters
 					Team = _context.Team,
 					CharacterId = _context.CharacterId,
 					ApplyDamage = _context.Events.ApplyDamage,
-					InvulnerabilityLogic = _context.InvulnerabilityLogic
+					InvulnerabilityLogic = _context.Logic.InvulnerabilityLogic
 				});
 			}
 
-			if(_context.ParryReceiver != null)
+			if(_context.Views.ParryReceiver != null)
 			{
-				_context.ParryReceiver.Initialize(_context);
+				_context.Views.ParryReceiver.Initialize(_context);
 			}
 
 			_poiseLogic.SetContext(_context);
@@ -254,7 +262,7 @@ namespace game.gameplay_core.characters
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);
-			_context.DebugDrawer.Value = _debugDrawer;
+			_context.Views.DebugDrawer.Value = _debugDrawer;
 
 			var customScripts = GetComponentsInChildren<AbstractCharacterScript>();
 			foreach(var customScript in customScripts)
@@ -446,7 +454,7 @@ namespace game.gameplay_core.characters
 			{
 				CharacterStateMachine.Update(deltaTime, true);
 				_movementLogic.Update(deltaTime);
-				_context.Animator.Playable.Graph.Evaluate(deltaTime);
+				_context.Views.Animator.Playable.Graph.Evaluate(deltaTime);
 				return;
 			}
 
@@ -465,8 +473,8 @@ namespace game.gameplay_core.characters
 				personalDeltaTime -= deltaTimeStep;
 				CharacterStateMachine.Update(deltaTimeStep, calculateInputLogic);
 				_movementLogic.Update(deltaTimeStep);
-				_context.BodyAttackView.CustomUpdate(deltaTimeStep);
-				_context.Animator.Playable.Graph.Evaluate(deltaTimeStep);
+				_context.Views.BodyAttackView.CustomUpdate(deltaTimeStep);
+				_context.Views.Animator.Playable.Graph.Evaluate(deltaTimeStep);
 				_lockOnLogic.Update(deltaTimeStep);
 				_staminaLogic.Update(deltaTimeStep);
 				_poiseLogic.Update(deltaTimeStep);

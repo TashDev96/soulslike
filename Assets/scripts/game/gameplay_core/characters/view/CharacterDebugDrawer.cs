@@ -111,7 +111,7 @@ namespace game.gameplay_core.characters.view
 			}
 			_debugStringBuilder.Clear();
 			_debugStringBuilder.AppendLine($"stamina: {_context.CharacterStats.Stamina.Value.CeilFormat(1)}");
-			_debugStringBuilder.AppendLine($"stamina: {_context.StaminaLogic.GetDebugString()}");
+			_debugStringBuilder.AppendLine($"stamina: {_context.Logic.StaminaLogic.GetDebugString()}");
 
 			EditorGUILayout.LabelField(_debugStringBuilder.ToString(), EditorStyles.wordWrappedLabel);
 		}
@@ -140,7 +140,7 @@ namespace game.gameplay_core.characters.view
 
 			if(DrawMovementInfo)
 			{
-				_context.MovementLogic.GetDebugString(sb);
+				_context.Logic.MovementLogic.GetDebugString(sb);
 				sb.Append(_lastTransformLog);
 			}
 

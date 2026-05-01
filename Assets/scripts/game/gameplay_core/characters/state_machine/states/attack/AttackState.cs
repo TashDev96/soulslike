@@ -51,10 +51,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			base.Update(deltaTime);
 
 			var rotationDisabled = _currentAttackConfig.AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedTime);
-			rotationDisabled |= _context.LockOnLogic.IsLockedOn;
+			rotationDisabled |= _context.Logic.LockOnLogic.IsLockedOn;
 			if(_context.InputData.HasDirectionInput && !rotationDisabled)
 			{
-				_context.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
+				_context.Logic.MovementLogic.RotateCharacter(_context.InputData.DirectionWorld, _context.CharacterStats.Locomotion.HalfTurnDurationSecondsLockOn, deltaTime);
 			}
 
 			UpdateStaminaRegenLock();
@@ -76,7 +76,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						hitData.IsEnded = true;
 						if(!_staminaSpent)
 						{
-							_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
+							_context.Logic.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
 							_staminaSpent = true;
 						}
 
@@ -102,7 +102,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 						hitData.IsStarted = true;
 						if(!_staminaSpent)
 						{
-							_context.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
+							_context.Logic.StaminaLogic.SpendStamina(_currentAttackConfig.StaminaCost);
 						}
 					}
 
@@ -182,20 +182,20 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					if(disableRegen)
 					{
 						_staminaRegenDisabled = true;
-						_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
+						_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, true);
 					}
 				}
 				else if(!disableRegen)
 				{
 					_staminaRegenDisabled = false;
-					_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+					_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
 				}
 			}
 		}
 
 		public override void OnExit()
 		{
-			_context.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
+			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenDisableKey, false);
 			base.OnExit();
 		}
 
@@ -258,7 +258,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 
 		private void LaunchAttack()
 		{
-			_weaponView = _context.EquippedWeaponViews[EquipmentSlotType.RightHand];
+			_weaponView = _context.Views.EquippedWeaponViews[EquipmentSlotType.RightHand];
 
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
 
@@ -279,7 +279,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			CurrentAttackAnimation = _context.Animator.Play(_currentAttackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
+			CurrentAttackAnimation = _context.Views.Animator.Play(_currentAttackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			if(_attackType.IsRollAttack())
 			{
@@ -324,10 +324,10 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			var spawnPosition = weapon.ProjectileSpawnPosition;
 			var direction = _context.Transform.Forward;
 
-			if(_context.LockOnLogic.LockOnTarget.HasValue)
+			if(_context.Logic.LockOnLogic.LockOnTarget.HasValue)
 			{
 				var maxAngleCorrection = _currentAttackConfig.MaxProjectileHorizontalAngleCorrection;
-				var targetPosition = _context.LockOnLogic.LockOnTarget.Value.transform.position + Vector3.up * 1.2f;
+				var targetPosition = _context.Logic.LockOnLogic.LockOnTarget.Value.transform.position + Vector3.up * 1.2f;
 				var targetDirection = (targetPosition - spawnPosition).normalized;
 
 				var forwardHorizontal = _context.Transform.Forward;
