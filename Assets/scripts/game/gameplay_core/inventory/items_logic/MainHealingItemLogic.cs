@@ -83,6 +83,12 @@ namespace game.gameplay_core.inventory.items_logic
 			_chargesLeft.Value = _config.ChargesCount;
 		}
 
+		public override void GetCountData(out bool countAvailable, out int count)
+		{
+			countAvailable = true;
+			count = _chargesLeft.Value;
+		}
+
 		public bool CheckCanStartConsumption()
 		{
 			return _chargesLeft.Value > 0;

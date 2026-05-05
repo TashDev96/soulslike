@@ -110,6 +110,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c221ba93fe249494ba1c084cbc0b58d3
+    m_Address: MeteorOre
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d94508fe4800c4384a6bd43cbc4cb8d3
     m_Address: ZombieSword
     m_ReadOnly: 0

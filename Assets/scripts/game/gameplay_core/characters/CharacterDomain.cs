@@ -184,13 +184,7 @@ namespace game.gameplay_core.characters
 			var damageReceivers = GetComponentsInChildren<DamageReceiver>();
 			foreach(var damageReceiver in damageReceivers)
 			{
-				damageReceiver.Initialize(new DamageReceiver.DamageReceiverContext
-				{
-					Team = _context.Team,
-					CharacterId = _context.CharacterId,
-					ApplyDamage = _context.Events.ApplyDamage,
-					InvulnerabilityLogic = _context.Logic.InvulnerabilityLogic
-				});
+				damageReceiver.Initialize(_context);
 			}
 
 			if(_context.Views.ParryReceiver != null)
@@ -374,6 +368,10 @@ namespace game.gameplay_core.characters
 				if(data.Hp <= 0)
 				{
 					CharacterStateMachine.ForceDeadStateOnLoad();
+					if(IsBoss)
+					{
+						gameObject.SetActive(false);
+					}
 				}
 			}
 			else
@@ -393,6 +391,10 @@ namespace game.gameplay_core.characters
 
 		public void HandleLocationRespawn()
 		{
+			if(IsBoss && _context.IsDead.Value)
+			{
+				return;
+			}
 			_context.CharacterStats.SetStatsToMax();
 			_context.Logic.InventoryLogic.HandleRespawn();
 			_context.IsDead.Value = false;

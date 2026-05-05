@@ -21,5 +21,6 @@ namespace game
 		public ReactiveCommand ReloadLocation { get; set; }
 		public PlayerSaveData PlayerSave { get; set; }
 		public ReactiveCommand SavePlayerAndLocationState { get; set; }
+		public ReactiveCommand<Vector2> OnUiNavigationInput { get; set; }
 	}
 }

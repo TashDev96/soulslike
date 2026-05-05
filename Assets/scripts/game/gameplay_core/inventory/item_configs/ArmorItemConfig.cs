@@ -5,7 +5,7 @@ using UnityEngine;
 namespace game.gameplay_core.inventory.item_configs
 {
 	[AddressableAssetTag(nameof(AddressableCollections.ItemConfigs))]
-	[CreateAssetMenu(menuName = "Configs/ArmorConfig")]
+	[CreateAssetMenu(menuName = "Configs/Items/Armor")]
 	public class ArmorItemConfig : BaseEquipmentItemConfig
 	{
 		[field: FoldoutGroup("Stats")]

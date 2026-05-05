@@ -47,6 +47,12 @@ namespace game.ui
 			{
 				ToggleInventoryScreen();
 			}
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.Vertical) || InputAdapter.GetButtonDown(InputAxesNames.Horizontal))
+			{
+				var direction = InputAdapter.GetDirectionInputRaw();
+				GameStaticContext.Instance.OnUiNavigationInput.Execute(direction);
+			}
 		}
 	}
 }

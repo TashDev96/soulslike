@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
+using game.gameplay_core.characters;
 using game.gameplay_core.characters.runtime_data.bindings;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.location.location_save_system;
@@ -74,11 +75,14 @@ namespace game.gameplay_core.location.interactive_objects
 			var characterId = new ReactiveProperty<string>(UniqueId);
 			var team = new ReactiveProperty<Team>(Team.HostileNPC);
 
-			_damageReceiver.Initialize(new DamageReceiver.DamageReceiverContext
+			_damageReceiver.Initialize(new CharacterContext()
 			{
 				Team = team,
 				CharacterId = characterId,
-				ApplyDamage = _applyDamageCommand
+				Events =
+				{
+					ApplyDamage = _applyDamageCommand
+				}
 			});
 		}
 

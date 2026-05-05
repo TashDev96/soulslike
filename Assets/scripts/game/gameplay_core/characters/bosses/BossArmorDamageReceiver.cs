@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.location;
+using game.gameplay_core.location.view;
 using game.gameplay_core.worldspace_ui;
 using UnityEngine;
 
@@ -20,20 +23,32 @@ namespace game.gameplay_core.characters.bosses
 		private float _armorAmount;
 
 		[SerializeField]
+		private Transform _lootDropPivot;
+		[SerializeField]
+		private List<LootConfig> _loot;
+		
+		
+		[SerializeField]
 		private bool _listenPlungeDamage;
+		
 		private int _selfLayerMask;
 
 		public bool IsBroken => _armorAmount <= 0;
 
-		public override void Initialize(DamageReceiverContext damageReceiverContext)
+		public override void Initialize(CharacterContext context)
 		{
-			base.Initialize(damageReceiverContext);
+			base.Initialize(context);
+			if(context.IsDead.Value)
+			{
+				gameObject.SetActive(false);
+				return;
+			}
 			_unarmoredReceiver.gameObject.SetActive(false);
 			_selfLayerMask = LayerMask.GetMask("DamageReceivers");
 
 			if(_listenPlungeDamage)
 			{
-				damageReceiverContext.ApplyDamage.OnExecute += HandlePlungeAttack;
+				context.Events.ApplyDamage.OnExecute += HandlePlungeAttack;
 			}
 		}
 
@@ -91,6 +106,10 @@ namespace game.gameplay_core.characters.bosses
 
 		private void DestroyArmor()
 		{
+			if(_loot.Count > 0)
+			{
+				LocationStaticContext.Instance.LootLogic.TrySpawnLoot(_lootDropPivot.position, _loot);
+			}
 			_unarmoredReceiver.gameObject.SetActive(true);
 			gameObject.SetActive(false);
 			_armorBreakParticles.gameObject.SetActive(true);

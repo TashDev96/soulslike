@@ -1,4 +1,5 @@
 using System;
+using dream_lib.ui;
 using game.gameplay_core.inventory.items_logic;
 using TMPro;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace game.ui.inventory.variant_darksouls
 	{
 		private const float DoubleClickThreshold = 0.3f;
 		[SerializeField]
-		private Button _button;
+		private UiInteractableElement _button;
 		[SerializeField]
 		private Image _icon;
 		[SerializeField]
@@ -30,27 +31,19 @@ namespace game.ui.inventory.variant_darksouls
 			_item = item;
 			_icon.sprite = item.BaseConfig.Icon;
 			_onDoubleClick = onDoubleClick;
-			_button.onClick.AddListener(OnClick);
+			_button.OnClick += OnClick;
 
-			switch(item)
-			{
-				case BaseConsumableItemLogic baseConsumableItemLogic:
-					_countText.gameObject.SetActive(true);
-					_countText.text = baseConsumableItemLogic.ChargesLeft.Value.ToString();
-					break;
-				case MainHealingItemLogic mainHealingItemLogic:
-					_countText.gameObject.SetActive(true);
-					_countText.text = mainHealingItemLogic.ChargesLeft.Value.ToString();
-					break;
-				case WeaponItemLogic weaponItemLogic:
-					_countText.gameObject.SetActive(false);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(item));
-			}
+			item.GetCountData(out var countAvailable, out var count);
+			_countText.gameObject.SetActive(countAvailable);
+			_countText.text = count.ToString();
 
 			_nameText.text = _item.BaseConfig.name.Replace("Config", ""); // temp until localization is implemented
 			_descriptionText.text = _item.BaseConfig.Description;
+		}
+
+		private void OnDestroy()
+		{
+			_button.OnClick -= OnClick;
 		}
 
 		private void OnClick()

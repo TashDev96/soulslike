@@ -11,7 +11,7 @@ using UnityEngine;
 namespace game.gameplay_core.inventory.item_configs
 {
 	[AddressableAssetTag(nameof(AddressableCollections.WeaponConfigs))]
-	[CreateAssetMenu(menuName = "Configs/WeaponConfig")]
+	[CreateAssetMenu(menuName = "Configs/Items/Weapon")]
 	public class WeaponItemConfig : BaseEquipmentItemConfig
 	{
 		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]

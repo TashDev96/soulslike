@@ -1,4 +1,3 @@
-using game.gameplay_core;
 using game.gameplay_core.characters;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;

@@ -38,6 +38,7 @@ namespace game
 			GameStaticContext.Instance = new GameStaticContext
 			{
 				WorldToScreenUiParent = new ReactiveProperty<RectTransform>(),
+				OnUiNavigationInput = new ReactiveCommand<Vector2>(),
 				MainCamera = new ReactiveProperty<Camera>(),
 				UiDomain = _uiDomain,
 				InventoryDomain = _inventoryDomain,

@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using dream_lib.src.utils.data_types;
+using dream_lib.ui;
 using game.enums;
-using game.gameplay_core;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.location;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace game.ui.inventory.variant_darksouls
 {
@@ -21,13 +22,7 @@ namespace game.ui.inventory.variant_darksouls
 
 		[Header("Tabs")]
 		[SerializeField]
-		private Button _tabAll;
-		[SerializeField]
-		private Button _tabWeapons;
-		[SerializeField]
-		private Button _tabArmor;
-		[SerializeField]
-		private Button _tabQuest;
+		private List<Pair<ItemCategory, UiTabButton>> _tabButtons;
 
 		private Action<BaseItemLogic> _onItemDoubleClicked;
 		private List<BaseItemLogic> _allItems = new();
@@ -48,20 +43,25 @@ namespace game.ui.inventory.variant_darksouls
 
 			_allItems = unequippedItems.ToList();
 			_onItemDoubleClicked = autoEquipItem;
-			RefreshList();
+			UniTask.DelayFrame(0, PlayerLoopTiming.LastPostLateUpdate).ContinueWith(() => { SetCategory(ItemCategory.All); }).Forget();
 		}
 
 		private void Awake()
 		{
-			_tabAll.onClick.AddListener(() => SetCategory(ItemCategory.All));
-			_tabWeapons.onClick.AddListener(() => SetCategory(ItemCategory.Weapons));
-			_tabArmor.onClick.AddListener(() => SetCategory(ItemCategory.Armor));
-			_tabQuest.onClick.AddListener(() => SetCategory(ItemCategory.Quest));
+			foreach(var tabPair in _tabButtons)
+			{
+				var tabButton = tabPair.Value;
+				tabButton.OnClick += () => SetCategory(tabPair.Key);
+			}
 		}
 
 		private void SetCategory(ItemCategory category)
 		{
 			_currentCategory = category;
+			foreach(var tabButton in _tabButtons)
+			{
+				tabButton.Value.SetActiveTab(tabButton.Key == _currentCategory);
+			}
 			RefreshList();
 		}
 

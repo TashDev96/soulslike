@@ -1,4 +1,5 @@
 using ControlFreak2;
+using UnityEngine;
 
 namespace game.input
 {
@@ -12,6 +13,11 @@ namespace game.input
 		public static float GetAxisRaw(InputAxesNames axis)
 		{
 			return CF2Input.GetAxisRaw(axis.ToString());
+		}
+
+		public static Vector2 GetDirectionInputRaw()
+		{
+			return new Vector2(CF2Input.GetAxisRaw(nameof(InputAxesNames.Horizontal)), CF2Input.GetAxisRaw(nameof(InputAxesNames.Vertical)));
 		}
 
 		public static bool GetButtonDown(InputAxesNames axis)

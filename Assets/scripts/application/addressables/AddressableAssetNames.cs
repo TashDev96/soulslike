@@ -5,6 +5,7 @@ public static class AddressableAssetNames
 	public const string PlayerWorldSpaceUi = "PlayerWorldSpaceUi";
 	public const string PlayerMaterial = "PlayerMaterial";
 	public const string FloatingTextView = "FloatingTextView";
+	public const string LootItemViewBasic = "LootItemViewBasic";
 	public const string ZombieSwordConfig = "ZombieSwordConfig";
 	public const string EmptyHandConfig = "EmptyHandConfig";
 	public const string EmptyHand = "EmptyHand";
@@ -24,7 +25,7 @@ public static class AddressableAssetNames
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
 	public const string Boss1Weapon = "Boss1Weapon";
-	public const string LootItemViewBasic = "LootItemViewBasic";
+	public const string MeteorOre = "MeteorOre";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
@@ -35,7 +36,8 @@ public static class AddressableAssetNames
 		"DebugShieldConfig",
 		"MainHealingItemConfig",
 		"SimpleSwordConfig",
-		"Boss1Weapon"
+		"Boss1Weapon",
+		"MeteorOre"
 	};
 
 	public static readonly string[] LootVfxPrefabs = new[] {

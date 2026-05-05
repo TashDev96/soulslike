@@ -1,6 +1,6 @@
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
-using dream_lib.src.ui;
+using dream_lib.ui;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.view.ui

@@ -1,5 +1,5 @@
 using System.Collections;
-using dream_lib.src.ui;
+using dream_lib.ui;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.location;

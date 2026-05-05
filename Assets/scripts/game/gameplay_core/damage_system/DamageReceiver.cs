@@ -1,44 +1,34 @@
-using dream_lib.src.reactive;
-using game.gameplay_core.characters.logic;
-using game.gameplay_core.characters.runtime_data.bindings;
+using game.gameplay_core.characters;
 using UnityEngine;
 
 namespace game.gameplay_core.damage_system
 {
 	public class DamageReceiver : MonoBehaviour
 	{
-		public struct DamageReceiverContext
-		{
-			public IReadOnlyReactiveProperty<Team> Team { get; set; }
-			public IReadOnlyReactiveProperty<string> CharacterId { get; set; }
-			public ApplyDamageCommand ApplyDamage { get; set; }
-			public InvulnerabilityLogic InvulnerabilityLogic { get; set; }
-		}
-
 		[SerializeField]
 		protected float _damageMultiplier = 1f;
 
-		private DamageReceiverContext _context;
+		private CharacterContext _context;
 
 		public Team OwnerTeam => _context.Team.Value;
 		public string CharacterId => _context.CharacterId.Value;
 
-		public bool IsInvulnerable => _context.InvulnerabilityLogic.IsInvulnerable;
+		public bool IsInvulnerable => _context.Logic.InvulnerabilityLogic.IsInvulnerable;
 
-		public virtual void Initialize(DamageReceiverContext damageReceiverContext)
+		public virtual void Initialize(CharacterContext context)
 		{
-			_context = damageReceiverContext;
+			_context = context;
 		}
 
 		public virtual void ApplyDamage(DamageInfo damageInfo)
 		{
-			if(_context.InvulnerabilityLogic is { IsInvulnerable: true })
+			if(_context.Logic.InvulnerabilityLogic is { IsInvulnerable: true })
 			{
 				return;
 			}
 
 			damageInfo.DamageAmount *= _damageMultiplier;
-			_context.ApplyDamage.Execute(damageInfo);
+			_context.Events.ApplyDamage.Execute(damageInfo);
 		}
 	}
 }

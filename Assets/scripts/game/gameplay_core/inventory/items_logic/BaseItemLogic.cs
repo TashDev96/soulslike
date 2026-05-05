@@ -26,5 +26,7 @@ namespace game.gameplay_core.inventory.items_logic
 		public virtual void HandleLocationRespawn()
 		{
 		}
+
+		public abstract void GetCountData(out bool countAvailable, out int count);
 	}
 }

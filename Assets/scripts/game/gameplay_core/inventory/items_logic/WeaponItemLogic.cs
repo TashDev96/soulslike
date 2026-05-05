@@ -37,5 +37,11 @@ namespace game.gameplay_core.inventory.items_logic
 		{
 			SaveableData.SetFloat(DurabilityKey, Durability);
 		}
+
+		public override void GetCountData(out bool countAvailable, out int count)
+		{
+			countAvailable = false;
+			count = 0;
+		}
 	}
 }
