@@ -26,11 +26,10 @@ namespace game.gameplay_core.characters.bosses
 		private Transform _lootDropPivot;
 		[SerializeField]
 		private List<LootConfig> _loot;
-		
-		
+
 		[SerializeField]
 		private bool _listenPlungeDamage;
-		
+
 		private int _selfLayerMask;
 
 		public bool IsBroken => _armorAmount <= 0;

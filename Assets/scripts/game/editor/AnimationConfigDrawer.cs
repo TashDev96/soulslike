@@ -36,6 +36,8 @@ namespace game.editor
 		private const int TypeSound = 2;
 		private const int TypeCameraShake = 3;
 
+		private bool _foldOutTimeLine;
+
 		private bool _isDragging;
 		private bool _isTimelineHandleDragging;
 		private int _draggedEventPackedId = -1;
@@ -76,6 +78,13 @@ namespace game.editor
 			{
 				EditorGUI.EndProperty();
 				EditorGUI.indentLevel--;
+				return;
+			}
+
+			_foldOutTimeLine = EditorGUILayout.Foldout(_foldOutTimeLine, "Timeline");
+
+			if(!_foldOutTimeLine)
+			{
 				return;
 			}
 

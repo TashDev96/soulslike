@@ -13,10 +13,11 @@ using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.player;
 using game.gameplay_core.characters.runtime_data;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters.runtime_data.stats;
 using game.gameplay_core.characters.state_machine;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.stagger;
+using game.gameplay_core.characters.stats;
+using game.gameplay_core.characters.stats.runtime_data;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.damage_system;
@@ -53,7 +54,6 @@ namespace game.gameplay_core.characters
 		private ICharacterBrain _brain;
 		private CharacterContext _context;
 
-		[ShowInInspector]
 		private CharacterStatsData _characterStats;
 
 		private CharacterBodyView _characterBodyView;

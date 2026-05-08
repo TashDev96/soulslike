@@ -29,7 +29,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			if(_context.CharacterStats.Stamina.Value < _context.CharacterStats.StaminaMax.Value && _regenLockReasons.Count == 0)
+			if(_context.CharacterStats.Stamina.Value < _context.CharacterStats.Stamina.MaxValue && _regenLockReasons.Count == 0)
 			{
 				var baseRegenRate = deltaTime * 10f;
 				var totalMultiplier = CalculateTotalRegenMultiplier();

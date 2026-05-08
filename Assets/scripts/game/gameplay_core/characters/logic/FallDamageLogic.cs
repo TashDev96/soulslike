@@ -106,13 +106,13 @@ namespace game.gameplay_core.characters.logic
 						MathUtils.InverseLerpUnclamped(_minimumFallDamageSpeed, _lethalFallSpeed, fallSpeed)
 					);
 
-					var damage = damagePercentage * _context.CharacterStats.HpMax.Value;
-					var staminaDamage = damagePercentage * _context.CharacterStats.StaminaMax.Value;
+					var damage = damagePercentage * _context.CharacterStats.Hp.Value;
+					var staminaDamage = damagePercentage * _context.CharacterStats.Stamina.MaxValue;
 
 					var damageInfo = new DamageInfo
 					{
 						DamageAmount = damage,
-						PoiseDamageAmount = fallSpeed > _staggerThresholdSpeed ? _context.CharacterStats.PoiseMax.Value : 0f,
+						PoiseDamageAmount = fallSpeed > _staggerThresholdSpeed ? _context.CharacterStats.Poise.MaxValue : 0f,
 						WorldPos = _context.Transform.Position,
 						Direction = Vector3.down,
 						DoneByPlayer = false,

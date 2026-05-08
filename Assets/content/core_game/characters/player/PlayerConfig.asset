@@ -154,11 +154,13 @@ MonoBehaviour:
       CameraShakeEvents: []
       LayerNames:
       - Default
-  <BaseStats>k__BackingField:
-    HpMax: 15
-    StaminaMax: 50
-    PoiseMax: 1
-    PoiseRestoreTimerMax: 5
+  <DefaultStatsValueOverride>k__BackingField:
+    _list:
+    - Key: 0
+      Value: 10
+    - Key: 5
+      Value: 5
+    _keyCollision: 0
   <CanDoBackstabs>k__BackingField: 1
   <CanReceiveBackstabs>k__BackingField: 1
   <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig

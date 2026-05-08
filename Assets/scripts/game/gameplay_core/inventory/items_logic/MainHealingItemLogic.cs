@@ -47,10 +47,10 @@ namespace game.gameplay_core.inventory.items_logic
 			if(healProgress > _healProgressDone)
 			{
 				var healNormalizedDelta = healProgress - _healProgressDone;
-				_characterContext.CharacterStats.Hp.Value += healNormalizedDelta * HealAmount;
-				if(_characterContext.CharacterStats.Hp.Value > _characterContext.CharacterStats.HpMax.Value)
+				_characterContext.CharacterStats.Hp.Current.Value += healNormalizedDelta * HealAmount;
+				if(_characterContext.CharacterStats.Hp.Value > _characterContext.CharacterStats.Hp.MaxValue)
 				{
-					_characterContext.CharacterStats.Hp.Value = _characterContext.CharacterStats.HpMax.Value;
+					_characterContext.CharacterStats.Hp.Value = _characterContext.CharacterStats.Hp.MaxValue;
 				}
 				_healProgressDone = healProgress;
 			}

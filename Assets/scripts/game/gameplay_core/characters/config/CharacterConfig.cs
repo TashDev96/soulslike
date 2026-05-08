@@ -1,4 +1,6 @@
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.config.animation;
+using game.gameplay_core.characters.stats.config;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -18,7 +20,7 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public AnimationClip ParryStunAnimation { get; private set; }
 		[field: SerializeField]
-		[field: Header("Riposted")]
+		[field: FoldoutGroup("Riposted")]
 		public AnimationConfig RipostedAnimation { get; private set; }
 		[field: SerializeField]
 		public AnimationClip DeathAnimation { get; set; }
@@ -31,7 +33,7 @@ namespace game.gameplay_core.characters.config
 		public LocomotionConfig Locomotion { get; private set; }
 
 		[field: SerializeField]
-		public BaseStats BaseStats { get; private set; }
+		public SerializableDictionary<StatKey, int> DefaultStatsValueOverride { get; private set; }
 
 		[field: SerializeField]
 		public bool CanDoBackstabs { get; private set; }

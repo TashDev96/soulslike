@@ -3,7 +3,7 @@ using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.runtime_data.bindings;
-using game.gameplay_core.characters.runtime_data.stats;
+using game.gameplay_core.characters.stats.runtime_data;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using UnityEngine;

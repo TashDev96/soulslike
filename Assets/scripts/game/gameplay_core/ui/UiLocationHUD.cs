@@ -31,17 +31,17 @@ namespace game.gameplay_core.ui
 			_healthBar.SetContext(new PlayerHpBar.Context
 			{
 				HealthLogic = context.Player.Context.Logic.HealthLogic,
-				Current = context.Player.ExternalData.Stats.Hp,
-				Max = context.Player.ExternalData.Stats.HpMax,
-				RecoverableAmount = context.Player.ExternalData.Stats.RecoverableHp,
+				Current = context.Player.ExternalData.Stats.Hp.Current,
+				Max = context.Player.ExternalData.Stats.Hp.Max,
+				RecoverableAmount = context.Player.ExternalData.Stats.Hp.Recoverable,
 				CustomUpdate = context.LocationUiUpdate
 			});
 
 			_staminaBar.SetContext(new UiBar.Context
 			{
-				Current = context.Player.ExternalData.Stats.Stamina,
-				Max = context.Player.ExternalData.Stats.StaminaMax,
-				RecoverableAmount = context.Player.ExternalData.Stats.RecoverableStamina,
+				Current = context.Player.ExternalData.Stats.Stamina.Current,
+				Max = context.Player.ExternalData.Stats.Stamina.Max,
+				RecoverableAmount = null,
 				CustomUpdate = context.LocationUiUpdate
 			});
 

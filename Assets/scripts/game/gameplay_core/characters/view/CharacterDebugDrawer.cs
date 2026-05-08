@@ -126,8 +126,8 @@ namespace game.gameplay_core.characters.view
 			_debugStringBuilder.Clear();
 			var sb = _debugStringBuilder;
 
-			sb.Append("hp: ").Append(_context.CharacterStats.Hp.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.HpMax.Value.CeilFormat()).AppendLine();
-			sb.Append("st: ").Append(_context.CharacterStats.Stamina.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.StaminaMax.Value.CeilFormat()).AppendLine();
+			sb.Append("hp: ").Append(_context.CharacterStats.Hp.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.Hp.MaxValue.CeilFormat()).AppendLine();
+			sb.Append("st: ").Append(_context.CharacterStats.Stamina.Value.CeilFormat(1)).Append("/").Append(_context.CharacterStats.Stamina.Value.CeilFormat()).AppendLine();
 
 			if(DrawStateMachineInfo)
 			{

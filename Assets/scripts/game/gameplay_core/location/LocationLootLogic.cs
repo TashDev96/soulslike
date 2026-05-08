@@ -10,7 +10,7 @@ namespace game.gameplay_core.location
 	{
 		public void TrySpawnLoot(Vector3 position, List<LootConfig> lootList)
 		{
-			position+=Vector3.up*0.5f;
+			position += Vector3.up * 0.5f;
 			foreach(var lootConfig in lootList)
 			{
 				if(lootConfig.DropsOnlyOnce)

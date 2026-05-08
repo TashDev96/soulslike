@@ -22,7 +22,7 @@ namespace game.gameplay_core.location.view
 
 		public float MaxFlightDistance = 0.2f;
 
-		[Range(0,100)]
+		[Range(0, 100)]
 		public int DropChance;
 
 		public bool DropsOnlyOnce;

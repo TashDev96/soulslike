@@ -75,7 +75,7 @@ namespace game.gameplay_core.location.interactive_objects
 			var characterId = new ReactiveProperty<string>(UniqueId);
 			var team = new ReactiveProperty<Team>(Team.HostileNPC);
 
-			_damageReceiver.Initialize(new CharacterContext()
+			_damageReceiver.Initialize(new CharacterContext
 			{
 				Team = team,
 				CharacterId = characterId,
@@ -119,8 +119,6 @@ namespace game.gameplay_core.location.interactive_objects
 				}
 			}
 		}
-
-		 
 
 		private void SetVisualState(DestructibleVisualState state)
 		{

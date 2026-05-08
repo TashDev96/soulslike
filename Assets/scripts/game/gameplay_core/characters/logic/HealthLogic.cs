@@ -15,13 +15,13 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context = context;
 			_context.Events.ApplyDamage.OnExecute += ApplyDamage;
-			_context.CharacterStats.Hp.OnChangedFromTo += HandleHpChanged;
+			_context.CharacterStats.Hp.Current.OnChangedFromTo += HandleHpChanged;
 			RecoverableFadeDelay = RecoverableFadeDelayMax;
 		}
 
 		public void Update(float deltaTimeStep)
 		{
-			if(_context.CharacterStats.RecoverableHp.Value > 0)
+			if(_context.CharacterStats.Hp.Recoverable.Value > 0)
 			{
 				if(RecoverableFadeDelay > 0)
 				{
@@ -29,11 +29,11 @@ namespace game.gameplay_core.characters.logic
 				}
 				else
 				{
-					var step = RecoverableFadePercentPerSecond * _context.CharacterStats.HpMax.Value / 100f;
-					_context.CharacterStats.RecoverableHp.Value -= deltaTimeStep * step;
-					if(_context.CharacterStats.RecoverableHp.Value <= 0)
+					var step = RecoverableFadePercentPerSecond * _context.CharacterStats.Hp.MaxValue / 100f;
+					_context.CharacterStats.Hp.Recoverable.Value -= deltaTimeStep * step;
+					if(_context.CharacterStats.Hp.Recoverable.Value <= 0)
 					{
-						_context.CharacterStats.RecoverableHp.Value = 0;
+						_context.CharacterStats.Hp.Recoverable.Value = 0;
 						RecoverableFadeDelay = RecoverableFadeDelayMax;
 					}
 				}
@@ -47,10 +47,10 @@ namespace game.gameplay_core.characters.logic
 		private void HandleHpChanged(float oldValue, float newValue)
 		{
 			var delta = newValue - oldValue;
-			_context.CharacterStats.RecoverableHp.Value -= delta;
-			if(_context.CharacterStats.RecoverableHp.Value <= 0)
+			_context.CharacterStats.Hp.Recoverable.Value -= delta;
+			if(_context.CharacterStats.Hp.Recoverable.Value <= 0)
 			{
-				_context.CharacterStats.RecoverableHp.Value = 0;
+				_context.CharacterStats.Hp.Recoverable.Value = 0;
 			}
 		}
 

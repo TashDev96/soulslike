@@ -29,9 +29,9 @@ namespace game.gameplay_core.characters.view.ui
 			transform.parent = GameStaticContext.Instance.WorldToScreenUiParent.Value;
 			_healthBar.SetContext(new UiBar.Context
 			{
-				Current = context.CharacterContext.CharacterStats.Hp,
-				Max = context.CharacterContext.CharacterStats.HpMax,
-				RecoverableAmount = context.CharacterContext.CharacterStats.RecoverableHp,
+				Current = context.CharacterContext.CharacterStats.Hp.Current,
+				Max = context.CharacterContext.CharacterStats.Hp.Max,
+				RecoverableAmount = context.CharacterContext.CharacterStats.Hp.Recoverable,
 				CustomUpdate = context.LocationUiUpdate
 			});
 

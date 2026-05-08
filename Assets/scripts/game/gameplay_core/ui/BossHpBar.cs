@@ -30,22 +30,22 @@ namespace game.gameplay_core.ui
 
 			_bar.SetContext(new UiBar.Context
 			{
-				Current = bossDomain.Context.CharacterStats.Hp,
-				Max = bossDomain.Context.CharacterStats.HpMax,
-				RecoverableAmount = bossDomain.Context.CharacterStats.RecoverableHp,
+				Current = bossDomain.Context.CharacterStats.Hp.Current,
+				Max = bossDomain.Context.CharacterStats.Hp.Max,
+				RecoverableAmount = bossDomain.Context.CharacterStats.Hp.Recoverable,
 				CustomUpdate = LocationStaticContext.Instance.LocationUiUpdate
 			});
 
 			_damageCounterUi.SetContext(_boss.Context);
 
-			bossDomain.Context.CharacterStats.Hp.OnChanged += HandleBossHpChanged;
+			bossDomain.Context.CharacterStats.Hp.Current.OnChanged += HandleBossHpChanged;
 		}
 
 		private void HandleBossHpChanged(float newHp)
 		{
 			if(newHp <= 0f)
 			{
-				_boss.Context.CharacterStats.Hp.OnChanged -= HandleBossHpChanged;
+				_boss.Context.CharacterStats.Hp.Current.OnChanged -= HandleBossHpChanged;
 				StartCoroutine(Disappear());
 			}
 		}

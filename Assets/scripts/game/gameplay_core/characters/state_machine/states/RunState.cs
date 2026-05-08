@@ -11,7 +11,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private float _time;
 		private float _noiseTimer;
 
-		public override float RequiredStaminaOffset => _context.CharacterStats.StaminaMax.Value * 0.2f;
+		public override float RequiredStaminaOffset => _context.CharacterStats.Stamina.MaxValue * 0.2f;
 
 		public RunState(CharacterContext context) : base(context)
 		{

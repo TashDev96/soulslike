@@ -1,4 +1,6 @@
 using dream_lib.src.reactive;
+using game.gameplay_core.characters.config;
+using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.inventory;
 using game.gameplay_core.worldspace_ui;
 using game.ui;
@@ -22,5 +24,6 @@ namespace game
 		public PlayerSaveData PlayerSave { get; set; }
 		public ReactiveCommand SavePlayerAndLocationState { get; set; }
 		public ReactiveCommand<Vector2> OnUiNavigationInput { get; set; }
+		public CommonStatsConfig CommonStatsConfig { get; set; }
 	}
 }

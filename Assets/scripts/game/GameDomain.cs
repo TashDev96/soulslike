@@ -3,6 +3,8 @@ using Cysharp.Threading.Tasks;
 using dream_lib.src.reactive;
 using game.gameplay_core;
 using game.gameplay_core.characters;
+using game.gameplay_core.characters.config;
+using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.debug;
 using game.gameplay_core.inventory;
 using game.ui;
@@ -31,6 +33,10 @@ namespace game
 
 		private async UniTask InitializeAsync()
 		{
+			await UniTask.WhenAll(
+				AddressableManager.PreloadAssetAsync(AddressableAssetNames.CommonStats, AssetOwner.Game)
+			);
+
 			_inventoryDomain = new InventoryDomain();
 
 			_uiDomain = new UiDomain();
@@ -43,7 +49,8 @@ namespace game
 				UiDomain = _uiDomain,
 				InventoryDomain = _inventoryDomain,
 				ReloadLocation = new ReactiveCommand(),
-				SavePlayerAndLocationState = new ReactiveCommand()
+				SavePlayerAndLocationState = new ReactiveCommand(),
+				CommonStatsConfig = AddressableManager.GetPreloadedAsset<CommonStatsConfig>(AddressableAssetNames.CommonStats),
 			};
 
 			await _uiDomain.Initialize();

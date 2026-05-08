@@ -133,22 +133,9 @@ MonoBehaviour:
       LayerNames:
       - Default
       - New Layer
-  <BaseStats>k__BackingField:
-    HpMax: 21
-    StaminaMax: 60
-    PoiseMax: 2
-    PoiseRestoreTimerMax: 5
+  <DefaultStatsValueOverride>k__BackingField:
+    _list: []
+    _keyCollision: 0
   <CanDoBackstabs>k__BackingField: 0
   <CanReceiveBackstabs>k__BackingField: 0
   <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig
-  <CanReceivePlungeAttack>k__BackingField: 1
-  <CustomPlungeAnimation>k__BackingField:
-    WeaponForPreview: 
-    Clip: {fileID: 7400000, guid: 92400d90725ea4dc0b424ee97ed3f89a, type: 2}
-    Speed: 1
-    FlagEvents: []
-    HitEvents: []
-    SoundEvents: []
-    CameraShakeEvents: []
-    LayerNames:
-    - Default

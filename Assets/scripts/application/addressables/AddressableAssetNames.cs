@@ -20,12 +20,13 @@ public static class AddressableAssetNames
 	public const string DebugShieldConfig = "DebugShieldConfig";
 	public const string SimpleSword = "SimpleSword";
 	public const string MainHealingItemConfig = "MainHealingItemConfig";
+	public const string MeteorOre = "MeteorOre";
 	public const string ZombieSword = "ZombieSword";
 	public const string CharacterWorldSpaceUi = "CharacterWorldSpaceUi";
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
 	public const string Boss1Weapon = "Boss1Weapon";
-	public const string MeteorOre = "MeteorOre";
+	public const string CommonStats = "CommonStats";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",
@@ -35,9 +36,9 @@ public static class AddressableAssetNames
 		"DebugBowConfig",
 		"DebugShieldConfig",
 		"MainHealingItemConfig",
+		"MeteorOre",
 		"SimpleSwordConfig",
-		"Boss1Weapon",
-		"MeteorOre"
+		"Boss1Weapon"
 	};
 
 	public static readonly string[] LootVfxPrefabs = new[] {
