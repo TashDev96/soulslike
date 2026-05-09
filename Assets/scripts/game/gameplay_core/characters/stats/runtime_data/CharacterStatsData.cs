@@ -6,7 +6,7 @@ namespace game.gameplay_core.characters.stats.runtime_data
 {
 	public class CharacterStatsData
 	{
-		private readonly Dictionary<StatKey, StatData> _allStats = new();
+		public readonly Dictionary<StatKey, StatData> AllStats = new();
 
 		public HpStat Hp { get; private set; }
 		public StatData Stamina { get; private set; }
@@ -26,18 +26,18 @@ namespace game.gameplay_core.characters.stats.runtime_data
 				switch(kvp.Key)
 				{
 					case StatKey.Hp:
-						_allStats.Add(kvp.Key, new HpStat(kvp.Key, commonStats[kvp.Key]));
+						AllStats.Add(kvp.Key, new HpStat(kvp.Key, commonStats[kvp.Key]));
 						break;
 					default:
-						_allStats.Add(kvp.Key, new StatData(kvp.Key, commonStats[kvp.Key]));
+						AllStats.Add(kvp.Key, new StatData(kvp.Key, commonStats[kvp.Key]));
 						break;
 				}
 			}
 
-			Hp = _allStats[StatKey.Hp] as HpStat;
-			Stamina = _allStats[StatKey.Stamina];
-			Poise = _allStats[StatKey.Poise];
-			PoiseRestoreTimer = _allStats[StatKey.PoiseRestoreTimer];
+			Hp = AllStats[StatKey.Hp] as HpStat;
+			Stamina = AllStats[StatKey.Stamina];
+			Poise = AllStats[StatKey.Poise];
+			PoiseRestoreTimer = AllStats[StatKey.PoiseRestoreTimer];
 
 			Locomotion = new LocomotionStatsData();
 		}
@@ -48,7 +48,7 @@ namespace game.gameplay_core.characters.stats.runtime_data
 
 		public void SetStatsToMax()
 		{
-			foreach(var kvp in _allStats)
+			foreach(var kvp in AllStats)
 			{
 				kvp.Value.SetToMax();
 			}

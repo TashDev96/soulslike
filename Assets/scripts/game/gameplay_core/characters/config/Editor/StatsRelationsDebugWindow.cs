@@ -15,6 +15,9 @@ namespace game.gameplay_core.characters.config.Editor
 		private CharacterConfig _targetCharacter;
 		[SerializeField]
 		private WeaponItemConfig _weapon;
+		
+		[SerializeField]
+		private DebugCharacterUpgradeConfig _debugCharacterUpgradeConfig;
 
 		[MenuItem("Tools/RPG Stats Debugger")]
 		public static void ShowWindow()
@@ -27,7 +30,8 @@ namespace game.gameplay_core.characters.config.Editor
 		{
 			base.OnImGUI();
 
-			var statsCalculated = CharacterStatsLogic.CalcAllStatMaxValues(_commonStatsConfig, _targetCharacter.DefaultStatsValueOverride, _weapon);
+			var statUpgrades = _debugCharacterUpgradeConfig?.StatsUpgrades;
+			var statsCalculated = CharacterStatsLogic.CalcAllStatMaxValues(_commonStatsConfig, _targetCharacter.DefaultStatsValueOverride, _weapon, statUpgrades);
 
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.BeginVertical();

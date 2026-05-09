@@ -16,7 +16,10 @@ namespace game.gameplay_core.characters.stats
 			RecalculateStats();
 		}
 
-		public static Dictionary<StatKey, float> CalcAllStatMaxValues(CommonStatsConfig config, SerializableDictionary<StatKey, int> defaultValuesOverride, WeaponItemConfig weapon)
+		public static Dictionary<StatKey, float> CalcAllStatMaxValues(CommonStatsConfig config,
+			SerializableDictionary<StatKey, int> defaultValuesOverride,
+			WeaponItemConfig weapon,
+			SerializableDictionary<StatKey, int> statsUpgrades)
 		{
 			if(_cacheMaxValues == null)
 			{
@@ -33,10 +36,27 @@ namespace game.gameplay_core.characters.stats
 				}
 			}
 
+			if(statsUpgrades != null)
+			{
+				foreach(var kvp in statsUpgrades)
+				{
+					_cacheMaxValues[kvp.Key] += kvp.Value;
+				}
+			}
+			
+			//TODO: armor weight affects move speed, roll speed
+			
+
 			_cacheMaxValues[StatKey.Hp] += _cacheMaxValues[StatKey.Vitality] * 1;
 			_cacheMaxValues[StatKey.Stamina] += _cacheMaxValues[StatKey.Endurance] * 10;
 
 			_cacheMaxValues[StatKey.AttackDamage] = weapon.RegularAttacks[0].BaseDamage;
+
+			foreach(var kvp in weapon.DamageScaling)
+			{
+				var statValue = _cacheMaxValues[kvp.Key];
+				_cacheMaxValues[StatKey.AttackDamage] += statValue * kvp.Value;
+			}
 
 			return _cacheMaxValues;
 		}
@@ -45,19 +65,29 @@ namespace game.gameplay_core.characters.stats
 		{
 			var data = _context.CharacterStats;
 
-			//TODO calculate max values
-			data.Hp.SetToMax();
-			data.Stamina.SetToMax();
-			data.Poise.SetToMax();
+			var statsMaxValues = CalcAllStatMaxValues(GameStaticContext.Instance.CommonStatsConfig,
+				_context.Config.DefaultStatsValueOverride,
+				_context.Logic.InventoryLogic.RightWeapon.Config,
+				GameStaticContext.Instance.PlayerSave.CharacterData.StatUpgrades
+			);
 
-			data.Locomotion.HalfTurnDurationSeconds = _context.Config.Locomotion.HalfTurnDurationSeconds;
-			data.Locomotion.HalfTurnDurationSecondsLockOn = _context.Config.Locomotion.HalfTurnDurationSecondsLockOn;
-			data.Locomotion.RunSpeed = _context.Config.Locomotion.RunSpeed;
+			foreach(var kvp in statsMaxValues)
+			{
+				data.AllStats[kvp.Key].MaxValue = kvp.Value;
+			}
+
+			data.SetStatsToMax();
+
+			var turnSpeedMult = statsMaxValues[StatKey.TurnSpeedMultiplier];
+			var moveSpeedMult = statsMaxValues[StatKey.MoveSpeedMultiplier];
+			
+
+			data.Locomotion.HalfTurnDurationSeconds = _context.Config.Locomotion.HalfTurnDurationSeconds / turnSpeedMult;
+			data.Locomotion.HalfTurnDurationSecondsLockOn = _context.Config.Locomotion.HalfTurnDurationSecondsLockOn / turnSpeedMult;
+			data.Locomotion.RunSpeed = _context.Config.Locomotion.RunSpeed * moveSpeedMult;
 			data.Locomotion.WalkAcceleration = _context.Config.Locomotion.WalkAcceleration;
 			data.Locomotion.WalkDeceleration = _context.Config.Locomotion.WalkDeceleration;
-			data.Locomotion.WalkSpeed = _context.Config.Locomotion.WalkSpeed;
+			data.Locomotion.WalkSpeed = _context.Config.Locomotion.WalkSpeed * moveSpeedMult;
 		}
-
-		//TODO: solid stats increment logic, with multipliers paired with string ids or smh
 	}
 }

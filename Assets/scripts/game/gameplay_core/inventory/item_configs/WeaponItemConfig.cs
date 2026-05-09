@@ -4,6 +4,7 @@ using dream_lib.src.utils.data_types;
 using game.enums;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.state_machine.states.attack;
+using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -19,11 +20,16 @@ namespace game.gameplay_core.inventory.item_configs
 		public string WeaponPrefabName { get; private set; }
 
 		[field: SerializeField]
+		public SerializableDictionary<StatKey, float> DamageScaling = new();
+		
+		[field: SerializeField]
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] StrongAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] SpecialAttacks { get; private set; }
+		
+		
 
 		[field: FoldoutGroup("Roll")]
 		[field: SerializeField]

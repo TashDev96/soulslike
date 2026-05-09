@@ -17,6 +17,13 @@ MonoBehaviour:
     antient era. May have unique stats each time, depending on developer needs.
   <EquipmentSlotType>k__BackingField: 1
   <WeaponPrefabName>k__BackingField: DebugWeapon
+  DamageScaling:
+    _list:
+    - Key: 1
+      Value: 0.1
+    - Key: 3
+      Value: 0.05
+    _keyCollision: 0
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
       WeaponForPreview: DebugWeapon
@@ -1262,3 +1269,4 @@ MonoBehaviour:
     _list: []
     _keyCollision: 0
   <FallAttackAnimation>k__BackingField: {fileID: 7400000, guid: c148d60d7173d4f858842468351dad2f, type: 2}
+  <FallDamageMultiplier>k__BackingField: 1
