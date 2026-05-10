@@ -13,7 +13,6 @@ namespace game.gameplay_core.characters.stats
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			RecalculateStats();
 		}
 
 		public static Dictionary<StatKey, float> CalcAllStatMaxValues(CommonStatsConfig config,
@@ -61,7 +60,7 @@ namespace game.gameplay_core.characters.stats
 			return _cacheMaxValues;
 		}
 
-		private void RecalculateStats()
+		public void RecalculateStats()
 		{
 			var data = _context.CharacterStats;
 
@@ -74,6 +73,7 @@ namespace game.gameplay_core.characters.stats
 			foreach(var kvp in statsMaxValues)
 			{
 				data.AllStats[kvp.Key].MaxValue = kvp.Value;
+				data.AllStats[kvp.Key].IsHidden = data.AllStats[kvp.Key].Config.IsHidden;
 			}
 
 			data.SetStatsToMax();

@@ -164,6 +164,8 @@ namespace game.gameplay_core.characters
 			_context.Logic.PoiseLogic.SetContext(_context);
 
 			InitializeInventory();
+			
+			_context.Logic.StatsLogic.RecalculateStats();
 
 			ExternalData = new CharacterExternalData(_context);
 

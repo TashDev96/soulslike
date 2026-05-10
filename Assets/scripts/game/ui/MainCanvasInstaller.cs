@@ -1,5 +1,6 @@
 using game.gameplay_core.ui;
 using game.ui.inventory;
+using game.ui.stats;
 using UnityEngine;
 
 namespace game.ui
@@ -13,5 +14,7 @@ namespace game.ui
 		public UiLocationHUD UiLocationHUD { get; private set; }
 		[field: SerializeField]
 		public InventoryScreenView Inventory { get; set; }
+		[field: SerializeField]
+		public StatsScreenView StatsScreen { get; set; }
 	}
 }

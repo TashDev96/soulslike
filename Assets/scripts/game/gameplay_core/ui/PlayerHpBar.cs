@@ -28,6 +28,8 @@ namespace game.gameplay_core.ui
 		private Image _topper;
 
 		[SerializeField]
+		private Image _blinkImage;
+		[SerializeField]
 		private Color _blinkColor = Color.white;
 
 		[SerializeField]
@@ -39,7 +41,7 @@ namespace game.gameplay_core.ui
 		private Context _context;
 		private float _currentTargetValue = 1f;
 		private float _slowFillerValue = 1f;
-		private Color _defaultSlowColor;
+		private Color _defaultBlinkColor;
 		private Coroutine _blinkCoroutine;
 
 		public void SetContext(Context context)
@@ -61,7 +63,10 @@ namespace game.gameplay_core.ui
 
 		private void Awake()
 		{
-			_defaultSlowColor = _fillerSlow.color;
+			if(_blinkImage != null)
+			{
+				_defaultBlinkColor = _blinkImage.color;
+			}
 		}
 
 		public void Reset()
@@ -96,7 +101,7 @@ namespace game.gameplay_core.ui
 				{
 					StopCoroutine(_blinkCoroutine);
 				}
-				if(gameObject.activeInHierarchy)
+				if(gameObject.activeInHierarchy && _blinkImage != null)
 				{
 					_blinkCoroutine = StartCoroutine(BlinkCoroutine());
 				}
@@ -115,13 +120,13 @@ namespace game.gameplay_core.ui
 
 			for(var i = 0; i < _blinkCount; i++)
 			{
-				_fillerSlow.color = _blinkColor;
+				_blinkImage.color = _blinkColor;
 				yield return new WaitForSeconds(halfBlinkDuration);
-				_fillerSlow.color = _defaultSlowColor;
+				_blinkImage.color = _defaultBlinkColor;
 				yield return new WaitForSeconds(halfBlinkDuration);
 			}
 
-			_fillerSlow.color = _defaultSlowColor;
+			_blinkImage.color = _defaultBlinkColor;
 			_blinkCoroutine = null;
 		}
 

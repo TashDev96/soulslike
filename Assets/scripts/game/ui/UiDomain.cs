@@ -21,6 +21,7 @@ namespace game.ui
 
 			_mainCanvasInstaller = Object.Instantiate(mainCanvasPrefab).GetComponent<MainCanvasInstaller>();
 			_mainCanvasInstaller.Inventory.gameObject.SetActive(false);
+			_mainCanvasInstaller.StatsScreen.gameObject.SetActive(false);
 			Object.DontDestroyOnLoad(_mainCanvasInstaller.gameObject);
 
 			_locationHud = _mainCanvasInstaller.UiLocationHUD;
@@ -43,9 +44,14 @@ namespace game.ui
 
 		private void CustomUpdate()
 		{
-			if(InputAdapter.GetButtonDown(InputAxesNames.Inventory))
+			if(InputAdapter.GetButtonDown(InputAxesNames.InventoryScreen))
 			{
 				ToggleInventoryScreen();
+			}
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.StatsScreen))
+			{
+				_mainCanvasInstaller.StatsScreen.Toggle();
 			}
 
 			if(InputAdapter.GetButtonDown(InputAxesNames.Vertical) || InputAdapter.GetButtonDown(InputAxesNames.Horizontal))
