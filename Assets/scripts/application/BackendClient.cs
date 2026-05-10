@@ -8,7 +8,10 @@ namespace Soulslike.Application
 {
     public class BackendClient
     {
-        public string BaseUrl { get; set; } = "http://localhost:5189";
+        public const string LocalUrl = "http://localhost:5189";
+        public const string ProductionUrl = "https://testtestslgme.uk";
+
+        public string BaseUrl { get; set; } = LocalUrl;
         public string Token { get; set; }
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(Token);

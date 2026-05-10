@@ -11,9 +11,30 @@ namespace Soulslike.Editor
 {
 	public class ServerTestWindow : OdinEditorWindow
 	{
+		public enum ServerEnvironment { Local, Production }
+
+		[BoxGroup("Connection Settings")]
+		[EnumToggleButtons]
+		[OnValueChanged(nameof(UpdateBaseUrl))]
+		[SerializeField]
+		private ServerEnvironment environment;
+
 		[BoxGroup("Connection Settings")]
 		[SerializeField]
-		private string baseUrl = "http://localhost:5189";
+		private string baseUrl = BackendClient.LocalUrl;
+
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			environment = (ServerEnvironment)EditorPrefs.GetInt("ServerTestWindow_Environment", (int)ServerEnvironment.Local);
+			UpdateBaseUrl();
+		}
+
+		private void UpdateBaseUrl()
+		{
+			baseUrl = environment == ServerEnvironment.Local ? BackendClient.LocalUrl : BackendClient.ProductionUrl;
+			EditorPrefs.SetInt("ServerTestWindow_Environment", (int)environment);
+		}
 
 		[BoxGroup("Authentication")]
 		[SerializeField]
