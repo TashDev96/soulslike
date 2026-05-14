@@ -1,6 +1,7 @@
 using application;
 using Cysharp.Threading.Tasks;
 using dream_lib.src.reactive;
+using dream_lib.ui.Input;
 using game.gameplay_core;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.config;
@@ -36,6 +37,8 @@ namespace game
 			await UniTask.WhenAll(
 				AddressableManager.PreloadAssetAsync(AddressableAssetNames.CommonStats, AssetOwner.Game)
 			);
+			
+			InputControllersMetaManager.Initialize();
 
 			_inventoryDomain = new InventoryDomain();
 

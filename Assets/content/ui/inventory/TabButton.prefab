@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DreamLibAssembly::dream_lib.src.ui.UiTabButton
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -295,7 +295,8 @@ MonoBehaviour:
   _selectedAnims: []
   _activeTabAnims:
   - rid: 2435018149627953396
-  _inactiveTabAnims: []
+  _inactiveTabAnims:
+  - rid: 2435018264402985289
   references:
     version: 2
     RefIds:
@@ -304,3 +305,9 @@ MonoBehaviour:
       data:
         _target: {fileID: 8997180533760460743}
         _newParent: {fileID: 0}
+    - rid: 2435018264402985289
+      type: {class: ChangeColorUiAnim, ns: dream_lib.ui.animations, asm: DreamLibAssembly}
+      data:
+        _target: {fileID: 6506555184883621213}
+        _color: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
+        _duration: 0.1

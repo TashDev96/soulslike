@@ -1,4 +1,5 @@
 using System;
+using dream_lib.ui;
 using game.gameplay_core.inventory.items_logic;
 
 namespace game.ui.inventory.variant_tetris
@@ -6,6 +7,11 @@ namespace game.ui.inventory.variant_tetris
 	public class InventoryPossessionsTetrisView : InventoryPossessionsViewAbstract
 	{
 		public override void Initialize(Action<BaseItemLogic> autoEquipItem)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override UiInteractableElement GetTopItemBtn()
 		{
 			throw new NotImplementedException();
 		}

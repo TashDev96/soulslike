@@ -28,6 +28,8 @@ namespace game.ui.inventory
 
 		public EquipmentSlotType SlotType => _slotType;
 		public int SlotIndex => _slotIndex;
+		public UiInteractableElement Button => _button;
+
 		public event Action<InventorySlotView> OnDoubleClick;
 
 		private void Awake()

@@ -28,6 +28,7 @@ namespace game.ui.inventory.variant_darksouls
 		private List<BaseItemLogic> _allItems = new();
 		private ItemCategory _currentCategory = ItemCategory.All;
 		private CharacterInventoryLogic _inventoryLogic;
+		private List<InventoryPossessionItemView> _currentItemsList = new();
 
 		public override void Initialize(Action<BaseItemLogic> autoEquipItem)
 		{
@@ -44,6 +45,11 @@ namespace game.ui.inventory.variant_darksouls
 			_allItems = unequippedItems.ToList();
 			_onItemDoubleClicked = autoEquipItem;
 			UniTask.DelayFrame(0, PlayerLoopTiming.LastPostLateUpdate).ContinueWith(() => { SetCategory(ItemCategory.All); }).Forget();
+		}
+
+		public override UiInteractableElement GetTopItemBtn()
+		{
+			return _currentItemsList.Count == 0 ? null : _currentItemsList[0].Button;
 		}
 
 		private void Awake()
@@ -67,6 +73,7 @@ namespace game.ui.inventory.variant_darksouls
 
 		private void RefreshList()
 		{
+			_currentItemsList.Clear();
 			foreach(Transform child in _itemsContainer)
 			{
 				Destroy(child.gameObject);
@@ -78,6 +85,7 @@ namespace game.ui.inventory.variant_darksouls
 			{
 				var view = Instantiate(_itemPrefab, _itemsContainer);
 				view.Initialize(item, _onItemDoubleClicked);
+				_currentItemsList.Add(view);
 			}
 		}
 

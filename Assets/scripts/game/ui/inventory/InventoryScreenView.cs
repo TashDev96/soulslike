@@ -3,6 +3,7 @@ using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.location;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace game.ui.inventory
 {
@@ -12,6 +13,7 @@ namespace game.ui.inventory
 		private InventoryPossessionsViewAbstract _possessionsView;
 		private CharacterContext _context;
 		private InventorySlotView[] _slots;
+		private bool _initialized;
 
 		public void Initialize(CharacterContext context)
 		{
@@ -31,7 +33,7 @@ namespace game.ui.inventory
 				slot.OnDoubleClick += OnSlotDoubleClicked;
 			}
 
-			Refresh();
+			_initialized = true;
 		}
 
 		public void Refresh()
@@ -54,13 +56,31 @@ namespace game.ui.inventory
 		{
 			if(gameObject.activeSelf)
 			{
-				gameObject.SetActive(false);
+				Hide();
 			}
 			else
 			{
-				gameObject.SetActive(true);
+				Show();
+			}
+		}
+
+		private void Show()
+		{
+			gameObject.SetActive(true);
+			if(!_initialized)
+			{
 				Initialize(LocationStaticContext.Instance.Player.Context);
 			}
+
+			Refresh();
+
+			var elementToSelect = _possessionsView.GetTopItemBtn() ?? _slots[0].Button;
+			EventSystem.current.SetSelectedGameObject(elementToSelect.gameObject);
+		}
+
+		private void Hide()
+		{
+			gameObject.SetActive(false);
 		}
 
 		private void OnSlotDoubleClicked(InventorySlotView slotView)
