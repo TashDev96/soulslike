@@ -25,7 +25,7 @@ namespace game.ui.inventory.variant_darksouls
 
 		private Action<BaseItemLogic> _onDoubleClick;
 		private BaseItemLogic _item;
-		
+
 		public UiInteractableElement Button => _button;
 
 		public void Initialize(BaseItemLogic item, Action<BaseItemLogic> onDoubleClick)

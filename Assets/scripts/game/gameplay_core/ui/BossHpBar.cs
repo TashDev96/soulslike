@@ -10,7 +10,6 @@ namespace game.gameplay_core.ui
 {
 	public class BossHpBar : MonoBehaviour
 	{
-		 
 		[SerializeField]
 		private TMP_Text _bossName;
 

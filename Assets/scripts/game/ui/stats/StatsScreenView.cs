@@ -46,9 +46,8 @@ namespace game.ui.stats
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			
+
 			gameObject.SetActive(true);
-			
 		}
 
 		public void Toggle()

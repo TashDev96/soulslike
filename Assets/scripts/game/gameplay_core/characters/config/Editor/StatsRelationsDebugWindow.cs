@@ -15,7 +15,7 @@ namespace game.gameplay_core.characters.config.Editor
 		private CharacterConfig _targetCharacter;
 		[SerializeField]
 		private WeaponItemConfig _weapon;
-		
+
 		[SerializeField]
 		private DebugCharacterUpgradeConfig _debugCharacterUpgradeConfig;
 

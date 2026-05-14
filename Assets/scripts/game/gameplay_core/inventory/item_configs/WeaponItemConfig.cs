@@ -15,21 +15,18 @@ namespace game.gameplay_core.inventory.item_configs
 	[CreateAssetMenu(menuName = "Configs/Items/Weapon")]
 	public class WeaponItemConfig : BaseEquipmentItemConfig
 	{
+		[field: SerializeField]
+		public SerializableDictionary<StatKey, float> DamageScaling = new();
 		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]
 		[field: SerializeField]
 		public string WeaponPrefabName { get; private set; }
 
-		[field: SerializeField]
-		public SerializableDictionary<StatKey, float> DamageScaling = new();
-		
 		[field: SerializeField]
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] StrongAttacks { get; private set; }
 		[field: SerializeField]
 		public AttackConfig[] SpecialAttacks { get; private set; }
-		
-		
 
 		[field: FoldoutGroup("Roll")]
 		[field: SerializeField]

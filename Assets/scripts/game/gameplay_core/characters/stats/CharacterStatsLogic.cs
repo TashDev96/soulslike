@@ -42,9 +42,8 @@ namespace game.gameplay_core.characters.stats
 					_cacheMaxValues[kvp.Key] += kvp.Value;
 				}
 			}
-			
+
 			//TODO: armor weight affects move speed, roll speed
-			
 
 			_cacheMaxValues[StatKey.Hp] += _cacheMaxValues[StatKey.Vitality] * 1;
 			_cacheMaxValues[StatKey.Stamina] += _cacheMaxValues[StatKey.Endurance] * 10;
@@ -80,7 +79,6 @@ namespace game.gameplay_core.characters.stats
 
 			var turnSpeedMult = statsMaxValues[StatKey.TurnSpeedMultiplier];
 			var moveSpeedMult = statsMaxValues[StatKey.MoveSpeedMultiplier];
-			
 
 			data.Locomotion.HalfTurnDurationSeconds = _context.Config.Locomotion.HalfTurnDurationSeconds / turnSpeedMult;
 			data.Locomotion.HalfTurnDurationSecondsLockOn = _context.Config.Locomotion.HalfTurnDurationSecondsLockOn / turnSpeedMult;
