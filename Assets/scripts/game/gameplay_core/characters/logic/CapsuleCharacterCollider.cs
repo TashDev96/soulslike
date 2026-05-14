@@ -275,7 +275,7 @@ namespace game.gameplay_core.characters.logic
 #if UNITY_EDITOR
 					if(_context.IsPlayer.Value)
 					{
-						Debug.Log($"player exit {enteredTrigger}");
+						//Debug.Log($"player exit {enteredTrigger}");
 					}
 #endif
 					_exitedTriggersCache.Add(enteredTrigger);
