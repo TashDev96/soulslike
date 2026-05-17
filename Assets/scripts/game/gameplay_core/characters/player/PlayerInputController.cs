@@ -68,6 +68,11 @@ namespace game.gameplay_core.characters.player
 			{
 				_rollDashHoldDuration = 0;
 			}
+
+			if(InputAdapter.GetButtonDown(InputAxesNames.Interact))
+			{
+				_characterContext.Logic.InteractionLogic.TriggerCurrentInteraction();
+			}
 		}
 
 		public void GetDebugString(StringBuilder sb)

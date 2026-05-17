@@ -12,7 +12,6 @@ namespace game.gameplay_core.inventory.items_logic
 		public float Durability;
 
 		public override BaseItemConfig BaseConfig => Config;
-		public override string ConfigId => Config.name;
 
 		public WeaponItemLogic(WeaponItemConfig config)
 		{

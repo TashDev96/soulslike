@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using dream_lib.src.utils.data_types;
 using game.enums;
 using game.gameplay_core.inventory;
 using game.gameplay_core.inventory.item_configs;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
+using game.gameplay_core.utils;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -60,6 +62,8 @@ namespace game.gameplay_core.characters.logic
 		public void PickUpItem(InventoryItemSaveData itemSaveData)
 		{
 			var createdItemLogic = InventoryItemsFabric.CreateItemFromSave(itemSaveData);
+
+			_context.Logic.InteractionLogic.AddNotification(LocalizationHelper.BuildItemPickupLocale(createdItemLogic.BaseConfig));
 
 			switch(createdItemLogic)
 			{
@@ -204,6 +208,21 @@ namespace game.gameplay_core.characters.logic
 			{
 				baseItemLogic.HandleLocationRespawn();
 			}
+		}
+
+		public bool CheckHasKeys(KeyId[] keys)
+		{
+			foreach(var item in _items)
+			{
+				if(item is KeyItemLogic keyItemLogic)
+				{
+					if(keys.Any(k => k == keyItemLogic.Config.Key))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		private void EnsureHandsNotNull()

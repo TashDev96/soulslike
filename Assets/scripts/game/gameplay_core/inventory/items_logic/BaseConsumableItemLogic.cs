@@ -20,8 +20,6 @@ namespace game.gameplay_core.inventory.items_logic
 
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 
-		public override string ConfigId => _config.name;
-
 		public BaseConsumableItemLogic(BaseConsumableItemConfig config)
 		{
 			_config = config;

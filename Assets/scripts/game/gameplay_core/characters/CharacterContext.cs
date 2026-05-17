@@ -47,8 +47,8 @@ namespace game.gameplay_core.characters
 		public Views Views;
 		public Logics Logic;
 
-		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem { get; set; }
-		public CharacterSensorsDomain SensorsDomain { get; set; }
+		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem;
+		public CharacterSensorsDomain SensorsDomain;
 	}
 
 	public struct Logics
@@ -64,6 +64,7 @@ namespace game.gameplay_core.characters
 		public CharacterStatsLogic StatsLogic;
 		public DeathLogic DeathLogic;
 		public CharacterInventoryLogic InventoryLogic;
+		public InteractionLogic InteractionLogic;
 	}
 
 	public struct Views
@@ -76,7 +77,7 @@ namespace game.gameplay_core.characters
 		public ParryReceiver ParryReceiver;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
-		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews { get; set; }
+		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews;
 	}
 
 	public struct Events

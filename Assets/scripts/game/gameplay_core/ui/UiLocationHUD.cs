@@ -47,8 +47,8 @@ namespace game.gameplay_core.ui
 
 			_uiInteractionPrompt.SetContext(new UiInteractionPrompt.Context
 			{
-				TriggersEnteredByPlayer = context.Player.ExternalData.EnteredTriggers,
-				Player = context.Player
+				Logic = context.Player.Context.Logic.InteractionLogic,
+				UiUpdate = context.LocationUiUpdate
 			});
 
 			_equippedItems.SetContext(new UiEquippedItems.Context

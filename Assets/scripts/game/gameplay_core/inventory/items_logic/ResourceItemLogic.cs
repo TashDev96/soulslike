@@ -6,7 +6,6 @@ namespace game.gameplay_core.inventory.items_logic
 	{
 		public ResourceItemConfig Config { get; }
 		public override BaseItemConfig BaseConfig => Config;
-		public override string ConfigId => Config.name;
 
 		public ResourceItemLogic(ResourceItemConfig config)
 		{

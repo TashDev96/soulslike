@@ -149,7 +149,8 @@ namespace game.gameplay_core.characters
 					HealthLogic = new HealthLogic(),
 					StatsLogic = new CharacterStatsLogic(),
 					DeathLogic = new DeathLogic(),
-					InventoryLogic = new CharacterInventoryLogic()
+					InventoryLogic = new CharacterInventoryLogic(),
+					InteractionLogic = new InteractionLogic()
 				}
 			};
 
@@ -162,6 +163,7 @@ namespace game.gameplay_core.characters
 			_context.Logic.FallDamageLogic.SetContext(_context);
 			_context.Logic.StaminaLogic.Initialize(_context);
 			_context.Logic.PoiseLogic.SetContext(_context);
+			_context.Logic.InteractionLogic.SetContext(_context);
 
 			InitializeInventory();
 

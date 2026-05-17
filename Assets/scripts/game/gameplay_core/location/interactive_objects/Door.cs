@@ -55,7 +55,7 @@ namespace game.gameplay_core.location.interactive_objects
 		{
 			if(!_canOpenFromFrontSide)
 			{
-				//TODO message can not be open from this side
+				interactedCharacter.Context.Logic.InteractionLogic.AddNotification("Can not be opened from this side");
 				return;
 			}
 			TryOpen(interactedCharacter);
@@ -65,7 +65,10 @@ namespace game.gameplay_core.location.interactive_objects
 		{
 			if(_openWithKey)
 			{
-				//TODO key logic
+				if(!interactedCharacter.Context.Logic.InventoryLogic.CheckHasKeys(_keys))
+				{
+					interactedCharacter.Context.Logic.InteractionLogic.AddNotification("Need key");
+				}
 			}
 
 			SaveData.IsOpened = true;

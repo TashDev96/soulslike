@@ -9,7 +9,7 @@ namespace game.gameplay_core.inventory.items_logic
 		protected InventoryItemSaveData SaveableData;
 		public abstract BaseItemConfig BaseConfig { get; }
 
-		public abstract string ConfigId { get; }
+		public string ConfigId => BaseConfig.name;
 		public string UniqueId => SaveableData.UniqueId;
 
 		public virtual void InitializeForLocation(CharacterContext context)

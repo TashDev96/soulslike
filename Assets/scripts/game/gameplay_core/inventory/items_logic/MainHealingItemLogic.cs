@@ -20,7 +20,6 @@ namespace game.gameplay_core.inventory.items_logic
 		public bool HasInfiniteCharges => false;
 
 		public override BaseItemConfig BaseConfig => _config;
-		public override string ConfigId => _config.name;
 
 		public ItemAnimationConfig AnimationConfig => _config.AnimationConfig;
 

@@ -18,6 +18,8 @@ namespace game.gameplay_core.inventory
 					return new MainHealingItemLogic(mainHealingItemConfig);
 				case ResourceItemConfig resourceItemConfig:
 					return new ResourceItemLogic(resourceItemConfig);
+				case KeyItemConfig keyItemConfig:
+					return new KeyItemLogic(keyItemConfig);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(config));
 			}
