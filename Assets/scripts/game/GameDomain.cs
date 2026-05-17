@@ -4,7 +4,6 @@ using dream_lib.src.reactive;
 using dream_lib.ui.Input;
 using game.gameplay_core;
 using game.gameplay_core.characters;
-using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.debug;
 using game.gameplay_core.inventory;
@@ -37,7 +36,7 @@ namespace game
 			await UniTask.WhenAll(
 				AddressableManager.PreloadAssetAsync(AddressableAssetNames.CommonStats, AssetOwner.Game)
 			);
-			
+
 			InputControllersMetaManager.Initialize();
 
 			_inventoryDomain = new InventoryDomain();
@@ -53,7 +52,7 @@ namespace game
 				InventoryDomain = _inventoryDomain,
 				ReloadLocation = new ReactiveCommand(),
 				SavePlayerAndLocationState = new ReactiveCommand(),
-				CommonStatsConfig = AddressableManager.GetPreloadedAsset<CommonStatsConfig>(AddressableAssetNames.CommonStats),
+				CommonStatsConfig = AddressableManager.GetPreloadedAsset<CommonStatsConfig>(AddressableAssetNames.CommonStats)
 			};
 
 			await _uiDomain.Initialize();

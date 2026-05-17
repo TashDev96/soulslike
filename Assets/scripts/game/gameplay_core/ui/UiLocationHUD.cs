@@ -3,6 +3,7 @@ using dream_lib.ui;
 using game.gameplay_core.characters;
 using game.gameplay_core.location;
 using game.ui;
+using game.ui.interaction;
 using UnityEngine;
 
 namespace game.gameplay_core.ui

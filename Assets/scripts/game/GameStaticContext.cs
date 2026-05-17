@@ -1,5 +1,4 @@
 using dream_lib.src.reactive;
-using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.inventory;
 using game.gameplay_core.worldspace_ui;

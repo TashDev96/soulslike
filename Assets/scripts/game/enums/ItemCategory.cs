@@ -6,6 +6,6 @@ namespace game.enums
 		Weapons = 1,
 		Armor = 2,
 		Quest = 3,
-		Resource = 4,
+		Resource = 4
 	}
 }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace game.ui
+namespace game.ui.interaction
 {
 	public class UiMessageView : MonoBehaviour
 	{
