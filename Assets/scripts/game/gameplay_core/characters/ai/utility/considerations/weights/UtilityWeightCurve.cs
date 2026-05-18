@@ -17,12 +17,32 @@ namespace game.gameplay_core.characters.ai.utility.considerations.weights
 	{
 		[SerializeField]
 		public float Multiplier = 1f;
+		[SerializeField]
+		private bool _normalizeCurveLength;
+		[SerializeField]
+		[ReadOnly]
+		[ShowIf(nameof(_normalizeCurveLength))]
+		private float _curveDuration;
+		
 		[HideReferenceObjectPicker]
 		public AnimationCurve Curve = new();
 
 		protected override float EvaluateInternal(float statValue)
 		{
+			if(_normalizeCurveLength)
+			{
+				statValue *= _curveDuration;
+			}
 			return Curve.Evaluate(statValue) * Multiplier;
+		}
+
+		public override void OnValidateEditor()
+		{
+			base.OnValidateEditor();
+			if(_normalizeCurveLength)
+			{
+				_curveDuration = Curve.keys[Curve.length - 1].time;
+			}
 		}
 	}
 }

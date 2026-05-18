@@ -7,5 +7,10 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 	public abstract class ValueSourceBase
 	{
 		public abstract float GetValue(UtilityBrainContext context);
+
+		public virtual void OnValidateEditor()
+		{
+			
+		}
 	}
 }

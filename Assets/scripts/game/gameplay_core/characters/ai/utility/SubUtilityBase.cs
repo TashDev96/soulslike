@@ -357,6 +357,19 @@ namespace game.gameplay_core.characters.ai.utility
 		{
 			EditorGUILayout.LabelField(DebugString, EditorStyles.wordWrappedLabel);
 		}
+
+		private void OnValidate()
+		{
+			foreach(var action in Actions)
+			{
+				action.OnValidateEditor();
+			}
+
+			foreach(var goalChain in GoalChains)
+			{
+				goalChain.OnValidateEditor();
+			}
+		}
 #endif
 	}
 }

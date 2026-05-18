@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.stats.config;
 
@@ -34,6 +35,11 @@ namespace game.gameplay_core.characters.stats.runtime_data
 		public void SetToMax()
 		{
 			Current.Value = MaxValue;
+		}
+
+		public override string ToString()
+		{
+			return $"{Id}: {Value.RoundFormat()}/{MaxValue.RoundFormat()}";
 		}
 	}
 }

@@ -21,5 +21,13 @@ namespace game.gameplay_core.characters.ai.utility.goals
 		public float LastWeight;
 		[field: SerializeField]
 		public float InertiaWeight { get; private set; }
+
+		public void OnValidateEditor()
+		{
+			foreach(var consideration in Considerations)
+			{
+				consideration.OnValidateEditor();
+			}
+		}
 	}
 }

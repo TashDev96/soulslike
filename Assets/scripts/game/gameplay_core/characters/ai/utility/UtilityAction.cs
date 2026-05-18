@@ -47,5 +47,13 @@ namespace game.gameplay_core.characters.ai.utility
 		[field: PropertyOrder(-1)]
 		public Color DebugColor { get; set; }
 		public float InertiaTimer { get; set; }
+
+		public void OnValidateEditor()
+		{
+			foreach(var consideration in Considerations)
+			{
+				consideration.OnValidateEditor();
+			}
+		}
 	}
 }

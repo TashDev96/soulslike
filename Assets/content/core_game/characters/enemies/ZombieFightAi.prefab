@@ -73,11 +73,30 @@ MonoBehaviour:
     Considerations:
     - rid: 8163169196350373992
     - rid: 8163169418539172003
-    HasInertia: 0
-    InertiaDuration: 0
+    - rid: 8163169418539172143
+    HasInertia: 1
+    InertiaDuration: 1
     InertiaCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.008728027
+        value: -1.1549683
+        inSlope: 1.1766671
+        outSlope: 1.1766671
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.011428833
+        inSlope: 1.1766671
+        outSlope: 1.1766671
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -96,23 +115,42 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <DebugColor>k__BackingField: {r: 0.84, g: 1, b: 0.19999999, a: 1}
+    <DebugColor>k__BackingField: {r: 0.2, g: 1, b: 0.52156866, a: 1}
   - Id: Get Into Attack Distance
     Type: 6
     Direction: 0
     Distance: 1
     Considerations:
     - rid: 8163169196350373998
+    - rid: 8163169418539172153
     - rid: 8163169418539171999
-    HasInertia: 0
-    InertiaDuration: 0
+    HasInertia: 1
+    InertiaDuration: 1
     InertiaCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <DebugColor>k__BackingField: {r: 0.19999999, g: 1, b: 0.52000004, a: 1}
+    <DebugColor>k__BackingField: {r: 0.9745225, g: 1, b: 0.19999999, a: 1}
   - Id: Keep Safe Distance
     Type: 5
     Direction: 0
@@ -146,8 +184,8 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <DebugColor>k__BackingField: {r: 0.84000015, g: 0.19999999, b: 1, a: 1}
-  DebugString: "\ngoal:Attack -1 \nHeal -1 \nGet Into Attack Distance 1 \nKeep Safe
-    Distance 0.86478 \nWaitBlock 0.2146273 \n"
+  DebugString: "\ngoal:Attack 0.7570234 \nHeal -1 \nGet Into Attack Distance 0.88
+    \nKeep Safe Distance 0.6204575 \nWaitBlock 0.9571527 \n"
   _noAttackWeight:
     _octaves:
     - Disabled: 0
@@ -189,13 +227,14 @@ MonoBehaviour:
     - rid: 8163169196350373996
       type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
-        Stat: 0
+        StatKey: 6
+        Normalized: 1
     - rid: 8163169196350373997
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         _compareType: 3
         _value: 0.5
-        _metWeight: 1
+        _metWeight: 0.8
         _notMetWeight: -1
     - rid: 8163169196350373998
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
@@ -235,7 +274,8 @@ MonoBehaviour:
     - rid: 8163169196350374006
       type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
-        Stat: 0
+        StatKey: 0
+        Normalized: 0
     - rid: 8163169196350374007
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
@@ -266,15 +306,15 @@ MonoBehaviour:
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         _compareType: 1
-        _value: 1.03
-        _metWeight: 0.9
+        _value: 1.5
+        _metWeight: 0.27
         _notMetWeight: -1
     - rid: 8163169418539171928
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         _compareType: 2
-        _value: 1
-        _metWeight: 1
+        _value: 1.2
+        _metWeight: 0.88
         _notMetWeight: 0
     - rid: 8163169418539171929
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
@@ -342,7 +382,7 @@ MonoBehaviour:
     - rid: 8163169418539171997
       type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
-        _multiplier: 1.12
+        _multiplier: 1.1
     - rid: 8163169418539171999
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
@@ -355,7 +395,8 @@ MonoBehaviour:
     - rid: 8163169418539172002
       type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
-        Stat: 1
+        StatKey: 7
+        Normalized: 1
     - rid: 8163169418539172003
       type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
       data:
@@ -368,12 +409,13 @@ MonoBehaviour:
     - rid: 8163169418539172004
       type: {class: ValueSourceStat, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
       data:
-        Stat: 1
+        StatKey: 7
+        Normalized: 1
     - rid: 8163169418539172005
       type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         _compareType: 1
-        _value: 20
+        _value: 0.5
         _metWeight: -0.5
         _notMetWeight: 0
     - rid: 8163169418539172010
@@ -397,6 +439,8 @@ MonoBehaviour:
       type: {class: UtilityWeightCurve, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
       data:
         Multiplier: 1
+        _normalizeCurveLength: 1
+        _curveDuration: 30
         Curve:
           serializedVersion: 2
           m_Curve:
@@ -421,3 +465,47 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+    - rid: 8163169418539172143
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539172144
+        Weight:
+          rid: 8163169418539172145
+    - rid: 8163169418539172144
+      type: {class: ValueSourceRandom, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _randomValuesOverTime:
+          _octaves:
+          - Disabled: 0
+            TimeOffset: 0
+            TimeScale: 2.13
+            AmplitudeMultiplier: 0.3
+            AddMode: 0
+          _threshold: 0.5
+    - rid: 8163169418539172145
+      type: {class: UtilityWeightMultiplier, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _multiplier: 1.13
+    - rid: 8163169418539172153
+      type: {class: Consideration, ns: game.gameplay_core.characters.ai.utility.considerations, asm: GameAssembly}
+      data:
+        _commentEnabled: 0
+        Comment: 
+        ValueSource:
+          rid: 8163169418539172154
+        Weight:
+          rid: 8163169418539172155
+    - rid: 8163169418539172154
+      type: {class: DistanceToTarget, ns: game.gameplay_core.characters.ai.utility.considerations.value_sources, asm: GameAssembly}
+      data:
+        _normalizeToAttackRange: 1
+    - rid: 8163169418539172155
+      type: {class: UtilityWeightCompare, ns: game.gameplay_core.characters.ai.utility.considerations.weights, asm: GameAssembly}
+      data:
+        _compareType: 2
+        _value: 3
+        _metWeight: 0.88
+        _notMetWeight: 0

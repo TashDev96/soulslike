@@ -17,5 +17,10 @@ namespace game.gameplay_core.characters.ai.utility.considerations.weights
 		}
 
 		protected abstract float EvaluateInternal(float seedValue);
+
+		public virtual void OnValidateEditor()
+		{
+			
+		}
 	}
 }

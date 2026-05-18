@@ -1,38 +1,34 @@
 using System;
-using dream_lib.src.reactive;
+using dream_lib.src.extensions;
 using game.gameplay_core.characters.ai.utility.blackbox;
+using game.gameplay_core.characters.stats.config;
+using Sirenix.OdinInspector;
 
 namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 {
 	[Serializable]
 	public class ValueSourceStat : ValueSourceBase
 	{
-		public Stats Stat;
+		public StatKey StatKey;
+
+		public bool Normalized;
+
+		[ShowInInspector, ReadOnly]
+		private string _debugStatValue;
 
 		//evaluate stat
 		public override float GetValue(UtilityBrainContext context)
 		{
-			var stat = GetStat(context);
-			return stat.Value;
-		}
+			var stat = context.CharacterContext.CharacterStats.AllStats[StatKey];
 
-		private IReadOnlyReactiveProperty<float> GetStat(UtilityBrainContext context)
-		{
-			switch(Stat)
-			{
-				case Stats.HpPercent:
-					return context.CharacterContext.CharacterStats.Hp.Current;
-				case Stats.Stamina:
-					return context.CharacterContext.CharacterStats.Stamina.Current;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-	}
 
-	public enum Stats
-	{
-		HpPercent,
-		Stamina
+			var result = Normalized ? stat.Value/stat.MaxValue : stat.Value;
+			 
+#if UNITY_EDITOR
+			_debugStatValue = result.RoundFormat()+"   "+ stat.ToString();
+#endif
+			
+			return result;
+		}
 	}
 }

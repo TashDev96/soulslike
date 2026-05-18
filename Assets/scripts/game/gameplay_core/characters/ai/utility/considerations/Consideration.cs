@@ -48,5 +48,11 @@ namespace game.gameplay_core.characters.ai.utility.considerations
 		{
 			_commentEnabled = !_commentEnabled;
 		}
+
+		public void OnValidateEditor()
+		{
+			ValueSource?.OnValidateEditor();
+			Weight?.OnValidateEditor();
+		}
 	}
 }
