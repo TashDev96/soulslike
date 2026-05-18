@@ -15,6 +15,10 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Description>k__BackingField: 
   <EquipmentSlotType>k__BackingField: 1
+  <BaseDamage>k__BackingField: 2
+  DamageScaling:
+    _list: []
+    _keyCollision: 0
   <WeaponPrefabName>k__BackingField: Boss_1_WeaponView
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -91,7 +95,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -200,7 +203,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 20
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -341,7 +343,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -436,7 +437,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 1
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -545,7 +545,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -636,7 +635,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -727,7 +725,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -845,7 +842,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -978,7 +974,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 0
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -1070,7 +1065,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -1197,7 +1191,6 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <BaseDamage>k__BackingField: 9.84
     <StaminaCost>k__BackingField: 10
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
@@ -1227,6 +1220,41 @@ MonoBehaviour:
     <AiData>k__BackingField:
       <Range>k__BackingField: 1
       <Sector>k__BackingField: 90
+  <PlungeAttack>k__BackingField:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 0}
+      Speed: 1
+      FlagEvents: []
+      HitEvents: []
+      SoundEvents: []
+      CameraShakeEvents: []
+      LayerNames:
+      - Default
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 2
+      <Sector>k__BackingField: 90
+  <PlungedEnemyAnimation>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 0}
+    Speed: 1
+    FlagEvents: []
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default
   <RegularToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0
@@ -1236,3 +1264,5 @@ MonoBehaviour:
   <StrongToRegularCustomOrder>k__BackingField:
     _list: []
     _keyCollision: 0
+  <FallAttackAnimation>k__BackingField: {fileID: 0}
+  <FallDamageMultiplier>k__BackingField: 1
