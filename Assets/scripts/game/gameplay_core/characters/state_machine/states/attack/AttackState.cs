@@ -6,6 +6,7 @@ using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.damage_system;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -114,7 +115,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 							foreach(var caster in interpolatedCaster.GetActiveColliders())
 							{
 								var deflectionRating = _weaponView.Config.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus;
-								AttackHelpers.CastAttack(_currentAttackConfig.BaseDamage, hitData, caster, _context, deflectionRating, true);
+								AttackHelpers.CastAttack(_context.CharacterStats.GetValue(StatKey.AttackDamage), hitData, caster, _context, deflectionRating, true);
 							}
 						}
 
@@ -350,7 +351,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			projectileView.Initialize(new ProjectileData
 			{
 				Speed = weaponConfig.ProjectileSpeed,
-				BaseDamage = _currentAttackConfig.BaseDamage,
+				BaseDamage = _context.CharacterStats.GetValue(StatKey.AttackDamage),
 				HitConfig = hitConfig,
 				CasterContext = _context,
 				DeflectionRating = weaponConfig.AttackDeflectionRating + _currentAttackConfig.AttackDeflectionRatingBonus,

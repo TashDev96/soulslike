@@ -47,8 +47,7 @@ namespace game.gameplay_core.characters.stats
 
 			_cacheMaxValues[StatKey.Hp] += _cacheMaxValues[StatKey.Vitality] * 1;
 			_cacheMaxValues[StatKey.Stamina] += _cacheMaxValues[StatKey.Endurance] * 10;
-
-			_cacheMaxValues[StatKey.AttackDamage] = weapon.RegularAttacks[0].BaseDamage;
+			_cacheMaxValues[StatKey.AttackDamage] = weapon.BaseDamage;
 
 			foreach(var kvp in weapon.DamageScaling)
 			{

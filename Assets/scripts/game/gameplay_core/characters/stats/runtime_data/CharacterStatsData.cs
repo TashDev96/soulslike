@@ -53,5 +53,10 @@ namespace game.gameplay_core.characters.stats.runtime_data
 				kvp.Value.SetToMax();
 			}
 		}
+
+		public float GetValue(StatKey statKey)
+		{
+			return AllStats[statKey].Value;
+		}
 	}
 }

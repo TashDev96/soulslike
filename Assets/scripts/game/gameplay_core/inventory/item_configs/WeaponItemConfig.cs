@@ -16,11 +16,14 @@ namespace game.gameplay_core.inventory.item_configs
 	public class WeaponItemConfig : BaseEquipmentItemConfig
 	{
 		[field: SerializeField]
+		public float BaseDamage { get; private set; } = 1;
+		[field: SerializeField]
 		public SerializableDictionary<StatKey, float> DamageScaling = new();
 		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]
 		[field: SerializeField]
 		public string WeaponPrefabName { get; private set; }
 
+		
 		[field: SerializeField]
 		public AttackConfig[] RegularAttacks { get; private set; }
 		[field: SerializeField]
