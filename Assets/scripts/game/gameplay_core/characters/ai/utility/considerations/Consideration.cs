@@ -44,15 +44,15 @@ namespace game.gameplay_core.characters.ai.utility.considerations
 			return LastWeight;
 		}
 
-		private void ToggleComment()
-		{
-			_commentEnabled = !_commentEnabled;
-		}
-
 		public void OnValidateEditor()
 		{
 			ValueSource?.OnValidateEditor();
 			Weight?.OnValidateEditor();
+		}
+
+		private void ToggleComment()
+		{
+			_commentEnabled = !_commentEnabled;
 		}
 	}
 }

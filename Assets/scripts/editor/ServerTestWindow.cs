@@ -11,7 +11,11 @@ namespace Soulslike.Editor
 {
 	public class ServerTestWindow : OdinEditorWindow
 	{
-		public enum ServerEnvironment { Local, Production }
+		public enum ServerEnvironment
+		{
+			Local,
+			Production
+		}
 
 		[BoxGroup("Connection Settings")]
 		[EnumToggleButtons]
@@ -22,19 +26,6 @@ namespace Soulslike.Editor
 		[BoxGroup("Connection Settings")]
 		[SerializeField]
 		private string baseUrl = BackendClient.LocalUrl;
-
-		protected override void OnEnable()
-		{
-			base.OnEnable();
-			environment = (ServerEnvironment)EditorPrefs.GetInt("ServerTestWindow_Environment", (int)ServerEnvironment.Local);
-			UpdateBaseUrl();
-		}
-
-		private void UpdateBaseUrl()
-		{
-			baseUrl = environment == ServerEnvironment.Local ? BackendClient.LocalUrl : BackendClient.ProductionUrl;
-			EditorPrefs.SetInt("ServerTestWindow_Environment", (int)environment);
-		}
 
 		[BoxGroup("Authentication")]
 		[SerializeField]
@@ -52,7 +43,7 @@ namespace Soulslike.Editor
 
 		[BoxGroup("Shared Writings")]
 		[SerializeField]
-		private WritingData testWriting = new WritingData { locationId = "area_01", position = new float[3], rotation = new float[3], wordIndexes = new int[] { 1, 2, 3 } };
+		private WritingData testWriting = new() { locationId = "area_01", position = new float[3], rotation = new float[3], wordIndexes = new[] { 1, 2, 3 } };
 
 		[BoxGroup("Shared Writings")]
 		[SerializeField]
@@ -65,6 +56,13 @@ namespace Soulslike.Editor
 		private WritingData[] fetchedWritings;
 
 		private readonly BackendClient client = new();
+
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			environment = (ServerEnvironment)EditorPrefs.GetInt("ServerTestWindow_Environment", (int)ServerEnvironment.Local);
+			UpdateBaseUrl();
+		}
 
 		[HorizontalGroup("Authentication/Buttons")]
 		[Button(ButtonSizes.Large)] [GUIColor(0.4f, 0.8f, 1)]
@@ -149,6 +147,12 @@ namespace Soulslike.Editor
 					Repaint();
 				},
 				error => Debug.LogError("Get Writings Failed: " + error)));
+		}
+
+		private void UpdateBaseUrl()
+		{
+			baseUrl = environment == ServerEnvironment.Local ? BackendClient.LocalUrl : BackendClient.ProductionUrl;
+			EditorPrefs.SetInt("ServerTestWindow_Environment", (int)environment);
 		}
 
 		[MenuItem("Tools/Server/Test Window")]

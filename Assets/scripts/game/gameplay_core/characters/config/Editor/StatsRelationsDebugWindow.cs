@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using game.gameplay_core.characters.stats;
 using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.inventory.item_configs;
@@ -60,3 +61,4 @@ namespace game.gameplay_core.characters.config.Editor
 		}
 	}
 }
+#endif

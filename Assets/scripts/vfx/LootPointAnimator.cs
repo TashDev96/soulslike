@@ -207,7 +207,7 @@ namespace VFX
 
 				yield return null;
 			}
-			transform.localScale = Vector3.one*2f;
+			transform.localScale = Vector3.one * 2f;
 
 			// 2. Secondary Rays Fade In
 			elapsed = 0;

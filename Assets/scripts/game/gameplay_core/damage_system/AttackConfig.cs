@@ -25,7 +25,7 @@ namespace game.gameplay_core.damage_system
 		[field: SerializeField]
 		[field: ShowIf(nameof(IsRangedAttack))]
 		public float MaxProjectileHorizontalAngleCorrection { get; private set; }
-		
+
 		[field: SerializeField]
 		public float StaminaCost { get; private set; } = 10;
 		[field: SerializeField]

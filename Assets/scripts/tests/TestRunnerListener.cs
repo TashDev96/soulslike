@@ -8,8 +8,8 @@ namespace Tests
 	[InitializeOnLoad]
 	public class TestRunnerListener
 	{
-		private const string FlagFilePath = "all_tests_passed";
 		private static readonly TestRunnerApi _api;
+		private const string FlagFilePath = "all_tests_passed";
 
 		static TestRunnerListener()
 		{

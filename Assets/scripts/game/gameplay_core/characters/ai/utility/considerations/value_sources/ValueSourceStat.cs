@@ -13,7 +13,7 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 
 		public bool Normalized;
 
-		[ShowInInspector, ReadOnly]
+		[ShowInInspector] [ReadOnly]
 		private string _debugStatValue;
 
 		//evaluate stat
@@ -21,13 +21,12 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 		{
 			var stat = context.CharacterContext.CharacterStats.AllStats[StatKey];
 
+			var result = Normalized ? stat.Value / stat.MaxValue : stat.Value;
 
-			var result = Normalized ? stat.Value/stat.MaxValue : stat.Value;
-			 
 #if UNITY_EDITOR
-			_debugStatValue = result.RoundFormat()+"   "+ stat.ToString();
+			_debugStatValue = result.RoundFormat() + "   " + stat;
 #endif
-			
+
 			return result;
 		}
 	}

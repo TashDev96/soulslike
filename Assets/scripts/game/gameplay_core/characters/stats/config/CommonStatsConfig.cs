@@ -18,6 +18,7 @@ namespace game.gameplay_core.characters.stats.config
 			return Stats.Count == allStats.Length;
 		}
 
+#if UNITY_EDITOR
 		[HideIf("@ValidateStats()")]
 		[Button]
 		private void FillMissingKeys()
@@ -33,5 +34,6 @@ namespace game.gameplay_core.characters.stats.config
 
 			EditorUtility.SetDirty(this);
 		}
+#endif
 	}
 }

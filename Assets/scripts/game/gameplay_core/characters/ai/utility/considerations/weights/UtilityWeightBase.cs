@@ -16,11 +16,10 @@ namespace game.gameplay_core.characters.ai.utility.considerations.weights
 			return Mathf.Clamp(unclampedValue, MinValue, MaxValue);
 		}
 
-		protected abstract float EvaluateInternal(float seedValue);
-
 		public virtual void OnValidateEditor()
 		{
-			
 		}
+
+		protected abstract float EvaluateInternal(float seedValue);
 	}
 }

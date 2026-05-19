@@ -10,7 +10,6 @@ namespace game.gameplay_core.characters.ai.utility.considerations.value_sources
 
 		public virtual void OnValidateEditor()
 		{
-			
 		}
 	}
 }

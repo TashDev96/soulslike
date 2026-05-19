@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 /*
   Copyright <2025> <h.tomioka>
 
@@ -28883,3 +28884,4 @@ namespace EditorSculptEditor
 		}
 	}  
 }  
+#endif

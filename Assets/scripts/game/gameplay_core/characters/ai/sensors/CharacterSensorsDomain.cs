@@ -114,7 +114,7 @@ namespace game.gameplay_core.characters.ai.sensors
 				TimePassed = 0
 			});
 		}
-
+#if UNITY_EDITOR
 		private void OnDrawGizmosSelected()
 		{
 			if(_drawVisualPoints)
@@ -141,5 +141,6 @@ namespace game.gameplay_core.characters.ai.sensors
 				}
 			}
 		}
+#endif
 	}
 }
