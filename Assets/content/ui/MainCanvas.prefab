@@ -3013,6 +3013,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5031995602022072087, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -33.500366
+      objectReference: {fileID: 0}
     - target: {fileID: 5195327158564234363, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3164,6 +3168,14 @@ PrefabInstance:
     - target: {fileID: 8877798861536487850, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8941309331938376886, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -484.27478
+      objectReference: {fileID: 0}
+    - target: {fileID: 8941309331938376886, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -33.500366
       objectReference: {fileID: 0}
     - target: {fileID: 8998075188194332666, guid: e66dec033e7c64ad8922a651f97756ef, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4048,7 +4060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4474266266723772571, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0007992701
+      value: 0.010636143
       objectReference: {fileID: 0}
     - target: {fileID: 4594091560498863808, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4148,7 +4160,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7012815456845227869, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.9999862
+      objectReference: {fileID: 0}
+    - target: {fileID: 7139757064697481295, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 41.708862
       objectReference: {fileID: 0}
     - target: {fileID: 8244063068507453386, guid: 22a5dcd5337b84302948a527c7fec35c, type: 3}
       propertyPath: m_Pivot.x

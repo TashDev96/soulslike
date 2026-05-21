@@ -16,7 +16,6 @@ MonoBehaviour:
   <Description>k__BackingField: The first weapon in the game, unique artifact of
     antient era. May have unique stats each time, depending on developer needs.
   <EquipmentSlotType>k__BackingField: 1
-  <BaseDamage>k__BackingField: 2
   DamageScaling:
     _list:
     - Key: 1
@@ -24,6 +23,7 @@ MonoBehaviour:
     - Key: 3
       Value: 0.05
     _keyCollision: 0
+  <BaseDamage>k__BackingField: 3
   <WeaponPrefabName>k__BackingField: DebugWeapon
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -1259,4 +1259,20 @@ MonoBehaviour:
     _list: []
     _keyCollision: 0
   <FallAttackAnimation>k__BackingField: {fileID: 7400000, guid: c148d60d7173d4f858842468351dad2f, type: 2}
+  <FallHitConfig>k__BackingField:
+    <InvolvedColliders>k__BackingField: 010000
+    <FriendlyFire>k__BackingField: 0
+    <DamageMultiplier>k__BackingField: 1
+    <PoiseDamage>k__BackingField: 1
+    <KnockBackImpulse>k__BackingField: 1
   <FallDamageMultiplier>k__BackingField: 1
+  <FallAttackLandingAnim>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 7400000, guid: 509e9549b83df4e9f80e525b081bb4ac, type: 2}
+    Speed: 1
+    FlagEvents: []
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default

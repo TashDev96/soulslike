@@ -64,13 +64,9 @@ MonoBehaviour:
   _config: {fileID: 11400000, guid: d81bc20484e9346fb88bee6e99486bc5, type: 2}
   _deadStateRoot: {fileID: 6899306725788326224}
   _uiPivot: {fileID: 5318633997349167403}
-  _movementLogic:
-    _slidingAcceleration: 10
-    _slidingDamping: 0.7
-    _slidingStopDamping: 2
-    _drawDebug: 1
   <UniqueId>k__BackingField: Player
   <IsBoss>k__BackingField: 0
+  <PlungeAttackPivots>k__BackingField: []
   <ArmSockets>k__BackingField:
     _list:
     - Key: 1
@@ -1091,6 +1087,10 @@ PrefabInstance:
     - target: {fileID: 8868318379368163789, guid: 2f89c0c1fbdb47d4d96aedab4f26c048, type: 3}
       propertyPath: m_Name
       value: BlobShadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8868318379368163789, guid: 2f89c0c1fbdb47d4d96aedab4f26c048, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

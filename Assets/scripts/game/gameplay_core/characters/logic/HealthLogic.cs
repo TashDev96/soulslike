@@ -1,4 +1,5 @@
 using game.gameplay_core.damage_system;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -56,6 +57,16 @@ namespace game.gameplay_core.characters.logic
 
 		private void ApplyDamage(DamageInfo damageInfo)
 		{
+			if(damageInfo.DamageAmount < 0.1f)
+			{
+				damageInfo.DamageAmount = 0;
+			}
+			if(damageInfo.DamageAmount < 1)
+			{
+				damageInfo.DamageAmount = 1;
+			}
+			damageInfo.DamageAmount = Mathf.Ceil(damageInfo.DamageAmount);
+			
 			_context.CharacterStats.Hp.Value -= damageInfo.DamageAmount;
 			if(_context.CharacterStats.Hp.Value <= 0)
 			{

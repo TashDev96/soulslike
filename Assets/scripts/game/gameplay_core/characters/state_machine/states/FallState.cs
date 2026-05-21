@@ -1,5 +1,9 @@
 using Animancer;
+using game.enums;
 using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.runtime_data;
+using game.gameplay_core.characters.stats.config;
+using game.gameplay_core.damage_system;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -15,6 +19,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private bool _hasPlayedFallAnimation;
 		private float _initialFallY;
 		private float _lastRollInputTime = -10f;
+		private HitData _hitData;
 
 		public override float Time { get; protected set; }
 		protected override float Duration { get; set; } = float.MaxValue;
@@ -66,13 +71,38 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_hasPlayedFallAnimation && !_isAttacking && _context.InputData.Command == CharacterCommand.RegularAttack)
 			{
 				_isAttacking = true;
+
 				var weaponConfig = _context.Logic.InventoryLogic.RightWeapon.Config;
+				_hitData = new HitData
+				{
+					BlockDamageMultiplier = 1,
+					Config = weaponConfig.FallHitConfig
+				};
 				_context.Views.Animator.Play(weaponConfig.FallAttackAnimation, 0.2f, FadeMode.FromStart);
+				_context.Views.EquippedWeaponViews[EquipmentSlotType.RightHand].StorePreviousTransform();
 			}
 
-			if(_isAttacking && _context.Views.BodyAttackView.CheckPlungeAttackLanding(out var target, out var pivot))
+			if(_isAttacking)
 			{
-				_context.Events.TriggerPlungeAttack.Execute(target, pivot);
+				if(_context.Views.BodyAttackView.CheckPlungeAttackLanding(out var target, out var pivot))
+				{
+					_isAttacking = false;
+					_context.Events.TriggerPlungeAttack.Execute(target, pivot);
+					return;
+				}
+
+				var weaponView = _context.Views.EquippedWeaponViews[EquipmentSlotType.RightHand];
+				var interpolatedCaster = weaponView.StartInterpolatedCast(WeaponColliderType.Attack, _hitData.Config.InvolvedColliders);
+				while(interpolatedCaster.MoveNext())
+				{
+					foreach(var caster in interpolatedCaster.GetActiveColliders())
+					{
+						var damage = _context.CharacterStats.GetValue(StatKey.AttackDamage) * _context.Logic.FallDamageLogic.GetBonusDamageMultiplierForPlunge();
+						AttackHelpers.CastAttack(damage, _hitData, caster, _context, 999, true);
+					}
+				}
+				weaponView.StorePreviousTransform();
+
 				return;
 			}
 
@@ -106,6 +136,13 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		private void HandleFallingChanged(bool wasFalling, bool isFalling)
 		{
+			if(_isAttacking)
+			{
+				var anim = _context.Logic.InventoryLogic.RightWeapon.Config.FallAttackLandingAnim;
+				_context.SelfLink.CharacterStateMachine.LockInAnimation(anim);
+				return;
+			}
+
 			if(!isFalling && wasFalling)
 			{
 				CheckRollOnLanding();

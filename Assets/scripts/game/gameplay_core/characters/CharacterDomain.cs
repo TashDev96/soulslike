@@ -434,6 +434,7 @@ namespace game.gameplay_core.characters
 			{
 				CharacterStateMachine.Update(deltaTime, true);
 				_context.Logic.MovementLogic.Update(deltaTime);
+				_context.Logic.HealthLogic.Update(deltaTime);
 				_context.Views.Animator.Playable.Graph.Evaluate(deltaTime);
 				return;
 			}

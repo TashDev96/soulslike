@@ -3,6 +3,7 @@ using dream_lib.src.reactive;
 using dream_lib.src.utils;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -72,6 +73,11 @@ namespace game.gameplay_core.characters.logic
 			return false;
 		}
 
+		public float GetBonusDamageMultiplierForPlunge()
+		{
+			return 1 + FallSpeed / _lethalFallSpeed * 3f;
+		}
+
 		private void HandleFallingChanged(bool wasFalling, bool isFalling)
 		{
 			if(isFalling && !wasFalling)
@@ -94,9 +100,18 @@ namespace game.gameplay_core.characters.logic
 
 		private void HandleLanded()
 		{
+			//todo roll only decreases damage, not cancel any amount
+			
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
 				var fallSpeed = FallSpeed;
+				
+			 
+				var shakeStrength = Mathf.Lerp(0.3f, 2f, fallSpeed / 60f);
+				if(shakeStrength > 0.6f)
+				{
+					LocationStaticContext.Instance.CameraController.Shake(shakeStrength, shakeStrength, 1, 0.2f);
+				}
 
 				if(fallSpeed > _minimumFallDamageSpeed)
 				{

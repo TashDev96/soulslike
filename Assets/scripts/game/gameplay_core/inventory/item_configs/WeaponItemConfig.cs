@@ -122,8 +122,13 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: Space]
 		[field: SerializeField]
 		public AnimationClip FallAttackAnimation { get; private set; }
+		[field:SerializeField]
+		public HitConfig FallHitConfig { get; private set; }
 		[field: SerializeField]
 		public float FallDamageMultiplier { get; private set; } = 1f;
+		[field:SerializeField]
+		public AnimationConfig FallAttackLandingAnim { get; private set; }
+		
 
 		public AttackConfig[] GetAttacksSequence(AttackType attackType)
 		{
