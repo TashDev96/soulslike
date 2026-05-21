@@ -453,5 +453,10 @@ namespace game.gameplay_core.characters.logic
 
 			return false;
 		}
+
+		public void SetColliderEnabled(bool value)
+		{
+			_capsule.enabled = value;
+		}
 	}
 }

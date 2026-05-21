@@ -14,6 +14,12 @@ namespace game.gameplay_core.characters.runtime_data
 			set => _rigidbody.linearVelocity = value;
 		}
 
+		public bool IsKinematic
+		{
+			get => _rigidbody.isKinematic;
+			set => _rigidbody.isKinematic = value;
+		}
+
 		public RigidBodyWrapper(Rigidbody rigidbody)
 		{
 			_rigidbody = rigidbody;

@@ -130,6 +130,7 @@ namespace game.gameplay_core.location
 			var isFirstTimePlayerCreated = false;
 			if(_sceneInstaller.TestPlayerSpawnPos != null && !playerSave.CharacterData.Initialized)
 			{
+				playerSave.CharacterData.Hp = 4;
 				playerSave.CharacterData.Position = _sceneInstaller.TestPlayerSpawnPos.position;
 				playerSave.CharacterData.Euler = _sceneInstaller.TestPlayerSpawnPos.eulerAngles;
 				playerSave.CharacterData.Initialized = true;

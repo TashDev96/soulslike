@@ -42,9 +42,7 @@ namespace game.gameplay_core.characters
 		private CharacterConfig _config;
 
 		[BoxGroup("Pivots Setup")]
-		[SerializeField]
-		private GameObject _deadStateRoot;
-
+		
 		[SerializeField]
 		[BoxGroup("Pivots Setup")]
 		private Transform _uiPivot;
@@ -56,7 +54,6 @@ namespace game.gameplay_core.characters
 
 		private CharacterStatsData _characterStats;
 
-		private CharacterBodyView _characterBodyView;
 		private CharacterSaveData _saveData;
 		private TransformCache _respawnTransform;
 		private CharacterSensorsDomain _sensorsDomain;
@@ -82,8 +79,6 @@ namespace game.gameplay_core.characters
 		{
 			var isPlayer = UniqueId == "Player";
 
-			var isDead = new IsDead();
-			isDead.OnChanged += HandleDeath;
 
 			var isFalling = new ReactiveProperty<bool>();
 
@@ -113,7 +108,7 @@ namespace game.gameplay_core.characters
 				CharacterId = new ReactiveProperty<string>(UniqueId),
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
-				IsDead = isDead,
+				IsDead = new IsDead(),
 
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
 
@@ -130,7 +125,7 @@ namespace game.gameplay_core.characters
 				Views =
 				{
 					Animator = GetComponent<AnimancerComponent>(),
-					DeadStateRoot = _deadStateRoot,
+					BodyView = GetComponentInChildren<CharacterBodyView>(),
 					LockOnPoints = GetComponentsInChildren<LockOnPointView>(),
 					EquippedWeaponViews = new Dictionary<EquipmentSlotType, WeaponView>(),
 					BodyAttackView = GetComponentInChildren<BodyAttackView>(),
@@ -229,8 +224,7 @@ namespace game.gameplay_core.characters
 				}
 			}
 
-			_characterBodyView = GetComponentInChildren<CharacterBodyView>();
-			_characterBodyView.Initialize(_context.Events.ApplyDamage);
+			_context.Views.BodyView.Initialize(_context);
 
 			LocationStaticContext.Instance.LocationUpdate.OnExecute += CustomUpdate;
 			_debugDrawer.Initialize(_context, CharacterStateMachine, _brain);
@@ -251,7 +245,7 @@ namespace game.gameplay_core.characters
 				if(_context.IsPlayer.Value)
 				{
 					var damageString = info.DamageAmount < 20 ? info.DamageAmount.RoundFormat() : info.DamageAmount.RoundFormat(1);
-					GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(damageString, FloatingTextView.TextColorVariant.Red, _characterBodyView.GetTopPos());
+					GameStaticContext.Instance.FloatingTextsManager.ShowFloatingText(damageString, FloatingTextView.TextColorVariant.Red, _context.Views.BodyView.GetTopPos());
 				}
 			});
 
@@ -420,12 +414,6 @@ namespace game.gameplay_core.characters
 			{
 				SetWeapon(address.SlotType, item);
 			}
-		}
-
-		private void HandleDeath(bool isDead)
-		{
-			gameObject.GetComponent<CapsuleCollider>().enabled = !isDead;
-			gameObject.GetComponent<Rigidbody>().isKinematic = isDead;
 		}
 
 		private void CustomUpdate(float deltaTime)

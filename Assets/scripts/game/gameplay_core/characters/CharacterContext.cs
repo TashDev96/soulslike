@@ -70,7 +70,6 @@ namespace game.gameplay_core.characters
 	public struct Views
 	{
 		public AnimancerComponent Animator;
-		public GameObject DeadStateRoot;
 		public LockOnPointView[] LockOnPoints;
 
 		public BodyAttackView BodyAttackView;
@@ -78,6 +77,7 @@ namespace game.gameplay_core.characters
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews;
+		public CharacterBodyView BodyView;
 	}
 
 	public struct Events

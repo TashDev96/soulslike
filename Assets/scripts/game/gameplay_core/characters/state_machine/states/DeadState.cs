@@ -27,13 +27,13 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				_context.Views.Animator.Play(_context.Config.DeathAnimation, 0.1f, FadeMode.FromStart);
 			}
-			_context.Views.DeadStateRoot.SetActive(true);
+			_context.Views.BodyView.SetDeadState(true);
 		}
 
 		public override void OnExit()
 		{
 			_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.1f, FadeMode.FromStart);
-			_context.Views.DeadStateRoot.SetActive(false);
+			_context.Views.BodyView.SetDeadState(true);
 		}
 	}
 }

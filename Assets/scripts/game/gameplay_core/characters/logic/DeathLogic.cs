@@ -1,5 +1,4 @@
-using System.Collections;
-using dream_lib.src.utils.components;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
@@ -7,29 +6,29 @@ namespace game.gameplay_core.characters.logic
 	public class DeathLogic
 	{
 		private CharacterContext _context;
-		private UnityEventsListener _unityEventsListener;
 
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			if(_context.IsPlayer.Value)
-			{
-				_context.IsDead.OnChanged += HandlePlayerIsDead;
-				_unityEventsListener = UnityEventsListener.Create("PlayerDeathLogic");
-			}
+			_context.IsDead.OnChanged += HandlePlayerIsDead;
 		}
 
 		private void HandlePlayerIsDead(bool isDead)
 		{
-			if(isDead)
+			Debug.LogError(isDead);
+			_context.RigidBody.IsKinematic = isDead;
+			_context.CharacterCollider.SetColliderEnabled(!isDead);
+			_context.Views.BodyView.SetDeadState(isDead);
+
+			if(isDead && _context.IsPlayer.Value)
 			{
-				_unityEventsListener.StartCoroutine(ProcessPlayerDeathSequence());
+				ProcessPlayerDeathSequence().Forget();
 			}
 		}
 
-		private IEnumerator ProcessPlayerDeathSequence()
+		private async UniTask ProcessPlayerDeathSequence()
 		{
-			yield return new WaitForSeconds(1);
+			await UniTask.WaitForSeconds(1);
 			GameStaticContext.Instance.ReloadLocation.Execute();
 			_context.Logic.MovementLogic.Teleport(GameStaticContext.Instance.PlayerSave.RespawnTransform);
 			_context.IsDead.Value = false;
