@@ -15,7 +15,6 @@ namespace game.gameplay_core.characters.logic
 
 		private void HandlePlayerIsDead(bool isDead)
 		{
-			Debug.LogError(isDead);
 			_context.RigidBody.IsKinematic = isDead;
 			_context.CharacterCollider.SetColliderEnabled(!isDead);
 			_context.Views.BodyView.SetDeadState(isDead);

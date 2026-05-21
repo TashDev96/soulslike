@@ -61,12 +61,12 @@ namespace game.gameplay_core.characters.logic
 			{
 				damageInfo.DamageAmount = 0;
 			}
-			if(damageInfo.DamageAmount < 1)
+			else if(damageInfo.DamageAmount < 1)
 			{
 				damageInfo.DamageAmount = 1;
 			}
 			damageInfo.DamageAmount = Mathf.Ceil(damageInfo.DamageAmount);
-			
+
 			_context.CharacterStats.Hp.Value -= damageInfo.DamageAmount;
 			if(_context.CharacterStats.Hp.Value <= 0)
 			{
