@@ -65,6 +65,7 @@ namespace game.gameplay_core.characters.logic
 				Flags |= CollisionFlags.Below;
 			}
 			_context.RigidBody.LinearVelocity = Vector3.zero;
+			_context.RigidBody.AngularVelocity = Vector3.zero;
 		}
 
 		public void CalculateGravity()

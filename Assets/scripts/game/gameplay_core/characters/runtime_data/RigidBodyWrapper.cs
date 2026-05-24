@@ -20,6 +20,12 @@ namespace game.gameplay_core.characters.runtime_data
 			set => _rigidbody.isKinematic = value;
 		}
 
+		public Vector3 AngularVelocity
+		{
+			get => _rigidbody.angularVelocity;
+			set => _rigidbody.angularVelocity = value;
+		}
+
 		public RigidBodyWrapper(Rigidbody rigidbody)
 		{
 			_rigidbody = rigidbody;
