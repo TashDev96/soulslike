@@ -243,6 +243,11 @@ namespace game.gameplay_core.characters.logic
 			return false;
 		}
 
+		public void SetColliderEnabled(bool value)
+		{
+			_capsule.enabled = value;
+		}
+
 		private void UpdateTriggers(Vector3 endPos)
 		{
 			//it may probably skip small triggers when moving fast.
@@ -453,11 +458,6 @@ namespace game.gameplay_core.characters.logic
 			}
 
 			return false;
-		}
-
-		public void SetColliderEnabled(bool value)
-		{
-			_capsule.enabled = value;
 		}
 	}
 }

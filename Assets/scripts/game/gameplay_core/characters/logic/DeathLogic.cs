@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -10,18 +9,26 @@ namespace game.gameplay_core.characters.logic
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
-			_context.IsDead.OnChanged += HandlePlayerIsDead;
+			_context.IsDead.OnChanged += HandleIsDead;
 		}
 
-		private void HandlePlayerIsDead(bool isDead)
+		private void HandleIsDead(bool isDead)
 		{
 			_context.RigidBody.IsKinematic = isDead;
 			_context.CharacterCollider.SetColliderEnabled(!isDead);
 			_context.Views.BodyView.SetDeadState(isDead);
 
-			if(isDead && _context.IsPlayer.Value)
+			if(isDead)
 			{
-				ProcessPlayerDeathSequence().Forget();
+				if(_context.IsPlayer.Value)
+				{
+					ProcessPlayerDeathSequence().Forget();
+				}
+				else
+				{
+					Shortcuts.PlayerSoftCurrency.AddDelayedValue(_context.Config.SoftCurrencyDrop, out var delayId);
+					ViewsOrchestra.ShowSoftCurrencyDrop(_context.Transform.Position, delayId);
+				}
 			}
 		}
 

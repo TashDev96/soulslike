@@ -33,7 +33,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.1f, FadeMode.FromStart);
-			_context.Views.BodyView.SetDeadState(true);
+			_context.Views.BodyView.SetDeadState(false);
 		}
 	}
 }

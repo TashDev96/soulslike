@@ -101,12 +101,11 @@ namespace game.gameplay_core.characters.logic
 		private void HandleLanded()
 		{
 			//todo roll only decreases damage, not cancel any amount
-			
+
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
 				var fallSpeed = FallSpeed;
-				
-			 
+
 				var shakeStrength = Mathf.Lerp(0.3f, 2f, fallSpeed / 60f);
 				if(shakeStrength > 0.6f)
 				{

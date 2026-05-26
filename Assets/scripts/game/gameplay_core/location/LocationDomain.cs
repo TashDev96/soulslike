@@ -3,6 +3,7 @@ using dream_lib.src.utils.editor;
 #endif
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
@@ -43,7 +44,8 @@ namespace game.gameplay_core.location
 				LocationUiUpdate = new ReactiveCommand<float>(),
 				LocationTime = new ReactiveProperty<float>(),
 				CameraController = _cameraController,
-				LootLogic = new LocationLootLogic()
+				LootLogic = new LocationLootLogic(),
+				UnloadCancellationTokenSource = new CancellationTokenSource()
 			};
 
 			GameStaticContext.Instance.MainCamera.Value = _sceneInstaller.MainCamera;

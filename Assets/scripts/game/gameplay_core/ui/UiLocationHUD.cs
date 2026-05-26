@@ -26,6 +26,8 @@ namespace game.gameplay_core.ui
 		private UiEquippedItems _equippedItems;
 		[SerializeField]
 		private BossHpBar _bossHealthBar;
+		[SerializeField]
+		private SoftCounterView _softCounterView;
 
 		public void SetContext(Context context)
 		{
@@ -56,6 +58,8 @@ namespace game.gameplay_core.ui
 			{
 				Player = context.Player
 			});
+
+			_softCounterView.Initialize();
 
 			LocationStaticContext.Instance.CurrentlyFightingBoss.OnChanged += HandleBossStarted;
 			_bossHealthBar.gameObject.SetActive(false);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using dream_lib.src.reactive;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
@@ -9,6 +10,7 @@ namespace game.gameplay_core.location
 {
 	public class LocationStaticContext
 	{
+		public CancellationTokenSource UnloadCancellationTokenSource;
 		public static LocationStaticContext Instance { get; set; }
 
 		public LocationSaveData LocationSaveData { get; set; }

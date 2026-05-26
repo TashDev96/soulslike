@@ -42,7 +42,6 @@ namespace game.gameplay_core.characters
 		private CharacterConfig _config;
 
 		[BoxGroup("Pivots Setup")]
-		
 		[SerializeField]
 		[BoxGroup("Pivots Setup")]
 		private Transform _uiPivot;
@@ -78,7 +77,6 @@ namespace game.gameplay_core.characters
 		public void Initialize()
 		{
 			var isPlayer = UniqueId == "Player";
-
 
 			var isFalling = new ReactiveProperty<bool>();
 

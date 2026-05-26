@@ -54,7 +54,6 @@ namespace game.gameplay_core.characters.view
 				StopCoroutine(_deadStateCoroutine);
 			}
 
-			
 			_aliveBodyCollider.gameObject.SetActive(!isDead);
 			_deadBodyCollider.gameObject.SetActive(false);
 
@@ -81,11 +80,10 @@ namespace game.gameplay_core.characters.view
 		private IEnumerator ActivateDeadState()
 		{
 			yield return new WaitForSeconds(2f);
-			
+
 			_deadBodyCollider.gameObject.SetActive(true);
 			_deadBodyCollider.radius = 0.01f;
-			
-			
+
 			while(_deadBodyCollider.radius < _defaultDeadRadius)
 			{
 				var deltaTime = Mathf.Min(1 / 60f, Time.deltaTime);
