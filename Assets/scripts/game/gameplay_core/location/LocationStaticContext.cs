@@ -5,6 +5,7 @@ using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.location.location_save_system;
+using game.gameplay_core.vfx;
 
 namespace game.gameplay_core.location
 {
@@ -29,5 +30,6 @@ namespace game.gameplay_core.location
 
 		public WorldObservableInfo WorldInfo { get; set; } = new();
 		public LocationLootLogic LootLogic { get; set; }
+		public PlayerVfxView PlayerVfxView { get; set; }
 	}
 }

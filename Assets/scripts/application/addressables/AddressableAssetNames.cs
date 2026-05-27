@@ -11,7 +11,8 @@ public static class AddressableAssetNames
 	public const string EmptyHand = "EmptyHand";
 	public const string DebugWeaponConfig = "DebugWeaponConfig";
 	public const string DebugWeapon = "DebugWeapon";
-	public const string Player = "Player";
+	public const string CommonStats = "CommonStats";
+	public const string BaseCharacterPrefab = "BaseCharacterPrefab";
 	public const string ZombieBowConfig = "ZombieBowConfig";
 	public const string MainCanvas = "MainCanvas";
 	public const string DebugBow = "DebugBow";
@@ -26,7 +27,7 @@ public static class AddressableAssetNames
 	public const string SimpleSwordConfig = "SimpleSwordConfig";
 	public const string DebugShield = "DebugShield";
 	public const string Boss1Weapon = "Boss1Weapon";
-	public const string CommonStats = "CommonStats";
+	public const string Player = "Player";
 
 	public static readonly string[] ItemConfigs = new[] {
 		"ZombieSwordConfig",

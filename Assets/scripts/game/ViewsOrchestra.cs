@@ -6,26 +6,16 @@ namespace game
 {
 	public class ViewsOrchestra
 	{
-		public static void ShowSoftCurrencyDrop(Vector3 spawnWorldPos, int counterDelayId)
+		public static async UniTask ShowSoftCurrencyDrop(Vector3 spawnWorldPos, int counterDelayId)
 		{
-			var vfxDuration = 2000;
 
-			//show vfx
+			await LocationStaticContext.Instance.PlayerVfxView.ShowExperienceFlight(spawnWorldPos);
 
-			//resolve delay
-
-			Loop().Forget();
-
-			async UniTask Loop()
+			if(LocationStaticContext.Instance.UnloadCancellationTokenSource.IsCancellationRequested)
 			{
-				await UniTask.Delay(vfxDuration); //, cancellationToken: LocationStaticContext.Instance.UnloadCancellationTokenSource.Token);
-				if(LocationStaticContext.Instance.UnloadCancellationTokenSource.IsCancellationRequested)
-				{
-					return;
-				}
-
-				GameStaticContext.Instance.PlayerSave.SoftCurrency.ResolveDelay(counterDelayId);
+				return;
 			}
+			GameStaticContext.Instance.PlayerSave.SoftCurrency.ResolveDelay(counterDelayId);
 		}
 	}
 }

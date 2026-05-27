@@ -15,10 +15,10 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Description>k__BackingField: 
   <EquipmentSlotType>k__BackingField: 1
-  <BaseDamage>k__BackingField: 1
   DamageScaling:
     _list: []
     _keyCollision: 0
+  <BaseDamage>k__BackingField: 3
   <WeaponPrefabName>k__BackingField: DebugBow
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -1073,4 +1073,20 @@ MonoBehaviour:
     _list: []
     _keyCollision: 0
   <FallAttackAnimation>k__BackingField: {fileID: 0}
+  <FallHitConfig>k__BackingField:
+    <InvolvedColliders>k__BackingField: 010000
+    <FriendlyFire>k__BackingField: 0
+    <DamageMultiplier>k__BackingField: 1
+    <PoiseDamage>k__BackingField: 1
+    <KnockBackImpulse>k__BackingField: 1
   <FallDamageMultiplier>k__BackingField: 1
+  <FallAttackLandingAnim>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 0}
+    Speed: 1
+    FlagEvents: []
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default

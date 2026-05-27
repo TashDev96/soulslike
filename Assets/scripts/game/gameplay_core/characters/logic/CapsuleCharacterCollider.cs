@@ -64,8 +64,11 @@ namespace game.gameplay_core.characters.logic
 				_stepGravityDisableTimer -= deltaTime;
 				Flags |= CollisionFlags.Below;
 			}
-			_context.RigidBody.LinearVelocity = Vector3.zero;
-			_context.RigidBody.AngularVelocity = Vector3.zero;
+			if(!_context.RigidBody.IsKinematic)
+			{
+				_context.RigidBody.LinearVelocity = Vector3.zero;
+				_context.RigidBody.AngularVelocity = Vector3.zero;
+			}
 		}
 
 		public void CalculateGravity()

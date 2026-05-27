@@ -232,7 +232,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.89055, b: 0.801, a: 1}
+    - _BaseColor: {r: 0.75, g: 0.66764706, b: 0.6, a: 1}
     - _Color: {r: 0.21176466, g: 0.5803921, b: 0.31372544, a: 1}
     - _Color1: {r: 0.67910445, g: 0.67910445, b: 0.67910445, a: 1}
     - _Color2: {r: 0.14179105, g: 0.14179105, b: 0.14179105, a: 1}
@@ -240,9 +240,9 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColorWithMapUI: {r: 1, g: 1, b: 1, a: 1}
-    - _HighlightColor: {r: 0.8745098, g: 0.8352941, b: 0.79607844, a: 1}
+    - _HighlightColor: {r: 0.759, g: 0.72496414, b: 0.6909283, a: 1}
     - _Indicator: {r: 1, g: 0, b: 0, a: 1}
-    - _ShadowColor: {r: 0.280047, g: 0.3059791, b: 0.337, a: 1}
+    - _ShadowColor: {r: 0.21630232, g: 0.23762791, b: 0.262, a: 1}
     - _SpecularColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -25,6 +25,7 @@ using game.gameplay_core.inventory;
 using game.gameplay_core.inventory.items_logic;
 using game.gameplay_core.inventory.serialized_data;
 using game.gameplay_core.location;
+using game.gameplay_core.vfx;
 using game.gameplay_core.worldspace_ui;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -202,6 +203,10 @@ namespace game.gameplay_core.characters
 				_brain.Initialize(_context);
 
 				CreatePlayerWorldspaceUi();
+
+				var playerVfxView = GetComponentInChildren<PlayerVfxView>();
+				playerVfxView.Initialize(this);
+				LocationStaticContext.Instance.PlayerVfxView = playerVfxView;
 			}
 			else
 			{

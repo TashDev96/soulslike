@@ -27,7 +27,7 @@ namespace game.gameplay_core.characters.logic
 				else
 				{
 					Shortcuts.PlayerSoftCurrency.AddDelayedValue(_context.Config.SoftCurrencyDrop, out var delayId);
-					ViewsOrchestra.ShowSoftCurrencyDrop(_context.Transform.Position, delayId);
+					ViewsOrchestra.ShowSoftCurrencyDrop(_context.Transform.Position, delayId).Forget();
 				}
 			}
 		}
