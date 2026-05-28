@@ -73,6 +73,8 @@ namespace game.gameplay_core.location
 
 		public void RespawnAndReloadLocation()
 		{
+			LocationStaticContext.Instance.CurrentlyFightingBoss.Value = null;
+			
 			_player.Value.SetRespawnTransform(new TransformCache(_player.Value.transform));
 
 			foreach(var character in LocationStaticContext.Instance.Characters)

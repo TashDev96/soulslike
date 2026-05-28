@@ -45,6 +45,12 @@ namespace game.gameplay_core.location.logic
 						_wallsRoot.SetActive(false);
 						yield break;
 					}
+
+					if(LocationStaticContext.Instance.CurrentlyFightingBoss.Value==null)
+					{
+						_battleStarted = false;
+						_wallsRoot.SetActive(false);
+					}
 				}
 				yield return null;
 			}
