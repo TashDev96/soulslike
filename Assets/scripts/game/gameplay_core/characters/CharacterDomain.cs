@@ -400,8 +400,10 @@ namespace game.gameplay_core.characters
 			_context.Logic.InventoryLogic.HandleRespawn();
 			_context.IsDead.Value = false;
 			_context.Logic.MovementLogic.Teleport(_respawnTransform);
+			_context.Transform.Rotation = Quaternion.Euler(_respawnTransform.EulerAngles);
 			CharacterStateMachine.Reset();
 			_brain.Reset();
+			_context.Logic.LockOnLogic.Reset();
 			_sensorsDomain.Reset();
 			_worldSpaceUi?.Reset();
 		}

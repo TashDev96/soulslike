@@ -107,6 +107,7 @@ namespace game.gameplay_core.characters.state_machine
 
 		public void Reset()
 		{
+			_nextCommand = CharacterCommand.None;
 			SetState(_idleState);
 		}
 

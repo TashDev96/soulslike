@@ -82,5 +82,10 @@ namespace game.gameplay_core.characters.logic
 				LockOnTarget.Value = selectedTarget;
 			}
 		}
+
+		public void Reset()
+		{
+			LockOnTarget.Value = null;
+		}
 	}
 }
