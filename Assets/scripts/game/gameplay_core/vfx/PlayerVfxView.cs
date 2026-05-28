@@ -30,14 +30,19 @@ namespace game.gameplay_core.vfx
 
 			var lastParticleId = _particlesCache[0].randomSeed;
 			var timeStart = Time.time;
+			var forceCheckTimer = 0.5f;
 			const float maxDuration = 5f;
 
 			while(Time.time - timeStart < maxDuration)
 			{
 				await UniTask.WaitForEndOfFrame();
-				if(_particleTriggered)
+				
+				forceCheckTimer -= Time.deltaTime;
+				
+				if(_particleTriggered || forceCheckTimer <= 0f)
 				{
 					_particleTriggered = false;
+					forceCheckTimer = 0.5f;
 					RetrieveParticlesInfo();
 					if(!CheckParticleAlive(lastParticleId))
 					{
