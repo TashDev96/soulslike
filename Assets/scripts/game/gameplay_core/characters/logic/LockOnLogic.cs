@@ -56,6 +56,11 @@ namespace game.gameplay_core.characters.logic
 			DisableRotationForThisFrame = false;
 		}
 
+		public void Reset()
+		{
+			LockOnTarget.Value = null;
+		}
+
 		private void FindLockOnTarget()
 		{
 			CharacterDomain selectedTarget = null;
@@ -81,11 +86,6 @@ namespace game.gameplay_core.characters.logic
 			{
 				LockOnTarget.Value = selectedTarget;
 			}
-		}
-
-		public void Reset()
-		{
-			LockOnTarget.Value = null;
 		}
 	}
 }

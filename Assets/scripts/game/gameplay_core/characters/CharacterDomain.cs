@@ -46,6 +46,8 @@ namespace game.gameplay_core.characters
 		[SerializeField]
 		[BoxGroup("Pivots Setup")]
 		private Transform _uiPivot;
+		[SerializeField]
+		private DebugVars _debugVars;
 
 		private ICharacterWorldSpaceUi _worldSpaceUi;
 
@@ -110,6 +112,7 @@ namespace game.gameplay_core.characters
 				IsDead = new IsDead(),
 
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
+				DebugVars = _debugVars,
 
 				Events =
 				{
@@ -477,6 +480,15 @@ namespace game.gameplay_core.characters
 			{
 				plungeAttackPivot.DrawGizmos();
 			}
+		}
+
+		[SerializeField]
+		private TransformCache _debugTeleportTo;
+
+		[Button]
+		private void Teleport()
+		{
+			_context.Logic.MovementLogic.Teleport(_debugTeleportTo);
 		}
 #endif
 	}

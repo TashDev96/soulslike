@@ -36,9 +36,9 @@ namespace game.gameplay_core.vfx
 			while(Time.time - timeStart < maxDuration)
 			{
 				await UniTask.WaitForEndOfFrame();
-				
+
 				forceCheckTimer -= Time.deltaTime;
-				
+
 				if(_particleTriggered || forceCheckTimer <= 0f)
 				{
 					_particleTriggered = false;

@@ -20,8 +20,8 @@ namespace game.gameplay_core.characters.logic
 		private CharacterContext _context;
 
 		private Vector3 _prevPos;
-		private bool _isGroundedCache;
-		private bool _prevIsGrounded;
+
+		private IsGroundedData _isGrounded;
 		private Vector3 _groundNormal;
 
 		private bool _rotationAndMovementLocked;
@@ -34,10 +34,8 @@ namespace game.gameplay_core.characters.logic
 		private bool _hadAcceleratedMovement;
 		private Vector3 _virtualForward;
 		private bool _rotationMovementLocked;
-		private Transform _transform;
+		private Vector3 _compensateTeleportAmount;
 		public bool LockedInAnimationSlot { get; set; }
-
-		public bool IsGrounded { get; private set; }
 
 		public Vector3 FallVelocity => _fallVelocity;
 
@@ -59,8 +57,11 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			_prevIsGrounded = _isGroundedCache;
-			_isGroundedCache = false;
+			_isGrounded.Cached = false;
+			if(_isGrounded.ContinuousGroundingTriggered && Time.frameCount > _isGrounded.GroundingConfirmFrame)
+			{
+				_isGrounded.ContinuousGroundingTriggered = false;
+			}
 
 			_debugFlags = _context.CharacterCollider.Flags;
 
@@ -68,8 +69,7 @@ namespace game.gameplay_core.characters.logic
 
 			if(LockedInAnimationSlot)
 			{
-				LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
-				_prevPos = CurrentPosition;
+				CalculateLastUpdateVelocity(deltaTime);
 				return;
 			}
 
@@ -88,8 +88,14 @@ namespace game.gameplay_core.characters.logic
 				}
 			}
 
-			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime;
-			_prevPos = CurrentPosition;
+			CalculateLastUpdateVelocity(deltaTime);
+			_isGrounded.Previous = _isGrounded.Continuous;
+
+			if(!_isGrounded.Cached)
+			{
+				_isGrounded.Continuous = false;
+				_isGrounded.ContinuousGroundingTriggered = false;
+			}
 		}
 
 		public void ApplyLocomotion(Vector3 vector, float deltaTime)
@@ -100,7 +106,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			var projectedMovement = Vector3.ProjectOnPlane(vector, _groundNormal);
 
-			if(_isGroundedCache)
+			if(_isGrounded.Continuous)
 			{
 				if(CharacterCollider.HasStableGround)
 				{
@@ -185,12 +191,8 @@ namespace game.gameplay_core.characters.logic
 
 			sb.Append("Target Locked: ").Append(target != null ? target.name : "None").AppendLine();
 
-			//sb.Append("grounded ").Append(_isGroundedCache).Append("/").Append(CharacterCollider.IsGrounded)
-			//	.Append(", stable: ").Append(CharacterCollider.HasStableGround)
-			//	.Append(", gravity disabled: ").Append(_context.CharacterCollider.IsFakeGrounded).AppendLine();
-
-			//sb.Append("falling: ").Append(_context.IsFalling.Value).Append("  fall velocity ").Append(_fallVelocity).AppendLine();
-			//sb.Append("Collision Flags: ").Append(_debugFlags).AppendLine();
+			sb.Append($"is grounded {_isGrounded.Continuous}").AppendLine();
+			sb.Append($"is falling {_context.IsFalling.Value}").AppendLine();
 		}
 
 		public void SetRotationAndMovementLocked(bool value)
@@ -212,8 +214,10 @@ namespace game.gameplay_core.characters.logic
 
 		public void Teleport(TransformCache respawnTransform)
 		{
+			var prevPos = _context.Transform.Position;
 			_context.Transform.SetPosition(respawnTransform.Position);
 			_context.Transform.SetRotation(respawnTransform.EulerAngles);
+			_compensateTeleportAmount += _context.Transform.Position - prevPos;
 		}
 
 		public static Vector3 GetAirDampingForceFalling(Vector3 velocity)
@@ -238,6 +242,13 @@ namespace game.gameplay_core.characters.logic
 			_fallVelocity = value;
 		}
 
+		private void CalculateLastUpdateVelocity(float deltaTime)
+		{
+			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime - _compensateTeleportAmount / deltaTime;
+			_compensateTeleportAmount = Vector3.zero;
+			_prevPos = CurrentPosition;
+		}
+
 		private void HandleDamage(DamageInfo info)
 		{
 			_slidingVelocity += info.Direction * info.KnockbackImpulse / _context.RigidBody.Mass;
@@ -255,7 +266,7 @@ namespace game.gameplay_core.characters.logic
 			_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, projectedMovement, deltaTime * _context.CharacterStats.Locomotion.WalkAcceleration);
 			var resultMovement = _acceleratedMovement;
 
-			if(_isGroundedCache)
+			if(_isGrounded.Continuous)
 			{
 				if(CharacterCollider.HasStableGround)
 				{
@@ -271,9 +282,15 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateFalling(float deltaTime)
 		{
-			if(_context.CharacterCollider.IsFakeGrounded)
+			if(_context.DebugVars.DisableFall)
 			{
-				_isGroundedCache = true;
+				return;
+			}
+
+			if(_context.CharacterCollider.IsSteppingUp)
+			{
+				_isGrounded.Continuous = true;
+				_isGrounded.Continuous = true;
 			}
 			else
 			{
@@ -281,7 +298,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			_debugFlags = _context.CharacterCollider.Flags;
 
-			if(_isGroundedCache)
+			if(_isGrounded.Continuous)
 			{
 				if(_context.IsFalling.Value)
 				{
@@ -291,7 +308,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			else
 			{
-				if(_prevIsGrounded)
+				if(_isGrounded.Previous)
 				{
 					_fallVelocity = LastUpdateVelocity;
 					if(_fallVelocity.y > 0)
@@ -309,14 +326,16 @@ namespace game.gameplay_core.characters.logic
 					}
 
 					_fallVelocity += Physics.gravity * deltaTime;
+					_context.DebugVars.IsFallCall = true;
 					MoveAndStoreFrameData(_fallVelocity * deltaTime);
+					_context.DebugVars.IsFallCall = false;
 				}
-
-				if(!CharacterCollider.IsGrounded)
+				else
 				{
-					if(!_context.IsFalling.Value && CharacterCollider.SampleGroundBelow(CharacterCollider.StepOffset, out var distanceToGround))
+					var hasGroundPreventFalling = CharacterCollider.SampleGroundBelow(CharacterCollider.StepOffset, out var distanceToGround, 0.1f);
+					if(!_context.IsFalling.Value && hasGroundPreventFalling)
 					{
-						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true);
+						MoveAndStoreFrameData(Vector3.down * (distanceToGround + 0.0001f), true, true);
 					}
 					else
 					{
@@ -328,7 +347,7 @@ namespace game.gameplay_core.characters.logic
 
 		private void UpdateSliding(float deltaTime)
 		{
-			if(_isGroundedCache)
+			if(_isGrounded.Continuous)
 			{
 				if(CharacterCollider.HasStableGround || CharacterCollider.IsOnStableSlope)
 				{
@@ -354,12 +373,36 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false)
+		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false, bool dontCountAsSpeed = false)
 		{
+			var prevPos = _context.Transform.Position;
 			CharacterCollider.Move(vector, disableIterations);
 
-			//this is required because UnityCharacterController.isGrounded is changed every time Move() called
-			_isGroundedCache |= CharacterCollider.IsGrounded;
+			var posDelta = _context.Transform.Position - prevPos;
+
+			if(dontCountAsSpeed)
+			{
+				_compensateTeleportAmount += posDelta;
+			}
+
+			//this is required because UnityCharacterController.isGrounded is invalidated every time Move() called
+			_isGrounded.Cached |= CharacterCollider.IsGrounded;
+			if(_isGrounded is { Cached: true, Continuous: false })
+			{
+				if(!_isGrounded.ContinuousGroundingTriggered)
+				{
+					_isGrounded.ContinuousGroundingTriggered = true;
+					_isGrounded.GroundingConfirmFrame = Time.frameCount + 2;
+				}
+				else
+				{
+					if(Time.frameCount >= _isGrounded.GroundingConfirmFrame)
+					{
+						_isGrounded.Continuous = true;
+						_isGrounded.ContinuousGroundingTriggered = false;
+					}
+				}
+			}
 		}
 
 		private void HandleDeath(bool isDead)
@@ -370,6 +413,15 @@ namespace game.gameplay_core.characters.logic
 		private void HandleFallingChanged(bool isFalling)
 		{
 			DebugDrawUtils.DrawText(isFalling ? "start fall" : "end fall", _context.Transform.Position, 2f);
+		}
+
+		private struct IsGroundedData
+		{
+			public bool Cached; //invalidates each update
+			public bool Continuous;
+			public bool Previous;
+			public bool ContinuousGroundingTriggered;
+			public int GroundingConfirmFrame;
 		}
 	}
 }

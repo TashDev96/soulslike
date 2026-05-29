@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using game.enums;
 using game.gameplay_core.characters;
-using game.gameplay_core.location;
 using game.gameplay_core.utils;
 using UnityEngine;
 
@@ -41,7 +40,7 @@ namespace game.gameplay_core.damage_system
 		public void Initialize(ProjectileData data)
 		{
 			GameStaticContext.Instance.ReloadLocation.OnExecute += HandleLocationReload;
-			
+
 			if(!_layerMasksInitialized)
 			{
 				_layerMaskDamageReceivers = LayerMask.GetMask("DamageReceivers");

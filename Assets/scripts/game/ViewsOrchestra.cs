@@ -8,7 +8,6 @@ namespace game
 	{
 		public static async UniTask ShowSoftCurrencyDrop(Vector3 spawnWorldPos, int counterDelayId)
 		{
-
 			await LocationStaticContext.Instance.PlayerVfxView.ShowExperienceFlight(spawnWorldPos);
 
 			if(LocationStaticContext.Instance.UnloadCancellationTokenSource.IsCancellationRequested)

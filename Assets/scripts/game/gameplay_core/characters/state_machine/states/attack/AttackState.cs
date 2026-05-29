@@ -343,7 +343,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				var clampedAngle = Mathf.Clamp(angleDifference, -maxAngleCorrection, maxAngleCorrection);
 
 				//TODO: sample multiple points if target point is behind wall
-				
+
 				var horizontalMagnitude = new Vector3(targetDirection.x, 0, targetDirection.z).magnitude;
 				var correctedDirection = Quaternion.AngleAxis(clampedAngle, Vector3.up) * forwardHorizontal * horizontalMagnitude;
 				correctedDirection.y = targetDirection.y;

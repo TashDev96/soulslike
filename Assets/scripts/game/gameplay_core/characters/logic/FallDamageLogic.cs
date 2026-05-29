@@ -1,6 +1,8 @@
+using System.Linq;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils;
+using dream_lib.utils.stored_data;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.location;
@@ -13,9 +15,11 @@ namespace game.gameplay_core.characters.logic
 		private const float ProtectionCooldown = 0.2f;
 		private const float ProtectionDuration = 1f;
 
-		private const float MinimumFallDamageAltitude = 8.0f;
-		private const float LethalFallAltitude = 18.0f;
+		private const float MinimumFallDamageAltitude = 7.0f;
+		private const float LethalFallAltitude = 16.0f;
 		private const float StaggerThresholdAltitude = 5.0f;
+
+		private const int FallSpeedHistoryLength = 3;
 
 		private float _minimumFallDamageSpeed;
 		private float _lethalFallSpeed;
@@ -29,6 +33,10 @@ namespace game.gameplay_core.characters.logic
 		private float _fallStartY;
 
 		private float _lastProtectionActivationTime;
+		private readonly float[] _fallSpeedDeltaHistory = new float[FallSpeedHistoryLength];
+		private float _previousFallSpeed;
+
+		private SmoothVectorTracker _smoothVectorTracker;
 
 		private ReactiveProperty<bool> FallDamageProtectionActive { get; } = new();
 
@@ -41,6 +49,8 @@ namespace game.gameplay_core.characters.logic
 			_minimumFallDamageSpeed = CalculateFallDamageSpeed(MinimumFallDamageAltitude);
 			_lethalFallSpeed = CalculateFallDamageSpeed(LethalFallAltitude);
 			_staggerThresholdSpeed = CalculateFallDamageSpeed(StaggerThresholdAltitude);
+
+			Debug.Log($"minimum fall damage speed: {_minimumFallDamageSpeed}");
 
 			_context.IsFalling.OnChangedFromTo += HandleFallingChanged;
 			_lastProtectionActivationTime = -ProtectionCooldown;
@@ -56,6 +66,27 @@ namespace game.gameplay_core.characters.logic
 					FallDamageProtectionActive.Value = false;
 				}
 			}
+
+			for(var i = 0; i < _fallSpeedDeltaHistory.Length - 1; i++)
+			{
+				_fallSpeedDeltaHistory[i] = _fallSpeedDeltaHistory[i + 1];
+			}
+
+			var fallSpeedDelta = Mathf.Max(0, _previousFallSpeed - FallSpeed);
+			_fallSpeedDeltaHistory[^1] = fallSpeedDelta;
+
+			var smoothedFallSpeedDelta = _fallSpeedDeltaHistory.Sum();
+
+			if(smoothedFallSpeedDelta > 0.5f)
+			{
+				HandleLanded(smoothedFallSpeedDelta);
+				for(var i = 0; i < _fallSpeedDeltaHistory.Length; i++)
+				{
+					_fallSpeedDeltaHistory[i] = 0;
+				}
+			}
+
+			_previousFallSpeed = FallSpeed;
 		}
 
 		public bool TryActivateFallDamageProtection()
@@ -86,7 +117,7 @@ namespace game.gameplay_core.characters.logic
 			}
 			else if(!isFalling && wasFalling)
 			{
-				HandleLanded();
+				//now fall damage is triggered by detecting change in fall speed
 			}
 		}
 
@@ -98,14 +129,12 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		private void HandleLanded()
+		private void HandleLanded(float fallSpeed)
 		{
 			//todo roll only decreases damage, not cancel any amount
 
 			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
-				var fallSpeed = FallSpeed;
-
 				var shakeStrength = Mathf.Lerp(0.3f, 2f, fallSpeed / 60f);
 				if(shakeStrength > 0.6f)
 				{
@@ -120,7 +149,7 @@ namespace game.gameplay_core.characters.logic
 						MathUtils.InverseLerpUnclamped(_minimumFallDamageSpeed, _lethalFallSpeed, fallSpeed)
 					);
 
-					var damage = damagePercentage * _context.CharacterStats.Hp.Value;
+					var damage = damagePercentage * _context.CharacterStats.Hp.MaxValue;
 					var staminaDamage = damagePercentage * _context.CharacterStats.Stamina.MaxValue;
 
 					var damageInfo = new DamageInfo

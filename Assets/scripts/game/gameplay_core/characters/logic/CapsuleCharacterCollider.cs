@@ -26,6 +26,7 @@ namespace game.gameplay_core.characters.logic
 		private bool _drawDebug;
 
 		public float SkinWidth = 0.05f;
+		public float ImmediateGroundSlopeLimit = 20f;
 		public float SlopeLimit = 30f;
 		public float StepOffset = 0.55f;
 		public float MinStepOffset = 0.01f;
@@ -42,11 +43,13 @@ namespace game.gameplay_core.characters.logic
 		private CapsuleCollider _myCapsuleCollider;
 		private readonly List<Collider> _exitedTriggersCache = new();
 
-		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsFakeGrounded;
+		private readonly int _framesToAcceptShallowSlope = 2;
+
+		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsSteppingUp;
 		public CollisionFlags Flags { get; private set; }
 		public Vector3 GroundNormal { get; private set; } = Vector3.up;
 		public bool IsOnStableSlope { get; private set; }
-		public bool IsFakeGrounded => _stepGravityDisableTimer > 0;
+		public bool IsSteppingUp => _stepGravityDisableTimer > 0;
 
 		private float Radius => _capsule.radius;
 
@@ -84,7 +87,7 @@ namespace game.gameplay_core.characters.logic
 
 			CalculateMovement(moveStartPosition, motion, disableIterations, out var normalResultPosition, out var normalMovementFlags);
 
-			if(wasGrounded && !IsFakeGrounded && normalMovementFlags.HasFlag(CollisionFlags.CollidedSides))
+			if(wasGrounded && !IsSteppingUp && normalMovementFlags.HasFlag(CollisionFlags.CollidedSides))
 			{
 				var verticalAngle = Vector3.Angle(motion.normalized, motion.SetY(0).normalized);
 
@@ -196,10 +199,10 @@ namespace game.gameplay_core.characters.logic
 			return !isSafe;
 		}
 
-		public bool SampleGroundBelow(float maxDistance, out float distanceToGround)
+		public bool SampleGroundBelow(float maxDistance, out float distanceToGround, float radiusDecrease = 0f)
 		{
-			var offset = Radius + SkinWidth;
-			var radius = Radius - 0.03f;
+			var offset = Radius - radiusDecrease + SkinWidth;
+			var radius = Radius - radiusDecrease - 0.03f;
 			var origin = transform.position + Vector3.up * offset;
 
 			var hitCount = Physics.SphereCastNonAlloc(origin, radius, Vector3.down, _groundCastResults, maxDistance + offset, _collisionMask);
@@ -227,9 +230,8 @@ namespace game.gameplay_core.characters.logic
 
 				if(_drawDebug)
 				{
-					//DebugDrawUtils.DrawHandlesSphere(origin, radius / 2, new Color(1, 0, 1, 0.3f));
-					//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * distanceToGround, radius, Color.green, 3.3f);
-//
+					//DebugDrawUtils.DrawHandlesSphere(origin + Vector3.down * distanceToGround, radius, Color.red * 0.5f, 0.1f);
+					//DebugDrawUtils.DrawHandlesSphere(origin, radius, Color.green * 0.5f, 0.1f);
 					//DebugDrawUtils.DrawText(name +" "+distanceToGround.RoundFormat(), origin + Vector3.down * (distanceToGround / 2), 10f);
 				}
 
@@ -330,6 +332,7 @@ namespace game.gameplay_core.characters.logic
 					remainingMovement -= remainingMovement.normalized * distance;
 
 					flags |= CalculateHitFlags(hit);
+
 					remainingMovement = CalculateRemainingMovement(hit, remainingMovement);
 
 					if(IsGrounded)
@@ -365,6 +368,8 @@ namespace game.gameplay_core.characters.logic
 
 				if(upDot > slopeThreshold)
 				{
+					DebugDrawUtils.DrawHandlesSphere(hit.point, 0.1f, Color.green, 3f);
+					Debug.DrawLine(hit.point, hit.point + hit.normal * 0.5f, Color.red, 5f);
 					flags |= CollisionFlags.Below;
 				}
 				else if(upDot < -0.707f)
@@ -381,7 +386,8 @@ namespace game.gameplay_core.characters.logic
 
 			Vector3 CalculateRemainingMovement(RaycastHit hit, Vector3 remaining)
 			{
-				return Vector3.ProjectOnPlane(remaining, hit.normal);
+				var normal = hit.normal;
+				return Vector3.ProjectOnPlane(remaining, normal);
 			}
 		}
 
@@ -418,9 +424,9 @@ namespace game.gameplay_core.characters.logic
 			return false;
 		}
 
-		private bool CastCapsule(Vector3 resultPosition, Vector3 remainingMovement, out RaycastHit hit)
+		private bool CastCapsule(Vector3 capsulePos, Vector3 remainingMovement, out RaycastHit hit)
 		{
-			_capsule.GetCapsulePoints(resultPosition, out var p1, out var p2);
+			_capsule.GetCapsulePoints(capsulePos, out var p1, out var p2);
 			var castDistance = remainingMovement.magnitude + SkinWidth;
 			var minDist = float.MaxValue;
 			hit = default;

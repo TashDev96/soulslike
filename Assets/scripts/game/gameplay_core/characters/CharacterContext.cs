@@ -49,6 +49,7 @@ namespace game.gameplay_core.characters
 
 		public ReactiveProperty<IConsumableItemLogic> CurrentConsumableItem;
 		public CharacterSensorsDomain SensorsDomain;
+		public DebugVars DebugVars;
 	}
 
 	public struct Logics

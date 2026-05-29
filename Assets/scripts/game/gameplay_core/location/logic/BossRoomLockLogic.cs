@@ -46,7 +46,7 @@ namespace game.gameplay_core.location.logic
 						yield break;
 					}
 
-					if(LocationStaticContext.Instance.CurrentlyFightingBoss.Value==null)
+					if(LocationStaticContext.Instance.CurrentlyFightingBoss.Value == null)
 					{
 						_battleStarted = false;
 						_wallsRoot.SetActive(false);

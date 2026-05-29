@@ -15,10 +15,10 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Description>k__BackingField: 
   <EquipmentSlotType>k__BackingField: 1
-  <BaseDamage>k__BackingField: 2
   DamageScaling:
     _list: []
     _keyCollision: 0
+  <BaseDamage>k__BackingField: 5
   <WeaponPrefabName>k__BackingField: Boss_1_WeaponView
   <RegularAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
@@ -126,7 +126,7 @@ MonoBehaviour:
       <Sector>k__BackingField: 90
   <StrongAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: Boss_1_WeaponView
+      WeaponForPreview: 
       Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
       Speed: 1
       FlagEvents:
@@ -270,7 +270,7 @@ MonoBehaviour:
       <Sector>k__BackingField: 90
   <SpecialAttacks>k__BackingField:
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: Boss_1_WeaponView
+      WeaponForPreview: 
       Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
       Speed: 1
       FlagEvents:
@@ -373,7 +373,7 @@ MonoBehaviour:
       <Range>k__BackingField: 4
       <Sector>k__BackingField: 45
   - <AnimationConfig>k__BackingField:
-      WeaponForPreview: Boss_1_WeaponView
+      WeaponForPreview: 
       Clip: {fileID: 7400000, guid: 6974265dc099c480795114a27b8042bc, type: 2}
       Speed: 1
       FlagEvents:
@@ -1265,4 +1265,20 @@ MonoBehaviour:
     _list: []
     _keyCollision: 0
   <FallAttackAnimation>k__BackingField: {fileID: 0}
+  <FallHitConfig>k__BackingField:
+    <InvolvedColliders>k__BackingField: 010000
+    <FriendlyFire>k__BackingField: 0
+    <DamageMultiplier>k__BackingField: 1
+    <PoiseDamage>k__BackingField: 1
+    <KnockBackImpulse>k__BackingField: 1
   <FallDamageMultiplier>k__BackingField: 1
+  <FallAttackLandingAnim>k__BackingField:
+    WeaponForPreview: 
+    Clip: {fileID: 0}
+    Speed: 1
+    FlagEvents: []
+    HitEvents: []
+    SoundEvents: []
+    CameraShakeEvents: []
+    LayerNames:
+    - Default

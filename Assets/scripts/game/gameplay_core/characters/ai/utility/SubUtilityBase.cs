@@ -152,7 +152,7 @@ namespace game.gameplay_core.characters.ai.utility
 		public virtual void Reset()
 		{
 			InputData.Command = CharacterCommand.None;
-			
+
 			_currentGoalChain = null;
 			_currentGoalIndex = 0;
 			_currentGoalExecutionTime = 0;
