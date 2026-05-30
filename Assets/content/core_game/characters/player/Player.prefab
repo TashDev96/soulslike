@@ -5412,19 +5412,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _debugTeleportTo.Position.x
-      value: -48.04189
+      value: -31.85783
       objectReference: {fileID: 0}
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _debugTeleportTo.Position.y
-      value: 42.89824
+      value: 50.93074
       objectReference: {fileID: 0}
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _debugTeleportTo.Position.z
-      value: -67.26868
+      value: -64.48064
       objectReference: {fileID: 0}
     - target: {fileID: 618884517016294189, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: _debugTeleportTo.EulerAngles.y
-      value: -180
+      value: -135
       objectReference: {fileID: 0}
     - target: {fileID: 1163829566012686365, guid: 7d0438033ce39ff459b646935761f4c3, type: 3}
       propertyPath: m_Name

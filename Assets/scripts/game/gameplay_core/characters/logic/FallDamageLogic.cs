@@ -20,6 +20,8 @@ namespace game.gameplay_core.characters.logic
 		private const float StaggerThresholdAltitude = 5.0f;
 
 		private const int FallSpeedHistoryLength = 3;
+		private const float FallSpeedMultiplierFromPerfectRoll = 0.82f;
+		private const float FallSpeedMultiplierFromWater = 0.86f;
 
 		private float _minimumFallDamageSpeed;
 		private float _lethalFallSpeed;
@@ -132,8 +134,16 @@ namespace game.gameplay_core.characters.logic
 		private void HandleLanded(float fallSpeed)
 		{
 			//todo roll only decreases damage, not cancel any amount
+			if(_context.CharacterCollider.IsInWater)
+			{
+				fallSpeed *= FallSpeedMultiplierFromWater;
+			}
+			if(FallDamageProtectionActive.Value)
+			{
+				fallSpeed *= FallSpeedMultiplierFromPerfectRoll;
+			}
 
-			if(!_context.IsDead.Value && !FallDamageProtectionActive.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
+			if(!_context.IsDead.Value && !_context.Logic.InvulnerabilityLogic.IsInvulnerable)
 			{
 				var shakeStrength = Mathf.Lerp(0.3f, 2f, fallSpeed / 60f);
 				if(shakeStrength > 0.6f)
@@ -166,17 +176,17 @@ namespace game.gameplay_core.characters.logic
 					_context.Views.BodyAttackView.CastFallAttack(fallSpeed);
 					_context.Logic.StaminaLogic.SpendStamina(staminaDamage);
 
-					if(fallSpeed > _staggerThresholdSpeed)
+					if(fallSpeed > _staggerThresholdSpeed && !FallDamageProtectionActive.Value)
 					{
 						_context.Events.TriggerStagger.Execute(StaggerReason.Fall);
 					}
 
-					Debug.Log($"Fall damage applied: {damage} from speed {fallSpeed.RoundFormat(100)}m");
+					Debug.Log($"Fall damage applied: {damage} from speed {fallSpeed.RoundFormat(100)}, roll: {FallDamageProtectionActive.Value} water: {_context.CharacterCollider.IsInWater} ");
 				}
-			}
-			else if(FallDamageProtectionActive.Value)
-			{
-				Debug.Log("Fall damage prevented by perfectly timed roll!");
+				else if(FallDamageProtectionActive.Value)
+				{
+					Debug.Log("Fall damage prevented by perfectly timed roll!");
+				}
 			}
 		}
 

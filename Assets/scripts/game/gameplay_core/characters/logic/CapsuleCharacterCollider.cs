@@ -18,6 +18,8 @@ namespace game.gameplay_core.characters.logic
 		private LayerMask _collisionMask = ~0;
 		[SerializeField]
 		private LayerMask _charactersCollisionMask = ~0;
+	 
+		private LayerMask _waterLayerMask;
 
 		[SerializeField]
 		private CapsuleCollider _capsule;
@@ -53,10 +55,13 @@ namespace game.gameplay_core.characters.logic
 
 		private float Radius => _capsule.radius;
 
+		public bool IsInWater { get; set; }
+
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			_myCapsuleCollider = GetComponent<CapsuleCollider>();
+			_waterLayerMask = LayerMask.GetMask("Water");
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -123,6 +128,8 @@ namespace game.gameplay_core.characters.logic
 				}
 				transform.position = normalResultPosition;
 			}
+
+			CheckIsInWater();
 
 			UpdateTriggers(transform.position);
 		}
@@ -389,6 +396,13 @@ namespace game.gameplay_core.characters.logic
 				var normal = hit.normal;
 				return Vector3.ProjectOnPlane(remaining, normal);
 			}
+		}
+
+		private void CheckIsInWater()
+		{
+			_capsule.GetCapsulePoints(_context.Transform.Position, out var p1, out var p2);
+			var count = Physics.OverlapCapsuleNonAlloc(p1, p2, Radius + _characterToCharacterOffset, _castResults, _waterLayerMask, QueryTriggerInteraction.Collide);
+			IsInWater = count > 0;
 		}
 
 		private bool CheckInsideOtherCharacter(Vector3 position, out Vector3 escapeVector)

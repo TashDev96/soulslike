@@ -1,4 +1,5 @@
 using game.gameplay_core.characters.config.animation;
+using game.gameplay_core.characters.logic;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.inventory.item_configs;
@@ -31,6 +32,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_pivot.SetAttackerLocalRotation(_context.Transform);
 
 			_fallDamageBonus = _context.Logic.FallDamageLogic.FallSpeed;
+			_context.Logic.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.PlungeAttack, true);
 			_context.Logic.MovementLogic.ResetVelocity();
 			_context.Logic.MovementLogic.LockedInAnimationSlot = true;
 
@@ -43,6 +45,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			base.OnExit();
+			_context.Logic.InvulnerabilityLogic.SetInvulnerability(InvulnerabilityReason.PlungeAttack, false);
 			_context.Logic.MovementLogic.LockedInAnimationSlot = false;
 			_context.Transform.ResetRotationVertical();
 		}
