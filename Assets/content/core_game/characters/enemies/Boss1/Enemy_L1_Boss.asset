@@ -135,7 +135,11 @@ MonoBehaviour:
       - Default
       - New Layer
   <DefaultStatsValueOverride>k__BackingField:
-    _list: []
+    _list:
+    - Key: 10
+      Value: 5
+    - Key: 6
+      Value: 85
     _keyCollision: 0
   <CanDoBackstabs>k__BackingField: 0
   <CanReceiveBackstabs>k__BackingField: 0
