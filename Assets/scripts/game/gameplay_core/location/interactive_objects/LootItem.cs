@@ -39,7 +39,7 @@ namespace game.gameplay_core.location.interactive_objects
 			{
 				fallbackPosition = hit.point;
 			}
-			SaveData = new LootItemSaveData
+			Data = new LootItemSaveData
 			{
 				UniqueId = UniqueId,
 				Item = itemData,
@@ -58,8 +58,8 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void InitializeAfterSaveLoaded()
 		{
-			transform.position = SaveData.Position;
-			UniqueId = SaveData.UniqueId;
+			transform.position = Data.Position;
+			UniqueId = Data.UniqueId;
 		}
 
 		private void Awake()
@@ -70,7 +70,7 @@ namespace game.gameplay_core.location.interactive_objects
 		protected override void HandleInteractionTriggered(CharacterDomain interactedCharacter)
 		{
 			gameObject.SetActive(false);
-			LocationStaticContext.Instance.LootLogic.HandleLootInteracted(SaveData, interactedCharacter);
+			LocationStaticContext.Instance.LootLogic.HandleLootInteracted(Data, interactedCharacter);
 		}
 
 		protected override string GetInteractionTextHint()

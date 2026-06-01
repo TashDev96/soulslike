@@ -44,7 +44,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData = new DestructibleObjectSaveData
+			Data = new DestructibleObjectSaveData
 			{
 				Destroyed = false,
 				Hp = _maxHp
@@ -54,9 +54,9 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void InitializeAfterSaveLoaded()
 		{
-			_currentHp = SaveData.Hp;
+			_currentHp = Data.Hp;
 
-			if(SaveData.Destroyed)
+			if(Data.Destroyed)
 			{
 				SetVisualState(DestructibleVisualState.DestroyedInstantly);
 			}
@@ -88,17 +88,17 @@ namespace game.gameplay_core.location.interactive_objects
 
 		private void HandleDamageReceived(DamageInfo damageInfo)
 		{
-			if(SaveData.Destroyed)
+			if(Data.Destroyed)
 			{
 				return;
 			}
 
 			_currentHp -= damageInfo.DamageAmount;
-			SaveData.Hp = _currentHp;
+			Data.Hp = _currentHp;
 
 			if(_currentHp <= 0)
 			{
-				SaveData.Destroyed = true;
+				Data.Destroyed = true;
 				SetVisualState(DestructibleVisualState.DestroyedWithAnimation);
 
 				var rigidbodies = _visualStates[DestructibleVisualState.DestroyedWithAnimation].GetComponentsInChildren<Rigidbody>(true);

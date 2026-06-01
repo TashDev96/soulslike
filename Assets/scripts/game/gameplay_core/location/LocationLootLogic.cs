@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using dream_lib.src.utils.serialization;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
 using game.gameplay_core.location.view;
@@ -39,13 +40,7 @@ namespace game.gameplay_core.location
 			interactedCharacter.Context.Logic.InventoryLogic.PickUpItem(saveData.Item);
 
 			var locationSave = LocationStaticContext.Instance.LocationSaveData;
-			for(var i = 0; i < locationSave.SpawnedObjects.Count; i++)
-			{
-				if(locationSave.SpawnedObjects[i].UniqueId == saveData.UniqueId)
-				{
-					locationSave.SpawnedObjects.RemoveAt(i--);
-				}
-			}
+			locationSave.SpawnedObjects.Remove(saveData.UniqueId);
 		}
 
 		private void SpawnLootGameObject(Vector3 position, LootConfig lootConfig)
@@ -57,7 +52,7 @@ namespace game.gameplay_core.location
 			lootView.InitializeFromLoot(lootConfig);
 
 			var locationSave = LocationStaticContext.Instance.LocationSaveData;
-			locationSave.SceneObjects.Add(lootView.UniqueId, lootView.GetSave());
+			locationSave.SpawnedObjects.Add(lootView.UniqueId, new PolymorphicJsonObject());
 		}
 	}
 }

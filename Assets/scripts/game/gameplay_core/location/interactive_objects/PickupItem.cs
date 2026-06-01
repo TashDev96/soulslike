@@ -14,7 +14,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData = new PickupItemSaveData
+			Data = new PickupItemSaveData
 			{
 				PickedUp = false
 			};
@@ -23,7 +23,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void InitializeAfterSaveLoaded()
 		{
-			if(SaveData.PickedUp)
+			if(Data.PickedUp)
 			{
 				gameObject.SetActive(false);
 			}
@@ -35,13 +35,13 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void HandleInteractionTriggered(CharacterDomain interactedCharacter)
 		{
-			if(SaveData.PickedUp)
+			if(Data.PickedUp)
 			{
 				Debug.LogError("Error! trying to pick up already picked item");
 				return;
 			}
 
-			SaveData.PickedUp = true;
+			Data.PickedUp = true;
 			gameObject.SetActive(false);
 
 			interactedCharacter.Context.Logic.InventoryLogic.PickUpItem(_item);
@@ -58,5 +58,10 @@ namespace game.gameplay_core.location.interactive_objects
 	{
 		[field: SerializeField]
 		public bool PickedUp { get; set; }
+
+		public override string ToString()
+		{
+			return base.ToString() +$" pickedUp: {PickedUp}";
+		}
 	}
 }

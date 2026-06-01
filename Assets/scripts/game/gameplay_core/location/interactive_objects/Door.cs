@@ -32,7 +32,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData = new DoorSaveData
+			Data = new DoorSaveData
 			{
 				IsOpened = !_isClosedByDefault
 			};
@@ -71,16 +71,16 @@ namespace game.gameplay_core.location.interactive_objects
 				}
 			}
 
-			SaveData.IsOpened = true;
+			Data.IsOpened = true;
 			UpdateAnimatorState();
 		}
 
 		private void UpdateAnimatorState(bool immediate = false)
 		{
-			SaveData.IsOpened = !SaveData.IsOpened;
+			Data.IsOpened = !Data.IsOpened;
 			if(_animator != null)
 			{
-				_animator.SetBool(IsOpen, SaveData.IsOpened);
+				_animator.SetBool(IsOpen, Data.IsOpened);
 				if(immediate)
 				{
 					_animator.SetTrigger(Immediate);

@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Text;
 using Cysharp.Threading.Tasks;
+using dream_lib.src.utils.serialization;
 using game.gameplay_core.location;
 using game.gameplay_core.location.location_save_system;
 using UnityEngine;
@@ -34,7 +36,8 @@ namespace game.gameplay_core
 			{
 				if(File.Exists(savePath))
 				{
-					saveData = JsonUtility.FromJson<LocationSaveData>(File.ReadAllText(savePath));
+					var file = File.ReadAllText(savePath);
+					saveData = JsonUtility.FromJson<LocationSaveData>(file);
 				}
 
 				if(File.Exists(playerSavePath))
@@ -65,6 +68,7 @@ namespace game.gameplay_core
 				return;
 			}
 			var saveData = _locationDomain.SaveCurrentStateToData();
+
 			var savePath = GetSavePath(GameStaticContext.Instance.PlayerSave.CurrentLocationId);
 			var playerSavePath = GetPlayerSavePath();
 

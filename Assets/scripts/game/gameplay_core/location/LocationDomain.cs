@@ -8,6 +8,7 @@ using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.components;
 using dream_lib.src.utils.data_types;
+using dream_lib.src.utils.serialization;
 using game.gameplay_core.camera;
 using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
@@ -90,6 +91,8 @@ namespace game.gameplay_core.location
 			{
 				character.WriteStateToSaveData();
 			}
+
+			
 
 			return LocationStaticContext.Instance.LocationSaveData;
 		}
@@ -183,13 +186,15 @@ namespace game.gameplay_core.location
 
 				if(locationSave.SceneObjects.TryGetValue(objectId, out var objectSave))
 				{
-					sceneSavableObject.LoadSave(objectSave);
+					sceneSavableObject.LoadSave(objectSave.Deserialize() as BaseSaveData);
 				}
 				else
 				{
 					sceneSavableObject.InitializeFirstTime();
-					locationSave.SceneObjects.Add(objectId, sceneSavableObject.GetSave());
+					locationSave.SceneObjects.Add(objectId, new PolymorphicJsonObject(sceneSavableObject.GetSaveData()));
 				}
+				
+				
 
 				switch(sceneSavableObject)
 				{
@@ -208,7 +213,7 @@ namespace game.gameplay_core.location
 
 			foreach(var keyInSave in keysInSave)
 			{
-				if(usedIds.Contains(keyInSave))
+				if(!usedIds.Contains(keyInSave))
 				{
 					Debug.LogWarning($"remove from save unused object id {keyInSave}");
 					locationSave.SceneObjects.Remove(keyInSave);
@@ -220,13 +225,14 @@ namespace game.gameplay_core.location
 		{
 			var locationSave = LocationStaticContext.Instance.LocationSaveData;
 
-			foreach(var spawnedObjectSave in locationSave.SpawnedObjects)
+			foreach(var kvp in locationSave.SpawnedObjects)
 			{
-				var prefab = Resources.Load<GameObject>(spawnedObjectSave.PrefabName);
-				var instance = Object.Instantiate(prefab, spawnedObjectSave.Position, Quaternion.identity);
+				var saveData = kvp.Value.Deserialize() as SpawnedObjectSaveData;
+				var prefab = Resources.Load<GameObject>(saveData.PrefabName);
+				var instance = Object.Instantiate(prefab, saveData.Position, Quaternion.identity);
 
 				var view = instance.GetComponent<SavableSceneObjectGeneric<SpawnedObjectSaveData>>();
-				view.LoadSave(spawnedObjectSave);
+				view.LoadSave(saveData);
 
 				LocationStaticContext.Instance.SpawnedObjects.Add(view);
 			}

@@ -20,7 +20,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		public override void InitializeFirstTime()
 		{
-			SaveData = new BonfireSaveData
+			Data = new BonfireSaveData
 			{
 				IsUnlocked = _unlockedByDefault,
 				UpgradeLevel = _defaultLevel
@@ -41,7 +41,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override string GetInteractionTextHint()
 		{
-			if(SaveData.IsUnlocked)
+			if(Data.IsUnlocked)
 			{
 				return "Rest At Bonfire";
 			}

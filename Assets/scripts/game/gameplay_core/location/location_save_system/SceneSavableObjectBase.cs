@@ -12,7 +12,7 @@ namespace game.gameplay_core.location.location_save_system
 		public abstract void InitializeFirstTime();
 
 		public abstract void LoadSave(BaseSaveData data);
-		public abstract BaseSaveData GetSave();
+		public abstract BaseSaveData GetSaveData();
 
 		[Button]
 		public void GenerateUniqueId()

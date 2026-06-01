@@ -2,19 +2,19 @@ namespace game.gameplay_core.location.location_save_system
 {
 	public abstract class SavableSceneObjectGeneric<T> : SceneSavableObjectBase where T : BaseSaveData
 	{
-		protected T SaveData { get; set; }
+		protected T Data { get; set; }
 
 		protected abstract void InitializeAfterSaveLoaded();
 
 		public override void LoadSave(BaseSaveData data)
 		{
-			SaveData = (T)data;
+			Data = (T)data;
 			InitializeAfterSaveLoaded();
 		}
 
-		public override BaseSaveData GetSave()
+		public override BaseSaveData GetSaveData()
 		{
-			return SaveData;
+			return Data;
 		}
 	}
 }
