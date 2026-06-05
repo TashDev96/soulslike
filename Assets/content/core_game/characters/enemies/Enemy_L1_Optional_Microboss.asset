@@ -66,7 +66,75 @@ MonoBehaviour:
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
   <SoftCurrencyDrop>k__BackingField: 2000
-  <ParentConfig>k__BackingField: {fileID: 11400000, guid: d81bc20484e9346fb88bee6e99486bc5, type: 2}
+  <Flying>k__BackingField:
+    <BaseSpeed>k__BackingField: 10
+    <MaxSpeed>k__BackingField: 30
+    <Friction>k__BackingField: {x: 0.005, y: 0.1, z: 0.01}
+    <PitchSpeed>k__BackingField: 40
+    <YawSpeedByForwardSpeed>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <MaxRollAngle>k__BackingField: 45
+    <RollSpeed>k__BackingField: 5
+    <AltitudeSpeedGain>k__BackingField: 2
+    <FlapForce>k__BackingField: 5
+    <FlapStaminaCost>k__BackingField: 10
+    <FlapCooldown>k__BackingField: 0.5
+    <MaxUpPitchWithNoEnergy>k__BackingField: 15
+    <StallPitchDownSpeedCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 6
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 10
+        value: 60
+        inSlope: 6
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <MinPitchPerSpeed>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 6
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 10
+        value: 60
+        inSlope: 6
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <StallRecoveryPitch>k__BackingField: 20
+    <LiftForceCoeff>k__BackingField: 0.1
+  <ParentConfig>k__BackingField: {fileID: 11400000, guid: 4c2679c708b2a47f6933cc1cad3e6a15, type: 2}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
   <ParryStunAnimation>k__BackingField: {fileID: 7400000, guid: c9210f5e361be4756a52a734fe5bdacb, type: 2}

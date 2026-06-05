@@ -10,24 +10,55 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5723f2522e7045b09d5fa806bd897878, type: 3}
-  m_Name: Enemy_Big
+  m_Name: BaseEnemyConfig
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.config.CharacterConfigSO
   Roll:
     <AnimationConfig>k__BackingField:
       WeaponForPreview: 
-      Clip: {fileID: 0}
+      Clip: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
       Speed: 1
-      FlagEvents: []
+      FlagEvents:
+      - Name: New Flag
+        StartTimeNormalized: 0.1392812
+        EndTimeNormalized: 0.606748
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 5
+      - Name: New Flag
+        StartTimeNormalized: 0.08928572
+        EndTimeNormalized: 0.5357143
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 3
+      - Name: New Flag
+        StartTimeNormalized: 0.6785715
+        EndTimeNormalized: 0.6964285
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 4
+      - Name: New Flag
+        StartTimeNormalized: 0.37421036
+        EndTimeNormalized: 0.7031406
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0.93333334
+        Flag: 0
       HitEvents: []
       SoundEvents: []
       CameraShakeEvents: []
       LayerNames:
-      - Default
+      - Invincible
+      - Attack
+      - Combo
+      - Rotation
     <ForwardAnimation>k__BackingField: {fileID: 7400000, guid: a5fc626c4c2eaf64e90f65f75d758f2c, type: 2}
     <BackwardAnimation>k__BackingField: {fileID: 7400000, guid: 1bc5a05ca50513e40881eb2c860a5253, type: 2}
     <RightAnimation>k__BackingField: {fileID: 7400000, guid: f421fff3a76c9f3479e4f306d7eba88f, type: 2}
     <LeftAnimation>k__BackingField: {fileID: 7400000, guid: 10652e60d73513c45bf96e754ad3dd61, type: 2}
-    <RollInvulnerabilityTiming>k__BackingField: {x: 0.33928573, y: 0.6428572}
+    <RollInvulnerabilityTiming>k__BackingField: {x: 0.17857143, y: 0.58928573}
     <BodyAttackTiming>k__BackingField: {x: 0.08928572, y: 0.53571427}
     <ExitToRollAttackTiming>k__BackingField: {x: 0.67857146, y: 0.69642854}
     <RotationDisabledTime>k__BackingField: {x: 0.33928573, y: 1}
@@ -65,15 +96,33 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <BaseStaminaCost>k__BackingField: 10
-  <SoftCurrencyDrop>k__BackingField: 300
+  <SoftCurrencyDrop>k__BackingField: 0
   <Flying>k__BackingField:
     <BaseSpeed>k__BackingField: 10
     <MaxSpeed>k__BackingField: 30
-    <Friction>k__BackingField: {x: 0.005, y: 0.1, z: 0.01}
+    <Friction>k__BackingField: {x: 0, y: 0.5, z: 0.01}
     <PitchSpeed>k__BackingField: 40
     <YawSpeedByForwardSpeed>k__BackingField:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 150
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 30
+        value: 50
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -112,32 +161,41 @@ MonoBehaviour:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: 3.3321857
+        value: 13
         inSlope: 0
-        outSlope: 6
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 10
-        value: 60
-        inSlope: 6
-        outSlope: 0
+        time: 7.1978226
+        value: 6.6666737
+        inSlope: -4.268469
+        outSlope: -4.268469
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 20
+        value: -90
+        inSlope: -1.3209538
+        outSlope: -1.3209538
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.18333335
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     <StallRecoveryPitch>k__BackingField: 20
     <LiftForceCoeff>k__BackingField: 0.1
-  <ParentConfig>k__BackingField: {fileID: 11400000, guid: 4c2679c708b2a47f6933cc1cad3e6a15, type: 2}
+  <ParentConfig>k__BackingField: {fileID: 0}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
-  <ParryStunAnimation>k__BackingField: {fileID: 0}
+  <ParryStunAnimation>k__BackingField: {fileID: 7400000, guid: c9210f5e361be4756a52a734fe5bdacb, type: 2}
   <RipostedAnimation>k__BackingField:
     WeaponForPreview: 
     Clip: {fileID: 7400000, guid: 2c5fcd12c60c44d4ca38e00ca98c9f0f, type: 2}
@@ -148,13 +206,13 @@ MonoBehaviour:
     CameraShakeEvents: []
     LayerNames:
     - Default
-  <DeathAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}
+  <DeathAnimation>k__BackingField: {fileID: 7400000, guid: 11669775ec6454cfba8de2c91f147eaa, type: 2}
   <FallAnimation>k__BackingField: {fileID: 0}
-  <RunAnimation>k__BackingField: {fileID: 0}
+  <RunAnimation>k__BackingField: {fileID: 7400000, guid: f20ed00c7ce344848b522e5dcf56b325, type: 2}
   <Locomotion>k__BackingField:
     <HalfTurnDurationSeconds>k__BackingField: 0.22
     <HalfTurnDurationSecondsLockOn>k__BackingField: 0.22
-    <WalkSpeed>k__BackingField: 3.96
+    <WalkSpeed>k__BackingField: 5
     <RunSpeed>k__BackingField: 10
     <WalkAcceleration>k__BackingField: 1
     <WalkDeceleration>k__BackingField: 0.1
@@ -193,8 +251,10 @@ MonoBehaviour:
       LayerNames:
       - Default
   <DefaultStatsValueOverride>k__BackingField:
-    _list: []
+    _list:
+    - Key: 10
+      Value: 0
     _keyCollision: 0
-  <CanDoBackstabs>k__BackingField: 0
+  <CanDoBackstabs>k__BackingField: 1
   <CanReceiveBackstabs>k__BackingField: 1
   <EmptyHandItemConfigId>k__BackingField: EmptyHandConfig
