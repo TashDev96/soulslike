@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.damage_system;
@@ -45,6 +46,7 @@ namespace game.gameplay_core.characters.logic
 		private CapsuleCharacterCollider CharacterCollider => _context.CharacterCollider;
 
 		private Vector3 CurrentPosition => _context.Transform.Position;
+		public bool IsGrounded => _isGrounded.Continuous;
 
 		public void SetContext(CharacterContext context)
 		{
@@ -65,26 +67,33 @@ namespace game.gameplay_core.characters.logic
 
 			_debugFlags = _context.CharacterCollider.Flags;
 
-			_context.CharacterCollider.CustomUpdate(deltaTime);
-
 			if(LockedInAnimationSlot)
 			{
 				CalculateLastUpdateVelocity(deltaTime);
 				return;
 			}
-
-			UpdateFalling(deltaTime);
-			UpdateSliding(deltaTime);
-
-			if(!_rotationAndMovementLocked)
+			
+			if(_context.FlyingMode.Value)
 			{
-				if(_hadAcceleratedMovement)
+				UpdateFlyingMode(deltaTime);
+			}
+			else
+			{
+				_context.CharacterCollider.CustomUpdate(deltaTime);
+
+				UpdateFalling(deltaTime);
+				UpdateSliding(deltaTime);
+
+				if(!_rotationAndMovementLocked)
 				{
-					_hadAcceleratedMovement = false;
-				}
-				else
-				{
-					_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.CharacterStats.Locomotion.WalkDeceleration);
+					if(_hadAcceleratedMovement)
+					{
+						_hadAcceleratedMovement = false;
+					}
+					else
+					{
+						_acceleratedMovement = Vector3.MoveTowards(_acceleratedMovement, Vector3.zero, deltaTime * _context.CharacterStats.Locomotion.WalkDeceleration);
+					}
 				}
 			}
 
@@ -258,6 +267,32 @@ namespace game.gameplay_core.characters.logic
 		{
 		}
 
+		public void SetFlyingMode(bool on, Vector3 fallVelocity)
+		{
+			_context.FlyingMode.Value = on;
+			_context.IsFalling.Value = !on;
+			_fallVelocity = fallVelocity;
+		}
+
+		public static Vector3 GetAirDampingForceFalling(Vector3 velocity, float height, float radius)
+		{
+			return -velocity.normalized * (velocity.magnitude * AirDamping); // linear damping
+			//TODO: more realistic gravity and damping
+			//var result = Vector3.zero;
+			
+			//var areaVertical = radius * radius * 3.14f;
+			//var cylinderWidth = radius * 2;
+			//var cylinderHeight = height - radius * 2;
+			//var areaHorizontal = cylinderHeight * cylinderWidth + radius * radius * 3.14f;
+
+			//var velocityH = velocity.x0z();
+			//result -= velocityH.normalized * (velocityH.sqrMagnitude * AirDamping2 * areaHorizontal);
+			//result.y -= velocity.y * velocity.y * AirDamping2 * areaVertical;
+
+			//return result;
+		}
+ 
+
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
 		{
 			_hadAcceleratedMovement = true;
@@ -322,7 +357,7 @@ namespace game.gameplay_core.characters.logic
 				{
 					if(AirDamping > 0f && _fallVelocity.sqrMagnitude > 0.0001f)
 					{
-						_fallVelocity += GetAirDampingForceFalling(_fallVelocity) * deltaTime;
+						_fallVelocity += GetAirDampingForceFalling(_fallVelocity, _context.CharacterCollider.Height, _context.CharacterCollider.Radius) * deltaTime;
 					}
 
 					_fallVelocity += Physics.gravity * deltaTime;
@@ -353,6 +388,7 @@ namespace game.gameplay_core.characters.logic
 				{
 					_slidingVelocity.y = 0;
 					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * SlidingStopDamping);
+				_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
 					if(_slidingVelocity.sqrMagnitude < 0.001f)
 					{

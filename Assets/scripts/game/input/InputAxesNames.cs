@@ -4,6 +4,8 @@ namespace game.input
 	{
 		StatsScreen,
 		InventoryScreen,
+		Transform,
+		Flap,
 		CameraVertical,
 		CameraHorizontal,
 		Parry,

@@ -13,6 +13,8 @@ namespace game.gameplay_core.characters.commands
 		StayBlock,
 		Parry,
 		UseItem,
-		Interact
+		Interact,
+		Transform,
+		FlapWings
 	}
 }

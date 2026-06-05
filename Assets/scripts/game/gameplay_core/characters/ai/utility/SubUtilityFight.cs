@@ -1,3 +1,4 @@
+using dream_lib.src.extensions;
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
 using game.gameplay_core.characters.ai.world_reflection;
@@ -74,8 +75,8 @@ namespace game.gameplay_core.characters.ai.utility
 				var vector = _context.CharacterContext.Transform.Position - _lastTarget.Position;
 				var range = _context.BlackboardValues[BlackboardValues.BasicAttackRange];
 
-				var result = Mathf.Clamp01(range * range - vector.sqrMagnitude + keepFightOutOfRangeMeters * keepFightOutOfRangeMeters);
-
+				var result =Mathf.Clamp01(range * range - vector.sqrMagnitude + keepFightOutOfRangeMeters * keepFightOutOfRangeMeters);
+				 
 				//Debug.DrawLine(_context.CharacterContext.Transform.Position, _lastTarget.Position, Color.red);
 				return result;
 			}

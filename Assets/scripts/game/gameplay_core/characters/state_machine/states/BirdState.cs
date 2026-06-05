@@ -1,0 +1,223 @@
+using System;
+using Animancer;
+using dream_lib.src.extensions;
+using game.gameplay_core.characters.commands;
+using game.gameplay_core.characters.config.animation;
+using game.gameplay_core.characters.view;
+using UnityEngine;
+
+namespace game.gameplay_core.characters.state_machine.states
+{
+	public class BirdState : CharacterStateBase
+	{
+		private Vector3 _flyingVelocity;
+		private float _currentPitch;
+		private float _currentYaw;
+		private float _currentRoll;
+		private float _lastFlapTime;
+		private readonly Transform _transform;
+		private Vector3 _localVelocity;
+
+		private SubState _subState;
+		private CharacterFlyingBodyView _view;
+
+		private AnimationConfig _currentAnimation;
+
+		public BirdState(CharacterContext context) : base(context)
+		{
+			IsReadyToRememberNextCommand = true;
+			_transform = context.SelfLink.transform;
+
+			_currentYaw = _transform.eulerAngles.y;
+			_currentPitch = _transform.eulerAngles.x;
+			if(_currentPitch > 180)
+			{
+				_currentPitch -= 360;
+			}
+			_currentRoll = 0;
+			_localVelocity = _transform.InverseTransformVector(_context.Logic.MovementLogic.LastUpdateVelocity);
+			_lastFlapTime = -100f;
+		}
+
+		public override void OnEnter()
+		{
+			base.OnEnter();
+
+			_context.Views.BodyView.SetFlyingMode(true);
+
+			_view = _context.Views.BodyView.FlyingBodyView;
+			
+			if(_context.Logic.MovementLogic.IsGrounded)
+			{
+				_subState = SubState.SitOnTheGround;
+				_context.Views.Animator.Play(_view.Animations.Sit.Clip);
+			}
+			else
+			{
+				_subState = SubState.Fly;
+				_context.Views.Animator.Play(_view.Animations.Glide.Clip);
+			}
+			
+			_context.Logic.MovementLogic.SetFlyingMode(true, Vector3.zero);
+			
+		}
+
+		public override void OnExit()
+		{
+			base.OnExit();
+			_context.Logic.MovementLogic.SetFlyingMode(false, _flyingVelocity);
+			_context.Views.BodyView.SetFlyingMode(false);
+		}
+
+		public override string GetDebugString()
+		{
+			return $"{_flyingVelocity.magnitude.RoundFormat()} {_currentPitch.RoundFormat()}";
+		}
+
+		public override void Update(float deltaTime)
+		{
+			switch(_subState)
+			{
+				case SubState.SitOnTheGround:
+					UpdateSitOnTheGround(deltaTime);
+
+					break;
+				case SubState.Fly:
+					UpdateFlying(deltaTime);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private void UpdateFlying(float deltaTime)
+		{
+			var config = _context.Config.Flying;
+
+			var input = _context.InputData.InputScreenSpace;
+			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
+
+			// Yaw
+			_currentYaw += input.x * config.YawSpeedByForwardSpeed.Evaluate(_localVelocity.z) * deltaTime;
+
+			// Pitch
+			var targetPitch = _currentPitch + input.y * config.PitchSpeed * deltaTime;
+
+			// Pitch correction if no energy to fly up
+			if(targetPitch < 0 && _context.CharacterStats.Stamina.Value <= 0)
+			{
+				targetPitch = Mathf.MoveTowards(targetPitch, 0, config.PitchSpeed * deltaTime);
+			}
+
+			// Stall prevention: force nose down if speed is too low
+			var minPitch = config.MinPitchPerSpeed.Evaluate(_localVelocity.z);
+			if(targetPitch < minPitch)
+			{
+				targetPitch = minPitch;
+			}
+
+			_currentPitch = Mathf.Clamp(targetPitch, -85f, 85f);
+
+			// Roll
+			var targetRoll = -input.x * config.MaxRollAngle;
+			_currentRoll = Mathf.Lerp(_currentRoll, targetRoll, deltaTime * config.RollSpeed);
+
+			// Apply rotation
+			_transform.rotation = Quaternion.Euler(_currentPitch, _currentYaw, _currentRoll);
+
+			// Friction
+			var frictionForce = config.Friction;
+
+			frictionForce.x *= _localVelocity.x * _localVelocity.x;
+			frictionForce.y *= _localVelocity.y * _localVelocity.y;
+			frictionForce.z *= _localVelocity.z * _localVelocity.z;
+			_localVelocity = _localVelocity.MoveTowardsSeparate(Vector3.zero, frictionForce * deltaTime);
+
+			// Speed gain/loss by altitude
+			// var pitchRad = _currentPitch * Mathf.Deg2Rad;
+			// _flyingSpeed += Mathf.Sin(pitchRad) * config.AltitudeSpeedGain * deltaTime;
+
+			//Gravity
+			var xCache = _localVelocity.x;
+			_localVelocity += _transform.InverseTransformVector(Physics.gravity) * deltaTime;
+			_localVelocity.y += _localVelocity.z * _localVelocity.z * config.LiftForceCoeff * deltaTime;
+			_localVelocity.x = xCache; //disable sliding to the side with gravity TODO: try enable a little for realism
+
+			// Flaps
+			if(flap && Time.time > _lastFlapTime + config.FlapCooldown)
+			{
+				if(_context.CharacterStats.Stamina.Value >= config.FlapStaminaCost)
+				{
+					_context.Logic.StaminaLogic.SpendStamina(config.FlapStaminaCost);
+					var flapDirection = Vector3.forward;
+					var inputPitchUp = Mathf.Clamp01(-input.y);
+					if(inputPitchUp > 0)
+					{
+						flapDirection = Vector3.RotateTowards(flapDirection, Vector3.up, inputPitchUp * 70 * Mathf.Deg2Rad, 0);
+					}
+					_localVelocity += flapDirection * config.FlapForce;
+					_lastFlapTime = Time.time;
+				}
+			}
+
+			_flyingVelocity = _transform.TransformVector(_localVelocity);
+			Debug.DrawRay(_transform.position, _flyingVelocity * 2f, Color.red);
+
+			_context.CharacterCollider.MoveFlying(_flyingVelocity * deltaTime, out var collisionFlags);
+			if(collisionFlags.HasFlag(CollisionFlags.Below) && _flyingVelocity.y < 0)
+			{
+				_flyingVelocity.y = 0;
+			}
+			if(collisionFlags.HasFlag(CollisionFlags.Sides))
+			{
+				//_flyingVelocity.x = 0;
+				//_flyingVelocity.z = 0;
+			}
+		}
+
+		private void UpdateSitOnTheGround(float deltaTime)
+		{
+			var input = _context.InputData.InputScreenSpace;
+			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
+
+			if(flap)
+			{
+				_subState = SubState.Fly;
+				_currentAnimation = _view.Animations.TakeOff;
+				_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				return;
+			}
+			 
+			//walk
+			if(_context.InputData.Command == CharacterCommand.Walk)
+			{
+				if(_currentAnimation != _view.Animations.Walk)
+				{
+					_currentAnimation = _view.Animations.Walk;
+					_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				}
+				
+				_context.Logic.MovementLogic.ApplyInputMovement(_context.InputData.DirectionWorld, 2f, deltaTime);
+				Debug.LogError(_context.Logic.MovementLogic.IsGrounded);
+			}
+			else
+			{
+				if(_currentAnimation != _view.Animations.Sit)
+				{
+					_currentAnimation = _view.Animations.Sit;
+					_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				}
+			}
+			
+						
+
+		}
+
+		private enum SubState
+		{
+			SitOnTheGround,
+			Fly
+		}
+	}
+}

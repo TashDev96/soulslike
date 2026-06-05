@@ -14,6 +14,8 @@ namespace game.gameplay_core.characters.config
 		[field: SerializeField]
 		public int SoftCurrencyDrop { get; private set; }
 		[field: SerializeField]
+		public FlyingConfig Flying { get; private set; }
+		[field: SerializeField]
 		public CharacterConfig ParentConfig { get; private set; }
 		[field: SerializeField]
 		public AnimationClip IdleAnimation { get; private set; }

@@ -110,6 +110,8 @@ namespace game.gameplay_core.characters
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				IsDead = new IsDead(),
+				FlyingMode = new ReactiveProperty<bool>(),
+				
 
 				EnteredTriggers = new ReactiveHashSet<Collider>(),
 				DebugVars = _debugVars,
@@ -364,6 +366,7 @@ namespace game.gameplay_core.characters
 			{
 				transform.position = data.Position;
 				transform.eulerAngles = data.Euler;
+				transform.up = Vector3.up;
 				if(!ignoreStats)
 				{
 					_context.CharacterStats.Hp.Value = data.Hp;

@@ -37,6 +37,8 @@ namespace game.gameplay_core.characters
 		public IReadOnlyReactiveProperty<string> CharacterId;
 		public IReadOnlyReactiveProperty<bool> IsPlayer;
 		public IsDead IsDead;
+		public ReactiveProperty<bool> FlyingMode;
+		public ReactiveCommand<StaggerReason> TriggerStagger;
 
 		public ReactiveProperty<bool> IsFalling;
 		public ReactiveHashSet<Collider> EnteredTriggers;
@@ -75,10 +77,10 @@ namespace game.gameplay_core.characters
 
 		public BodyAttackView BodyAttackView;
 		public ParryReceiver ParryReceiver;
+		public CharacterBodyView BodyView;
 
 		public ReactiveProperty<CharacterDebugDrawer> DebugDrawer;
 		public Dictionary<EquipmentSlotType, WeaponView> EquippedWeaponViews;
-		public CharacterBodyView BodyView;
 	}
 
 	public struct Events
