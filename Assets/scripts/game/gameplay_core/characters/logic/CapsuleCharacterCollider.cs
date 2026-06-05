@@ -18,8 +18,6 @@ namespace game.gameplay_core.characters.logic
 		private LayerMask _collisionMask = ~0;
 		[SerializeField]
 		private LayerMask _charactersCollisionMask = ~0;
-	 
-		private LayerMask _waterLayerMask;
 
 		[SerializeField]
 		private CapsuleCollider _capsule;
@@ -35,6 +33,8 @@ namespace game.gameplay_core.characters.logic
 
 		[NonSerialized]
 		public bool HasStableGround;
+
+		private LayerMask _waterLayerMask;
 
 		private readonly RaycastHit[] _groundCastResults = new RaycastHit[20];
 
@@ -86,65 +86,12 @@ namespace game.gameplay_core.characters.logic
 
 		public void MoveFlying(Vector3 motion, out CollisionFlags collisionFlags)
 		{
-
 			var moveStartPosition = transform.position;
 
 			CalculateMovement(moveStartPosition, motion, true, out var normalResultPosition, out collisionFlags);
 			transform.position = normalResultPosition;
-			 
 		}
-		
-		public void Move(Vector3 motion, bool disableIterations)
-		{
-			var wasGrounded = IsGrounded;
 
-			var moveStartPosition = transform.position;
-			var stepUpSuccess = false;
-
-			CalculateMovement(moveStartPosition, motion, disableIterations, out var normalResultPosition, out var normalMovementFlags);
-
-			if(wasGrounded && !IsSteppingUp && normalMovementFlags.HasFlag(CollisionFlags.CollidedSides))
-			{
-				var verticalAngle = Vector3.Angle(motion.normalized, motion.SetY(0).normalized);
-
-				if(verticalAngle < SlopeLimit)
-				{
-					var stepMotion = motion + motion.normalized * SkinWidth;
-					CalculateMovement(moveStartPosition + Vector3.up * StepOffset, stepMotion, disableIterations, out var resultPositionUp, out var flagsUp);
-					stepUpSuccess = (moveStartPosition - resultPositionUp).SetY(0).magnitude > (moveStartPosition - normalResultPosition).SetY(0).magnitude + SkinWidth;
-
-					DebugDrawUtils.DrawWireCapsulePersistent(resultPositionUp + _capsule.center, _capsule.height, _capsule.radius, stepUpSuccess ? Color.green : Color.red);
-
-					if(stepUpSuccess)
-					{
-						CalculateMovement(resultPositionUp, Vector3.down * StepOffset, true, out var resultPositionStepGravity, out var groundingFlags);
-						stepUpSuccess &= resultPositionStepGravity.y > normalResultPosition.y + MinStepOffset;
-
-						if(stepUpSuccess)
-						{
-							transform.position = resultPositionStepGravity;
-							Flags = flagsUp | groundingFlags;
-							_stepGravityDisableTimer = 0.2f;
-						}
-					}
-				}
-			}
-
-			if(!stepUpSuccess)
-			{
-				Flags |= normalMovementFlags;
-				if(_stepGravityDisableTimer > 0)
-				{
-					Flags |= CollisionFlags.Below;
-				}
-				transform.position = normalResultPosition;
-			}
-
-			CheckIsInWater();
-
-			UpdateTriggers(transform.position);
-		}
-		
 		public void MoveWithStepUp(Vector3 motion, bool disableIterations)
 		{
 			var wasGrounded = IsGrounded;
@@ -196,6 +143,7 @@ namespace game.gameplay_core.characters.logic
 			UpdateTriggers(transform.position);
 		}
 
+	 
 		// private void GetGroundNormal()
 		// {
 		// 	if(!IsGrounded)

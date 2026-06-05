@@ -412,7 +412,7 @@ namespace game.gameplay_core.characters.logic
 		private void MoveAndStoreFrameData(Vector3 vector, bool disableIterations = false, bool dontCountAsSpeed = false)
 		{
 			var prevPos = _context.Transform.Position;
-			CharacterCollider.Move(vector, disableIterations);
+			CharacterCollider.MoveWithStepUp(vector, disableIterations);
 
 			var posDelta = _context.Transform.Position - prevPos;
 

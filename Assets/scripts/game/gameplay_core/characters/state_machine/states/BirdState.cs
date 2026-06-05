@@ -199,7 +199,6 @@ namespace game.gameplay_core.characters.state_machine.states
 				}
 				
 				_context.Logic.MovementLogic.ApplyInputMovement(_context.InputData.DirectionWorld, 2f, deltaTime);
-				Debug.LogError(_context.Logic.MovementLogic.IsGrounded);
 			}
 			else
 			{
