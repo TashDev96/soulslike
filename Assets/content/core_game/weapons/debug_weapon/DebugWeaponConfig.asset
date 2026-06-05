@@ -86,7 +86,7 @@ MonoBehaviour:
         EndTimeNormalized: 0.32589287
         LayerIndex: 5
         IsSingleFrame: 0
-        ClipDuration: 0
+        ClipDuration: 1.8666667
         <InvolvedColliders>k__BackingField: 010000
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
@@ -229,7 +229,7 @@ MonoBehaviour:
         EndTimeNormalized: 0.2962963
         LayerIndex: 5
         IsSingleFrame: 0
-        ClipDuration: 0
+        ClipDuration: 1.8
         <InvolvedColliders>k__BackingField: 010000
         <FriendlyFire>k__BackingField: 0
         <DamageMultiplier>k__BackingField: 1
@@ -247,7 +247,7 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <StaminaCost>k__BackingField: 10
+    <StaminaCost>k__BackingField: 8
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
@@ -329,25 +329,25 @@ MonoBehaviour:
         ClipDuration: 0
         Flag: 6
       - Name: Enter Combo
-        StartTimeNormalized: 0.18115942
-        EndTimeNormalized: 0.18333334
+        StartTimeNormalized: 0.084109314
+        EndTimeNormalized: 0.08628323
         LayerIndex: 3
         IsSingleFrame: 1
-        ClipDuration: 0
+        ClipDuration: 2.3
         Flag: 7
       - Name: Enter From Roll
         StartTimeNormalized: 0
         EndTimeNormalized: 0.002173913
         LayerIndex: 3
         IsSingleFrame: 1
-        ClipDuration: 0
+        ClipDuration: 2.3
         Flag: 8
       - Name: Start Handle Cast
         StartTimeNormalized: 0.31159422
         EndTimeNormalized: 0.31376812
         LayerIndex: 4
         IsSingleFrame: 1
-        ClipDuration: 0
+        ClipDuration: 2.3
         Flag: 9
       HitEvents:
       - Name: Hit
@@ -358,7 +358,7 @@ MonoBehaviour:
         ClipDuration: 2.3
         <InvolvedColliders>k__BackingField: 010000
         <FriendlyFire>k__BackingField: 0
-        <DamageMultiplier>k__BackingField: 1
+        <DamageMultiplier>k__BackingField: 1.5
         <PoiseDamage>k__BackingField: 1
         <KnockBackImpulse>k__BackingField: 1
       SoundEvents: []
@@ -373,7 +373,7 @@ MonoBehaviour:
     <IsRangedAttack>k__BackingField: 0
     <ProjectilePrefabNames>k__BackingField: 
     <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
-    <StaminaCost>k__BackingField: 10
+    <StaminaCost>k__BackingField: 15
     <AttackDeflectionRatingBonus>k__BackingField: 0
     <ForwardMovement>k__BackingField:
       serializedVersion: 2
@@ -1149,7 +1149,7 @@ MonoBehaviour:
         ClipDuration: 4.266667
         <InvolvedColliders>k__BackingField: 010000
         <FriendlyFire>k__BackingField: 0
-        <DamageMultiplier>k__BackingField: 1
+        <DamageMultiplier>k__BackingField: 3
         <PoiseDamage>k__BackingField: 1
         <KnockBackImpulse>k__BackingField: 0
       - Name: knock

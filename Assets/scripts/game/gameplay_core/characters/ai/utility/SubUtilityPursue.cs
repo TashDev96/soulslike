@@ -59,6 +59,11 @@ namespace game.gameplay_core.characters.ai.utility
 
 			foreach(var observation in CharacterObservations)
 			{
+				if(observation.Character == null)
+				{
+					continue;
+				}
+				
 				if(observation.Character.Context.Team.Value == _context.CharacterContext.Team.Value)
 				{
 					continue;
