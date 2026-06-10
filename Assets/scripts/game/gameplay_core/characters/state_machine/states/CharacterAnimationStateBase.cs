@@ -115,6 +115,10 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected bool CheckTiming(Vector2 timing)
 		{
+			if(_legacyMode)
+			{
+				return timing.Contains(NormalizedAnimationTime);
+			}
 			return _player.CheckTiming(timing);
 		}
 	}

@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: MainHealingItemConfig
   m_EditorClassIdentifier: 
   <Icon>k__BackingField: {fileID: 2104114952, guid: 9c5f2426d24484699a497c354e7a81db, type: 3}
+  <Description>k__BackingField: 
   <HasInfiniteCharges>k__BackingField: 0
   <ChargesCount>k__BackingField: 5
   <AnimationConfig>k__BackingField:
+    <DisableRightHandWeapon>k__BackingField: 1
     <Animation>k__BackingField:
       _FadeDuration: 0.25
       _Events:

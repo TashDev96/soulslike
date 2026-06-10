@@ -1,5 +1,4 @@
 using System;
-using Animancer;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
@@ -21,7 +20,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		private SubState _subState;
 		private CharacterFlyingBodyView _view;
 
-		private AnimationConfig _currentAnimation;
+		private readonly AnimationConfigPlayer _player;
 
 		public BirdState(CharacterContext context) : base(context)
 		{
@@ -37,6 +36,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_currentRoll = 0;
 			_localVelocity = _transform.InverseTransformVector(_context.Logic.MovementLogic.LastUpdateVelocity);
 			_lastFlapTime = -100f;
+			_player = new AnimationConfigPlayer(_context);
 		}
 
 		public override void OnEnter()
@@ -46,20 +46,19 @@ namespace game.gameplay_core.characters.state_machine.states
 			_context.Views.BodyView.SetFlyingMode(true);
 
 			_view = _context.Views.BodyView.FlyingBodyView;
-			
+
 			if(_context.Logic.MovementLogic.IsGrounded)
 			{
 				_subState = SubState.SitOnTheGround;
-				_context.Views.Animator.Play(_view.Animations.Sit.Clip);
+				_player.Play(_view.Animations.Sit);
 			}
 			else
 			{
 				_subState = SubState.Fly;
-				_context.Views.Animator.Play(_view.Animations.Glide.Clip);
+				_player.Play(_view.Animations.Glide);
 			}
-			
+
 			_context.Logic.MovementLogic.SetFlyingMode(true, Vector3.zero);
-			
 		}
 
 		public override void OnExit()
@@ -76,6 +75,8 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override void Update(float deltaTime)
 		{
+			_player.Update(deltaTime);
+
 			switch(_subState)
 			{
 				case SubState.SitOnTheGround:
@@ -95,14 +96,14 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			var config = _context.Config.Flying;
 
-			var input = _context.InputData.InputScreenSpace;
-			var flap = _context.InputData.Command == CharacterCommand.FlapWings;
+			var steerInput = _context.InputData.InputScreenSpace;
+			var flapInput = _context.InputData.Command == CharacterCommand.FlapWings;
 
 			// Yaw
-			_currentYaw += input.x * config.YawSpeedByForwardSpeed.Evaluate(_localVelocity.z) * deltaTime;
+			_currentYaw += steerInput.x * config.YawSpeedByForwardSpeed.Evaluate(_localVelocity.z) * deltaTime;
 
 			// Pitch
-			var targetPitch = _currentPitch + input.y * config.PitchSpeed * deltaTime;
+			var targetPitch = _currentPitch + steerInput.y * config.PitchSpeed * deltaTime;
 
 			// Pitch correction if no energy to fly up
 			if(targetPitch < 0 && _context.CharacterStats.Stamina.Value <= 0)
@@ -120,7 +121,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			_currentPitch = Mathf.Clamp(targetPitch, -85f, 85f);
 
 			// Roll
-			var targetRoll = -input.x * config.MaxRollAngle;
+			var targetRoll = -steerInput.x * config.MaxRollAngle;
 			_currentRoll = Mathf.Lerp(_currentRoll, targetRoll, deltaTime * config.RollSpeed);
 
 			// Apply rotation
@@ -144,20 +145,39 @@ namespace game.gameplay_core.characters.state_machine.states
 			_localVelocity.y += _localVelocity.z * _localVelocity.z * config.LiftForceCoeff * deltaTime;
 			_localVelocity.x = xCache; //disable sliding to the side with gravity TODO: try enable a little for realism
 
-			// Flaps
-			if(flap && Time.time > _lastFlapTime + config.FlapCooldown)
+			var flapInProgress = _player.AnimationConfig != _view.Animations.Glide;
+
+			if(_player.AnimationConfig.TryGetCustomEvent<AnimEventFlapWings>(_player.NormalizedAnimationTime, out var flapEvent))
 			{
-				if(_context.CharacterStats.Stamina.Value >= config.FlapStaminaCost)
+				var inputPitchUp = -flapEvent.PitchCurve.Evaluate(-steerInput.y);
+
+				var liftDirection = Quaternion.Euler(inputPitchUp, 0, 0) * Vector3.forward;
+				Debug.DrawLine(_transform.position, _transform.position + _transform.TransformVector(liftDirection * 10f), Color.violet, 2f, false);
+
+				if(liftDirection.z < 0)
 				{
-					_context.Logic.StaminaLogic.SpendStamina(config.FlapStaminaCost);
-					var flapDirection = Vector3.forward;
-					var inputPitchUp = Mathf.Clamp01(-input.y);
-					if(inputPitchUp > 0)
-					{
-						flapDirection = Vector3.RotateTowards(flapDirection, Vector3.up, inputPitchUp * 70 * Mathf.Deg2Rad, 0);
-					}
-					_localVelocity += flapDirection * config.FlapForce;
-					_lastFlapTime = Time.time;
+					var angle = Vector3.Angle(liftDirection, Vector3.up);
+					liftDirection = Quaternion.Euler(-angle, 0, 0) * liftDirection;
+					Debug.DrawLine(_transform.position, _transform.position + _transform.TransformVector(liftDirection * 10f), Color.blue, 2f, false);
+				}
+
+				_localVelocity += liftDirection.Scaled(flapEvent.LiftForceAxesMultipliers) * (deltaTime * flapEvent.GetLiftForce(_player.NormalizedAnimationTime));
+			}
+
+			// Flaps
+			if(flapInput && Time.time > _lastFlapTime + config.FlapCooldown)
+			{
+				_lastFlapTime = Time.time;
+
+				if(flapInProgress)
+				{
+					//_player.NextAnimation = _view.Animations.Flap;
+				}
+				else if(_context.Logic.FlyingLogic.TryFlap())
+				{
+					Debug.LogError(_context.Logic.FlyingLogic.FlapsLeftCount);
+					_player.Play(_view.Animations.Flap);
+					_player.NextAnimation = _view.Animations.Glide;
 				}
 			}
 
@@ -183,34 +203,34 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			if(flap)
 			{
+				_currentYaw = _transform.eulerAngles.y;
 				_subState = SubState.Fly;
-				_currentAnimation = _view.Animations.TakeOff;
-				_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+				_player.Play(_view.Animations.TakeOff);
+				_player.NextAnimation = _view.Animations.Glide;
 				return;
 			}
-			 
+
 			//walk
 			if(_context.InputData.Command == CharacterCommand.Walk)
 			{
-				if(_currentAnimation != _view.Animations.Walk)
+				if(_player.AnimationConfig != _view.Animations.Walk)
 				{
-					_currentAnimation = _view.Animations.Walk;
-					_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+					_player.Play(_view.Animations.Walk);
 				}
-				
-				_context.Logic.MovementLogic.ApplyInputMovement(_context.InputData.DirectionWorld, 2f, deltaTime);
+
+				_currentYaw += input.x * _context.Config.Flying.LandedYawSpeed * deltaTime;
+				_currentPitch = 0;
+				_currentRoll = 0;
+
+				_context.Logic.MovementLogic.ApplyInputMovement(Quaternion.Euler(0, _currentYaw, 0) * Vector3.forward, 2f, deltaTime);
 			}
 			else
 			{
-				if(_currentAnimation != _view.Animations.Sit)
+				if(_player.AnimationConfig != _view.Animations.Sit)
 				{
-					_currentAnimation = _view.Animations.Sit;
-					_context.Views.Animator.Play(_currentAnimation.Clip, 0, FadeMode.FromStart);
+					_player.Play(_view.Animations.Sit);
 				}
 			}
-			
-						
-
 		}
 
 		private enum SubState

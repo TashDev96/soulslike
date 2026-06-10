@@ -13,6 +13,7 @@ namespace game.gameplay_core.inventory.item_configs
 	[Serializable]
 	public class ItemAnimationConfig
 	{
+		[field: SerializeField]
 		public bool DisableRightHandWeapon { get; private set; }
 
 		[field: SerializeField]

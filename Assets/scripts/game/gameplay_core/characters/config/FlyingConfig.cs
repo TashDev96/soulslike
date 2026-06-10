@@ -16,14 +16,15 @@ namespace game.gameplay_core.characters.config
 		public float PitchSpeed { get; private set; } = 40f;
 		[field: SerializeField]
 		public AnimationCurve YawSpeedByForwardSpeed { get; private set; }
+		[field:SerializeField]
+		public float LandedYawSpeed { get; private set; } = 100f;
+		
 		[field: SerializeField]
 		public float MaxRollAngle { get; private set; } = 45f;
 		[field: SerializeField]
 		public float RollSpeed { get; private set; } = 5f;
 		[field: SerializeField]
 		public float AltitudeSpeedGain { get; private set; } = 2f;
-		[field: SerializeField]
-		public float FlapForce { get; private set; } = 5f;
 		[field: SerializeField]
 		public float FlapStaminaCost { get; private set; } = 10f;
 		[field: SerializeField]

@@ -35,7 +35,7 @@ namespace game.gameplay_core.characters.logic
 
 		public void Update(float deltaTime)
 		{
-			if(!LockOnTarget.HasValue || _context.IsDead.Value)
+			if(!LockOnTarget.HasValue || _context.IsDead.Value || _context.FlyingMode.Value)
 			{
 				return;
 			}

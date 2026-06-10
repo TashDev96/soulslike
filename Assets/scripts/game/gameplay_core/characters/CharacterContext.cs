@@ -68,6 +68,7 @@ namespace game.gameplay_core.characters
 		public DeathLogic DeathLogic;
 		public CharacterInventoryLogic InventoryLogic;
 		public InteractionLogic InteractionLogic;
+		public FlyingLogic FlyingLogic;
 	}
 
 	public struct Views

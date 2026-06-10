@@ -19,11 +19,12 @@ namespace game.gameplay_core.characters.config.animation
 		[FoldoutGroup("Clip Settings")]
 		public float Speed = 1;
 
-		//I don't want single polymorphic list, for optimization and code simplicity purpose, even if there is some boilerplate, it's ok
 		public List<AnimationFlagEvent> FlagEvents = new();
 		public List<AnimationEventHit> HitEvents = new();
 		public List<AnimationEventSound> SoundEvents = new();
 		public List<AnimationEventCameraShake> CameraShakeEvents = new();
+		[SerializeReference]
+		public List<AnimationEventBase> CustomEvents = new();
 		public List<string> LayerNames = new() { "Default" };
 
 		public int MaxFrame => (Duration * EditorPrecisionFps).RoundToInt();
@@ -172,6 +173,52 @@ namespace game.gameplay_core.characters.config.animation
 				}
 			}
 			return null;
+		}
+
+		public T GetCustomEvent<T>() where T : AnimationEventBase
+		{
+			foreach(var customEvent in CustomEvents)
+			{
+				if(customEvent is T typedEvent)
+				{
+					return typedEvent;
+				}
+			}
+			return null;
+		}
+
+		public bool TryGetCustomEvent<T>(float timeNormalized, out T result) where T : AnimationEventBase
+		{
+			foreach(var customEvent in CustomEvents)
+			{
+				if(customEvent is T typedEvent)
+				{
+					if(timeNormalized >= typedEvent.StartTimeNormalized && timeNormalized <= typedEvent.EndTimeNormalized)
+					{
+						result = typedEvent;
+						return true;
+					}
+				}
+			}
+			result = null;
+			return false;
+		}
+
+		public bool CheckCustomEventBegin<T>(float startTime, float endTime, out T evt) where T : AnimationEventBase
+		{
+			foreach(var customEvent in CustomEvents)
+			{
+				if(customEvent is T typedEvent)
+				{
+					if(typedEvent.StartTimeNormalized >= startTime && typedEvent.StartTimeNormalized <= endTime)
+					{
+						evt = typedEvent;
+						return true;
+					}
+				}
+			}
+			evt = null;
+			return false;
 		}
 	}
 }

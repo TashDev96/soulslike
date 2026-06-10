@@ -16,8 +16,9 @@ namespace game.gameplay_core.characters.state_machine
 		public AnimationConfig AnimationConfig { get; private set; }
 
 		public float Time { get; private set; }
-		public float Duration => AnimationConfig.Duration;
-		protected float NormalizedAnimationTime => Time % Duration / Duration;
+		public float Duration { get; private set; }
+		public float NormalizedAnimationTime => Time % Duration / Duration;
+		public AnimationConfig NextAnimation { get; set; }
 
 		public AnimationConfigPlayer(CharacterContext context)
 		{
@@ -28,12 +29,13 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			AnimationConfig = config;
 			Time = 0;
+			Duration = Mathf.Max(config.Duration, 0.1f);
 			return _context.Views.Animator.Play(config.Clip, 0.1f, FadeMode.FromStart);
 		}
 
 		public void Update(float deltaTime)
 		{
-			if(AnimationConfig.Duration == 0)
+			if(Duration == 0)
 			{
 				throw new Exception($"duration not set for {GetType().Name} of {_context.SelfLink.transform.GetFullPathInScene()}");
 			}
@@ -63,8 +65,14 @@ namespace game.gameplay_core.characters.state_machine
 					LocationStaticContext.Instance.CameraController.Shake(duration, strength, vertMultiplier, horMultiplier);
 				}
 			}
+
+			if(Time >= Duration && NextAnimation != null)
+			{
+				Play(NextAnimation);
+				NextAnimation = null;
+			}
 		}
-		
+
 		public bool CheckTiming(Vector2 timing)
 		{
 			return timing.Contains(NormalizedAnimationTime);

@@ -152,7 +152,8 @@ namespace game.gameplay_core.characters
 					StatsLogic = new CharacterStatsLogic(),
 					DeathLogic = new DeathLogic(),
 					InventoryLogic = new CharacterInventoryLogic(),
-					InteractionLogic = new InteractionLogic()
+					InteractionLogic = new InteractionLogic(),
+					FlyingLogic = new FlyingLogic(),
 				}
 			};
 
@@ -166,6 +167,7 @@ namespace game.gameplay_core.characters
 			_context.Logic.StaminaLogic.Initialize(_context);
 			_context.Logic.PoiseLogic.SetContext(_context);
 			_context.Logic.InteractionLogic.SetContext(_context);
+			_context.Logic.FlyingLogic.SetContext(_context);
 
 			InitializeInventory();
 
@@ -478,9 +480,11 @@ namespace game.gameplay_core.characters
 				_context.Logic.HealthLogic.Update(deltaTimeStep);
 
 				_context.Logic.FallDamageLogic.CustomUpdate(deltaTimeStep);
+				_context.Logic.FlyingLogic.CustomUpdate(deltaTimeStep);
 
 				calculateInputLogic = false;
 			}
+			
 
 #if UNITY_EDITOR
 			_debugDrawer.CustomUpdate(deltaTime);

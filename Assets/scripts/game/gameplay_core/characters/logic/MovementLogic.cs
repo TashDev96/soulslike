@@ -161,7 +161,7 @@ namespace game.gameplay_core.characters.logic
 			}
 		}
 
-		public void ApplyInputMovement(Vector3 inputDirection, float speed, float deltaTime)
+		public void ApplyInputMovement(Vector3 directionWorld, float speed, float deltaTime)
 		{
 			if(_rotationAndMovementLocked || LockedInAnimationSlot)
 			{
@@ -171,13 +171,13 @@ namespace game.gameplay_core.characters.logic
 
 			if(!hasLockOnTarget)
 			{
-				RotateCharacter(inputDirection, deltaTime);
+				RotateCharacter(directionWorld, deltaTime);
 			}
 			else
 			{
-				if(inputDirection.sqrMagnitude > 0.001f)
+				if(directionWorld.sqrMagnitude > 0.001f)
 				{
-					var targetForward = inputDirection.normalized;
+					var targetForward = directionWorld.normalized;
 					targetForward.y = 0;
 					targetForward = targetForward.normalized;
 					var degreesPerSecond = 180f / _context.CharacterStats.Locomotion.HalfTurnDurationSeconds;
@@ -188,8 +188,8 @@ namespace game.gameplay_core.characters.logic
 				}
 			}
 
-			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_virtualForward, inputDirection));
-			var velocity = inputDirection * (directionMultiplier * speed);
+			var directionMultiplier = Mathf.Clamp01(Vector3.Dot(_virtualForward, directionWorld));
+			var velocity = directionWorld * (directionMultiplier * speed);
 			ApplyLocomotion(velocity * deltaTime, deltaTime);
 		}
 

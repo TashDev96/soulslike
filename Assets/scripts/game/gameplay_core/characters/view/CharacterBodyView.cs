@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using game.enums;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,7 +9,6 @@ namespace game.gameplay_core.characters.view
 {
 	public class CharacterBodyView : MonoBehaviour
 	{
-		 
 		[SerializeField]
 		private Collider _aliveBodyCollider;
 		[SerializeField]
@@ -17,20 +17,24 @@ namespace game.gameplay_core.characters.view
 		[SerializeField]
 		private BlinkView _blinkView;
 
-
 		private IDisposable _damageSub;
 		private Coroutine _deadStateCoroutine;
 		private float _defaultDeadRadius;
-		
+		private CharacterContext _context;
+
 		[field: SerializeField]
 		public CharacterFlyingBodyView FlyingBodyView { get; private set; }
 
-
 		public void Initialize(CharacterContext context)
 		{
+			_context = context;
 			_damageSub = context.Events.ApplyDamage.Subscribe(HandleDamageApplied);
 			_blinkView.Initialize();
-			FlyingBodyView?.Initialize(context);
+			if(FlyingBodyView != null)
+			{
+				FlyingBodyView.Initialize(context);
+				SetFlyingMode(_context.FlyingMode.Value);
+			}
 		}
 
 		private void Awake()
@@ -66,11 +70,15 @@ namespace game.gameplay_core.characters.view
 		{
 			return transform.position + Vector3.up * 3f;
 		}
-		
+
 		public void SetFlyingMode(bool flying)
 		{
 			gameObject.SetActive(!flying);
 			FlyingBodyView.gameObject.SetActive(flying);
+			if(_context.Views.EquippedWeaponViews.TryGetValue(EquipmentSlotType.RightHand, out var rightView))
+			{
+				rightView.gameObject.SetActive(!flying);
+			}
 		}
 
 		private IEnumerator ActivateDeadState()
