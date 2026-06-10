@@ -63,6 +63,9 @@ MonoBehaviour:
   _debugDrawer: {fileID: 173639753708611914}
   _config: {fileID: 11400000, guid: d81bc20484e9346fb88bee6e99486bc5, type: 2}
   _uiPivot: {fileID: 5318633997349167403}
+  _debugVars:
+    DisableFall: 0
+    <Single>k__BackingField: 0
   <UniqueId>k__BackingField: Player
   <IsBoss>k__BackingField: 0
   <PlungeAttackPivots>k__BackingField: []
@@ -75,6 +78,9 @@ MonoBehaviour:
     - Key: 3
       Value: {fileID: 8792662738043832350}
     _keyCollision: 0
+  _debugTeleportTo:
+    Position: {x: 0, y: 0, z: 0}
+    EulerAngles: {x: 0, y: 0, z: 0}
 --- !u!114 &173639753708611914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +156,7 @@ MonoBehaviour:
   _capsule: {fileID: 1275262306807060881}
   _drawDebug: 0
   SkinWidth: 0.05
+  ImmediateGroundSlopeLimit: 20
   SlopeLimit: 45
   StepOffset: 0.55
   MinStepOffset: 0.01
@@ -385,12 +392,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c7b0edc9084d8c9466e5df5bd00ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameAssembly::game.gameplay_core.characters.view.CharacterBodyView
-  _bodyMesh: {fileID: 8249723804972747926}
   _aliveBodyCollider: {fileID: 5913837822015771739}
   _deadBodyCollider: {fileID: 444830256696912245}
-  _blinkColor: {r: 1, g: 1, b: 1, a: 1}
-  _blinkDuration: 0.3
-  _blinkCount: 3
+  _blinkView:
+    _blinkColor: {r: 1, g: 1, b: 1, a: 1}
+    _blinkCount: 3
+    _blinkDuration: 0.3
+    _blinkMeshes:
+    - {fileID: 8249723804972747926}
+  <FlyingBodyView>k__BackingField: {fileID: 0}
 --- !u!1 &2788963343709239770
 GameObject:
   m_ObjectHideFlags: 0
