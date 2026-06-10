@@ -3,10 +3,12 @@ using Animancer;
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
+using dream_lib.src.utils.drawers;
 using dream_lib.src.utils.serialization;
 using game.enums;
 using game.gameplay_core.characters.ai;
 using game.gameplay_core.characters.ai.sensors;
+using game.gameplay_core.characters.ai.world_reflection;
 using game.gameplay_core.characters.bosses;
 using game.gameplay_core.characters.config;
 using game.gameplay_core.characters.logic;
@@ -123,7 +125,8 @@ namespace game.gameplay_core.characters
 					DeflectCurrentAttack = new ReactiveCommand(),
 					OnParryTriggered = new ReactiveCommand<CharacterDomain>(),
 					TriggerStagger = new ReactiveCommand<StaggerReason>(),
-					TriggerPlungeAttack = new ReactiveCommand<CharacterDomain, PlungeAttackTargetView>()
+					TriggerPlungeAttack = new ReactiveCommand<CharacterDomain, PlungeAttackTargetView>(),
+					EmitNoise = new ReactiveCommand<float>(),
 				},
 
 				Views =
@@ -195,6 +198,8 @@ namespace game.gameplay_core.characters
 				_context.Views.ParryReceiver.Initialize(_context);
 			}
 
+			_context.Events.EmitNoise.OnExecute += EmitNoise;
+			
 			_sensorsDomain = GetComponent<CharacterSensorsDomain>();
 			if(_sensorsDomain != null)
 			{
@@ -425,6 +430,18 @@ namespace game.gameplay_core.characters
 			{
 				SetWeapon(address.SlotType, item);
 			}
+		}
+		
+		private void EmitNoise(float normalHearDistance)
+		{
+			DebugDrawUtils.DrawWireCircle(_context.Transform.Position + Vector3.up * 0.1f, normalHearDistance, Vector3.up, Color.darkOrange, 2f);
+
+			LocationStaticContext.Instance.WorldInfo.PropagateSoundInfo.Execute(new SoundInfo
+			{
+				Character = _context.SelfLink,
+				NormalHearDistance = normalHearDistance,
+				Position = _context.Transform.Position
+			});
 		}
 
 		private void CustomUpdate(float deltaTime)

@@ -34,7 +34,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		public AttackConfig CurrentAttackConfig => _currentAttackConfig;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public AttackState(CharacterContext context) : base(context)
 		{
@@ -262,10 +261,8 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			_weaponView = _context.Views.EquippedWeaponViews[EquipmentSlotType.RightHand];
 
 			GetCurrentAttackConfig(out _currentAttackConfig, out _currentAttackIndex);
-
-			AnimationConfig = _currentAttackConfig.AnimationConfig;
-
-			Duration = _currentAttackConfig.Duration;
+			
+			CurrentAttackAnimation = Play(_currentAttackConfig.AnimationConfig);
 
 			_stage = AttackStage.Windup;
 			_staminaSpent = false;
@@ -280,8 +277,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				});
 			}
 
-			CurrentAttackAnimation = _context.Views.Animator.Play(_currentAttackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
-
+			
 			if(_attackType.IsRollAttack())
 			{
 				var startTime = _currentAttackConfig.AnimationConfig.GetMarkerTime(AnimationFlags.TimingEnterFromRoll) ?? 0;

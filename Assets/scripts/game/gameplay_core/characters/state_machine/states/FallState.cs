@@ -22,7 +22,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		private HitData _hitData;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; } = float.MaxValue;
 
 		public bool ShouldRollOnLanding => HasValidRollInput;
 
@@ -174,11 +173,11 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			if(_context.Config.FallAnimation != null)
 			{
-				_context.Views.Animator.Play(_context.Config.FallAnimation, 0.2f, FadeMode.FromStart);
+				PlayLegacy(_context.Config.FallAnimation);
 			}
 			else
 			{
-				_context.Views.Animator.Play(_context.Config.IdleAnimation, 0.2f, FadeMode.FromStart);
+				PlayLegacy(_context.Config.IdleAnimation);
 			}
 		}
 	}

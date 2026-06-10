@@ -20,7 +20,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		private Vector3 _localMovementDirection;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public bool CanSwitchToAttack => _context.Config.Roll.AnimationConfig.HasFlag(AnimationFlags.TimingExitToAttack, NormalizedTime);
 
@@ -36,7 +35,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			IsComplete = false;
 
 			_config = _context.Config.Roll;
-			AnimationConfig = _config.AnimationConfig;
 
 			_staminaSpent = false;
 
@@ -77,11 +75,10 @@ namespace game.gameplay_core.characters.state_machine.states
 			}
 
 			Time = 0;
-			Duration = animation.length;
 
 			ResetForwardMovement();
 
-			_context.Views.Animator.Play(animation, 0.1f, FadeMode.FromStart);
+			Play(_config.AnimationConfig);
 		}
 
 		public override void OnExit()

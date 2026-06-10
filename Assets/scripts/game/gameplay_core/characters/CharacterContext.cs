@@ -91,5 +91,6 @@ namespace game.gameplay_core.characters
 		public ReactiveCommand<CharacterStateBase, CharacterStateBase> OnStateChanged;
 		public ReactiveCommand<StaggerReason> TriggerStagger;
 		public ReactiveCommand<CharacterDomain, PlungeAttackTargetView> TriggerPlungeAttack;
+		public ReactiveCommand<float> EmitNoise;
 	}
 }

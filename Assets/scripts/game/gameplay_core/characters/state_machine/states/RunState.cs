@@ -32,7 +32,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnExit()
 		{
 			_context.Logic.StaminaLogic.SetStaminaRegenLock(StaminaRegenLockKey, false);
-			EmitNoise(NoiseDistance);
+			_context.Events.EmitNoise.Execute(NoiseDistance);
 			base.OnExit();
 		}
 
@@ -66,7 +66,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_noiseTimer > NoiseEmitPeriod)
 			{
 				_noiseTimer = 0;
-				EmitNoise(NoiseDistance);
+				_context.Events.EmitNoise.Execute(NoiseDistance);
 			}
 		}
 

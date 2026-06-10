@@ -12,7 +12,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		private readonly ItemAnimationConfig _animationConfig;
 		private AnimancerState _animation;
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public ConsumeState(CharacterContext context, IConsumableItemLogic itemLogic) : base(context)
 		{
@@ -25,11 +24,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 
-			//TODO go to unified animation config
-			//AnimationConfig = _animationConfig; 
-
-			_animation = _context.Views.Animator.Play(_animationConfig.Animation, 0.1f, FadeMode.FromStart);
-			Duration = _animationConfig.Animation.Length;
+			_animation = PlayLegacy(_animationConfig.Animation);
 			if(_animationConfig.DisableRightHandWeapon && _context.Views.EquippedWeaponViews.TryGetValue(EquipmentSlotType.RightHand, out var rightView))
 			{
 				rightView.gameObject.SetActive(false);

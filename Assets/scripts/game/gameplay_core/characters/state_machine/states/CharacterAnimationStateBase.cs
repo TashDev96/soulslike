@@ -1,7 +1,7 @@
 using System;
+using Animancer;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.config.animation;
-using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states
@@ -10,16 +10,21 @@ namespace game.gameplay_core.characters.state_machine.states
 	{
 		private const string RotationLockKey = "by_animation";
 
-		protected AnimationConfig AnimationConfig;
+		protected AnimationConfig AnimationConfig { get; private set; }
 		private float _forwardMovementDone;
+
+		private bool _legacyMode;
+
+		private readonly AnimationConfigPlayer _player;
 		public abstract float Time { get; protected set; }
 		protected float NormalizedTime => Time / Duration;
 		protected float NormalizedAnimationTime => Time % Duration / Duration;
 		protected float TimeLeft => Duration - Time;
-		protected abstract float Duration { get; set; }
+		protected float Duration { get; private set; }
 
 		protected CharacterAnimationStateBase(CharacterContext context) : base(context)
 		{
+			_player = new AnimationConfigPlayer(context);
 		}
 
 		public override void OnEnter()
@@ -40,37 +45,49 @@ namespace game.gameplay_core.characters.state_machine.states
 			{
 				throw new Exception($"duration not set for {GetType().Name} of {_context.SelfLink.transform.GetFullPathInScene()}");
 			}
-			var previousNormalizedTime = NormalizedAnimationTime;
-			Time += deltaTime;
-			if(AnimationConfig != null)
-			{
-				var rotationDisabled = AnimationConfig.HasFlag(AnimationFlags.RotationLocked, NormalizedAnimationTime);
-				if(rotationDisabled)
-				{
-					if(AnimationConfig.CheckFlagBegin(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
-					{
-						_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, true);
-					}
-				}
-				else if(AnimationConfig.CheckFlagEnded(AnimationFlags.RotationLocked, previousNormalizedTime, NormalizedAnimationTime))
-				{
-					_context.Logic.MovementLogic.SetRotationLockedBy(RotationLockKey, false);
-				}
 
-				if(AnimationConfig.CheckSoundBegin(previousNormalizedTime, NormalizedAnimationTime, out var soundName, out var hearDistance))
-				{
-					EmitNoise(hearDistance);
-				}
-				if(AnimationConfig.CheckCameraShakeBegin(previousNormalizedTime, NormalizedAnimationTime, out var duration, out var strength, out var vertMultiplier, out var horMultiplier))
-				{
-					LocationStaticContext.Instance.CameraController.Shake(duration, strength, vertMultiplier, horMultiplier);
-				}
+			if(_legacyMode)
+			{
+				Time += deltaTime;
+				return;
 			}
+			_player.Update(deltaTime);
+			Time = _player.Time;
 		}
 
 		public override string GetDebugString()
 		{
 			return $"{Time.RoundFormat()}/{Duration.RoundFormat()}";
+		}
+
+		protected AnimancerState Play(AnimationConfig config)
+		{
+			AnimationConfig = config;
+			Duration = config.Duration;
+			_legacyMode = false;
+			return _player.Play(config);
+		}
+
+		protected AnimancerState PlayLegacy(ClipTransition transition)
+		{
+			Duration = transition.Length;
+			if(Duration == 0)
+			{
+				Duration = 0.1f;
+			}
+			_legacyMode = true;
+			return _context.Views.Animator.Play(transition, 0.1f, FadeMode.FromStart);
+		}
+		
+		protected AnimancerState PlayLegacy(AnimationClip clip)
+		{
+			Duration = clip.length;
+			if(Duration == 0)
+			{
+				Duration = 0.1f;
+			}
+			_legacyMode = true;
+			return _context.Views.Animator.Play(clip, 0.1f, FadeMode.FromStart);
 		}
 
 		protected void RecalculateFlagsImmediate()
@@ -98,7 +115,7 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		protected bool CheckTiming(Vector2 timing)
 		{
-			return timing.Contains(NormalizedAnimationTime);
+			return _player.CheckTiming(timing);
 		}
 	}
 }

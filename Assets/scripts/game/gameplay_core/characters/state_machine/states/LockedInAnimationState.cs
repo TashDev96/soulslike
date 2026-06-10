@@ -9,14 +9,14 @@ namespace game.gameplay_core.characters.state_machine.states
 		private AnimancerState _animation;
 		private readonly bool _canInterruptByStagger;
 		private DamageReceiver[] _damageReceivers;
+		private readonly AnimationConfig _animConfig;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 		public override bool CanInterruptByStagger => _canInterruptByStagger;
 
-		public LockedInAnimationState(CharacterContext context, AnimationConfig animationClip, bool canInterruptByStagger = false) : base(context)
+		public LockedInAnimationState(CharacterContext context, AnimationConfig animation, bool canInterruptByStagger = false) : base(context)
 		{
-			AnimationConfig = animationClip;
+			_animConfig = animation;
 			_canInterruptByStagger = canInterruptByStagger;
 			IsReadyToRememberNextCommand = false;
 		}
@@ -25,9 +25,8 @@ namespace game.gameplay_core.characters.state_machine.states
 		{
 			base.OnEnter();
 			_context.Logic.MovementLogic.ResetVelocity();
-			_animation = _context.Views.Animator.Play(AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 			_context.Logic.MovementLogic.SetRotationAndMovementLocked(true);
-			Duration = AnimationConfig.Duration;
+			_animation = Play(_animConfig);
 		}
 
 		public override void OnExit()

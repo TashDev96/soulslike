@@ -14,7 +14,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		private float _waitAfterHitTimer;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public DeflectedAttackState(CharacterContext context, AnimancerState animationState, AttackConfig attackConfig) : base(context)
 		{

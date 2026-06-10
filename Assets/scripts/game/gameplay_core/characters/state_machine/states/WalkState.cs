@@ -10,7 +10,6 @@ namespace game.gameplay_core.characters.state_machine.states
 
 		public override float Time { get; protected set; }
 
-		protected override float Duration { get; set; }
 
 		public WalkState(CharacterContext context) : base(context)
 		{
@@ -20,8 +19,7 @@ namespace game.gameplay_core.characters.state_machine.states
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			AnimationConfig = _context.Config.Locomotion.WalkAnimation;
-			Duration = AnimationConfig.Duration;
+			Play(_context.Config.Locomotion.WalkAnimation);
 			_noiseTimer = 0;
 			_context.Views.Animator.Play(AnimationConfig.Clip, 0.3f);
 		}
@@ -53,14 +51,14 @@ namespace game.gameplay_core.characters.state_machine.states
 			if(_noiseTimer > NoiseEmitPeriod)
 			{
 				_noiseTimer = 0;
-				EmitNoise(NoiseDistance);
+				_context.Events.EmitNoise.Execute(NoiseDistance);
 			}
 		}
 
 		public override void OnExit()
 		{
 			base.OnExit();
-			EmitNoise(NoiseDistance);
+			_context.Events.EmitNoise.Execute(NoiseDistance);
 		}
 	}
 }

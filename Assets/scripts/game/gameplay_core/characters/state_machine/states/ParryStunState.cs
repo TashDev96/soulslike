@@ -9,7 +9,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		private AnimancerState _animation;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public override bool CanInterruptByStagger => false;
 		public bool CanReceiveRiposte { get; private set; }
@@ -61,8 +60,7 @@ namespace game.gameplay_core.characters.state_machine.states
 			var animation = _context.Config.ParryStunAnimation;
 			if(animation != null)
 			{
-				_animation = _context.Views.Animator.Play(animation, 0.1f, FadeMode.FromStart);
-				Duration = _animation.Length;
+				_animation = PlayLegacy(animation);
 			}
 		}
 	}

@@ -60,16 +60,6 @@ namespace game.gameplay_core.characters.state_machine.states
 			return 0;
 		}
 
-		protected virtual void EmitNoise(float normalHearDistance)
-		{
-			DebugDrawUtils.DrawWireCircle(_context.Transform.Position + Vector3.up * 0.1f, normalHearDistance, Vector3.up, Color.darkOrange, 2f);
-
-			LocationStaticContext.Instance.WorldInfo.PropagateSoundInfo.Execute(new SoundInfo
-			{
-				Character = _context.SelfLink,
-				NormalHearDistance = normalHearDistance,
-				Position = _context.Transform.Position
-			});
-		}
+		
 	}
 }

@@ -14,7 +14,6 @@ namespace game.gameplay_core.characters.state_machine.states
 		private WeaponItemLogic _parryWeaponLogic;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		public bool IsParrySuccessful { get; private set; }
 
@@ -39,7 +38,6 @@ namespace game.gameplay_core.characters.state_machine.states
 
 			if(_parryConfig != null && _parryWeaponView.Config.CanParry)
 			{
-				Duration = _parryConfig.Duration;
 
 				_hitsData.Clear();
 				foreach(var hitEvent in _parryConfig.AnimationConfig.GetHitEvents())
@@ -50,9 +48,8 @@ namespace game.gameplay_core.characters.state_machine.states
 					});
 				}
 
-				_context.Views.Animator.Play(_parryConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
+				Play(_parryConfig.AnimationConfig);
 				_context.Logic.StaminaLogic.SpendStamina(_parryConfig.StaminaCost);
-				AnimationConfig = _parryConfig.AnimationConfig;
 			}
 			else
 			{

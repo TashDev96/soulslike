@@ -21,7 +21,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		private AttackConfig _attackConfig;
 
 		public override float Time { get; protected set; }
-		protected override float Duration { get; set; }
 
 		protected abstract float LogicDamageAdd { get; }
 		protected abstract float LogicDamageMultiply { get; }
@@ -34,10 +33,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 		public override void OnEnter()
 		{
 			base.OnEnter();
-			Duration = _attackConfig.Duration;
-
-			AnimationConfig = _attackConfig.AnimationConfig;
-
+			Play(_attackConfig.AnimationConfig);
 			_staminaSpent = false;
 			_hitsData.Clear();
 			foreach(var hitEvent in _attackConfig.AnimationConfig.GetHitEvents())
@@ -47,8 +43,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack.critical
 					Config = hitEvent
 				});
 			}
-
-			_context.Views.Animator.Play(_attackConfig.AnimationConfig.Clip, 0.1f, FadeMode.FromStart);
 
 			var camera = LocationStaticContext.Instance.CameraController;
 			var lockedFlag = AnimationConfig.GetFlag(AnimationFlags.StateLocked);
