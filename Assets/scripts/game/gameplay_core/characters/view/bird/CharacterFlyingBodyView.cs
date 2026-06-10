@@ -4,7 +4,7 @@ using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.view
+namespace game.gameplay_core.characters.view.bird
 {
 	public class CharacterFlyingBodyView : MonoBehaviour
 	{

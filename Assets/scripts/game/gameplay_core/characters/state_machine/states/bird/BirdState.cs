@@ -2,10 +2,10 @@ using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
-using game.gameplay_core.characters.view;
+using game.gameplay_core.characters.view.bird;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.state_machine.states
+namespace game.gameplay_core.characters.state_machine.states.bird
 {
 	public class BirdState : CharacterStateBase
 	{

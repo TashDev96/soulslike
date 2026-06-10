@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using game.enums;
+using game.gameplay_core.characters.view.bird;
 using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEngine;

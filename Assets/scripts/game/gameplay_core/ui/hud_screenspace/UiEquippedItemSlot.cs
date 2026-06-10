@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace game.ui
+namespace game.gameplay_core.ui.hud_screenspace
 {
 	public class UiEquippedItemSlot : MonoBehaviour
 	{

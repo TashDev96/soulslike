@@ -8,6 +8,7 @@ using game.gameplay_core.characters.extensions;
 using game.gameplay_core.characters.state_machine.states;
 using game.gameplay_core.characters.state_machine.states.attack;
 using game.gameplay_core.characters.state_machine.states.attack.critical;
+using game.gameplay_core.characters.state_machine.states.bird;
 using game.gameplay_core.characters.state_machine.states.stagger;
 using game.gameplay_core.characters.view;
 using game.gameplay_core.location;

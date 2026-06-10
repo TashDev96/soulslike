@@ -6,7 +6,7 @@ using game.gameplay_core.location;
 using TMPro;
 using UnityEngine;
 
-namespace game.gameplay_core.ui
+namespace game.gameplay_core.ui.hud_screenspace
 {
 	public class BossHpBar : MonoBehaviour
 	{
