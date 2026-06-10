@@ -492,5 +492,11 @@ namespace game.gameplay_core.characters.logic
 
 			return false;
 		}
+
+		public void ResetFlags()
+		{
+			Flags = CollisionFlags.None;
+			_stepGravityDisableTimer = 0;
+		}
 	}
 }

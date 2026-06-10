@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using dream_lib.src.reactive;
+using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.extensions;
@@ -15,6 +17,7 @@ namespace game.gameplay_core.characters.state_machine
 {
 	public class CharacterStateMachine
 	{
+		public readonly List<Pair<string, string>> _debugHistory = new();
 		private readonly CharacterContext _context;
 
 		private readonly IdleState _idleState;
@@ -148,7 +151,8 @@ namespace game.gameplay_core.characters.state_machine
 		{
 			if(isFalling && !(_currentState.Value is FallState) && !_context.IsDead.Value)
 			{
-				if(!(_currentState.Value is AttackState) && !(_currentState.Value is RollState) && !(_currentState.Value is StaggerState))
+				var fallingBlocked = _currentState.Value is AttackState or RollState or StaggerState or BirdState;
+				if(!fallingBlocked)
 				{
 					_currentState.Value.OnInterrupt();
 					SetState(_fallState);
@@ -328,7 +332,14 @@ namespace game.gameplay_core.characters.state_machine
 			_transformCooldown = 3f;
 			if(_currentState.Value is BirdState)
 			{
-				SetState(_idleState);
+				if(_context.Logic.MovementLogic.IsGrounded)
+				{
+					SetState(_idleState);
+				}
+				else
+				{
+					SetState(_fallState);
+				}
 				_context.SelfLink.transform.up = Vector3.up;
 			}
 			else
@@ -401,6 +412,22 @@ namespace game.gameplay_core.characters.state_machine
 
 		private void SetState(CharacterStateBase newState)
 		{
+#if UNITY_EDITOR
+			if(_currentState.HasValue)
+			{
+				var str = StackTraceUtility.ExtractStackTrace();
+				_debugHistory.Add(new Pair<string, string>
+				{
+					Key = Time.frameCount + "  " + _currentState.Value.GetType().Name + "->" + newState.GetType().Name,
+					Value = str
+				});
+				if(_debugHistory.Count > 50)
+				{
+					_debugHistory.RemoveAt(0);
+				}
+			}
+#endif
+
 			_currentState.Value?.OnExit();
 			var oldState = _currentState.Value;
 
@@ -552,7 +579,7 @@ namespace game.gameplay_core.characters.state_machine
 			return attackerInsideCone && victimInsideCone;
 		}
 
-		private void DrawAngleDebugLines(Vector3 attackerPos, Vector3 attackerForward, Vector3 attackerToVictim, Vector3 victimPos, Vector3 victimForward, Vector3 victimToAttacker, float attackerMaxAngle, float victimMaxAngle, bool success, Color debugColor)
+		private static void DrawAngleDebugLines(Vector3 attackerPos, Vector3 attackerForward, Vector3 attackerToVictim, Vector3 victimPos, Vector3 victimForward, Vector3 victimToAttacker, float attackerMaxAngle, float victimMaxAngle, bool success, Color debugColor)
 		{
 			const float debugDistance = 2f;
 			const float debugDuration = 2f;

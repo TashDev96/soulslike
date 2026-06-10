@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using dream_lib.src.extensions;
 using dream_lib.src.utils.drawers;
@@ -12,6 +13,7 @@ using game.gameplay_core.damage_system;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace game.gameplay_core.characters.view
 {
@@ -101,6 +103,22 @@ namespace game.gameplay_core.characters.view
 		}
 
 #if UNITY_EDITOR
+
+		[Button]
+		private void LogStateChanges(bool withStackTraces)
+		{
+			if(withStackTraces)
+			{
+				foreach(var pair in _context.SelfLink.CharacterStateMachine._debugHistory)
+				{
+					Debug.LogError($"{pair.Key}:\n {pair.Value}");
+				}
+			}
+			else
+			{
+				Debug.LogError(_context.SelfLink.CharacterStateMachine._debugHistory.Select(p => p.Key).ToStringJoin("\n"));
+			}
+		}
 
 		[OnInspectorGUI]
 		private void DrawGui()

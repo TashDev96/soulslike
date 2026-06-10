@@ -271,7 +271,15 @@ namespace game.gameplay_core.characters.logic
 		{
 			_context.FlyingMode.Value = on;
 			_context.IsFalling.Value = !on;
-			_fallVelocity = fallVelocity;
+			if(!on)
+			{
+				_context.CharacterCollider.ResetFlags();
+				_isGrounded.Cached = false;
+				_isGrounded.Continuous = false;
+				_isGrounded.Previous = false;
+				_isGrounded.GroundingConfirmFrame = Time.frameCount+3;
+				_fallVelocity = fallVelocity;
+			}
 		}
 
 		public static Vector3 GetAirDampingForceFalling(Vector3 velocity, float height, float radius)
@@ -325,7 +333,7 @@ namespace game.gameplay_core.characters.logic
 			if(_context.CharacterCollider.IsSteppingUp)
 			{
 				_isGrounded.Continuous = true;
-				_isGrounded.Continuous = true;
+				_isGrounded.Cached = true;
 			}
 			else
 			{
