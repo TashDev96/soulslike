@@ -320,17 +320,15 @@ namespace game.gameplay_core.characters.state_machine
 
 		private bool TryTransformFlyingMode()
 		{
-			if(_transformCooldown > 0)
+			var needTransformation = _transformCooldown <= 0 && _context.InputData.Command == CharacterCommand.Transform;
+			needTransformation |= _currentState.Value is BirdState && _currentState.Value.IsComplete;
+
+			if(!needTransformation)
 			{
 				return false;
 			}
 
-			if(_context.InputData.Command != CharacterCommand.Transform)
-			{
-				return false;
-			}
-
-			_transformCooldown = 3f;
+			_transformCooldown = 0.618f;
 			if(_currentState.Value is BirdState)
 			{
 				if(_context.Logic.MovementLogic.IsGrounded)

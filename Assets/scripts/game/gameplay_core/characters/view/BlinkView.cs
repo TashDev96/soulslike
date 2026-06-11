@@ -72,6 +72,10 @@ namespace game.gameplay_core.characters.view
 				WritePropertyToMeshes();
 				await UniTask.Delay(TimeSpan.FromSeconds(halfBlinkDuration),
 					cancellationToken: _cancellationToken.Token);
+				if(_cancellationToken.IsCancellationRequested)
+				{
+					return;
+				}
 			}
 
 			_propertyBlock.SetFloat(BlinkIntensityId, 0f);

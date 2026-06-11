@@ -112,7 +112,8 @@ namespace game.gameplay_core.characters
 				Team = new ReactiveProperty<Team>(isPlayer ? Team.Player : Team.HostileNPC),
 				IsPlayer = new ReactiveProperty<bool>(isPlayer),
 				IsDead = new IsDead(),
-				FlyingMode = new ReactiveProperty<bool>(),
+				IsFlying = new ReactiveProperty<bool>(),
+				IsBirdMode = new ReactiveProperty<bool>(),
 				
 
 				EnteredTriggers = new ReactiveHashSet<Collider>(),

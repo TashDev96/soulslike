@@ -37,7 +37,8 @@ namespace game.gameplay_core.characters
 		public IReadOnlyReactiveProperty<string> CharacterId;
 		public IReadOnlyReactiveProperty<bool> IsPlayer;
 		public IsDead IsDead;
-		public ReactiveProperty<bool> FlyingMode;
+		public ReactiveProperty<bool> IsBirdMode;
+		public ReactiveProperty<bool> IsFlying;
 		public ReactiveCommand<StaggerReason> TriggerStagger;
 
 		public ReactiveProperty<bool> IsFalling;

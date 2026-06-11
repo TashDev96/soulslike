@@ -154,7 +154,7 @@ namespace game.gameplay_core.characters.player
 				return CharacterCommand.Interact;
 			}
 
-			if(_characterContext.FlyingMode.Value)
+			if(_characterContext.IsBirdMode.Value)
 			{
 				if(InputAdapter.GetButton(InputAxesNames.Flap))
 				{

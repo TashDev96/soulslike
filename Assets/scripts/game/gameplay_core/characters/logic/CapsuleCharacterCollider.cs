@@ -50,6 +50,7 @@ namespace game.gameplay_core.characters.logic
 		public bool IsGrounded => (Flags & CollisionFlags.Below) != 0 || IsSteppingUp;
 		public CollisionFlags Flags { get; private set; }
 		public Vector3 GroundNormal { get; private set; } = Vector3.up;
+		public Vector3 WallsNormal { get; private set; } = Vector3.zero;
 		public bool IsOnStableSlope { get; private set; }
 		public bool IsSteppingUp => _stepGravityDisableTimer > 0;
 
@@ -84,11 +85,12 @@ namespace game.gameplay_core.characters.logic
 		{
 		}
 
-		public void MoveFlying(Vector3 motion, out CollisionFlags collisionFlags)
+		public void MoveFlying(Vector3 motion)
 		{
 			var moveStartPosition = transform.position;
 
-			CalculateMovement(moveStartPosition, motion, true, out var normalResultPosition, out collisionFlags);
+			CalculateMovement(moveStartPosition, motion, true, out var normalResultPosition, out var collisionFlags);
+			Flags = collisionFlags;
 			transform.position = normalResultPosition;
 		}
 
@@ -347,6 +349,8 @@ namespace game.gameplay_core.characters.logic
 					var distance = Mathf.Max(hit.distance - SkinWidth, 0f);
 					resultPosition += remainingMovement.normalized * distance;
 					remainingMovement -= remainingMovement.normalized * distance;
+					
+					DebugDrawUtils.DrawWireCapsulePersistent(resultPosition, Height, Radius, Color.red, 0.1f);
 
 					flags |= CalculateHitFlags(hit);
 
@@ -391,10 +395,14 @@ namespace game.gameplay_core.characters.logic
 				}
 				else if(upDot < -0.707f)
 				{
+					Debug.DrawLine(hit.point, hit.point + hit.normal * 3f, Color.magenta, 5f);
+					
 					flags |= CollisionFlags.Above;
 				}
 				else
 				{
+					Debug.DrawLine(hit.point, hit.point + hit.normal * 3f, Color.blue, 5f);
+					WallsNormal = hit.normal;
 					flags |= CollisionFlags.Sides;
 				}
 

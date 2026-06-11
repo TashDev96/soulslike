@@ -32,6 +32,19 @@ namespace game.gameplay_core.characters.state_machine
 			Duration = Mathf.Max(config.Duration, 0.1f);
 			return _context.Views.Animator.Play(config.Clip, 0.1f, FadeMode.FromStart);
 		}
+		
+		public bool TryPlay(AnimationConfig config)
+		{
+			if(AnimationConfig == config)
+			{
+				return false;
+			}
+			AnimationConfig = config;
+			Time = 0;
+			Duration = Mathf.Max(config.Duration, 0.1f);
+			_context.Views.Animator.Play(config.Clip, 0.1f, FadeMode.FromStart);
+			return true;
+		}
 
 		public void Update(float deltaTime)
 		{

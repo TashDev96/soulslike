@@ -34,7 +34,7 @@ namespace game.gameplay_core.characters.view
 			if(FlyingBodyView != null)
 			{
 				FlyingBodyView.Initialize(context);
-				SetFlyingMode(_context.FlyingMode.Value);
+				SetBirdMode(_context.IsBirdMode.Value);
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace game.gameplay_core.characters.view
 			return transform.position + Vector3.up * 3f;
 		}
 
-		public void SetFlyingMode(bool flying)
+		public void SetBirdMode(bool flying)
 		{
 			gameObject.SetActive(!flying);
 			FlyingBodyView.gameObject.SetActive(flying);

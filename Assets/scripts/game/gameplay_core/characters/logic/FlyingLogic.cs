@@ -17,7 +17,12 @@ namespace game.gameplay_core.characters.logic
 
 		public void CustomUpdate(float deltaTime)
 		{
-			if(!_context.FlyingMode.Value && !_context.IsFalling.Value)
+			var restoreFlaps = !_context.IsBirdMode.Value && !_context.IsFalling.Value;
+			if(_context.IsBirdMode.Value)
+			{
+				restoreFlaps |= _context.Logic.MovementLogic.IsGrounded;
+			}
+			if(restoreFlaps)
 			{
 				FlapsLeftCount.Value = MaxFlapsCount.Value;
 			}

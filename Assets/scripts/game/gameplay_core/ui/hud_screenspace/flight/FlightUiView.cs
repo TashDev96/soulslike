@@ -25,15 +25,16 @@ namespace game.gameplay_core.ui.hud_screenspace.flight
 
 			transform.DestroyAllChildren();
 			
-			context.FlyingMode.OnChanged += HandleFlyingModeChanged;
+			context.IsBirdMode.OnChanged += HandleBirdModeChanged;
 
 			_logic.MaxFlapsCount.OnChanged += HandleMaxFlapsChanged;
 			_logic.FlapsLeftCount.OnChangedFromTo += HandleFlapsCountChanged;
 			
 			HandleMaxFlapsChanged(_logic.MaxFlapsCount.Value);
+			HandleBirdModeChanged(context.IsBirdMode.Value);
 		}
 
-		private void HandleFlyingModeChanged(bool isFlyingMode)
+		private void HandleBirdModeChanged(bool isFlyingMode)
 		{
 			_canvasGroup.DOKill();
 			if(isFlyingMode)

@@ -19,7 +19,7 @@ namespace game.gameplay_core.characters.logic
 		private const float LethalFallAltitude = 16.0f;
 		private const float StaggerThresholdAltitude = 5.0f;
 
-		private const int FallSpeedHistoryLength = 3;
+		private const int FallSpeedHistoryLength = 2;
 		private const float FallSpeedMultiplierFromPerfectRoll = 0.82f;
 		private const float FallSpeedMultiplierFromWater = 0.86f;
 

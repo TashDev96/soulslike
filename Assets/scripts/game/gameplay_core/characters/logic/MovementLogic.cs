@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using dream_lib.src.extensions;
 using dream_lib.src.utils.data_types;
 using dream_lib.src.utils.drawers;
 using game.gameplay_core.damage_system;
@@ -72,8 +71,8 @@ namespace game.gameplay_core.characters.logic
 				CalculateLastUpdateVelocity(deltaTime);
 				return;
 			}
-			
-			if(_context.FlyingMode.Value)
+
+			if(_context.IsFlying.Value)
 			{
 				UpdateFlyingMode(deltaTime);
 			}
@@ -251,6 +250,46 @@ namespace game.gameplay_core.characters.logic
 			_fallVelocity = value;
 		}
 
+		public void SetFlyingMode(bool on, Vector3 fallVelocity)
+		{
+			_context.IsFlying.Value = on;
+			_context.IsFalling.Value = !on;
+			if(!on)
+			{
+				_context.CharacterCollider.ResetFlags();
+				_isGrounded.Cached = false;
+				_isGrounded.Continuous = false;
+				_isGrounded.Previous = false;
+				_isGrounded.GroundingConfirmFrame = Time.frameCount + 3;
+				_fallVelocity = fallVelocity;
+			}
+		}
+
+		public static Vector3 GetAirDampingForceFalling(Vector3 velocity, float height, float radius)
+		{
+			return -velocity.normalized * (velocity.magnitude * AirDamping); // linear damping
+
+			//TODO: more realistic gravity and damping
+			//var result = Vector3.zero;
+
+			//var areaVertical = radius * radius * 3.14f;
+			//var cylinderWidth = radius * 2;
+			//var cylinderHeight = height - radius * 2;
+			//var areaHorizontal = cylinderHeight * cylinderWidth + radius * radius * 3.14f;
+
+			//var velocityH = velocity.x0z();
+			//result -= velocityH.normalized * (velocityH.sqrMagnitude * AirDamping2 * areaHorizontal);
+			//result.y -= velocity.y * velocity.y * AirDamping2 * areaVertical;
+
+			//return result;
+		}
+
+		public void MoveFlying(Vector3 flyingVector)
+		{
+			_context.CharacterCollider.MoveFlying(flyingVector);
+			CalculateGroundAfterMovement();
+		}
+
 		private void CalculateLastUpdateVelocity(float deltaTime)
 		{
 			LastUpdateVelocity = (CurrentPosition - _prevPos) / deltaTime - _compensateTeleportAmount / deltaTime;
@@ -266,40 +305,6 @@ namespace game.gameplay_core.characters.logic
 		private void UpdateFlyingMode(float deltaTime)
 		{
 		}
-
-		public void SetFlyingMode(bool on, Vector3 fallVelocity)
-		{
-			_context.FlyingMode.Value = on;
-			_context.IsFalling.Value = !on;
-			if(!on)
-			{
-				_context.CharacterCollider.ResetFlags();
-				_isGrounded.Cached = false;
-				_isGrounded.Continuous = false;
-				_isGrounded.Previous = false;
-				_isGrounded.GroundingConfirmFrame = Time.frameCount+3;
-				_fallVelocity = fallVelocity;
-			}
-		}
-
-		public static Vector3 GetAirDampingForceFalling(Vector3 velocity, float height, float radius)
-		{
-			return -velocity.normalized * (velocity.magnitude * AirDamping); // linear damping
-			//TODO: more realistic gravity and damping
-			//var result = Vector3.zero;
-			
-			//var areaVertical = radius * radius * 3.14f;
-			//var cylinderWidth = radius * 2;
-			//var cylinderHeight = height - radius * 2;
-			//var areaHorizontal = cylinderHeight * cylinderWidth + radius * radius * 3.14f;
-
-			//var velocityH = velocity.x0z();
-			//result -= velocityH.normalized * (velocityH.sqrMagnitude * AirDamping2 * areaHorizontal);
-			//result.y -= velocity.y * velocity.y * AirDamping2 * areaVertical;
-
-			//return result;
-		}
- 
 
 		private void MoveWithAcceleration(Vector3 vector, float deltaTime)
 		{
@@ -396,7 +401,7 @@ namespace game.gameplay_core.characters.logic
 				{
 					_slidingVelocity.y = 0;
 					_slidingVelocity = Vector3.Lerp(_slidingVelocity, Vector3.zero, deltaTime * SlidingStopDamping);
-				_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
+					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
 					_slidingVelocity = Vector3.MoveTowards(_slidingVelocity, Vector3.zero, deltaTime);
 					if(_slidingVelocity.sqrMagnitude < 0.001f)
 					{
@@ -429,6 +434,11 @@ namespace game.gameplay_core.characters.logic
 				_compensateTeleportAmount += posDelta;
 			}
 
+			CalculateGroundAfterMovement();
+		}
+
+		private void CalculateGroundAfterMovement()
+		{
 			//this is required because UnityCharacterController.isGrounded is invalidated every time Move() called
 			_isGrounded.Cached |= CharacterCollider.IsGrounded;
 			if(_isGrounded is { Cached: true, Continuous: false })
