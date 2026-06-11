@@ -3,6 +3,7 @@ using dream_lib.ui;
 using game.gameplay_core.characters;
 using game.gameplay_core.location;
 using game.gameplay_core.ui.hud_screenspace;
+using game.gameplay_core.ui.hud_screenspace.flight;
 using game.ui;
 using game.ui.interaction;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace game.gameplay_core.ui
 		private BossHpBar _bossHealthBar;
 		[SerializeField]
 		private SoftCounterView _softCounterView;
+		[SerializeField]
+		private FlightUiView _flightUiView;
 
 		public void SetContext(Context context)
 		{
@@ -61,6 +64,7 @@ namespace game.gameplay_core.ui
 			});
 
 			_softCounterView.Initialize();
+			_flightUiView.Initialize();
 
 			LocationStaticContext.Instance.CurrentlyFightingBoss.OnChanged += HandleBossStarted;
 			_bossHealthBar.gameObject.SetActive(false);

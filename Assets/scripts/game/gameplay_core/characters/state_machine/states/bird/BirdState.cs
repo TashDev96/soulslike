@@ -175,15 +175,13 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 				}
 				else if(_context.Logic.FlyingLogic.TryFlap())
 				{
-					Debug.LogError(_context.Logic.FlyingLogic.FlapsLeftCount);
 					_player.Play(_view.Animations.Flap);
 					_player.NextAnimation = _view.Animations.Glide;
 				}
 			}
 
 			_flyingVelocity = _transform.TransformVector(_localVelocity);
-			Debug.DrawRay(_transform.position, _flyingVelocity * 2f, Color.red);
-
+	
 			_context.CharacterCollider.MoveFlying(_flyingVelocity * deltaTime, out var collisionFlags);
 			if(collisionFlags.HasFlag(CollisionFlags.Below) && _flyingVelocity.y < 0)
 			{
