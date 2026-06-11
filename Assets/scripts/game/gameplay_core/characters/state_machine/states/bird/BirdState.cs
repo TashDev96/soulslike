@@ -64,7 +64,7 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 				_localVelocity.y += 0.2f;
 				_transform.position += Vector3.up * 0.1f;
 			}
-			_context.Logic.MovementLogic.SetFlyingMode(true, Vector3.zero);
+			_context.Logic.MovementLogic.SetFlyingMode(true);
 
 			if(_context.Logic.FlyingLogic.TryFlap())
 			{
@@ -81,7 +81,7 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 		{
 			base.OnExit();
 			_context.IsBirdMode.Value = false;
-			_context.Logic.MovementLogic.SetFlyingMode(false, _flyingVelocity);
+			_context.Logic.MovementLogic.SetFlyingMode(false);
 			_context.Views.BodyView.SetBirdMode(false);
 			_transform.rotation = Quaternion.Euler(0, _currentYaw, 0);
 		}
@@ -206,6 +206,8 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 			{
 				HandleWallsCollision();
 			}
+
+			_context.Logic.MovementLogic.SetFallVelocity(_flyingVelocity);
 
 			void HandleWallsCollision()
 			{

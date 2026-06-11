@@ -101,7 +101,7 @@ MonoBehaviour:
   <Flying>k__BackingField:
     <BaseSpeed>k__BackingField: 10
     <MaxSpeed>k__BackingField: 30
-    <Friction>k__BackingField: {x: 0, y: 0.5, z: 0.02}
+    <Friction>k__BackingField: {x: 0.3, y: 0.5, z: 0.02}
     <PitchSpeed>k__BackingField: 40
     <YawSpeedByForwardSpeed>k__BackingField:
       serializedVersion: 2

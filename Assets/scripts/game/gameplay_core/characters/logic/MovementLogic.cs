@@ -250,7 +250,7 @@ namespace game.gameplay_core.characters.logic
 			_fallVelocity = value;
 		}
 
-		public void SetFlyingMode(bool on, Vector3 fallVelocity)
+		public void SetFlyingMode(bool on)
 		{
 			_context.IsFlying.Value = on;
 			_context.IsFalling.Value = !on;
@@ -261,7 +261,6 @@ namespace game.gameplay_core.characters.logic
 				_isGrounded.Continuous = false;
 				_isGrounded.Previous = false;
 				_isGrounded.GroundingConfirmFrame = Time.frameCount + 3;
-				_fallVelocity = fallVelocity;
 			}
 		}
 
