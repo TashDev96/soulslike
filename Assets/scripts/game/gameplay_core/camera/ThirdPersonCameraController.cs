@@ -1,11 +1,13 @@
 using System;
 using ControlFreak2;
+using DG.Tweening;
 using dream_lib.src.camera;
 using dream_lib.src.reactive;
 using dream_lib.src.utils.data_types;
 using game.gameplay_core.characters;
 using game.input;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace game.gameplay_core.camera
 {
@@ -25,6 +27,9 @@ namespace game.gameplay_core.camera
 		private Vector3 _lastPlayerPosition;
 		private bool _hasInitializedPosition;
 		private Vector3 _lastCameraUnsafePos;
+		private Tweener _shakeTweener;
+		private Vector3 _shakeOffset;
+		private bool _flightMode;
 
 		public Camera Camera => _context.Camera.Value;
 
@@ -98,7 +103,7 @@ namespace game.gameplay_core.camera
 					_currentRotation.x = Mathf.Clamp(_currentRotation.x, settings.MinPitch, settings.MaxPitch);
 				}
 			}
-			else if(settings.AutoRotateSpeed > 0)
+			else if(settings.AutoRotateSpeed > 0 && !_flightMode)
 			{
 				var vector = playerPos - cameraTransform.position;
 				vector.y = 0;
@@ -150,7 +155,21 @@ namespace game.gameplay_core.camera
 
 		public void Shake(float duration, float strength, float vertMultiplier = 1f, float horMultiplier = 1f)
 		{
-			throw new NotImplementedException();
+			_shakeTweener?.Kill();
+			_shakeOffset = Vector3.zero;
+
+			var randomOffset = Random.value * 100f;
+			_shakeTweener = DOVirtual.Float(strength, 0f, duration, value =>
+			{
+				var seed = strength < 0.5f ? value * 20f : Time.time * 20f + randomOffset;
+				_shakeOffset.x = (Mathf.PerlinNoise(seed, 0f) - 0.5f) * 2f * value * horMultiplier;
+				_shakeOffset.y = (Mathf.PerlinNoise(0f, seed) - 0.5f) * 2f * value * vertMultiplier;
+			}).OnComplete(() => _shakeOffset = Vector3.zero);
+		}
+
+		public void SetFlightMode(bool on)
+		{
+			_flightMode = on;
 		}
 	}
 }

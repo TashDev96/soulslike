@@ -32,7 +32,6 @@ namespace game.gameplay_core.characters.state_machine
 		private readonly ParryState _parryState;
 
 		private CharacterCommand _nextCommand;
-		private readonly ReactiveProperty<CharacterStateBase> _currentState = new();
 
 		private float _transformCooldown;
 
@@ -48,11 +47,12 @@ namespace game.gameplay_core.characters.state_machine
 			}
 		}
 
-		public IReadOnlyReactiveProperty<CharacterStateBase> CurrentState => _currentState;
+		private readonly ReactiveProperty<CharacterStateBase> _currentState;
 
 		public CharacterStateMachine(CharacterContext characterContext)
 		{
 			_context = characterContext;
+			_currentState = _context.CurrentState as ReactiveProperty<CharacterStateBase>;
 
 			_idleState = new IdleState(_context);
 			_walkState = new WalkState(_context);
@@ -339,7 +339,6 @@ namespace game.gameplay_core.characters.state_machine
 				{
 					SetState(_fallState);
 				}
-				_context.SelfLink.transform.up = Vector3.up;
 			}
 			else
 			{
@@ -472,7 +471,7 @@ namespace game.gameplay_core.characters.state_machine
 					continue;
 				}
 
-				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
+				if(character.Context.CurrentState.Value is LockedInAnimationState)
 				{
 					continue;
 				}
@@ -512,12 +511,12 @@ namespace game.gameplay_core.characters.state_machine
 					continue;
 				}
 
-				if(character.CharacterStateMachine.CurrentState.Value is LockedInAnimationState)
+				if(character.Context.CurrentState.Value is LockedInAnimationState)
 				{
 					continue;
 				}
 
-				if(!(character.CharacterStateMachine.CurrentState.Value is ParryStunState parryStunState) ||
+				if(!(character.Context.CurrentState.Value is ParryStunState parryStunState) ||
 				   !parryStunState.CanReceiveRiposte)
 				{
 					continue;

@@ -117,5 +117,10 @@ namespace game.gameplay_core.camera
 		{
 			throw new NotImplementedException();
 		}
+
+		public void SetFlightMode(bool on)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

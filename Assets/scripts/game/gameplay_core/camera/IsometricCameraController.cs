@@ -142,6 +142,11 @@ namespace game.gameplay_core.camera
 			}).OnComplete(() => _shakeOffset = Vector3.zero);
 		}
 
+		public void SetFlightMode(bool on)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		private void UpdateOcclusionSphere(Vector3 targetPosition, float deltaTime)
 		{
 			var settings = _context.CameraSettings;

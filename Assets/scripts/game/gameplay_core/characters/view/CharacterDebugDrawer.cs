@@ -168,7 +168,7 @@ namespace game.gameplay_core.characters.view
 			{
 				_graphDrawer.Draw(_context.Transform.Position + Vector3.up * (3f + 2 * HandleUtility.GetHandleSize(_context.Transform.Position)));
 
-				if(_stateMachine.CurrentState.Value is AttackState attackState)
+				if(_context.CurrentState.Value is AttackState attackState)
 				{
 					if(_context.InputData.Command == CharacterCommand.RegularAttack)
 					{

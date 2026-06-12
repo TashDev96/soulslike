@@ -1,4 +1,5 @@
 using dream_lib.src.reactive;
+using game.gameplay_core.characters.state_machine.states;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -6,12 +7,13 @@ namespace game.gameplay_core.characters.logic
 	{
 		private CharacterContext _context;
 
-		public ReactiveProperty<int> MaxFlapsCount { get; private set; } = new();
-		public ReactiveProperty<int> FlapsLeftCount { get; private set; } = new();
+		public ReactiveProperty<int> MaxFlapsCount { get; } = new();
+		public ReactiveProperty<int> FlapsLeftCount { get; } = new();
 
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
+			_context.CurrentState.OnChanged += HandleStateChanged;
 			MaxFlapsCount.Value = 3;
 		}
 
@@ -36,6 +38,14 @@ namespace game.gameplay_core.characters.logic
 				return true;
 			}
 			return false;
+		}
+
+		private void HandleStateChanged(CharacterStateBase state)
+		{
+			if(state is PlungeAttackState)
+			{
+				FlapsLeftCount.Value = MaxFlapsCount.Value;
+			}
 		}
 	}
 }

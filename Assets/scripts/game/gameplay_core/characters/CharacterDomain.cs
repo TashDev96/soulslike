@@ -103,6 +103,7 @@ namespace game.gameplay_core.characters
 				CharacterStats = _characterStats,
 				InputData = new CharacterInputData(),
 				CharacterCollider = characterCollider,
+				CurrentState = new ReactiveProperty<CharacterStateBase>(),
 
 				CurrentConsumableItem = new ReactiveProperty<IConsumableItemLogic>(),
 
@@ -179,7 +180,6 @@ namespace game.gameplay_core.characters
 			characterCollider.SetContext(_context);
 
 			CharacterStateMachine = new CharacterStateMachine(_context);
-			_context.CurrentState = CharacterStateMachine.CurrentState;
 			_context.Views.Animator.Playable.UpdateMode = DirectorUpdateMode.Manual;
 			_context.Views.Animator.Animator.enabled = true;
 			_context.Views.Animator.Animator.runtimeAnimatorController = null;

@@ -131,6 +131,10 @@ namespace game.gameplay_core.camera
 			throw new NotImplementedException();
 		}
 
+		public void SetFlightMode(bool on)
+		{
+		}
+
 		private void UpdateCameraBehavior(Transform cameraTransform, Vector3 playerPosition, float deltaTime)
 		{
 			var zone = _currentZone;

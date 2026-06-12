@@ -3,6 +3,7 @@ using dream_lib.src.utils.drawers;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
 using game.gameplay_core.characters.view.bird;
+using game.gameplay_core.location;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.state_machine.states.bird
@@ -50,6 +51,8 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 			{
 				_lockDirectionInputUntilChanged = null;
 			}
+			
+			LocationStaticContext.Instance.CameraController.SetFlightMode(true);
 
 			_context.IsBirdMode.Value = true;
 			_context.Views.BodyView.SetBirdMode(true);
