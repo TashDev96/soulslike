@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-namespace game.gameplay_core.worldspace_ui
+namespace game.gameplay_core.ui.worldspace
 {
 	public class FloatingTextView : MonoBehaviour
 	{

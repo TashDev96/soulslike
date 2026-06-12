@@ -4,7 +4,7 @@ using game.gameplay_core.characters.logic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace game.gameplay_core.ui.hud_screenspace
+namespace game.gameplay_core.ui.screenspace
 {
 	public class PlayerHpBar : MonoBehaviour
 	{

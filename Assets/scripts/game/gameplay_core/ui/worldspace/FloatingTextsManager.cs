@@ -2,7 +2,7 @@ using dream_lib.src.reactive;
 using game.gameplay_core.camera;
 using UnityEngine;
 
-namespace game.gameplay_core.worldspace_ui
+namespace game.gameplay_core.ui.worldspace
 {
 	public class FloatingTextsManager
 	{

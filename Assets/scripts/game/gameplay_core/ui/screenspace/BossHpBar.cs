@@ -1,12 +1,12 @@
 using System.Collections;
 using dream_lib.ui;
 using game.gameplay_core.characters;
-using game.gameplay_core.characters.view.ui;
 using game.gameplay_core.location;
+using game.gameplay_core.ui.worldspace.character;
 using TMPro;
 using UnityEngine;
 
-namespace game.gameplay_core.ui.hud_screenspace
+namespace game.gameplay_core.ui.screenspace
 {
 	public class BossHpBar : MonoBehaviour
 	{

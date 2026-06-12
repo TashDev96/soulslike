@@ -1,9 +1,10 @@
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using dream_lib.ui;
+using game.gameplay_core.characters;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.view.ui
+namespace game.gameplay_core.ui.worldspace.character
 {
 	public class CharacterWorldSpaceUi : MonoBehaviour, ICharacterWorldSpaceUi
 	{

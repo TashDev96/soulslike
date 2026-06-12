@@ -3,7 +3,7 @@ using game.gameplay_core.characters;
 using game.gameplay_core.inventory.items_logic;
 using UnityEngine;
 
-namespace game.gameplay_core.ui.hud_screenspace
+namespace game.gameplay_core.ui.screenspace
 {
 	public class UiEquippedItems : MonoBehaviour
 	{

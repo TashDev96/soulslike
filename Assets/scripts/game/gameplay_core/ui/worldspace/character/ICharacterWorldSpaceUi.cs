@@ -1,4 +1,4 @@
-namespace game.gameplay_core.characters.view.ui
+namespace game.gameplay_core.ui.worldspace.character
 {
 	public interface ICharacterWorldSpaceUi
 	{

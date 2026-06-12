@@ -14,7 +14,7 @@ using game.gameplay_core.characters;
 using game.gameplay_core.location.interactive_objects;
 using game.gameplay_core.location.location_save_system;
 using game.gameplay_core.ui;
-using game.gameplay_core.worldspace_ui;
+using game.gameplay_core.ui.worldspace;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

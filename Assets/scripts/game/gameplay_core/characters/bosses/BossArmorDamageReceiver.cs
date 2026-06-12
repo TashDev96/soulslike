@@ -5,7 +5,7 @@ using game.gameplay_core.characters.view;
 using game.gameplay_core.damage_system;
 using game.gameplay_core.location;
 using game.gameplay_core.location.view;
-using game.gameplay_core.worldspace_ui;
+using game.gameplay_core.ui.worldspace;
 using UnityEngine;
 
 namespace game.gameplay_core.characters.bosses

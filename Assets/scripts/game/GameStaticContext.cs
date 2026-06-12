@@ -1,7 +1,7 @@
 using dream_lib.src.reactive;
 using game.gameplay_core.characters.stats.config;
 using game.gameplay_core.inventory;
-using game.gameplay_core.worldspace_ui;
+using game.gameplay_core.ui.worldspace;
 using game.ui;
 using UnityEngine;
 

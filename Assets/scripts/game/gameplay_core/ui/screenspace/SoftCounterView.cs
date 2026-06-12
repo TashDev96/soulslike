@@ -3,7 +3,7 @@ using game.gameplay_core.location;
 using TMPro;
 using UnityEngine;
 
-namespace game.gameplay_core.ui.hud_screenspace
+namespace game.gameplay_core.ui.screenspace
 {
 	public class SoftCounterView : MonoBehaviour
 	{

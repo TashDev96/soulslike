@@ -1,10 +1,11 @@
 using DG.Tweening;
 using dream_lib.src.extensions;
+using game.gameplay_core.characters;
 using game.gameplay_core.damage_system;
 using TMPro;
 using UnityEngine;
 
-namespace game.gameplay_core.characters.view.ui
+namespace game.gameplay_core.ui.worldspace.character
 {
 	public class CharacterDamageCounterUi : MonoBehaviour
 	{

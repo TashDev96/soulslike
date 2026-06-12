@@ -5,7 +5,7 @@ using game.gameplay_core.characters.logic;
 using game.gameplay_core.location;
 using UnityEngine;
 
-namespace game.gameplay_core.ui.hud_screenspace.flight
+namespace game.gameplay_core.ui.screenspace.flight
 {
 	public class FlightUiView : MonoBehaviour
 	{
