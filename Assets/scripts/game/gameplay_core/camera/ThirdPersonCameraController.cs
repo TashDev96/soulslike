@@ -97,9 +97,11 @@ namespace game.gameplay_core.camera
 					var targetEuler = targetRotation.eulerAngles;
 
 					var lockOnSpeed = settings.RotationSpeed * 2f;
+					
+					
 
 					_currentRotation.y = Mathf.LerpAngle(_currentRotation.y, targetEuler.y, lockOnSpeed * deltaTime);
-					_currentRotation.x = Mathf.LerpAngle(_currentRotation.x, 15f, lockOnSpeed * deltaTime); // Slight look down angle
+					_currentRotation.x = Mathf.LerpAngle(_currentRotation.x, targetEuler.x+15f, lockOnSpeed * deltaTime/3f); // Slight look down angle
 					_currentRotation.x = Mathf.Clamp(_currentRotation.x, settings.MinPitch, settings.MaxPitch);
 				}
 			}

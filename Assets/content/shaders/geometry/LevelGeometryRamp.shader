@@ -14,6 +14,7 @@ Shader "LevelGeometryRamp"
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
         _FadeDistance ("Fade Distance", Float) = 1.0
+        _DarkLightThreshold ("Dark Light Threshold", Range(0, 1)) = 0.1
     }
     
     SubShader
@@ -72,11 +73,13 @@ Shader "LevelGeometryRamp"
                 float _Glossiness;
                 float _Metallic;
                 float _FadeDistance;
+                float _DarkLightThreshold;
             CBUFFER_END
             
             float4 _OcclusionSphereCenter;
             float _OcclusionSphereRadius;
             float _OcclusionCircleOffset;
+            float4 palyerLightPos;
             
             static const float DitherPattern[16] = 
             {
@@ -164,6 +167,16 @@ Shader "LevelGeometryRamp"
                 
                 // Add ambient light (usually tinted by base/shadow)
                 finalColor += ambient * _ShadowColor.rgb * texColor.rgb;
+                
+                float pixelValue = max(finalColor.r, max(finalColor.g, finalColor.b));
+                
+                float playerDist = distance(palyerLightPos.xyz, input.positionWS);
+                float fakeLight = saturate(1.0 - (playerDist / 10.0));
+                fakeLight = fakeLight * fakeLight * 0.15;
+                
+                float darkMask = saturate(1.0 - (pixelValue / max(0.001, _DarkLightThreshold)));
+                
+                finalColor += texColor.rgb * input.color.rgb * fakeLight * darkMask;
                 
                 return half4(finalColor, 1);
             }

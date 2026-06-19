@@ -9,12 +9,14 @@ namespace game.gameplay_core.characters.logic
 
 		public ReactiveProperty<int> MaxFlapsCount { get; } = new();
 		public ReactiveProperty<int> FlapsLeftCount { get; } = new();
+		public ReactiveProperty<float> CurrentFeatherGlideTimeLeft { get; } = new();
 
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
 			_context.CurrentState.OnChanged += HandleStateChanged;
 			MaxFlapsCount.Value = 3;
+			CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimePerFeather;
 		}
 
 		public void CustomUpdate(float deltaTime)
@@ -27,6 +29,26 @@ namespace game.gameplay_core.characters.logic
 			if(restoreFlaps)
 			{
 				FlapsLeftCount.Value = MaxFlapsCount.Value;
+				CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimePerFeather;
+			}
+			else if(_context.IsBirdMode.Value)
+			{
+				CurrentFeatherGlideTimeLeft.Value -= deltaTime;
+				if(FlapsLeftCount.Value > 0)
+				{
+					if(CurrentFeatherGlideTimeLeft.Value <= 0)
+					{
+						FlapsLeftCount.Value--;
+						if(FlapsLeftCount.Value > 0)
+						{
+							CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimePerFeather;
+						}
+						else
+						{
+							CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimeAfterExhaustion;
+						}
+					}
+				}
 			}
 		}
 
@@ -35,6 +57,14 @@ namespace game.gameplay_core.characters.logic
 			if(FlapsLeftCount.Value > 0)
 			{
 				FlapsLeftCount.Value--;
+				if(FlapsLeftCount.Value > 0)
+				{
+					CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimePerFeather;
+				}
+				else
+				{
+					CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimeAfterExhaustion;
+				}
 				return true;
 			}
 			return false;
@@ -45,6 +75,7 @@ namespace game.gameplay_core.characters.logic
 			if(state is PlungeAttackState)
 			{
 				FlapsLeftCount.Value = MaxFlapsCount.Value;
+				CurrentFeatherGlideTimeLeft.Value = _context.Config.Flying.GlideTimePerFeather;
 			}
 		}
 	}

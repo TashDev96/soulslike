@@ -39,5 +39,9 @@ namespace game.gameplay_core.characters.config
 		public float StallRecoveryPitch { get; private set; } = 20f;
 		[field: SerializeField]
 		public float LiftForceCoeff { get; set; } = 0.1f;
+		[field: SerializeField]
+		public float GlideTimePerFeather { get; private set; } = 3f;
+		[field: SerializeField]
+		public float GlideTimeAfterExhaustion { get; private set; } = 1.5f;
 	}
 }

@@ -193,6 +193,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     <StallRecoveryPitch>k__BackingField: 20
     <LiftForceCoeff>k__BackingField: 0.1
+    <GlideTimePerFeather>k__BackingField: 6
+    <GlideTimeAfterExhaustion>k__BackingField: 2
   <ParentConfig>k__BackingField: {fileID: 0}
   <IdleAnimation>k__BackingField: {fileID: 7400000, guid: e441336da53ad1d40ba27897eb88a7b9, type: 2}
   <StaggerAnimation>k__BackingField: {fileID: 7400000, guid: dce7b0d919ec7dc4085b73ef26e949a9, type: 2}

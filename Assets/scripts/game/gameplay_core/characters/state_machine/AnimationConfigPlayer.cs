@@ -12,6 +12,7 @@ namespace game.gameplay_core.characters.state_machine
 		private const string RotationLockKey = "by_animation";
 
 		private readonly CharacterContext _context;
+		private AnimancerState _animancerState;
 
 		public AnimationConfig AnimationConfig { get; private set; }
 
@@ -30,7 +31,8 @@ namespace game.gameplay_core.characters.state_machine
 			AnimationConfig = config;
 			Time = 0;
 			Duration = Mathf.Max(config.Duration, 0.1f);
-			return _context.Views.Animator.Play(config.Clip, 0.1f, FadeMode.FromStart);
+			_animancerState =_context.Views.Animator.Play(config.Clip, 0.1f, FadeMode.FromStart);
+			return _animancerState;
 		}
 		
 		public bool TryPlay(AnimationConfig config)
@@ -89,6 +91,12 @@ namespace game.gameplay_core.characters.state_machine
 		public bool CheckTiming(Vector2 timing)
 		{
 			return timing.Contains(NormalizedAnimationTime);
+		}
+
+		public void SetTime(float time)
+		{
+			Time = time;
+			_animancerState.Time = time;
 		}
 	}
 }

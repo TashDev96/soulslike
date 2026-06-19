@@ -205,6 +205,10 @@ namespace game.gameplay_core.characters.state_machine.states.bird
 					IsComplete = true;
 				}
 			}
+			else if(_context.Logic.FlyingLogic.FlapsLeftCount.Value == 0 && _context.Logic.FlyingLogic.CurrentFeatherGlideTimeLeft.Value <= 0 && !flapInProgress)
+			{
+				IsComplete = true;
+			}
 			if(_context.CharacterCollider.Flags.HasFlag(CollisionFlags.Sides))
 			{
 				HandleWallsCollision();

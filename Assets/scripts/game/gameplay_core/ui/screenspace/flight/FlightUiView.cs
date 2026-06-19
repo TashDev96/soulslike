@@ -29,9 +29,11 @@ namespace game.gameplay_core.ui.screenspace.flight
 
 			_logic.MaxFlapsCount.OnChanged += HandleMaxFlapsChanged;
 			_logic.FlapsLeftCount.OnChangedFromTo += HandleFlapsCountChanged;
+			_logic.CurrentFeatherGlideTimeLeft.OnChanged += HandleGlideTimeChanged;
 			
 			HandleMaxFlapsChanged(_logic.MaxFlapsCount.Value);
 			HandleBirdModeChanged(context.IsBirdMode.Value);
+			HandleFlapsCountChanged(0, _logic.FlapsLeftCount.Value);
 		}
 
 		private void HandleBirdModeChanged(bool isFlyingMode)
@@ -47,12 +49,34 @@ namespace game.gameplay_core.ui.screenspace.flight
 			}
 		}
 
+		private void HandleGlideTimeChanged(float timeLeft)
+		{
+			var context = LocationStaticContext.Instance.Player.Context;
+			var maxTime = context.Config.Flying.GlideTimePerFeather;
+			var fill = maxTime > 0 ? Mathf.Clamp01(timeLeft / maxTime) : 0f;
+			
+			var currentIndex = _logic.FlapsLeftCount.Value - 1;
+			if(currentIndex >= 0 && currentIndex < _itemViews.Count)
+			{
+				_itemViews[currentIndex].SetFillAmount(fill);
+			}
+		}
+
 		private void HandleFlapsCountChanged(int from, int to)
 		{
 			for(var i = 0; i < _itemViews.Count; i++)
 			{
-				_itemViews[i].SetIsFull(i < to);
+				_itemViews[i].SetIsEmpty(i >= to);
+				if(i < to - 1)
+				{
+					_itemViews[i].SetFillAmount(1f);
+				}
+				else if(i >= to)
+				{
+					_itemViews[i].SetFillAmount(0f);
+				}
 			}
+			HandleGlideTimeChanged(_logic.CurrentFeatherGlideTimeLeft.Value);
 		}
 
 		private void HandleMaxFlapsChanged(int count)

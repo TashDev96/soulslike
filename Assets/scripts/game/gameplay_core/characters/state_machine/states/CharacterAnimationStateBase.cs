@@ -113,6 +113,18 @@ namespace game.gameplay_core.characters.state_machine.states
 			_forwardMovementDone = currentForwardDistance;
 		}
 
+		protected void SetAnimationTime(float time)
+		{
+			if(_legacyMode)
+			{
+				
+			}
+			else
+			{
+				_player.SetTime( time);
+			}
+		}
+		
 		protected bool CheckTiming(Vector2 timing)
 		{
 			if(_legacyMode)

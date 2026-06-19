@@ -43,16 +43,33 @@ namespace game.gameplay_core.ui.worldspace
 		private ColorVariantConfig _currentConfig;
 		private Material _textMaterial;
 		private Material _bevelTextMaterial;
+		private Context _context;
 
 		public void Initialize(string text, TextColorVariant color, Vector3 worldPosition, Context context)
 		{
 			_text.text = text;
 			_textForBevelEffect.text = text;
 
-			if(context.CameraController is IsometricCameraController)
+			_context = context;
+
+			switch(context.CameraController)
 			{
-				worldPosition -= context.CameraController.Camera.transform.forward * 4f;
+				case FirstPersonCameraController firstPersonCameraController:
+					break;
+				case FixedCameraController fixedCameraController:
+					break;
+				case IsometricCameraController isometricCameraController:
+					worldPosition -= context.CameraController.Camera.transform.forward * 4f;
+					break;
+				case ThirdPersonCameraController thirdPersonCameraController:
+					worldPosition -= context.CameraController.Camera.transform.forward * 4f;
+					transform.rotation = Quaternion.LookRotation(context.CameraController.Camera.transform.forward);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
+			
+			
 			transform.position = worldPosition;
 
 			_cameraController = context.CameraController;
@@ -109,6 +126,11 @@ namespace game.gameplay_core.ui.worldspace
 			// Float up in camera space
 			transform.position += _cameraController.Camera.transform.up * (FloatSpeed * deltaTime);
 
+			if(_context.CameraController is ThirdPersonCameraController)
+			{
+				transform.rotation = Quaternion.LookRotation(_context.CameraController.Camera.transform.forward);
+			}
+			
 			// Fade out
 			var alpha = 1.0f - progress;
 			SetColor(alpha);

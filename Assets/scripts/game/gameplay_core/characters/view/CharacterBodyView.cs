@@ -3,6 +3,7 @@ using System.Collections;
 using game.enums;
 using game.gameplay_core.characters.view.bird;
 using game.gameplay_core.damage_system;
+using game.gameplay_core.location;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace game.gameplay_core.characters.view
 {
 	public class CharacterBodyView : MonoBehaviour
 	{
+		private static readonly int PlayerLightPosId = Shader.PropertyToID("palyerLightPos");
 		[SerializeField]
 		private Collider _aliveBodyCollider;
 		[SerializeField]
@@ -22,6 +24,7 @@ namespace game.gameplay_core.characters.view
 		private Coroutine _deadStateCoroutine;
 		private float _defaultDeadRadius;
 		private CharacterContext _context;
+		private IDisposable _updateSub;
 
 		[field: SerializeField]
 		public CharacterFlyingBodyView FlyingBodyView { get; private set; }
@@ -36,6 +39,7 @@ namespace game.gameplay_core.characters.view
 				FlyingBodyView.Initialize(context);
 				SetBirdMode(_context.IsBirdMode.Value);
 			}
+			_updateSub = LocationStaticContext.Instance.LocationUpdate.Subscribe(CustomUpdate);
 		}
 
 		private void Awake()
@@ -82,6 +86,14 @@ namespace game.gameplay_core.characters.view
 			}
 		}
 
+		private void CustomUpdate(float deltaTime)
+		{
+			if(_context.IsPlayer.Value)
+			{
+				Shader.SetGlobalVector(PlayerLightPosId, transform.position);
+			}
+		}
+
 		private IEnumerator ActivateDeadState()
 		{
 			yield return new WaitForSeconds(2f);
@@ -110,6 +122,7 @@ namespace game.gameplay_core.characters.view
 		{
 			_damageSub?.Dispose();
 			_blinkView.Dispose();
+			_updateSub?.Dispose();
 		}
 
 #if UNITY_EDITOR

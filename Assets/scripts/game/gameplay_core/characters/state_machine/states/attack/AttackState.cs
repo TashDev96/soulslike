@@ -304,11 +304,13 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 			void SetAttackInitialTime(float time)
 			{
 				Time = time * CurrentAttackAnimation.Duration;
-				CurrentAttackAnimation.Time = time * CurrentAttackAnimation.Duration;
+				SetAnimationTime(Time);
 				ResetForwardMovement(_currentAttackConfig.ForwardMovement.Evaluate(Time));
 				RecalculateFlagsImmediate();
 			}
 		}
+
+		
 
 		private void SpawnProjectile(IHitConfig hitConfig)
 		{
