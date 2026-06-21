@@ -1,6 +1,7 @@
 using dream_lib.src.extensions;
 using dream_lib.src.reactive;
 using game.gameplay_core.location;
+using UnityEngine;
 
 namespace game.gameplay_core.characters.logic
 {
@@ -12,9 +13,12 @@ namespace game.gameplay_core.characters.logic
 		public bool IsLockedOn => LockOnTarget.HasValue;
 		public bool DisableRotationForThisFrame { get; set; }
 
+		private int _obstacleMask;
+
 		public void SetContext(CharacterContext context)
 		{
 			_context = context;
+			_obstacleMask = LayerMask.GetMask("Default", "LevelGeometry", "Doors");
 		}
 
 		public void HandleLockOnTriggerInput()
@@ -74,6 +78,23 @@ namespace game.gameplay_core.characters.logic
 					continue;
 				}
 
+				var allPointBlocked = true;
+				foreach(var point in character.ExternalData.LockOnPoints)
+				{
+					var from = _context.Transform.Position + Vector3.up;
+					var to = point.transform.position;
+					if(!Physics.Linecast(from, to, _obstacleMask))
+					{
+						allPointBlocked = false;
+						break;
+					}
+				}
+
+				if(allPointBlocked)
+				{
+					continue;
+				}
+				
 				var distance = (_context.Transform.Position - character.ExternalData.Transform.Position).sqrMagnitude;
 				if(distance < minDistance && distance < maxDistance * maxDistance)
 				{

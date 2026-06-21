@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Animancer;
+using dream_lib.src.extensions;
 using game.enums;
 using game.gameplay_core.characters.commands;
 using game.gameplay_core.characters.config.animation;
@@ -226,7 +228,7 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 		public override float GetEnterStaminaCost()
 		{
 			//TODO: make correct calculation
-			return _context.Logic.InventoryLogic.RightWeapon.Config.RegularAttacks[0].StaminaCost;
+			return _context.Logic.InventoryLogic.RightWeapon.Config.RegularAttacks[0].Config.StaminaCost;
 		}
 
 		public override bool CheckIsReadyToChangeState(CharacterCommand nextCommand)
@@ -374,7 +376,6 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 				case AttackType.Regular:
 				case AttackType.Strong:
 					var attacksList = weaponConfig.GetAttacksSequence(_attackType);
-
 					if(_comboCounter > 0)
 					{
 						newAttackIndex = _comboCounter % attacksList.Length;
@@ -388,17 +389,17 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return;
 				case AttackType.RollAttackRegular:
 					newAttackIndex = 0;
-					attackConfig = _weaponView.Config.RollAttack;
+					attackConfig = _weaponView.Config.RollAttack.Config;
 					return;
 				case AttackType.RollAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _weaponView.Config.RollAttackStrong;
+					attackConfig = _weaponView.Config.RollAttackStrong.Config;
 					return;
 				case AttackType.RunAttackRegular:
 					newAttackIndex = 0;
 					try
 					{
-						attackConfig = _weaponView.Config.RunAttack;
+						attackConfig = _weaponView.Config.RunAttack.Config;
 						if(attackConfig == null)
 						{
 							attackConfig = weaponConfig.GetAttacksSequence(AttackType.Regular)[0];
@@ -415,14 +416,14 @@ namespace game.gameplay_core.characters.state_machine.states.attack
 					return;
 				case AttackType.RunAttackStrong:
 					newAttackIndex = 0;
-					attackConfig = _weaponView.Config.RunAttackStrong;
+					attackConfig = _weaponView.Config.RunAttackStrong.Config;
 					return;
 
 				case AttackType.Special:
 					newAttackIndex = _currentAttackIndex;
 
 					//TODO: why we are getting config from view ???
-					attackConfig = _weaponView.Config.SpecialAttacks[newAttackIndex];
+					attackConfig = _weaponView.Config.SpecialAttacks[newAttackIndex].Config;
 					break;
 
 				default:

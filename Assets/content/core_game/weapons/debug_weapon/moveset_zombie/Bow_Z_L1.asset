@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94cee6b59854f2f8460ff51c819058c, type: 3}
+  m_Name: Bow_Z_L1
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.damage_system.AttackConfigSo
+  Config:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 594e1566368b24fc08c1b67a0090d422, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.48333332
+        EndTimeNormalized: 0.85089326
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 2
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.2
+        EndTimeNormalized: 0.8502979
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 2
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.8523811
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 2
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.8755957
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 2
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.09791615
+        EndTimeNormalized: 0.100416146
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 2
+        Flag: 7
+      - Name: Enter From Roll
+        StartTimeNormalized: 0.14052445
+        EndTimeNormalized: 0.14302444
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 2
+        Flag: 8
+      - Name: Start Handle Cast
+        StartTimeNormalized: 0.18392807
+        EndTimeNormalized: 0.18642807
+        LayerIndex: 4
+        IsSingleFrame: 1
+        ClipDuration: 2
+        Flag: 9
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.8172623
+        EndTimeNormalized: 0.8255956
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 2
+        <InvolvedColliders>k__BackingField: 010000
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
+      SoundEvents: []
+      CameraShakeEvents: []
+      CustomEvents: []
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
+    <IsRangedAttack>k__BackingField: 1
+    <ProjectilePrefabNames>k__BackingField: DebugArrow
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0007769945
+        value: 0.00039045114
+        inSlope: -0.0018150839
+        outSlope: 0.27156472
+        tangentMode: 65
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1989717
+        value: 0.054635152
+        inSlope: 0.27156472
+        outSlope: 0.14877076
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.51367295
+        value: 0.1014535
+        inSlope: 0.14877076
+        outSlope: 2.176072
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.7036793
+        value: 0.514921
+        inSlope: 2.176072
+        outSlope: -0.03966309
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9944585
+        value: 0.5033878
+        inSlope: -0.11899399
+        outSlope: -0.11899399
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1.5633532
+        value: 0.49808115
+        inSlope: -0.00932802
+        outSlope: -0.00932802
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 33
+      <Sector>k__BackingField: 90
+  references:
+    version: 2
+    RefIds: []

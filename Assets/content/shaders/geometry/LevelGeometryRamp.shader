@@ -146,15 +146,18 @@ Shader "LevelGeometryRamp"
                 float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
                 
                 Light mainLight = GetMainLight(shadowCoord);
-                
+
                 // Lighting Intensity Calculation
                 half NdotL = dot(normalWS, mainLight.direction);
+                half down = saturate(dot(normalWS, half3(0, -1, 0)));
+
                 half lightIntensity = NdotL * mainLight.shadowAttenuation;
                 // Remap to 0-1 range for blending
-                lightIntensity = saturate(lightIntensity * 0.5 + 0.5); 
+                lightIntensity = saturate(lightIntensity * 0.5 + 0.5);
 
                 // 3-Color Blend logic
                 half shadowFactor = smoothstep(_ShadowThreshold - _Smoothness, _ShadowThreshold + _Smoothness, lightIntensity);
+                shadowFactor -= down * 0.03;
                 half highlightFactor = smoothstep(_HighlightThreshold - _Smoothness, _HighlightThreshold + _Smoothness, lightIntensity);
                 
                 half3 blendedColor = lerp(_ShadowColor.rgb, _BaseColor.rgb, shadowFactor);

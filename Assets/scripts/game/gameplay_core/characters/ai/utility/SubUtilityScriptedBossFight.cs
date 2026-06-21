@@ -83,7 +83,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 			var weaponConfig = _context.CharacterContext.Logic.InventoryLogic.GetEquipment(EquipmentSlotType.RightHand).BaseConfig as WeaponItemConfig;
 			var nextAttackIndex = _attackSequencesFirstPhase[_data.AttackSequenceKey][_data.AttackIndex];
-			var nextAttackConfig = weaponConfig.SpecialAttacks[nextAttackIndex];
+			var nextAttackConfig = weaponConfig.SpecialAttacks[nextAttackIndex].Config;
 
 			var range = nextAttackConfig.AiData.Range;
 			var maxAngle = nextAttackConfig.AiData.Sector / 2;

@@ -11,7 +11,7 @@ namespace game.gameplay_core.location.interactive_objects
 	public class Door : SavableSceneObjectGeneric<DoorSaveData>
 	{
 		private static readonly int IsOpen = Animator.StringToHash("IsOpen");
-		private static readonly int Immediate = Animator.StringToHash("Immediate");
+		private static readonly int ImmediateKey = Animator.StringToHash("Immediate");
 		[SerializeField]
 		private bool _isClosedByDefault = true;
 		[SerializeField]
@@ -23,6 +23,9 @@ namespace game.gameplay_core.location.interactive_objects
 		private InteractionZone _interactionFront;
 		[SerializeField]
 		private InteractionZone _interactionBack;
+
+		[SerializeField]
+		private Collider _colliderToDisable;
 
 		[SerializeField]
 		private bool _openWithKey;
@@ -42,7 +45,7 @@ namespace game.gameplay_core.location.interactive_objects
 
 		protected override void InitializeAfterSaveLoaded()
 		{
-			UpdateAnimatorState(true);
+			UpdateState(true);
 		}
 
 		private void Awake()
@@ -72,19 +75,25 @@ namespace game.gameplay_core.location.interactive_objects
 			}
 
 			Data.IsOpened = true;
-			UpdateAnimatorState();
+			UpdateState();
 		}
 
-		private void UpdateAnimatorState(bool immediate = false)
+		private void UpdateState(bool immediate = false)
 		{
-			Data.IsOpened = !Data.IsOpened;
 			if(_animator != null)
 			{
 				_animator.SetBool(IsOpen, Data.IsOpened);
 				if(immediate)
 				{
-					_animator.SetTrigger(Immediate);
+					_animator.SetTrigger(ImmediateKey);
 				}
+			}
+
+			_interactionBack.gameObject.SetActive(!Data.IsOpened);
+			_interactionFront.gameObject.SetActive(!Data.IsOpened);
+			if(_colliderToDisable != null)
+			{
+				_colliderToDisable.enabled = !Data.IsOpened;
 			}
 		}
 	}

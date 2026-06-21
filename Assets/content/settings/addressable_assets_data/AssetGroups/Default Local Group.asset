@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: b011c7077da0981468e9c8e98d8d4472
   m_SerializeEntries:
+  - m_GUID: 021805b13bf8a4ad8945112f17f58798
+    m_Address: Sword1_Roll_S
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 036fb36c60cde400c8eb865f29d9e37b
+    m_Address: Sword1_Roll_L
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0375b597253b2439b83ee0178b707e7f
     m_Address: Boss_1_WeaponView
     m_ReadOnly: 0
@@ -27,6 +37,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ebb6f5a860463c4fa01ca3ca1ab0130
     m_Address: PlayerMaterial
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13ab0c5fa88384b3591c01e7d4c590c6
+    m_Address: Sword1_L2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -45,6 +60,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f0b8c79f595141c4b76013077493066
+    m_Address: Bow1_L1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20db95530ed514d6c90aa5c4becba7bf
+    m_Address: Bow_Z_L1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 26e14c9eb321b4d87b7fc75c893276fe
     m_Address: EmptyHandConfig
     m_ReadOnly: 0
@@ -52,6 +77,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b551e0f896764e53aba62994f85e01a
     m_Address: EmptyHand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4358444fb4a394f6c946a6441122ee16
+    m_Address: ZombieBlunt
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -65,13 +95,43 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e1eae400746640f08d04c74fda7bfc1
+    m_Address: Sword_Z_A1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6817842d73caa4592acc2995bf154544
     m_Address: CommonStats
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ac61ab01753c412f9fcf8a31b92c9ce
+    m_Address: ZombieAxeConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 711370c9bf4a643be93c2b19ed1c18a1
+    m_Address: ZombieBluntConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72f3bf4084fb944568d618d3ffb2e792
+    m_Address: Sword1_L1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d0438033ce39ff459b646935761f4c3
     m_Address: BaseCharacterPrefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82dda3124bba84ec7bc5e25faf0a6260
+    m_Address: Sword_Z_AS
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ac3e8776e99b43eab59a75fcac8b11f
+    m_Address: Bow1_Roll_L
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -125,6 +185,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7ad6f97290ad461789a5f458c7bf88e
+    m_Address: Sword1_Run_S
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d94508fe4800c4384a6bd43cbc4cb8d3
     m_Address: ZombieSword
     m_ReadOnly: 0
@@ -145,8 +210,28 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7e147b4d2e084d85943e1d2299a8fe7
+    m_Address: Sword1_S1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8c89a1b3ab0a4e1d806012341f25d90
+    m_Address: ZombieAxe
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea54f318f069d44f6a59f9f8fa25c493
     m_Address: Boss1Weapon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5c035ef68de641e2b30ed1ff87b3ec3
+    m_Address: Bow1_Run_L
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f83e8801e12ff41049abd1501898550d
+    m_Address: Sword1_Run_L
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

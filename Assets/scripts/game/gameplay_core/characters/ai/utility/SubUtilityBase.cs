@@ -264,7 +264,7 @@ namespace game.gameplay_core.characters.ai.utility
 
 		protected void UpdateBlackboardValues()
 		{
-			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.Logic.InventoryLogic.RightWeapon.Config.RegularAttacks[0].AiData.Range;
+			_context.BlackboardValues[BlackboardValues.BasicAttackRange] = _context.CharacterContext.Logic.InventoryLogic.RightWeapon.Config.RegularAttacks[0].Config.AiData.Range;
 			var leftWeapon = _context.CharacterContext.Logic.InventoryLogic.LeftWeapon;
 			_context.BlackboardValues[BlackboardValues.HasShield] = leftWeapon?.Config.BlockDeflectionRating > 0 ? 1 : 0;
 		}

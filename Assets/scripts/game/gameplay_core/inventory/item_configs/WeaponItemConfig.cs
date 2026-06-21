@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Animancer;
 using dream_lib.src.utils.data_types;
 using game.enums;
@@ -17,6 +18,11 @@ namespace game.gameplay_core.inventory.item_configs
 	{
 		[field: SerializeField]
 		public SerializableDictionary<StatKey, float> DamageScaling = new();
+
+		private AttackConfig[] _regularAttacksCache;
+		private AttackConfig[] _strongAttacksCache;
+		private AttackConfig[] _specialAttacksCache;
+
 		[field: SerializeField]
 		public float BaseDamage { get; private set; } = 1;
 		[field: ValueDropdown("@AddressableAssetNames.WeaponPrefabNames")]
@@ -24,25 +30,25 @@ namespace game.gameplay_core.inventory.item_configs
 		public string WeaponPrefabName { get; private set; }
 
 		[field: SerializeField]
-		public AttackConfig[] RegularAttacks { get; private set; }
+		public AttackConfigSo[] RegularAttacks { get; private set; }
 		[field: SerializeField]
-		public AttackConfig[] StrongAttacks { get; private set; }
+		public AttackConfigSo[] StrongAttacks { get; private set; }
 		[field: SerializeField]
-		public AttackConfig[] SpecialAttacks { get; private set; }
+		public AttackConfigSo[] SpecialAttacks { get; private set; }
 
 		[field: FoldoutGroup("Roll")]
 		[field: SerializeField]
-		public AttackConfig RollAttack { get; private set; }
+		public AttackConfigSo RollAttack { get; private set; }
 		[field: FoldoutGroup("Roll")]
 		[field: SerializeField]
-		public AttackConfig RollAttackStrong { get; private set; }
+		public AttackConfigSo RollAttackStrong { get; private set; }
 
 		[field: FoldoutGroup("Run")]
 		[field: SerializeField]
-		public AttackConfig RunAttack { get; private set; }
+		public AttackConfigSo RunAttack { get; private set; }
 		[field: FoldoutGroup("Run")]
 		[field: SerializeField]
-		public AttackConfig RunAttackStrong { get; private set; }
+		public AttackConfigSo RunAttackStrong { get; private set; }
 
 		[field: FoldoutGroup("Ranged")]
 		[field: SerializeField]
@@ -129,19 +135,33 @@ namespace game.gameplay_core.inventory.item_configs
 		[field: SerializeField]
 		public AnimationConfig FallAttackLandingAnim { get; private set; }
 
+		private void OnEnable()
+		{
+			_regularAttacksCache = null;
+		}
+
 		public AttackConfig[] GetAttacksSequence(AttackType attackType)
 		{
+			if(_regularAttacksCache == null)
+			{
+				_regularAttacksCache = RegularAttacks.Select(c => c.Config).ToArray();
+				_strongAttacksCache = StrongAttacks.Select(c => c.Config).ToArray();
+				_specialAttacksCache = SpecialAttacks.Select(c => c.Config).ToArray();
+
+			}			
 			switch(attackType)
 			{
 				case AttackType.Regular:
-					return RegularAttacks;
+					return _regularAttacksCache;
 				case AttackType.Strong:
 					if(StrongAttacks == null || StrongAttacks.Length == 0)
 					{
 						Debug.LogError($"fallback to regular attacks as strong attacks empty {name}");
-						return RegularAttacks;
+						return _regularAttacksCache;
 					}
-					return StrongAttacks;
+					return _strongAttacksCache;
+				case AttackType.Special:
+					return _specialAttacksCache;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(attackType), attackType, null);
 			}
@@ -151,5 +171,7 @@ namespace game.gameplay_core.inventory.item_configs
 		{
 			return RiposteAttack;
 		}
+
+		 
 	}
 }

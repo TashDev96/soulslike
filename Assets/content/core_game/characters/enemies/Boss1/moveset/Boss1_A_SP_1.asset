@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94cee6b59854f2f8460ff51c819058c, type: 3}
+  m_Name: Boss1_A_SP_1
+  m_EditorClassIdentifier: GameAssembly::game.gameplay_core.damage_system.AttackConfigSo
+  Config:
+    <AnimationConfig>k__BackingField:
+      WeaponForPreview: 
+      Clip: {fileID: 7400000, guid: 356b28a23a2724131b484deb5e961157, type: 2}
+      Speed: 1
+      FlagEvents:
+      - Name: Rotation Disabled
+        StartTimeNormalized: 0.42113638
+        EndTimeNormalized: 0.86210185
+        LayerIndex: 0
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 0
+      - Name: Stamina Regen Disabled
+        StartTimeNormalized: 0.22777778
+        EndTimeNormalized: 0.7722222
+        LayerIndex: 1
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 2
+      - Name: State Locked
+        StartTimeNormalized: 0
+        EndTimeNormalized: 0.86311674
+        LayerIndex: 2
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Flag: 1
+      - Name: Exit To Combo
+        StartTimeNormalized: 0.9
+        EndTimeNormalized: 1
+        LayerIndex: 3
+        IsSingleFrame: 0
+        ClipDuration: 0
+        Flag: 6
+      - Name: Enter Combo
+        StartTimeNormalized: 0.0055555557
+        EndTimeNormalized: 0.006589682
+        LayerIndex: 3
+        IsSingleFrame: 1
+        ClipDuration: 4.8333335
+        Flag: 7
+      HitEvents:
+      - Name: Hit
+        StartTimeNormalized: 0.45555556
+        EndTimeNormalized: 0.48055556
+        LayerIndex: 5
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        <InvolvedColliders>k__BackingField: 010100
+        <FriendlyFire>k__BackingField: 0
+        <DamageMultiplier>k__BackingField: 1
+        <PoiseDamage>k__BackingField: 1
+        <KnockBackImpulse>k__BackingField: 1
+      SoundEvents: []
+      CameraShakeEvents:
+      - Name: New CameraShake
+        StartTimeNormalized: 0.45556125
+        EndTimeNormalized: 0.551207
+        LayerIndex: 6
+        IsSingleFrame: 0
+        ClipDuration: 4.8333335
+        Strength: 1
+        VertMultiplier: 1
+        HorMultiplier: 1
+      CustomEvents: []
+      LayerNames:
+      - RotationLocked
+      - StaminaRegenDisabled
+      - StateLocked
+      - Combo
+      - Markers
+      - Hits
+      - New Layer
+    <IsRangedAttack>k__BackingField: 0
+    <ProjectilePrefabNames>k__BackingField: 
+    <MaxProjectileHorizontalAngleCorrection>k__BackingField: 0
+    <StaminaCost>k__BackingField: 10
+    <AttackDeflectionRatingBonus>k__BackingField: 0
+    <ForwardMovement>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <AiData>k__BackingField:
+      <Range>k__BackingField: 4
+      <Sector>k__BackingField: 45
+  references:
+    version: 2
+    RefIds: []

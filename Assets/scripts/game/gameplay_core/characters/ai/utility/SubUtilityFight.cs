@@ -1,3 +1,4 @@
+using System;
 using dream_lib.src.extensions;
 using game.gameplay_core.characters.ai.utility.considerations.utils;
 using game.gameplay_core.characters.ai.utility.considerations.value_sources;
@@ -117,6 +118,23 @@ namespace game.gameplay_core.characters.ai.utility
 
 			foreach(var observation in CharacterObservations)
 			{
+				if(observation == null)
+				{
+					throw new Exception($"observation null {transform.GetFullPathInScene()}");
+				}
+				if(observation.Character == null)
+				{
+					throw new Exception($"character null {transform.GetFullPathInScene()}");
+				}
+				if(observation.Character.Context.Team.Equals(null))
+				{
+					throw new Exception($"team null {transform.GetFullPathInScene()}");
+				}
+				if(_context.CharacterContext.Equals(null))
+				{
+					throw new Exception($"character null {transform.GetFullPathInScene()}");
+				}
+				
 				if(observation.Character.Context.Team.Value == _context.CharacterContext.Team.Value)
 				{
 					continue;

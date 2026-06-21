@@ -57,7 +57,7 @@ MonoBehaviour:
   m_ShadowDistance: 1085.6
   m_ShadowCascadeCount: 3
   m_Cascade2Split: 0.094175674
-  m_Cascade3Split: {x: 0.16458029, y: 0.40177608}
+  m_Cascade3Split: {x: 0.13575174, y: 0.49042827}
   m_Cascade4Split: {x: 0.12299999, y: 0.2926, z: 0.53599995}
   m_CascadeBorder: 0.22843733
   m_ShadowDepthBias: 0.15
@@ -100,9 +100,9 @@ MonoBehaviour:
     obsoleteHasProbeVolumes:
       m_Keys: []
       m_Values: 
-  m_PrefilteringModeMainLightShadows: 0
+  m_PrefilteringModeMainLightShadows: 3
   m_PrefilteringModeAdditionalLight: 0
-  m_PrefilteringModeAdditionalLightShadows: 2
+  m_PrefilteringModeAdditionalLightShadows: 0
   m_PrefilterXRKeywords: 1
   m_PrefilteringModeForwardPlus: 2
   m_PrefilteringModeDeferredRendering: 0
@@ -128,11 +128,11 @@ MonoBehaviour:
   m_PrefilterSoftShadowsQualityHigh: 1
   m_PrefilterSoftShadows: 0
   m_PrefilterScreenCoord: 1
-  m_PrefilterScreenSpaceIrradiance: 0
+  m_PrefilterScreenSpaceIrradiance: 1
   m_PrefilterNativeRenderPass: 1
   m_PrefilterUseLegacyLightmaps: 0
-  m_PrefilterBicubicLightmapSampling: 0
-  m_PrefilterReflectionProbeRotation: 0
+  m_PrefilterBicubicLightmapSampling: 1
+  m_PrefilterReflectionProbeRotation: 1
   m_PrefilterReflectionProbeBlending: 0
   m_PrefilterReflectionProbeBoxProjection: 0
   m_PrefilterReflectionProbeAtlas: 0
